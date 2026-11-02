@@ -1,121 +1,94 @@
-# Accelerator Bootstrapper Template
+# RPG NeuralMesh
 
-A cloneable, production-shaped skeleton for **agentic apps on the ZenLabs Agent
-Foundry** — the same standard structure behind `digital-onboarding`, `zenarc`,
-`merchant-onboard`, `capmarkets`, and friends. Clone it, run one command, and
-you have a running FastAPI + LangGraph + Temporal + React app ready to deploy to
-Azure Container Apps.
+RPG NeuralMesh is a synthetic-data proof of concept for cross-subsidiary knowledge discovery. Each pilot company runs a separate MCP server over its own local knowledge pack. A central FastAPI/LangGraph service fans a question out to the selected nodes, which apply their own exposure policies and return cited evidence. No source records are migrated to a group data lake.
 
-> This repo holds the **template** (with `__PLACEHOLDER__` tokens). You don't run
-> the template directly — you `bootstrap` it into a new app repo.
+> **POC only:** all included knowledge and demo accounts are synthetic. Local accounts use a development identity flow; do not connect real corporate data or expose the development services publicly.
 
----
+## Current capabilities
 
-## The stack
+- Four independent subsidiary MCP servers: CEAT (`8101`), KEC (`8102`), Zensar (`8103`), and Harrisons Malayalam (`8104`).
+- Node-local FTS5 search, approved summaries, health/capability discovery, consent-filtered expert search, and access requests.
+- Node-side exposure policy, metadata-only restrictions, configured UPSI blackout handling, time-limited grants, and content-free hash-chained audit logs.
+- A central LangGraph fan-out endpoint at `POST /api/v1/mesh/query` that calls the selected MCP nodes and returns cited evidence, withheld decisions, and per-node status.
+- SQLite-backed signup/sign-in, subsidiary membership, and optional consented expert profiles.
+- React UI pages for Dashboard, Ask NeuralMesh, Expert Finder, Mesh Nodes, Governance, and Admin. Governance reviews are simulated for local demo accounts only.
+- A synthetic KB pack and golden scenarios under `app/neuralmesh_kb_pack/`.
 
-| Layer | Tech |
-|---|---|
-| API | FastAPI (async), environment-scoped CORS, `/health` probe |
-| Agents | LangGraph **supervisor loop** — specialists route back to a supervisor |
-| Durability | Temporal workflows + activities, dedicated worker process |
-| State / cache | Redis (session store) |
-| Database | Postgres via SQLAlchemy async + Alembic migrations |
-| LLM | Azure OpenAI via `langchain-openai` |
-| Observability | OpenTelemetry → Arize Phoenix (LangChain + OpenAI instrumented) |
-| Secrets | Azure Key Vault (resolved at startup from `*_KV_URI` settings) |
-| UI | React + Vite + Tailwind (ZenLabs design system) behind nginx |
-| Deploy | Azure Container Apps — `infra/aca-setup.sh` + Azure Pipelines |
+**Current orchestration limit:** LangGraph currently performs parallel MCP evidence fan-out. Iterative agent planning and Groq-backed answer synthesis are not implemented yet; the Ask page presents evidence and citations rather than claiming a synthesized answer.
 
----
+## Prerequisites
 
-## Quick start — create a new app
+- Python 3.11+
+- Node.js 20+
+- The workspace venv at `../venv` or another environment with `app/requirements.txt` installed
 
-```bash
-# 1. Clone the template
-git clone https://dev.azure.com/Zenlabs-Agent-Foundry/Zenlabs-Agent-Foundry/_git/accelerator-bootstrapper-template
-cd accelerator-bootstrapper-template
+## Start locally on Windows
 
-# 2. Bootstrap a new app (creates ../payment-insights)
-python bootstrap.py --name payment-insights \
-  --title "Payment Insights" \
-  --desc "Real-time payment analytics agent" \
-  --backend-port 8010 --frontend-port 3010
+Run each service in its own PowerShell terminal.
 
-# 3. Run it
-cd ../payment-insights/app
-cp .env.example .env                                   # add Azure OpenAI creds
-docker compose -f ../docker-compose.local.yml up -d    # postgres + redis
-python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
-alembic upgrade head
-uvicorn api.main:app --reload --port 8010              # API
-python -m workers.worker                               # worker (separate shell)
-cd ui && npm install && npm run dev                    # UI
+1. Start the API from the repository root:
+
+```powershell
+Push-Location app
+..\venv\Scripts\python.exe -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-The generated app has a working **Playground** page that talks to the example
-agent graph over `/api/v1/example` — proof the whole spine is wired.
+2. Start the subsidiary MCP servers from `app`, one process per node:
 
-### Bootstrap options
-
-| Flag | Default | Purpose |
-|---|---|---|
-| `--name` | *(required)* | kebab-case app + resource name |
-| `--title` | derived | Human title (UI + API) |
-| `--desc` | derived | One-line description |
-| `--backend-port` | `8000` | FastAPI port |
-| `--frontend-port` | `3000` | Vite dev port |
-| `--namespace` | `<name>` | Temporal namespace |
-| `--task-queue` | `<name>-agents` | Temporal task queue |
-| `--db-name` | snake_case name | Postgres DB name |
-| `--dest` | `../<name>` | output directory |
-| `--git-init` / `--remote <url>` | — | init git (+ set origin) |
-
-Placeholders and defaults are declared in [`template.config.json`](template.config.json).
-
----
-
-## Deploy to Azure Container Apps
-
-```bash
-bash infra/aca-setup.sh     # one-time provisioning (edit the VARIABLES block first)
+```powershell
+..\venv\Scripts\python.exe -m mcp_nodes.ceat
+..\venv\Scripts\python.exe -m mcp_nodes.kec
+..\venv\Scripts\python.exe -m mcp_nodes.zensar
+..\venv\Scripts\python.exe -m mcp_nodes.harrisons
 ```
 
-This provisions three apps with the **correct ingress topology** (a hard-won
-default — see [BOOTSTRAP_GUIDE.md](BOOTSTRAP_GUIDE.md)):
+3. Start the UI:
 
-- `<name>-be` — **internal** ingress **+ `--allow-insecure`** (so the FE nginx can
-  proxy over `http://…be.internal…` without a 301 http→https redirect)
-- `<name>-worker` — no ingress (Temporal worker)
-- `<name>-fe` — external ingress; `BACKEND_URL=http://<name>-be.internal…`
-
-CI/CD: push to `main` and `azure-pipelines-be.yml` / `azure-pipelines-fe.yml`
-build to ACR and roll the apps. `azure-pipelines-temporal.yml` is optional (most
-apps reuse the shared Temporal server).
-
----
-
-## What's inside
-
-See [BOOTSTRAP_GUIDE.md](BOOTSTRAP_GUIDE.md) for the full directory map, the
-supervisor-loop pattern, and how to add an agent, a router, a workflow, and a UI
-page. The short version:
-
-```
-app/
-  api/        FastAPI app, routers, schemas
-  agents/     LangGraph nodes, tools, state, guardrails, human-in-the-loop
-  workflows/  Temporal workflows + activities
-  workers/    worker entrypoint
-  config/     YAML prompts, rules, temporal dynamic-config
-  db/         SQLAlchemy models + async engine, alembic/
-  observability/  OTel + Phoenix tracing
-  security/   Key Vault + auth
-  shared/     config, llm, logger, prompt loader
-  ui/         React + Vite + Tailwind + nginx
-infra/        aca-setup.sh
-azure-pipelines-{be,fe,temporal}.yml
+```powershell
+Push-Location app/ui
+npm install
+npm run dev
 ```
 
-# RPG-NeuralMesh
+Open the Vite URL, normally `http://localhost:5173`.
 
-# starter_template
+## Seed presentation data
+
+From the repository root:
+
+```powershell
+Push-Location app
+..\venv\Scripts\python.exe -m scripts.seed_demo_accounts
+```
+
+The development-only seed creates five `@neuralmesh.local` accounts, four opted-in synthetic experts, one pending KEC content request, and one pending CEAT expert-introduction request. It is idempotent and only updates accounts in the reserved demo domain. The shared demo password and account list are documented in [app/scripts/DEMO_ACCOUNTS.md](app/scripts/DEMO_ACCOUNTS.md).
+
+The flagship Ask example is the CEAT-to-Harrisons latex-spoilage question. The included seed data contains approved materials-handling summaries, aggregate spoilage trends, source citations, restricted-data canaries, and policy scenarios.
+
+## Configuration and local state
+
+- API accounts: `app/.neuralmesh/accounts.db`
+- Node grants/audits: `app/.neuralmesh/nodes/<node>/`
+- Generated synthetic node indexes and structured mock databases: `app/neuralmesh_kb_pack/data_pack/`
+- Optional Groq setting: `NEURALMESH_GROQ_API_KEY` in a local `app/.env`; never place the key in the browser or commit it.
+- Local runtime databases, `.env` files, virtual environments, `node_modules`, and build output are excluded by `.gitignore`.
+
+## Tests
+
+From the repository root:
+
+```powershell
+.\venv\Scripts\python.exe -c "import sys,pytest; sys.path.insert(0,'app'); raise SystemExit(pytest.main(['app/tests','-q']))"
+```
+
+Build the frontend from the repository root:
+
+```powershell
+npm.cmd --prefix app/ui run build
+```
+
+## Planning artifacts
+
+- [Design plan](planning_docs/RPG_NeuralMesh_Design_Plan_v3_2.md)
+- [Subsidiary MCP server plan](planning_docs/RPG_NeuralMesh_MCP_Servers_Plan.md)
+- [Target wireframe](planning_docs/RPG_NeuralMesh_Wireframe_v4.html)

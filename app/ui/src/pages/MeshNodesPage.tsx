@@ -1,0 +1,51 @@
+import { useEffect, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { Activity, AlertTriangle, Boxes, ChevronDown, ChevronUp, LoaderCircle, RefreshCw } from 'lucide-react'
+import { getMeshNodes } from '../services/api'
+import type { MeshNodeInfo } from '../services/api'
+
+const NODE_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d' }
+
+export default function MeshNodesPage() {
+  const [nodes, setNodes] = useState<MeshNodeInfo[]>([])
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const refresh = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await getMeshNodes()
+      setNodes(data.nodes)
+    } catch (reason) {
+      setError((reason as { response?: { data?: { detail?: string } } }).response?.data?.detail ?? 'Could not load subsidiary node status.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { void refresh() }, [])
+
+  const connected = nodes.filter((node) => node.status === 'healthy').length
+  return (
+    <div className="mesh-data-page">
+      <header className="mesh-page-heading"><div><div className="mesh-eyebrow">Subsidiary connectivity</div><h1>Mesh Nodes</h1><p>Each subsidiary operates an independent MCP server and keeps control of its own exposure policy.</p></div><button type="button" className="mesh-outline-action" onClick={() => void refresh()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh status</button></header>
+      <section className="mesh-node-summary"><span className="mesh-node-summary-icon"><Activity size={18} /></span><strong>{connected} / {nodes.length || 4}</strong><span>nodes responding now</span><span className="mesh-node-summary-note">Live MCP health checks</span></section>
+      {error && <div className="mesh-alert error"><AlertTriangle size={17} />{error}</div>}
+      {loading && nodes.length === 0 && <div className="mesh-alert pending"><LoaderCircle size={17} className="animate-spin" />Checking each subsidiary server…</div>}
+      <section className="mesh-node-cards">
+        {nodes.map((node) => <article className="mesh-node-card" key={node.node_id} style={{ '--node-tone': NODE_TONES[node.node_id] ?? '#68708f' } as CSSProperties}>
+          <div className="mesh-node-card-top"><span className="mesh-node-company-mark"><Boxes size={17} /></span><span className={`mesh-result-state ${node.status === 'healthy' ? 'success' : 'warning'}`}><i />{node.status === 'healthy' ? 'Healthy' : 'Unavailable'}</span></div>
+          <h2>{node.company}</h2><p>{node.owner}</p>
+          <div className="mesh-node-level"><span>{node.level}</span><span>Schema {node.schema_version}</span></div>
+          <div className="mesh-node-card-stats"><div><strong>{node.datapoint_count}</strong><span>Datapoints</span></div><div><strong>{node.port}</strong><span>Local port</span></div></div>
+          <button type="button" className="mesh-node-expand" onClick={() => setExpanded(expanded === node.node_id ? null : node.node_id)}>{expanded === node.node_id ? 'Hide capabilities' : 'View capabilities'}{expanded === node.node_id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
+          {expanded === node.node_id && <div className="mesh-capability-list">{node.datapoints.map((dp) => <div key={String(dp.datapoint_id)}><span><b>{String(dp.datapoint_id)}</b>{String(dp.title)}</span><em>{String(dp.exposure_ceiling)}</em></div>)}</div>}
+          {node.error && <p className="mesh-node-error">{node.error}</p>}
+        </article>)}
+      </section>
+      {!loading && nodes.length === 0 && !error && <div className="ask-empty-results">No node registry results returned.</div>}
+    </div>
+  )
+}

@@ -1,0 +1,42 @@
+- id: ZE-1
+  role: Head of delivery excellence
+  skills:
+  - PMO playbooks
+  - integration
+  - transition
+  evidence:
+  - zensar:C-05-01
+  - zensar:C-05-02
+  consent: true
+  private:
+    name: Ishaan Kapoor (fictional)
+- id: ZE-2
+  role: AI CoE lead
+  skills:
+  - AI-assisted delivery
+  - pilots
+  evidence:
+  - zensar:C-05-03
+  - zensar:R-02-01
+  consent: true
+  private:
+    name: Tanvi Shah (fictional)
+- id: ZE-3
+  role: Solution architect
+  skills:
+  - tooling consolidation
+  - merger integration
+  evidence:
+  - zensar:C-05-04
+  consent: true
+  private:
+    name: Rahul Menon (fictional)
+- id: ZE-4
+  role: Support operations lead
+  skills:
+  - knowledge assistants
+  evidence:
+  - zensar:R-02-02
+  consent: false
+  private:
+    name: Opted out (fictional)

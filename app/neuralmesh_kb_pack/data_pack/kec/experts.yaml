@@ -1,0 +1,53 @@
+- id: KE-1
+  role: Programme director - international integration
+  skills:
+  - cross-border integration
+  - mobilisation
+  - labour
+  evidence:
+  - kec:L-02-01
+  - kec:L-02-02
+  consent: true
+  private:
+    name: Vikram Rao (fictional)
+- id: KE-2
+  role: Contracts and claims counsel
+  skills:
+  - claims
+  - payment terms
+  - LD clauses
+  evidence:
+  - kec:C-02-01
+  - kec:C-02-02
+  consent: true
+  private:
+    name: Sana Qureshi (fictional)
+- id: KE-3
+  role: Cables materials engineer
+  skills:
+  - elastomers
+  - ageing tests
+  evidence:
+  - kec:E-05-01
+  consent: true
+  private:
+    name: Pooja Bansal (fictional)
+- id: KE-4
+  role: Project planning lead
+  skills:
+  - delay analysis
+  - scheduling
+  evidence:
+  - kec:O-06-01
+  consent: true
+  private:
+    name: Deepak Joshi (fictional)
+- id: KE-5
+  role: Bid manager
+  skills:
+  - bidding
+  evidence:
+  - kec:C-01-01
+  consent: false
+  private:
+    name: Opted out (fictional)

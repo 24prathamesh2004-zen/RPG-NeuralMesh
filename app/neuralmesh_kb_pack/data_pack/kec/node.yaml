@@ -1,0 +1,7 @@
+node_id: kec
+display: KEC International
+port: 8102
+level: L2
+schema_version: 1.0.0
+structured_db: projects.db
+backend: projects.db (projects, delay notes) + document store

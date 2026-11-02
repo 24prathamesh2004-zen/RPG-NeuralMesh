@@ -1,0 +1,39 @@
+node: harrisons
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  roles_allowed:
+  - group_user
+datapoints:
+  O-05:
+    title: Aggregated latex-spoilage and estate trends
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: GM Estates
+    rule_id: R-AGG-01
+    views:
+    - v_spoilage_by_month
+    - v_spoilage_by_band
+    min_group: 3
+  F-01:
+    title: Estate SOPs (collection, preservation, transport)
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head Estate Operations
+  F-02:
+    title: Title-dispute file
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: General Counsel
+    rule_id: R-NL-02
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

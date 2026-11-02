@@ -1,0 +1,8 @@
+node_id: harrisons
+display: Harrisons Malayalam
+port: 8104
+level: L1
+schema_version: 1.0.0
+structured_db: estate_mis.db
+backend: estate_mis.db (row-level, never exposed) + SOP documents; only aggregate
+  views are exposed

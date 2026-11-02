@@ -1,0 +1,7 @@
+node_id: zensar
+display: Zensar
+port: 8103
+level: L2
+schema_version: 1.0.0
+structured_db: null
+backend: markdown KM wiki

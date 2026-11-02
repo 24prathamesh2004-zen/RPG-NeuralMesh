@@ -1,0 +1,43 @@
+- id: HE-1
+  role: Senior agronomist
+  skills:
+  - latex handling
+  - tapping
+  - monsoon operations
+  evidence:
+  - harrisons:F-01-01
+  - harrisons:F-01-05
+  consent: true
+  private:
+    name: Anil Varghese (fictional)
+- id: HE-2
+  role: Factory processing manager
+  skills:
+  - latex receipt
+  - quality testing
+  - coagulation
+  evidence:
+  - harrisons:F-01-03
+  consent: true
+  private:
+    name: Meera Pillai (fictional)
+- id: HE-3
+  role: Estate operations manager
+  skills:
+  - collection logistics
+  - transport
+  evidence:
+  - harrisons:F-01-03
+  consent: true
+  private:
+    name: Suresh Nair (fictional)
+- id: HE-4
+  role: Quality supervisor
+  skills:
+  - contamination control
+  - strainer checks
+  evidence:
+  - harrisons:F-01-04
+  consent: false
+  private:
+    name: Opted out (fictional)

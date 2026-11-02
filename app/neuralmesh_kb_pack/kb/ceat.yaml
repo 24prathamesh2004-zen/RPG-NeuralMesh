@@ -1,0 +1,166 @@
+node: ceat
+display: CEAT
+port: 8101
+level: L2
+backend: "document store + qms.db (failure reports, maintenance log)"
+datapoints:
+  E-01: {title: Compound formulations and material specs, sensitivity: Restricted, ceiling: MD, never_leave: true, owner_role: Head R&D, rule_id: R-NL-01}
+  E-02: {title: Test and field-failure reports and RCAs, sensitivity: Confidential, ceiling: SUM, upgrade_with_approval: RAG, owner_role: Head Quality, views: [v_failure_by_cause], min_group: 3}
+  E-03: {title: Approved materials handling and storage learnings (non-formula), sensitivity: Confidential, ceiling: SUM, owner_role: Head R&D}
+  L-01: {title: Camso integration playbook and post-mortems, sensitivity: Confidential, ceiling: SUM, owner_role: Integration lead}
+  O-01: {title: Maintenance and breakdown RCAs, sensitivity: Internal, ceiling: RAG, owner_role: Plant maintenance}
+  O-02: {title: HSE incidents (anonymised), sensitivity: Confidential, ceiling: SUM, owner_role: Head HSE}
+  F-06: {title: Finance and capex benchmarks (pre-results), sensitivity: Restricted, ceiling: MD, never_leave: true, blackout: results_calendar, owner_role: CFO, rule_id: UPSI}
+  C-03: {title: Channel pricing, sensitivity: Restricted, ceiling: MD, never_leave: true, owner_role: CMO, rule_id: R-NL-03}
+  F-04: {title: Expert directory (consent-based), sensitivity: Confidential, ceiling: LIVE, consent_required: true, owner_role: CHRO}
+docs:
+  - id: E-03-01
+    dp: E-03
+    title: Incoming natural-rubber lot acceptance and trending
+    version: "2026-03"
+    tags: [natural-rubber, lot-acceptance, quality, trending, supplier]
+    summary: >-
+      Incoming natural-rubber lots are accepted against a small set of quality parameters (dirt content, volatile matter, plasticity retention
+      and Mooney viscosity) with limits agreed with suppliers. Results are trended per supplier and per lot, so drift is seen before the material
+      reaches mixing. No formulations are included.
+  - id: E-03-02
+    dp: E-03
+    title: Warehouse storage practices for natural rubber
+    version: "2026-03"
+    tags: [natural-rubber, storage, warehouse, ageing, FIFO]
+    summary: >-
+      Rubber is stored in covered, ventilated warehouses, off the floor, away from direct sun and heat sources, with grades kept apart and
+      first-in-first-out issue. Long-stored lots get an extra ageing check before use.
+  - id: E-03-03
+    dp: E-03
+    title: Contamination and moisture control at receipt and handling
+    version: "2026-03"
+    tags: [contamination, moisture, receipt, unloading, foreign-matter]
+    summary: >-
+      Unloading is done under cover, wrapping integrity is checked, and foreign matter and moisture exposure are recorded at receipt. Findings
+      are tied to the delivery so supplier feedback has evidence.
+  - id: E-03-04
+    dp: E-03
+    title: Supplier feedback loop for raw-material quality
+    version: "2026-03"
+    tags: [supplier, feedback, corrective-action, scorecard]
+    summary: >-
+      Quality complaints go to suppliers with data attached, joint root-cause visits are held for repeat issues, corrective actions are tracked,
+      and a scorecard shows quality and consistency by supplier.
+  - id: E-03-05
+    dp: E-03
+    title: Time-to-use limits and lot traceability
+    version: "2026-03"
+    tags: [traceability, time-to-use, lot, batch]
+    summary: >-
+      Each lot is tagged with receipt date and storage location, a maximum time before use is set per grade, and every mixing batch can be traced
+      back to its supplier lot.
+  - id: E-03-06
+    dp: E-03
+    title: Legacy warehouse handling note (2019, superseded)
+    version: "2019-06"
+    tags: [warehouse, legacy, handling]
+    summary: Older warehouse handling note kept for history; superseded by the 2026 storage practices. Treat as stale.
+  - id: E-02-01
+    dp: E-02
+    title: Field-failure RCA pattern - material-handling-linked defects
+    version: "2026-02"
+    tags: [rca, failure, material-handling, defects]
+    summary: >-
+      A recurring share of failure reports trace to material handling rather than process settings: $MH_SHARE% of the mock failure reports in qms.db.
+      The common thread is lots used after long or uneven storage.
+    body: >-
+      Full RCA text for material-handling-linked failures, including plant labels, lot references and corrective actions. Approval from the Head of Quality is
+      required for full text. CANARY-CEAT-RCA-2208
+  - id: E-02-02
+    dp: E-02
+    title: Blister and void defects - process versus material causes
+    version: "2026-02"
+    tags: [blister, void, rca, process, material]
+    summary: >-
+      Blister and void cases are split between process drift and material condition. Material condition cases link to moisture exposure and
+      ageing; checking lot condition early shortens root-cause time.
+    body: >-
+      Full RCA text for blister and void cases with plant labels, process settings and lot references. Approval required for full text.
+  - id: L-01-01
+    dp: L-01
+    title: Camso integration playbook - first 100 days
+    version: "2026-01"
+    tags: [integration, acquisition, playbook, 100-days, systems]
+    summary: >-
+      Playbook for the first 100 days: one integration lead, early single view of customers and distributors, and early systems integration to
+      avoid parallel reporting. (Illustrative; conflicts with a process-first view elsewhere.)
+  - id: L-01-02
+    dp: L-01
+    title: Camso integration post-mortem - distribution and customer retention
+    version: "2026-01"
+    tags: [post-mortem, distribution, retention, customers]
+    summary: >-
+      Retention plans for key customers and distributors began after close; earlier plans would have reduced early churn. Overseas supplier
+      terms were reviewed late.
+  - id: O-01-01
+    dp: O-01
+    title: Mixer maintenance RCA - bearing wear pattern
+    version: "2026-02"
+    tags: [maintenance, mixer, bearing, rca]
+    summary: RCA of repeated bearing wear on a mixer line and the lubrication change that fixed it.
+    body: >-
+      Repeated bearing wear on a mixer line was traced to lubricant intervals that did not match loading. Intervals were shortened and a vibration
+      check added to the weekly round. Downtime fell in the following quarter.
+  - id: O-01-02
+    dp: O-01
+    title: Curing press downtime RCA - steam trap failures
+    version: "2026-02"
+    tags: [maintenance, curing, steam, rca]
+    summary: RCA of curing press downtime caused by steam trap failures.
+    body: >-
+      Press downtime came from steam trap failures that were found only after cure-time drift. A trap survey and a spare-parts kit at each press cut the repair time.
+  - id: O-02-01
+    dp: O-02
+    title: Near-miss pattern - forklift movement in warehouse aisles (anonymised)
+    version: "2026-02"
+    tags: [hse, near-miss, forklift, warehouse]
+    summary: Near-misses cluster at warehouse aisle crossings during shift change. Segregated walkways and a speed limit reduced repeats. Anonymised.
+  - id: E-01-01
+    dp: E-01
+    title: Compound formulation record A (restricted)
+    version: "2026-01"
+    tags: [formulation, restricted]
+    summary: Restricted formulation record. Metadata only.
+    private_body: "Mock restricted record. CANARY-CEAT-FORMULA-7731"
+  - id: E-01-02
+    dp: E-01
+    title: Material specification set B (restricted)
+    version: "2026-01"
+    tags: [specification, restricted]
+    summary: Restricted specification set. Metadata only.
+    private_body: "Mock restricted record. CANARY-CEAT-SPEC-7732"
+  - id: F-06-01
+    dp: F-06
+    title: Quarterly finance and capex benchmark note (pre-results)
+    version: "2026-10"
+    tags: [finance, benchmark, upsi]
+    summary: Pre-results finance note. Metadata only during the results window.
+    private_body: "Mock UPSI note. CANARY-CEAT-UPSI-9902"
+  - id: C-03-01
+    dp: C-03
+    title: Channel pricing sheet (restricted)
+    version: "2026-09"
+    tags: [pricing, channel, restricted]
+    summary: Restricted pricing sheet. Metadata only.
+    private_body: "Mock pricing sheet. CANARY-CEAT-PRICE-3301"
+facts:
+  - {id: C1, dp: E-03, text: "Natural-rubber lots are accepted on dirt content, volatile matter, plasticity retention and Mooney viscosity, trended per supplier and lot."}
+  - {id: C2, dp: E-03, text: "Storage: covered, ventilated, off-floor, shaded, grades apart, FIFO; extra ageing check for long-stored lots."}
+  - {id: C3, dp: E-03, text: "Each lot has a receipt date, location, maximum time-to-use and traceability to mixing batches."}
+  - {id: C4, dp: E-03, text: "Supplier feedback loop: data-backed complaints, joint visits, tracked corrective actions, scorecards."}
+  - {id: C5, dp: E-02, text: "$MH_SHARE% of mock failure reports link to material handling."}
+  - {id: C6, dp: E-01, text: "Formulations and specifications are restricted: metadata only, never returned."}
+  - {id: C7, dp: L-01, text: "CEAT's integration playbook favours early systems integration; this conflicts with the process-first view in Zensar and KEC material."}
+experts:
+  - {id: CE-1, role: Raw-material quality lead, skills: [natural rubber, lot acceptance, supplier quality], evidence: [E-03-01, E-03-04], consent: true, private_name: "Rohan Deshmukh (fictional)"}
+  - {id: CE-2, role: Warehouse and logistics manager, skills: [storage, FIFO, traceability], evidence: [E-03-02, E-03-05], consent: true, private_name: "Kavita Iyer (fictional)"}
+  - {id: CE-3, role: Integration PMO lead, skills: [acquisition integration, customer retention], evidence: [L-01-01, L-01-02], consent: true, private_name: "Arjun Mehta (fictional)"}
+  - {id: CE-4, role: Maintenance reliability engineer, skills: [RCA, mixers, curing], evidence: [O-01-01, O-01-02], consent: true, private_name: "Neha Kulkarni (fictional)"}
+  - {id: CE-5, role: Polymer scientist, skills: [compound development], evidence: [E-01-01], consent: false, private_name: "Opted out (fictional)"}
+canaries: [CANARY-CEAT-RCA-2208, CANARY-CEAT-FORMULA-7731, CANARY-CEAT-SPEC-7732, CANARY-CEAT-UPSI-9902, CANARY-CEAT-PRICE-3301]

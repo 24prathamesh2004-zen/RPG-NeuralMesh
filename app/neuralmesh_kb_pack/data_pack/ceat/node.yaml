@@ -1,0 +1,7 @@
+node_id: ceat
+display: CEAT
+port: 8101
+level: L2
+schema_version: 1.0.0
+structured_db: qms.db
+backend: document store + qms.db (failure reports, maintenance log)

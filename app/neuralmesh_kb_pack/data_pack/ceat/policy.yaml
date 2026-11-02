@@ -1,0 +1,68 @@
+node: ceat
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  roles_allowed:
+  - group_user
+datapoints:
+  E-01:
+    title: Compound formulations and material specs
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: Head R&D
+    rule_id: R-NL-01
+  E-02:
+    title: Test and field-failure reports and RCAs
+    sensitivity: Confidential
+    ceiling: SUM
+    upgrade_with_approval: RAG
+    owner_role: Head Quality
+    views:
+    - v_failure_by_cause
+    min_group: 3
+  E-03:
+    title: Approved materials handling and storage learnings (non-formula)
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head R&D
+  L-01:
+    title: Camso integration playbook and post-mortems
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Integration lead
+  O-01:
+    title: Maintenance and breakdown RCAs
+    sensitivity: Internal
+    ceiling: RAG
+    owner_role: Plant maintenance
+  O-02:
+    title: HSE incidents (anonymised)
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head HSE
+  F-06:
+    title: Finance and capex benchmarks (pre-results)
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    blackout: results_calendar
+    owner_role: CFO
+    rule_id: UPSI
+  C-03:
+    title: Channel pricing
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: CMO
+    rule_id: R-NL-03
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

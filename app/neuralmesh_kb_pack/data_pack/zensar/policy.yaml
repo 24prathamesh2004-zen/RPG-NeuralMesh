@@ -1,0 +1,32 @@
+node: zensar
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  roles_allowed:
+  - group_user
+datapoints:
+  C-05:
+    title: Delivery and integration playbooks
+    sensitivity: Internal
+    ceiling: RAG
+    owner_role: CTO office
+  R-02:
+    title: Pilot and experiment results (client names masked)
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head of AI CoE
+  F-01:
+    title: Policies and SOPs
+    sensitivity: Internal
+    ceiling: RAG
+    owner_role: Policy owners
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

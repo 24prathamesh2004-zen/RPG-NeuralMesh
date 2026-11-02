@@ -1,0 +1,56 @@
+- id: CE-1
+  role: Raw-material quality lead
+  skills:
+  - natural rubber
+  - lot acceptance
+  - supplier quality
+  evidence:
+  - ceat:E-03-01
+  - ceat:E-03-04
+  consent: true
+  private:
+    name: Rohan Deshmukh (fictional)
+- id: CE-2
+  role: Warehouse and logistics manager
+  skills:
+  - storage
+  - FIFO
+  - traceability
+  evidence:
+  - ceat:E-03-02
+  - ceat:E-03-05
+  consent: true
+  private:
+    name: Kavita Iyer (fictional)
+- id: CE-3
+  role: Integration PMO lead
+  skills:
+  - acquisition integration
+  - customer retention
+  evidence:
+  - ceat:L-01-01
+  - ceat:L-01-02
+  consent: true
+  private:
+    name: Arjun Mehta (fictional)
+- id: CE-4
+  role: Maintenance reliability engineer
+  skills:
+  - RCA
+  - mixers
+  - curing
+  evidence:
+  - ceat:O-01-01
+  - ceat:O-01-02
+  consent: true
+  private:
+    name: Neha Kulkarni (fictional)
+- id: CE-5
+  role: Polymer scientist
+  skills:
+  - compound development
+  evidence:
+  - ceat:E-01-01
+  consent: false
+  private:
+    name: Opted out (fictional)

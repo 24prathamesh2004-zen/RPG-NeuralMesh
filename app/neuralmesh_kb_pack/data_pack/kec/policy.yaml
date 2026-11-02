@@ -1,0 +1,82 @@
+node: kec
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  roles_allowed:
+  - group_user
+datapoints:
+  E-04:
+    title: Tower design standards and type-test summaries
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head Engineering
+  E-05:
+    title: Cable and elastomer test summaries
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Cables CTO
+  O-01:
+    title: Maintenance and breakdown RCAs
+    sensitivity: Internal
+    ceiling: RAG
+    owner_role: Plant maintenance
+  O-02:
+    title: HSE incidents (anonymised)
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head HSE
+  O-06:
+    title: Site progress and delay notes
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: PMO head
+    views:
+    - v_delay_by_category
+    min_group: 3
+  L-02:
+    title: Overseas integration post-mortem
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: PMO head
+  L-02a:
+    title: Post-mortem annex - claims and labour (full text)
+    sensitivity: Confidential
+    ceiling: RAG
+    requires_approval: true
+    owner_role: PMO head
+  C-01:
+    title: Bid prices and strategy
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: Bid head
+    rule_id: R-NL-04
+  C-02:
+    title: Contract clause precedents
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: General Counsel
+  F-05:
+    title: ESG metrics (water and energy)
+    sensitivity: Internal
+    ceiling: LIVE
+    owner_role: ESG head
+    tags:
+    - esg
+    - water
+    - energy
+    - recycling
+    - plants
+    views:
+    - v_esg_summary
+    min_group: 3
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO
