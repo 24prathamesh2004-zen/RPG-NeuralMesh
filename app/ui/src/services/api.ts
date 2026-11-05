@@ -45,11 +45,68 @@ export interface MeshNodeResult {
   error?: string | null
 }
 
+export type MeshPurpose = 'problem_solving' | 'compliance' | 'bid_support' | 'learning' | 'career_mobility'
+
+export interface EvidenceRecord {
+  schema_version: '1.0'
+  evidence_id: string
+  kind: 'summary' | 'chunk' | 'aggregate' | 'metadata' | 'relationship' | 'expert'
+  node: string
+  datapoint?: string | null
+  document?: string | null
+  title?: string | null
+  version?: string | null
+  stale?: boolean
+  superseded_by?: string | null
+  mode?: string | null
+  sensitivity?: string | null
+  decision?: string | null
+  rule_id?: string | null
+  reason?: string | null
+  text?: string | null
+  citation?: string | null
+  concepts?: string[]
+  score?: number | null
+  suspicious?: boolean
+}
+
+export interface MeshLink {
+  id: string
+  type: string
+  source: string
+  target: string
+  note?: string | null
+  status: string
+  approvals: { subsidiary: string; role: string; date: string; decision?: string }[]
+  source_title?: string
+  target_title?: string
+  sides?: string[]
+  confidence?: number | null
+}
+
+export interface MeshRouting {
+  method?: 'graph' | 'classifier' | 'user' | 'named' | 'none'
+  concepts?: string[]
+  concept_labels?: Record<string, string>
+  subsidiaries?: string[]
+  narrowed_out?: string[]
+  reason?: string
+}
+
 export interface MeshQueryResponse {
   question: string
   purpose: string
-  status: 'ok' | 'partial'
+  status: 'ok' | 'partial' | 'needs_node_choice'
   answer: string | null
+  answer_status: 'answered' | 'evidence_only' | 'check_failed'
+  answer_reason?: string | null
+  citations: string[]
+  cached: boolean
+  routing: MeshRouting
+  evidence: EvidenceRecord[]
+  also_found: EvidenceRecord[]
+  relationships: MeshLink[]
+  omitted: number
   node_results: MeshNodeResult[]
   sources: Record<string, unknown>[]
   withheld: Record<string, unknown>[]
@@ -64,8 +121,17 @@ export interface MeshNodeInfo {
   schema_version: string
   datapoint_count: number
   datapoints: Record<string, unknown>[]
+  packs?: { pack_id: string; domain: string; documents: number; published_at: string }[]
+  profile?: string
   owner: string
   error?: string
+}
+
+export interface MeshGraphView {
+  nodes: { id: string; type: string; label: string; subsidiary?: string | null }[]
+  edges: { id: string; type: string; source: string; target: string; status: string }[]
+  counts: Record<string, number>
+  exports: Record<string, string>
 }
 
 export interface ExpertMatch {
@@ -118,7 +184,7 @@ export interface DashboardSnapshot {
   allowed_decisions: number
   blocked_decisions: number
   pending_approvals: number
-  activity_by_node: Record<CompanyId, number>
+  activity_by_node: Record<string, number>
   recent_activity: AuditEntry[]
   synthetic: boolean
 }
@@ -159,9 +225,14 @@ export const getCurrentUser = () => api.get<UserAccount>('/auth/me')
 
 export const queryMesh = (payload: {
   question: string
-  nodes: CompanyId[]
-  purpose: 'problem_solving' | 'compliance' | 'bid_support'
+  nodes?: CompanyId[]
+  purpose: MeshPurpose
 }) => api.post<MeshQueryResponse>('/mesh/query', payload)
+export const getMeshGraph = () => api.get<MeshGraphView>('/mesh/graph')
+export const refreshMeshGraph = () => api.post<{ exports: Record<string, string> }>('/mesh/graph/refresh')
+export const getMeshLinks = () => api.get<{ links: MeshLink[] }>('/mesh/graph/links')
+export const reviewMeshLink = (id: string, subsidiary: string, decision: 'approve' | 'reject') =>
+  api.post<MeshLink>(`/mesh/graph/links/${id}/review`, { subsidiary, decision })
 
 export const getDashboardSnapshot = () => api.get<DashboardSnapshot>('/mesh/dashboard')
 export const getMeshNodes = () => api.get<{ nodes: MeshNodeInfo[] }>('/mesh/nodes')

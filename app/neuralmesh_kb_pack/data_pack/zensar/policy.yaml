@@ -6,6 +6,8 @@ defaults:
   - problem_solving
   - compliance
   - bid_support
+  - learning
+  - career_mobility
   roles_allowed:
   - group_user
 datapoints:

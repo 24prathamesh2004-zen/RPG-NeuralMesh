@@ -1,0 +1,123 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.lessons",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "lessons",
+    "title": "KEC International lessons learned",
+    "owner_role": "PMO head",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:L-02",
+      "catalogue_id": "L-02",
+      "title": "Overseas integration post-mortem",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "PMO head",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    },
+    {
+      "id": "kec:L-02a",
+      "catalogue_id": "L-02a",
+      "title": "Post-mortem annex - claims and labour (full text)",
+      "sensitivity": "Confidential",
+      "ceiling": "RAG",
+      "owner_role": "PMO head",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "requires_approval": true
+    }
+  ],
+  "documents": [
+    {
+      "id": "kec:L-02-01",
+      "datapoint": "kec:L-02",
+      "title": "Overseas integration post-mortem - first 100 days",
+      "kind": "post_mortem",
+      "version": "2026-02",
+      "tags": [
+        "integration",
+        "acquisition",
+        "overseas",
+        "post-mortem",
+        "process-ownership"
+      ],
+      "summary": "Systems were cut over before process owners were agreed, so teams rebuilt workarounds. Agreeing process ownership first, then gating cut-over behind a sign-off, is the main recommendation. (Illustrative.)",
+      "body_file": "source/L-02-01.md",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "kec:L-02-02",
+      "datapoint": "kec:L-02",
+      "title": "Overseas mobilisation lessons - labour, contracts, payment cycles",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "mobilisation",
+        "labour",
+        "contracts",
+        "payment-cycle",
+        "overseas"
+      ],
+      "summary": "Local labour rules, contract terms and payment cycles surfaced after day 60 and were underestimated at close. A review by day 30 is advised.",
+      "body_file": "source/L-02-02.md",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:overseas-mobilisation-terms"
+      ]
+    },
+    {
+      "id": "kec:L-02a-01",
+      "datapoint": "kec:L-02a",
+      "title": "Post-mortem annex - claims and labour",
+      "kind": "post_mortem",
+      "version": "2026-02",
+      "tags": [
+        "claims",
+        "labour",
+        "annex",
+        "restricted-content"
+      ],
+      "summary": "Full annex with claim figures and named parties. Owner approval required.",
+      "body_file": "gated/L-02a-01.md",
+      "gated": true,
+      "concepts": [
+        "concept:overseas-mobilisation-terms",
+        "concept:acquisition-integration"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-KEC-CLAIMS-4410",
+        "document": "kec:L-02a-01"
+      }
+    ]
+  }
+}

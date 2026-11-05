@@ -1,0 +1,120 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "group.skills",
+    "scope": "group",
+    "subsidiary": "group",
+    "title": "SAMPLE until SkillForge exports it: group skills with aliases",
+    "owner_role": "Group HR (SkillForge)",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true
+  },
+  "entities": [
+    {
+      "id": "skill:manufacturing",
+      "type": "Skill",
+      "label": "Manufacturing",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/manufacturing"
+        }
+      ]
+    },
+    {
+      "id": "skill:engineering",
+      "type": "Skill",
+      "label": "Engineering",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/engineering"
+        }
+      ]
+    },
+    {
+      "id": "skill:hr",
+      "type": "Skill",
+      "label": "HR",
+      "aliases": [
+        "human resources"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/hr"
+        }
+      ]
+    },
+    {
+      "id": "skill:finance",
+      "type": "Skill",
+      "label": "Finance",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/finance"
+        }
+      ]
+    },
+    {
+      "id": "skill:r-and-d-npd",
+      "type": "Skill",
+      "label": "R&D / NPD",
+      "aliases": [
+        "research and development",
+        "new product development"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/r&d / npd"
+        }
+      ]
+    },
+    {
+      "id": "skill:quality-management",
+      "type": "Skill",
+      "label": "Quality Management",
+      "aliases": [
+        "quality assurance",
+        "QA",
+        "QMS"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/quality management"
+        }
+      ]
+    },
+    {
+      "id": "skill:rubber-plantation-management",
+      "type": "Skill",
+      "label": "Rubber Plantation Management",
+      "aliases": [
+        "estate management",
+        "rubber estate operations"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/rubber plantation management"
+        }
+      ]
+    }
+  ],
+  "relationships": []
+}

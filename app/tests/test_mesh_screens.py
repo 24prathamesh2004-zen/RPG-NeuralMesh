@@ -61,7 +61,7 @@ def test_admin_endpoint_reports_registry_and_groq_configuration(monkeypatch):
     assert response.status_code == 200
     assert len(response.json()["registry"]) == 4
     assert response.json()["groq_configured"] is True
-    assert response.json()["orchestrator_stage"] == "parallel_mcp_evidence_fanout"
+    assert response.json()["orchestrator_stage"] == "resolve_route_fanout_scope_expand_build_answer_check"
 
 
 def test_screen_routes_require_authentication():

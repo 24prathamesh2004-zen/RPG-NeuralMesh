@@ -6,14 +6,13 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-CompanyId = Literal["ceat", "kec", "zensar", "harrisons"]
 
 
 class SignUpRequest(BaseModel):
     email: str = Field(min_length=5, max_length=254)
     password: str = Field(min_length=10, max_length=128)
     display_name: str = Field(min_length=2, max_length=100)
-    company: CompanyId
+    company: str
     expert_opt_in: bool = False
     expert_title: str = Field(default="", max_length=120)
     expert_skills: list[str] = Field(default_factory=list, max_length=20)
@@ -24,6 +23,15 @@ class SignUpRequest(BaseModel):
         value = value.strip().lower()
         if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", value):
             raise ValueError("Enter a valid email address")
+        return value
+
+    @field_validator("company")
+    @classmethod
+    def validate_company(cls, value: str) -> str:
+        from shared.registry import node_ids
+
+        if value not in node_ids():
+            raise ValueError("Choose a registered subsidiary")
         return value
 
     @model_validator(mode="after")

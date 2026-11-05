@@ -3,8 +3,9 @@ import { Activity, Bell, Boxes, CircleHelp, LayoutDashboard, LogOut, Network, Sh
 import type { ReactNode } from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import { DEFAULT_MESH_SCOPE, MeshScopeProvider } from '../../context/MeshScopeContext'
+import { getMeshNodes } from '../../services/api'
 import type { CompanyId } from '../../services/api'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const NAV = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,7 +26,16 @@ const SCOPES: { id: string; label: string; nodes: CompanyId[] }[] = [
 export default function AppShell({ children }: { children: ReactNode }) {
   const { user, signOut } = useAuth()
   const [selectedNodes, setSelectedNodes] = useState<CompanyId[]>(DEFAULT_MESH_SCOPE)
-  const scopeId = SCOPES.find((scope) => scope.nodes.length === selectedNodes.length && scope.nodes.every((node) => selectedNodes.includes(node)))?.id ?? 'custom'
+  const [allNodes, setAllNodes] = useState<CompanyId[]>(DEFAULT_MESH_SCOPE)
+  useEffect(() => {
+    getMeshNodes().then(({ data }) => {
+      const ids = data.nodes.map((node) => node.node_id)
+      setAllNodes(ids)
+      setSelectedNodes(ids)
+    }).catch(() => undefined)
+  }, [])
+  const scopes = SCOPES.map((scope) => (scope.id === 'all' ? { ...scope, nodes: allNodes } : scope))
+  const scopeId = scopes.find((scope) => scope.nodes.length === selectedNodes.length && scope.nodes.every((node) => selectedNodes.includes(node)))?.id ?? 'custom'
   const initials = user?.display_name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase() ?? 'GS'
 
   return (
@@ -56,11 +66,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 aria-label="Company scope"
                 value={scopeId}
                 onChange={(event) => {
-                  const scope = SCOPES.find((item) => item.id === event.target.value)
+                  const scope = scopes.find((item) => item.id === event.target.value)
                   if (scope) setSelectedNodes(scope.nodes)
                 }}
               >
-                {SCOPES.map((scope) => <option key={scope.id} value={scope.id}>{scope.label}</option>)}
+                {scopes.map((scope) => <option key={scope.id} value={scope.id}>{scope.label}</option>)}
                 <option value="custom">Custom selection</option>
               </select>
             </label>

@@ -1,0 +1,67 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.commercial",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "commercial",
+    "title": "CEAT commercial knowledge",
+    "owner_role": "CMO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "ceat:C-03",
+      "catalogue_id": "C-03",
+      "title": "Channel pricing",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "CMO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-03"
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:C-03-01",
+      "datapoint": "ceat:C-03",
+      "title": "Channel pricing sheet (restricted)",
+      "kind": "report",
+      "version": "2026-09",
+      "tags": [
+        "pricing",
+        "channel",
+        "restricted"
+      ],
+      "summary": "Restricted pricing sheet. Metadata only.",
+      "body_file": "source/C-03-01.md",
+      "concepts": [
+        "concept:pricing"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-CEAT-PRICE-3301",
+        "document": "ceat:C-03-01"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+# Node registry of RPG NeuralMesh. The API, the orchestrator, the nodes, the pack
+# builder and the screens read the list of Mesh Nodes from this file only.
+# A node URL can be overridden with NEURALMESH_<ID>_URL, a port with NEURALMESH_<ID>_PORT.
+embedding_model: all-MiniLM-L6-v2
+nodes:
+  - id: ceat
+    display: CEAT
+    port: 8101
+    level: L2
+    tone: "#e8590c"
+  - id: kec
+    display: KEC International
+    port: 8102
+    level: L2
+    tone: "#1c7ed6"
+  - id: zensar
+    display: Zensar
+    port: 8103
+    level: L2
+    tone: "#7048e8"
+  - id: harrisons
+    display: Harrisons Malayalam
+    port: 8104
+    level: L1
+    tone: "#5c940d"

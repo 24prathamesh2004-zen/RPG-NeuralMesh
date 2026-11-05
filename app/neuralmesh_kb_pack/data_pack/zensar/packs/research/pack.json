@@ -1,0 +1,75 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "zensar.research",
+    "scope": "subsidiary",
+    "subsidiary": "zensar",
+    "domain": "research",
+    "title": "Zensar research and pilot results",
+    "owner_role": "Head of AI CoE",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "zensar:R-02",
+      "catalogue_id": "R-02",
+      "title": "Pilot and experiment results (client names masked)",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head of AI CoE",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "zensar:R-02-01",
+      "datapoint": "zensar:R-02",
+      "title": "Pilot result - AI-assisted testing (client masked)",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "pilot",
+        "testing",
+        "ai"
+      ],
+      "summary": "Pilot of AI-assisted test generation reduced test authoring time; effects varied by application type. Client name removed.",
+      "body_file": "source/R-02-01.md",
+      "concepts": [
+        "concept:pilot-results",
+        "concept:ai-assisted-delivery"
+      ]
+    },
+    {
+      "id": "zensar:R-02-02",
+      "datapoint": "zensar:R-02",
+      "title": "Pilot result - knowledge assistant for support (client masked)",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "pilot",
+        "support",
+        "knowledge"
+      ],
+      "summary": "A knowledge assistant helped resolve repeat tickets faster but needed curated sources. Client name removed.",
+      "body_file": "source/R-02-02.md",
+      "concepts": [
+        "concept:pilot-results"
+      ]
+    }
+  ]
+}

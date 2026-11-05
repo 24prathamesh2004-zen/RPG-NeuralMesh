@@ -2,32 +2,42 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-MeshNodeId = Literal["ceat", "kec", "zensar", "harrisons"]
-MeshPurpose = Literal["problem_solving", "compliance", "bid_support"]
+from shared.registry import node_ids
+
+MeshPurpose = Literal["problem_solving", "compliance", "bid_support", "learning", "career_mobility"]
 ExposureMode = Literal["MD", "SUM", "RAG", "LIVE"]
+
+
+def check_node_list(nodes: list[str] | None) -> list[str] | None:
+    if nodes is None:
+        return None
+    unknown = set(nodes) - set(node_ids())
+    if unknown:
+        raise ValueError(f"Unknown subsidiary node: {', '.join(sorted(unknown))}")
+    if len(set(nodes)) != len(nodes):
+        raise ValueError("Node selection cannot contain duplicates")
+    return nodes
 
 
 class MeshQueryRequest(BaseModel):
     question: str = Field(min_length=3, max_length=2000)
-    nodes: list[MeshNodeId] = Field(min_length=1, max_length=4)
+    nodes: list[str] | None = Field(default=None, min_length=1, max_length=16)
     purpose: MeshPurpose
     mode: ExposureMode | None = None
     as_of: date | None = None
 
     @field_validator("nodes")
     @classmethod
-    def nodes_must_be_unique(cls, nodes: list[MeshNodeId]) -> list[MeshNodeId]:
-        if len(set(nodes)) != len(nodes):
-            raise ValueError("Node selection cannot contain duplicates")
-        return nodes
+    def nodes_must_be_registered_and_unique(cls, nodes: list[str] | None) -> list[str] | None:
+        return check_node_list(nodes)
 
 
 class MeshNodeResponse(BaseModel):
-    node_id: MeshNodeId
+    node_id: str
     status: str
     results: list[dict] = Field(default_factory=list)
     withheld: list[dict] = Field(default_factory=list)
@@ -35,10 +45,24 @@ class MeshNodeResponse(BaseModel):
 
 
 class MeshQueryResponse(BaseModel):
+    schema_version: str = "1.0"
     question: str
     purpose: MeshPurpose
-    status: Literal["ok", "partial"]
+    status: Literal["ok", "partial", "needs_node_choice"]
     answer: str | None = None
+    answer_status: str = "evidence_only"
+    answer_reason: str | None = None
+    citations: list[str] = Field(default_factory=list)
+    checks: list[dict] = Field(default_factory=list)
+    cached: bool = False
+    routing: dict[str, Any] = Field(default_factory=dict)
+    evidence: list[dict] = Field(default_factory=list)
+    also_found: list[dict] = Field(default_factory=list)
+    relationships: list[dict] = Field(default_factory=list)
+    proposed_relationships: list[dict] = Field(default_factory=list)
+    omitted: int = 0
+    model_calls: list[dict] = Field(default_factory=list)
+    trace_id: str | None = None
     node_results: list[MeshNodeResponse]
     sources: list[dict]
     withheld: list[dict]

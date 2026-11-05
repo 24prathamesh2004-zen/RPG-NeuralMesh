@@ -1,4 +1,4 @@
-"""FastAPI application entry point — __APP_TITLE__.
+"""FastAPI application entry point — RPG NeuralMesh.
 
 Accelerator baseline: environment-scoped CORS, structured logging, Phoenix
 tracing, and a session-oriented example router. Add routers under
@@ -6,12 +6,14 @@ api/routers/ and register them in the "Routers" block.
 """
 from __future__ import annotations
 
+import asyncio
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import auth, example, health, mesh
+from api.routers import auth, context, example, health, mesh
 from observability.tracing import init_tracing, instrument_fastapi
 from shared.config import get_settings
 from shared.logger import get_logger, setup_logging
@@ -29,13 +31,19 @@ async def lifespan(app: FastAPI):
     # Schema is managed by Alembic — run `alembic upgrade head` before starting
     # (pre-deploy pipeline step or init container), not create_all() on startup.
     log.info("api.startup", env=settings.app_env, version=APP_VERSION)
+    from services.mesh_runtime import runtime  # strict mode refuses a cloud model outside development here
+
+    rt = runtime()
+    if os.getenv("NEURALMESH_REFRESH_GRAPH_ON_START", "1") == "1":
+        refresh = asyncio.create_task(rt.refresh_from_nodes())  # nodes may start after the API
+        app.state.graph_refresh = refresh
     yield
     log.info("api.shutdown")
 
 
 app = FastAPI(
-    title="__APP_TITLE__ API",
-    description="__APP_DESC__",
+    title="RPG NeuralMesh API",
+    description="Cross-subsidiary knowledge mesh and context API for SkillForge",
     version=APP_VERSION,
     lifespan=lifespan,
 )
@@ -45,7 +53,6 @@ instrument_fastapi(app)
 if settings.app_env == "development":
     _cors_origins = [
         "http://localhost:3000",
-        "http://localhost:__FRONTEND_PORT__",
         "http://localhost:5173",
     ]
 else:
@@ -69,3 +76,4 @@ app.include_router(health.router, tags=["Health"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(example.router, prefix="/api/v1/example", tags=["Example"])
 app.include_router(mesh.router, prefix="/api/v1/mesh", tags=["Mesh"])
+app.include_router(context.router, prefix="/api/v1/context", tags=["Context for SkillForge"])

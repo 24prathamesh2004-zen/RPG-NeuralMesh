@@ -1,0 +1,351 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.talent",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "talent",
+    "title": "CEAT roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-04",
+    "synthetic": true
+  },
+  "datapoints": [
+    {
+      "id": "ceat:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "consent_required": true,
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "HRMS",
+      "refresh": "Daily"
+    },
+    {
+      "id": "ceat:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:T-01-01",
+      "datapoint": "ceat:T-01",
+      "title": "Quality Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "quality",
+        "engineering"
+      ],
+      "summary": "The Quality Engineer role requires Engineering at advanced level, and Manufacturing, R&D / NPD and Quality Management at intermediate level.",
+      "skills": [
+        {
+          "skill": "skill:quality-management",
+          "level": "M"
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "ceat:role/process-engineer",
+      "type": "Role",
+      "label": "Process Engineer",
+      "subsidiary": "ceat",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/CEAT/Process Engineer"
+        }
+      ]
+    },
+    {
+      "id": "ceat:role/quality-engineer",
+      "type": "Role",
+      "label": "Quality Engineer",
+      "subsidiary": "ceat",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/CEAT/Quality Engineer"
+        }
+      ]
+    },
+    {
+      "id": "ceat:role/sales-executive",
+      "type": "Role",
+      "label": "Sales Executive",
+      "subsidiary": "ceat",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/CEAT/Sales Executive"
+        }
+      ]
+    }
+  ],
+  "experts": [
+    {
+      "id": "ceat:expert/CE-1",
+      "role": "Raw-material quality lead",
+      "skills": [
+        {
+          "skill": "skill:quality-management",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "natural rubber",
+        "lot acceptance",
+        "supplier quality"
+      ],
+      "evidence": [
+        "ceat:E-03-01",
+        "ceat:E-03-04"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Rohan Deshmukh (fictional)"
+      }
+    },
+    {
+      "id": "ceat:expert/CE-2",
+      "role": "Warehouse and logistics manager",
+      "skills": [
+        {
+          "skill": "skill:manufacturing",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "storage",
+        "FIFO",
+        "traceability"
+      ],
+      "evidence": [
+        "ceat:E-03-02",
+        "ceat:E-03-05"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Kavita Iyer (fictional)"
+      }
+    },
+    {
+      "id": "ceat:expert/CE-5",
+      "role": "Polymer scientist",
+      "skills": [
+        {
+          "skill": "skill:r-and-d-npd",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "compound development"
+      ],
+      "evidence": [
+        "ceat:E-01-01"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:ceat.talent/001",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/process-engineer",
+      "to": "skill:manufacturing",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/002",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/process-engineer",
+      "to": "skill:engineering",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/003",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/process-engineer",
+      "to": "skill:hr",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/004",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/quality-engineer",
+      "to": "skill:manufacturing",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/005",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/quality-engineer",
+      "to": "skill:engineering",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/006",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/quality-engineer",
+      "to": "skill:r-and-d-npd",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/007",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/quality-engineer",
+      "to": "skill:quality-management",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/008",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/sales-executive",
+      "to": "skill:finance",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/009",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/sales-executive",
+      "to": "skill:hr",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/010",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/sales-executive",
+      "to": "skill:manufacturing",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-04"
+      }
+    }
+  ]
+}

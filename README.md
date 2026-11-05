@@ -6,15 +6,34 @@ RPG NeuralMesh is a synthetic-data proof of concept for cross-subsidiary knowled
 
 ## Current capabilities
 
-- Four independent subsidiary MCP servers: CEAT (`8101`), KEC (`8102`), Zensar (`8103`), and Harrisons Malayalam (`8104`).
-- Node-local FTS5 search, approved summaries, health/capability discovery, consent-filtered expert search, and access requests.
-- Node-side exposure policy, metadata-only restrictions, configured UPSI blackout handling, time-limited grants, and content-free hash-chained audit logs.
-- A central LangGraph fan-out endpoint at `POST /api/v1/mesh/query` that calls the selected MCP nodes and returns cited evidence, withheld decisions, and per-node status.
+- One node registry, `app/config/nodes.yaml`, read by the API, the orchestrator, the nodes and the pack builder.
+- Four independent subsidiary MCP servers: CEAT (`8101`), KEC (`8102`), Zensar (`8103`), and Harrisons Malayalam (`8104`). Seven tools each: `health`, `describe_capabilities` (with packs and a node profile), `search`, `summarize`, `find_experts`, `request_access` and `export_graph` (metadata only, for the mesh service identity).
+- 19 knowledge packs (one per subsidiary and domain) built from the synthetic YAML by `knowledge/packgen.py`, validated with the group packs, each with a FAISS index of the text its node may release. Node search merges FTS5 keyword search with Porter stemming, vector search (all-MiniLM-L6-v2 through ONNX Runtime) and the routed concepts by reciprocal rank fusion.
+- Node-side policy as before, plus a per-datapoint purpose check (`learning` and `career_mobility` added). Every returned item is an evidence record (`app/contracts/evidence.py`, `schema_version` 1.0).
+- A central mesh graph (SQLite tables loaded into NetworkX) filled from the group packs and the nodes' exports. Routing resolves concepts by alias and by meaning, so the node choice is optional. Cross-subsidiary links count only after both owners approve them in Governance.
+- A context layer in the LangGraph flow: resolve, route, fan out, scope (top 12 documents round-robin by node rank, re-rank that demotes but never drops), expand, build (24,000-character budget), answer, check (seven code rules). A model policy (`app/config/model_policy.json`) allows a cloud model in development only and never for Confidential or Restricted evidence, and strict mode refuses one at start outside development. Model calls are audited without content, and answers are cached by their evidence bundle.
+- A context API for SkillForge under `/api/v1/context` and as an MCP gateway on `8100`: `role_context`, `skill_context`, `ask`, `learning_sources`, `find_mentors`, `vocabulary_export`, plus the talent pack import.
 - SQLite-backed signup/sign-in, subsidiary membership, and optional consented expert profiles.
-- React UI pages for Dashboard, Ask NeuralMesh, Expert Finder, Mesh Nodes, Governance, and Admin. Governance reviews are simulated for local demo accounts only.
-- A synthetic KB pack and golden scenarios under `app/neuralmesh_kb_pack/`.
+- React UI pages for Dashboard, Ask NeuralMesh (automatic routing, answer, links, also-found list), Expert Finder, Mesh Nodes (profiles and the graph), Governance (requests, links between companies, decision log), and Admin. Reviews are simulated for local demo accounts only.
 
-**Current orchestration limit:** LangGraph currently performs parallel MCP evidence fan-out. Iterative agent planning and Groq-backed answer synthesis are not implemented yet; the Ask page presents evidence and citations rather than claiming a synthesized answer.
+**Answer model:** no model key ships with the repository, so the Ask page and `ask` return the evidence and citations alone, with the reason. For development without a model, `NEURALMESH_MODEL_POLICY=config/model_policy.dev-standin.json` points every step at `evaluations/standin_model_server.py`, a stand-in that composes answers from the evidence by rule and is not a language model. With `NEURALMESH_GROQ_API_KEY` set in development, the answer step runs only for bundles without Confidential or Restricted records, as the model policy requires. Use the `group-gateway` or `local-ollama` entry of the policy file for the rest.
+
+## Start locally on macOS or Linux
+
+From `app/`, with the environment of `app/requirements.txt` active:
+
+```bash
+make packs                        # data pack, 19 knowledge packs, vector indexes (needs the all-MiniLM-L6-v2 ONNX model)
+bash scripts/dev_stack.sh start   # stand-in model, the four nodes, the API, the gateway on 8100 and the Vite UI on 5173
+make test                         # unit and flow tests
+make live-check                   # wiring check against the running services
+python -m evaluations.golden_answers   # the ten golden scenarios through the running API
+bash scripts/dev_stack.sh stop
+```
+
+`make nodes`, `make dev` and `make gateway` start the parts one by one instead. `python -m mcp_nodes <id>` runs any registered node.
+
+`python -m scripts.issue_service_token` prints a development token for SkillForge's service identity.
 
 ## Prerequisites
 
@@ -92,3 +111,7 @@ npm.cmd --prefix app/ui run build
 - [Design plan](planning_docs/RPG_NeuralMesh_Design_Plan_v3_2.md)
 - [Subsidiary MCP server plan](planning_docs/RPG_NeuralMesh_MCP_Servers_Plan.md)
 - [Target wireframe](planning_docs/RPG_NeuralMesh_Wireframe_v4.html)
+- [Knowledge mesh, context layer and SkillForge context plan](planning_docs/RPG_NeuralMesh_Knowledge_Mesh_Strategy_Plan_v2.md) (the earlier version is in `planning_docs/Older_Versions/`)
+- [Knowledge pack format: JSON Schema, validator and examples](planning_docs/knowledge_pack_format/)
+- [Routing check of the mesh graph on the golden scenarios](planning_docs/graph_check/)
+- [Implementation status of plan v2](planning_docs/RPG_NeuralMesh_Implementation_Status.md)

@@ -1,0 +1,942 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "group.vocabulary",
+    "scope": "group",
+    "subsidiary": "group",
+    "title": "Group vocabulary of domains, subsidiaries and concepts",
+    "owner_role": "Mesh knowledge curator",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true
+  },
+  "entities": [
+    {
+      "id": "domain:engineering",
+      "type": "Domain",
+      "label": "Engineering"
+    },
+    {
+      "id": "domain:operations",
+      "type": "Domain",
+      "label": "Operations"
+    },
+    {
+      "id": "domain:commercial",
+      "type": "Domain",
+      "label": "Commercial"
+    },
+    {
+      "id": "domain:research",
+      "type": "Domain",
+      "label": "R&D and innovation"
+    },
+    {
+      "id": "domain:corporate",
+      "type": "Domain",
+      "label": "Corporate functions"
+    },
+    {
+      "id": "domain:lessons",
+      "type": "Domain",
+      "label": "Lessons learned"
+    },
+    {
+      "id": "domain:mesh",
+      "type": "Domain",
+      "label": "Mesh meta-data"
+    },
+    {
+      "id": "domain:talent",
+      "type": "Domain",
+      "label": "Talent and learning"
+    },
+    {
+      "id": "org:ceat",
+      "type": "Subsidiary",
+      "label": "CEAT",
+      "subsidiary": "ceat"
+    },
+    {
+      "id": "org:kec",
+      "type": "Subsidiary",
+      "label": "KEC International",
+      "subsidiary": "kec"
+    },
+    {
+      "id": "org:zensar",
+      "type": "Subsidiary",
+      "label": "Zensar Technologies",
+      "subsidiary": "zensar"
+    },
+    {
+      "id": "org:harrisons",
+      "type": "Subsidiary",
+      "label": "Harrisons Malayalam",
+      "subsidiary": "harrisons"
+    },
+    {
+      "id": "concept:incoming-quality-control",
+      "type": "Concept",
+      "label": "Incoming quality control",
+      "aliases": [
+        "incoming inspection",
+        "receipt inspection"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:lot-acceptance",
+      "type": "Concept",
+      "label": "Lot acceptance",
+      "aliases": [
+        "incoming lot acceptance",
+        "acceptance testing"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:lot-quality-trending",
+      "type": "Concept",
+      "label": "Lot-level quality trending",
+      "aliases": [
+        "per-lot trending",
+        "quality trending by lot"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:lot-traceability",
+      "type": "Concept",
+      "label": "Lot traceability",
+      "aliases": [
+        "batch traceability",
+        "lot tracking"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:time-to-use-limit",
+      "type": "Concept",
+      "label": "Time-to-use limit",
+      "aliases": [
+        "maximum storage time",
+        "shelf-life limit"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:raw-material-storage",
+      "type": "Concept",
+      "label": "Raw material storage",
+      "aliases": [
+        "warehouse storage",
+        "FIFO storage"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:material-ageing",
+      "type": "Concept",
+      "label": "Material ageing",
+      "aliases": [
+        "heat ageing",
+        "storage ageing"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:contamination-control",
+      "type": "Concept",
+      "label": "Contamination and moisture control",
+      "aliases": [
+        "foreign matter control",
+        "hygiene"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:supplier-feedback-loop",
+      "type": "Concept",
+      "label": "Supplier feedback loop",
+      "aliases": [
+        "supplier corrective action",
+        "supplier scorecard"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:root-cause-analysis",
+      "type": "Concept",
+      "label": "Root cause analysis",
+      "aliases": [
+        "RCA",
+        "failure analysis"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:latex-pre-coagulation",
+      "type": "Concept",
+      "label": "Latex pre-coagulation",
+      "aliases": [
+        "premature coagulation",
+        "latex spoilage"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:latex-collection-and-transport",
+      "type": "Concept",
+      "label": "Latex collection and transport",
+      "aliases": [
+        "collection-to-factory time",
+        "latex transport"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:compound-formulation",
+      "type": "Concept",
+      "label": "Compound formulation",
+      "domain": "engineering",
+      "aliases": [
+        "formulation",
+        "formulations",
+        "rubber compound",
+        "tread compound",
+        "compound",
+        "material specification"
+      ]
+    },
+    {
+      "id": "concept:materials-handling",
+      "type": "Concept",
+      "label": "Materials handling",
+      "domain": "engineering",
+      "aliases": [
+        "material handling",
+        "handling and storage",
+        "handling"
+      ]
+    },
+    {
+      "id": "concept:failure-pattern",
+      "type": "Concept",
+      "label": "Failure pattern",
+      "domain": "operations",
+      "aliases": [
+        "failures",
+        "failure",
+        "field failure",
+        "defect pattern",
+        "defects"
+      ]
+    },
+    {
+      "id": "concept:breakdown-rca",
+      "type": "Concept",
+      "label": "Maintenance and breakdown RCA",
+      "domain": "operations",
+      "aliases": [
+        "breakdown",
+        "breakdowns",
+        "maintenance rca",
+        "downtime",
+        "equipment failure"
+      ]
+    },
+    {
+      "id": "concept:near-miss-pattern",
+      "type": "Concept",
+      "label": "Near-miss pattern",
+      "domain": "operations",
+      "aliases": [
+        "near miss",
+        "near misses",
+        "hse incident",
+        "safety incident"
+      ]
+    },
+    {
+      "id": "concept:project-delay-pattern",
+      "type": "Concept",
+      "label": "Project delay pattern",
+      "domain": "operations",
+      "aliases": [
+        "delays",
+        "delay",
+        "schedule delay",
+        "site progress",
+        "delay notes"
+      ]
+    },
+    {
+      "id": "concept:recurring-pattern",
+      "type": "Concept",
+      "label": "Recurring pattern across sites",
+      "domain": "operations",
+      "aliases": [
+        "repeat",
+        "repeats",
+        "recurring",
+        "repeated",
+        "across plants",
+        "across projects"
+      ]
+    },
+    {
+      "id": "concept:acquisition-integration",
+      "type": "Concept",
+      "label": "Acquisition integration",
+      "domain": "lessons",
+      "aliases": [
+        "integration",
+        "overseas acquisition",
+        "overseas acquisitions",
+        "acquisition",
+        "first 100 days",
+        "100 days",
+        "100-day",
+        "post-merger",
+        "merger"
+      ]
+    },
+    {
+      "id": "concept:process-ownership-before-cut-over",
+      "type": "Concept",
+      "label": "Process ownership before system cut-over",
+      "domain": "lessons",
+      "aliases": [
+        "process ownership",
+        "cut-over",
+        "cutover",
+        "systems integration",
+        "process-first",
+        "process owner"
+      ]
+    },
+    {
+      "id": "concept:integration-checklist",
+      "type": "Concept",
+      "label": "Integration checklist",
+      "domain": "lessons",
+      "aliases": [
+        "checklist",
+        "playbook"
+      ]
+    },
+    {
+      "id": "concept:overseas-mobilisation-terms",
+      "type": "Concept",
+      "label": "Local labour, contract and payment terms",
+      "domain": "commercial",
+      "aliases": [
+        "labour",
+        "payment terms",
+        "payment cycle",
+        "payment cycles",
+        "contract terms",
+        "mobilisation",
+        "claims"
+      ]
+    },
+    {
+      "id": "concept:contract-clause-precedent",
+      "type": "Concept",
+      "label": "Contract clause precedents",
+      "domain": "commercial",
+      "aliases": [
+        "liquidated damages",
+        "contract clause",
+        "contract clauses",
+        "precedents"
+      ]
+    },
+    {
+      "id": "concept:supplier-quality",
+      "type": "Concept",
+      "label": "Supplier quality",
+      "domain": "engineering",
+      "aliases": [
+        "supplier quality",
+        "supplier-quality",
+        "vendor quality",
+        "raw-material quality"
+      ]
+    },
+    {
+      "id": "concept:ai-assisted-delivery",
+      "type": "Concept",
+      "label": "AI-assisted delivery",
+      "domain": "commercial",
+      "aliases": [
+        "ai assistant",
+        "ai assistants",
+        "ai-assisted",
+        "ai assisted",
+        "code review",
+        "test generation"
+      ]
+    },
+    {
+      "id": "concept:responsible-ai-use",
+      "type": "Concept",
+      "label": "Responsible AI use",
+      "domain": "corporate",
+      "aliases": [
+        "safely",
+        "safe use",
+        "responsible ai",
+        "ai policy",
+        "data handling rules",
+        "approved gateways"
+      ]
+    },
+    {
+      "id": "concept:pilot-results",
+      "type": "Concept",
+      "label": "Pilot and experiment results",
+      "domain": "research",
+      "aliases": [
+        "pilot",
+        "pilots",
+        "experiment results",
+        "what has worked",
+        "worked in pilots"
+      ]
+    },
+    {
+      "id": "concept:knowledge-transfer",
+      "type": "Concept",
+      "label": "Knowledge transfer and handover",
+      "domain": "commercial",
+      "aliases": [
+        "handover",
+        "transition",
+        "knowledge transfer",
+        "shadowing"
+      ]
+    },
+    {
+      "id": "concept:employee-onboarding",
+      "type": "Concept",
+      "label": "Employee onboarding",
+      "domain": "corporate",
+      "aliases": [
+        "onboard",
+        "onboarding",
+        "new joiners",
+        "new joiner",
+        "induction"
+      ]
+    },
+    {
+      "id": "concept:finance-benchmark-pre-results",
+      "type": "Concept",
+      "label": "Pre-results finance and capex benchmarks",
+      "domain": "corporate",
+      "aliases": [
+        "capex benchmarks",
+        "capex",
+        "pre-results",
+        "finance benchmarks",
+        "benchmark",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "concept:pricing",
+      "type": "Concept",
+      "label": "Pricing and bid prices",
+      "domain": "commercial",
+      "aliases": [
+        "pricing",
+        "price",
+        "prices",
+        "bid price",
+        "channel pricing",
+        "price book"
+      ]
+    },
+    {
+      "id": "concept:tower-design-standard",
+      "type": "Concept",
+      "label": "Tower design standards",
+      "domain": "engineering",
+      "aliases": [
+        "tower design",
+        "design standards",
+        "type test",
+        "galvanising"
+      ]
+    },
+    {
+      "id": "concept:anticoagulant-preservation",
+      "type": "Concept",
+      "label": "Anticoagulant dosing and field preservation",
+      "domain": "operations",
+      "aliases": [
+        "anticoagulant",
+        "preservation",
+        "dosing"
+      ]
+    },
+    {
+      "id": "concept:monsoon-operations",
+      "type": "Concept",
+      "label": "Monsoon operating procedure",
+      "domain": "operations",
+      "aliases": [
+        "monsoon",
+        "rain days",
+        "rainy season",
+        "rain guards"
+      ]
+    },
+    {
+      "id": "concept:title-dispute",
+      "type": "Concept",
+      "label": "Title dispute file",
+      "domain": "corporate",
+      "aliases": [
+        "title dispute",
+        "litigation",
+        "legal file"
+      ]
+    },
+    {
+      "id": "concept:esg-water-energy",
+      "type": "Concept",
+      "label": "ESG water and energy metrics",
+      "domain": "corporate",
+      "aliases": [
+        "esg",
+        "water recycling",
+        "energy use"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:group.vocabulary/001",
+      "type": "BROADER",
+      "from": "concept:lot-acceptance",
+      "to": "concept:incoming-quality-control",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/002",
+      "type": "BROADER",
+      "from": "concept:lot-quality-trending",
+      "to": "concept:incoming-quality-control",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/003",
+      "type": "PART_OF_SKILL",
+      "from": "concept:incoming-quality-control",
+      "to": "skill:quality-management",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/004",
+      "type": "PART_OF_SKILL",
+      "from": "concept:supplier-feedback-loop",
+      "to": "skill:quality-management",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/005",
+      "type": "PART_OF_SKILL",
+      "from": "concept:lot-traceability",
+      "to": "skill:manufacturing",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/006",
+      "type": "PART_OF_SKILL",
+      "from": "concept:time-to-use-limit",
+      "to": "skill:manufacturing",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/007",
+      "type": "PART_OF_SKILL",
+      "from": "concept:raw-material-storage",
+      "to": "skill:manufacturing",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/008",
+      "type": "PART_OF_SKILL",
+      "from": "concept:contamination-control",
+      "to": "skill:manufacturing",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/009",
+      "type": "PART_OF_SKILL",
+      "from": "concept:root-cause-analysis",
+      "to": "skill:engineering",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/010",
+      "type": "PART_OF_SKILL",
+      "from": "concept:latex-pre-coagulation",
+      "to": "skill:rubber-plantation-management",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/011",
+      "type": "PART_OF_SKILL",
+      "from": "concept:latex-collection-and-transport",
+      "to": "skill:rubber-plantation-management",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/012",
+      "type": "RELATED_TO",
+      "from": "concept:material-ageing",
+      "to": "concept:time-to-use-limit",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/013",
+      "type": "RELATED_TO",
+      "from": "concept:latex-collection-and-transport",
+      "to": "concept:time-to-use-limit",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      },
+      "properties": {
+        "note": "Both limit the time between collection or receipt and use, because the material degrades while it waits."
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/014",
+      "type": "RELATED_TO",
+      "from": "concept:latex-pre-coagulation",
+      "to": "concept:material-ageing",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/101",
+      "type": "BROADER",
+      "from": "concept:raw-material-storage",
+      "to": "concept:materials-handling",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/102",
+      "type": "BROADER",
+      "from": "concept:contamination-control",
+      "to": "concept:materials-handling",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/103",
+      "type": "BROADER",
+      "from": "concept:breakdown-rca",
+      "to": "concept:root-cause-analysis",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/104",
+      "type": "RELATED_TO",
+      "from": "concept:failure-pattern",
+      "to": "concept:root-cause-analysis",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/105",
+      "type": "RELATED_TO",
+      "from": "concept:failure-pattern",
+      "to": "concept:recurring-pattern",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/106",
+      "type": "RELATED_TO",
+      "from": "concept:project-delay-pattern",
+      "to": "concept:recurring-pattern",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/107",
+      "type": "RELATED_TO",
+      "from": "concept:near-miss-pattern",
+      "to": "concept:recurring-pattern",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/108",
+      "type": "RELATED_TO",
+      "from": "concept:breakdown-rca",
+      "to": "concept:recurring-pattern",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/109",
+      "type": "BROADER",
+      "from": "concept:integration-checklist",
+      "to": "concept:acquisition-integration",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/110",
+      "type": "BROADER",
+      "from": "concept:process-ownership-before-cut-over",
+      "to": "concept:acquisition-integration",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/111",
+      "type": "RELATED_TO",
+      "from": "concept:overseas-mobilisation-terms",
+      "to": "concept:acquisition-integration",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/112",
+      "type": "RELATED_TO",
+      "from": "concept:contract-clause-precedent",
+      "to": "concept:overseas-mobilisation-terms",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/113",
+      "type": "RELATED_TO",
+      "from": "concept:ai-assisted-delivery",
+      "to": "concept:responsible-ai-use",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/114",
+      "type": "RELATED_TO",
+      "from": "concept:pilot-results",
+      "to": "concept:ai-assisted-delivery",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/115",
+      "type": "RELATED_TO",
+      "from": "concept:anticoagulant-preservation",
+      "to": "concept:latex-pre-coagulation",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/116",
+      "type": "RELATED_TO",
+      "from": "concept:monsoon-operations",
+      "to": "concept:latex-pre-coagulation",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/117",
+      "type": "RELATED_TO",
+      "from": "concept:materials-handling",
+      "to": "concept:failure-pattern",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    },
+    {
+      "id": "rel:group.vocabulary/118",
+      "type": "SAME_AS",
+      "from": "concept:supplier-quality",
+      "to": "concept:supplier-feedback-loop",
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-05"
+      }
+    }
+  ]
+}

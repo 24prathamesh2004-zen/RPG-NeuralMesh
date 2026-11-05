@@ -1,0 +1,396 @@
+note: 'Synthetic annotations of the demo documents and experts: concepts (MENTIONS), skills with level (EXPLAINS_SKILL), supersedes, in-subsidiary
+  relationships, the purposes each datapoint owner allows, and the group skill of each expert. Reviewed by the datapoint owner before publication
+  in a real deployment.'
+published_at: '2026-11-05'
+datapoint_purposes:
+  ceat:E-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:E-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:E-03:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  ceat:L-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:O-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  ceat:O-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:F-06:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:C-03:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  kec:E-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:E-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:O-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:O-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:O-06:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:L-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:L-02a:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:C-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:C-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:F-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  zensar:C-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  zensar:R-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  zensar:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  zensar:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  harrisons:O-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  harrisons:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  harrisons:F-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  harrisons:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+documents:
+  ceat:C-03-01:
+    concepts:
+    - concept:pricing
+  ceat:E-01-01:
+    concepts:
+    - concept:compound-formulation
+  ceat:E-01-02:
+    concepts:
+    - concept:compound-formulation
+  ceat:E-02-01:
+    concepts:
+    - concept:root-cause-analysis
+    - concept:material-ageing
+    - concept:materials-handling
+    - concept:failure-pattern
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@M
+  ceat:E-02-02:
+    concepts:
+    - concept:root-cause-analysis
+    - concept:contamination-control
+    - concept:failure-pattern
+    skills:
+    - skill:engineering@M
+  ceat:E-03-01:
+    concepts:
+    - concept:lot-acceptance
+    - concept:lot-quality-trending
+    skills:
+    - skill:quality-management@M
+  ceat:E-03-02:
+    concepts:
+    - concept:raw-material-storage
+    - concept:material-ageing
+    skills:
+    - skill:manufacturing@M
+    supersedes: ceat:E-03-06
+  ceat:E-03-03:
+    concepts:
+    - concept:contamination-control
+    skills:
+    - skill:manufacturing@L
+  ceat:E-03-04:
+    concepts:
+    - concept:supplier-feedback-loop
+    skills:
+    - skill:quality-management@M
+  ceat:E-03-05:
+    concepts:
+    - concept:lot-traceability
+    - concept:time-to-use-limit
+    skills:
+    - skill:manufacturing@M
+  ceat:E-03-06:
+    concepts:
+    - concept:raw-material-storage
+    - concept:materials-handling
+    skills:
+    - skill:manufacturing@L
+  ceat:F-06-01:
+    concepts:
+    - concept:finance-benchmark-pre-results
+  ceat:L-01-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:integration-checklist
+    - concept:process-ownership-before-cut-over
+  ceat:L-01-02:
+    concepts:
+    - concept:acquisition-integration
+  ceat:O-01-01:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@L
+  ceat:O-01-02:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    skills:
+    - skill:engineering@L
+  ceat:O-02-01:
+    concepts:
+    - concept:near-miss-pattern
+    - concept:recurring-pattern
+  harrisons:F-01-01:
+    concepts:
+    - concept:latex-collection-and-transport
+    skills:
+    - skill:rubber-plantation-management@L
+  harrisons:F-01-02:
+    concepts:
+    - concept:anticoagulant-preservation
+    skills:
+    - skill:rubber-plantation-management@M
+  harrisons:F-01-03:
+    concepts:
+    - concept:latex-collection-and-transport
+    - concept:incoming-quality-control
+    skills:
+    - skill:rubber-plantation-management@L
+    - skill:quality-management@L
+  harrisons:F-01-04:
+    concepts:
+    - concept:contamination-control
+    skills:
+    - skill:rubber-plantation-management@L
+  harrisons:F-01-05:
+    concepts:
+    - concept:monsoon-operations
+    - concept:anticoagulant-preservation
+    - concept:latex-collection-and-transport
+    skills:
+    - skill:rubber-plantation-management@M
+  harrisons:F-02-01:
+    concepts:
+    - concept:title-dispute
+  harrisons:O-05-01:
+    concepts:
+    - concept:latex-pre-coagulation
+    - concept:monsoon-operations
+  harrisons:O-05-02:
+    concepts:
+    - concept:latex-collection-and-transport
+  harrisons:O-05-03:
+    concepts:
+    - concept:contamination-control
+    - concept:latex-pre-coagulation
+  harrisons:O-05-04:
+    concepts:
+    - concept:lot-quality-trending
+    - concept:incoming-quality-control
+  kec:C-01-01:
+    concepts:
+    - concept:pricing
+  kec:C-02-01:
+    concepts:
+    - concept:contract-clause-precedent
+  kec:C-02-02:
+    concepts:
+    - concept:contract-clause-precedent
+    - concept:overseas-mobilisation-terms
+  kec:E-04-01:
+    concepts:
+    - concept:tower-design-standard
+  kec:E-05-01:
+    concepts:
+    - concept:material-ageing
+    - concept:time-to-use-limit
+    skills:
+    - skill:engineering@M
+  kec:L-02-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:process-ownership-before-cut-over
+  kec:L-02-02:
+    concepts:
+    - concept:acquisition-integration
+    - concept:overseas-mobilisation-terms
+  kec:L-02a-01:
+    concepts:
+    - concept:overseas-mobilisation-terms
+    - concept:acquisition-integration
+  kec:O-01-01:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@L
+  kec:O-02-01:
+    concepts:
+    - concept:near-miss-pattern
+    - concept:recurring-pattern
+  kec:O-06-01:
+    concepts:
+    - concept:project-delay-pattern
+    - concept:recurring-pattern
+  zensar:C-05-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:integration-checklist
+    - concept:process-ownership-before-cut-over
+    - concept:overseas-mobilisation-terms
+  zensar:C-05-02:
+    concepts:
+    - concept:knowledge-transfer
+  zensar:C-05-03:
+    concepts:
+    - concept:ai-assisted-delivery
+    - concept:responsible-ai-use
+  zensar:C-05-04:
+    concepts:
+    - concept:acquisition-integration
+    - concept:process-ownership-before-cut-over
+  zensar:C-05-99:
+    concepts:
+    - concept:employee-onboarding
+  zensar:F-01-01:
+    concepts:
+    - concept:responsible-ai-use
+  zensar:R-02-01:
+    concepts:
+    - concept:pilot-results
+    - concept:ai-assisted-delivery
+  zensar:R-02-02:
+    concepts:
+    - concept:pilot-results
+relationships:
+- id: rel:ceat.engineering/001
+  type: CORROBORATES
+  from: ceat:E-02-01
+  to: ceat:E-03-05
+  properties:
+    note: Failures linked to long or uneven storage support the time-to-use limits.
+  confidence: 1
+  status: approved
+  provenance:
+    method: authored
+    by_role: Head Quality
+    created_at: '2026-11-04'
+expert_skills:
+  CE-1:
+  - skill:quality-management@A
+  CE-2:
+  - skill:manufacturing@A
+  CE-3:
+  - skill:hr@M
+  CE-4:
+  - skill:engineering@A
+  CE-5:
+  - skill:r-and-d-npd@A
+  KE-1:
+  - skill:hr@A
+  KE-2:
+  - skill:finance@M
+  KE-3:
+  - skill:engineering@A
+  KE-4:
+  - skill:engineering@M
+  KE-5:
+  - skill:finance@M
+  ZE-1:
+  - skill:hr@M
+  ZE-2:
+  - skill:engineering@A
+  ZE-3:
+  - skill:engineering@A
+  ZE-4:
+  - skill:engineering@M
+  HE-1:
+  - skill:rubber-plantation-management@A
+  HE-2:
+  - skill:quality-management@A
+  HE-3:
+  - skill:rubber-plantation-management@A
+  HE-4:
+  - skill:quality-management@M

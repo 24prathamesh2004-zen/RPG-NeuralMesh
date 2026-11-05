@@ -1,0 +1,124 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.operations",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "operations",
+    "title": "CEAT operations knowledge",
+    "owner_role": "Plant maintenance",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "ceat:O-01",
+      "catalogue_id": "O-01",
+      "title": "Maintenance and breakdown RCAs",
+      "sensitivity": "Internal",
+      "ceiling": "RAG",
+      "owner_role": "Plant maintenance",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    },
+    {
+      "id": "ceat:O-02",
+      "catalogue_id": "O-02",
+      "title": "HSE incidents (anonymised)",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head HSE",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:O-01-01",
+      "datapoint": "ceat:O-01",
+      "title": "Mixer maintenance RCA - bearing wear pattern",
+      "kind": "rca",
+      "version": "2026-02",
+      "tags": [
+        "maintenance",
+        "mixer",
+        "bearing",
+        "rca"
+      ],
+      "summary": "RCA of repeated bearing wear on a mixer line and the lubrication change that fixed it.",
+      "body_file": "source/O-01-01.md",
+      "concepts": [
+        "concept:breakdown-rca",
+        "concept:root-cause-analysis",
+        "concept:recurring-pattern"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "ceat:O-01-02",
+      "datapoint": "ceat:O-01",
+      "title": "Curing press downtime RCA - steam trap failures",
+      "kind": "rca",
+      "version": "2026-02",
+      "tags": [
+        "maintenance",
+        "curing",
+        "steam",
+        "rca"
+      ],
+      "summary": "RCA of curing press downtime caused by steam trap failures.",
+      "body_file": "source/O-01-02.md",
+      "concepts": [
+        "concept:breakdown-rca",
+        "concept:root-cause-analysis"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "ceat:O-02-01",
+      "datapoint": "ceat:O-02",
+      "title": "Near-miss pattern - forklift movement in warehouse aisles (anonymised)",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "hse",
+        "near-miss",
+        "forklift",
+        "warehouse"
+      ],
+      "summary": "Near-misses cluster at warehouse aisle crossings during shift change. Segregated walkways and a speed limit reduced repeats. Anonymised.",
+      "body_file": "source/O-02-01.md",
+      "concepts": [
+        "concept:near-miss-pattern",
+        "concept:recurring-pattern"
+      ]
+    }
+  ]
+}

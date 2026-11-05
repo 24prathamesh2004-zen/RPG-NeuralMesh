@@ -29,6 +29,9 @@ export default function DashboardPage() {
   }, [])
 
   const scopedNodes = snapshot?.nodes.filter((node) => selectedNodes.includes(node.node_id)) ?? []
+  const nodeRows = snapshot?.nodes.length
+    ? snapshot.nodes.map((node) => ({ id: node.node_id, label: node.company, tone: NODES.find((item) => item.id === node.node_id)?.tone ?? '#68756d', level: node.level }))
+    : NODES
   const decisions = snapshot?.search_decisions ?? 0
   const allowedRate = decisions ? Math.round((snapshot?.allowed_decisions ?? 0) * 100 / decisions) : 0
   const estimatedMonthlyBenefit = questionsPerWeek * 4.3 * 0.55 * (40 / 60) * 1500 / 100000
@@ -56,7 +59,7 @@ export default function DashboardPage() {
           <div className="mesh-section-heading"><div><div className="mesh-eyebrow">Local knowledge nodes</div><h2>Pilot companies</h2></div><Link to="/nodes" className="mesh-text-link">Node details <ArrowRight size={14} /></Link></div>
           <div className="mesh-node-table" role="table" aria-label="Pilot company nodes">
             <div className="mesh-node-table-head" role="row"><span>Company</span><span>Node level</span><span>Health</span></div>
-            {NODES.map((node) => {
+            {nodeRows.map((node) => {
               const live = snapshot?.nodes.find((item) => item.node_id === node.id)
               return <div className="mesh-node-table-row" role="row" key={node.id}><span className="mesh-company-name"><i style={{ backgroundColor: node.tone }} />{node.label}</span><span>{live?.level ?? node.level}</span><span className={`mesh-result-state ${live?.status === 'healthy' ? 'success' : 'warning'}`}>{loading ? 'Checking' : live?.status ?? 'Unavailable'}</span></div>
             })}
@@ -81,7 +84,7 @@ export default function DashboardPage() {
         <div className="mesh-section-panel mesh-principle-panel"><div className="mesh-eyebrow">Current account</div><h2>{user?.display_name}</h2><p>{user?.company_name} · {user?.expert_profile ? `Opted-in expert · ${user.expert_profile.job_title}` : 'Group user'}</p><Link to="/experts" className="mesh-text-link">Explore experts <ArrowRight size={14} /></Link></div>
       </section>
       <section className="dashboard-columns dashboard-lower">
-        <div className="mesh-section-panel"><div className="mesh-section-heading"><div><div className="mesh-eyebrow">Knowledge flow</div><h2>Search decisions by node</h2></div></div><div className="mesh-flow-bars">{NODES.map((node) => { const count = snapshot?.activity_by_node[node.id] ?? 0; const max = Math.max(1, ...Object.values(snapshot?.activity_by_node ?? {})); return <div key={node.id}><span>{node.label}</span><div><i style={{ width: `${count ? Math.max(4, count * 100 / max) : 0}%`, background: node.tone }} /></div><b>{count}</b></div> })}</div><p className="mesh-panel-footnote">Counts are derived from subsidiary-local decision audit entries; query text is never shown.</p></div>
+        <div className="mesh-section-panel"><div className="mesh-section-heading"><div><div className="mesh-eyebrow">Knowledge flow</div><h2>Search decisions by node</h2></div></div><div className="mesh-flow-bars">{nodeRows.map((node) => { const count = snapshot?.activity_by_node[node.id] ?? 0; const max = Math.max(1, ...Object.values(snapshot?.activity_by_node ?? {})); return <div key={node.id}><span>{node.label}</span><div><i style={{ width: `${count ? Math.max(4, count * 100 / max) : 0}%`, background: node.tone }} /></div><b>{count}</b></div> })}</div><p className="mesh-panel-footnote">Counts are derived from subsidiary-local decision audit entries; query text is never shown.</p></div>
         <div className="mesh-section-panel roi-panel"><div className="mesh-eyebrow">Illustrative only</div><h2>Potential monthly value</h2><p>Scenario estimate, not measured POC savings.</p><label htmlFor="roi-volume">Questions per week <strong>{questionsPerWeek}</strong></label><input id="roi-volume" type="range" min="100" max="2000" step="50" value={questionsPerWeek} onChange={(event) => setQuestionsPerWeek(Number(event.target.value))} /><div className="roi-value">₹{Math.max(0, estimatedMonthlyBenefit - 12).toFixed(1)} L <span>estimated net/month</span></div><small>Assumptions: 55% useful · 40 minutes saved · ₹1,500/hour · ₹12 L monthly run cost.</small></div>
       </section>
       <section className="mesh-ask-strip"><div><strong>What can the group help solve?</strong><span>Start with a question. Choose the companies it should reach.</span></div><Link to="/ask" aria-label="Ask NeuralMesh"><ArrowRight size={18} /></Link></section>

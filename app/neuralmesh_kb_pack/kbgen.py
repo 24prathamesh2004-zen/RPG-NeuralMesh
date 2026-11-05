@@ -11,7 +11,10 @@ import yaml
 
 ROOT = Path(__file__).parent
 KB, OUT = ROOT / "kb", ROOT / "data_pack"
-NODES = ["ceat", "kec", "zensar", "harrisons"]
+sys.path.insert(0, str(ROOT.parent))
+from shared.registry import node_ids  # noqa: E402
+
+NODES = list(node_ids())
 SCHEMA = "1.0.0"
 
 
@@ -170,10 +173,11 @@ def build_node(name):
     d = OUT / name
     for sub in ("source", "gated"):
         (d / sub).mkdir(parents=True, exist_ok=True)
-    dbname, fn = GEN[name]
+    dbname, fn = GEN.get(name, (None, None))
     stats = fn(d / dbname) if fn else {}
     idx = sqlite3.connect(d / "index.db")
-    idx.execute("CREATE VIRTUAL TABLE idx USING fts5(text, title, tags, doc_id UNINDEXED, dp UNINDEXED, mode UNINDEXED, sens UNINDEXED, version UNINDEXED, stale UNINDEXED)")
+    # porter stemming, so that "failures" finds "failure reports" and "delays" finds "delay notes"
+    idx.execute("CREATE VIRTUAL TABLE idx USING fts5(text, title, tags, doc_id UNINDEXED, dp UNINDEXED, mode UNINDEXED, sens UNINDEXED, version UNINDEXED, stale UNINDEXED, tokenize='porter unicode61')")
     n_idx = 0
     for doc in cfg["docs"]:
         dp = cfg["datapoints"][doc["dp"]]
@@ -212,7 +216,7 @@ def build_node(name):
                 "consent": e["consent"], "private": {"name": e["private_name"]}} for e in cfg["experts"]]
     (d / "experts.yaml").write_text(yaml.safe_dump(experts, sort_keys=False))
     pol = {"node": name, "schema_version": SCHEMA, "calendar": "results_calendar.yaml",
-           "defaults": {"purposes_allowed": ["problem_solving", "compliance", "bid_support"], "roles_allowed": ["group_user"]},
+           "defaults": {"purposes_allowed": ["problem_solving", "compliance", "bid_support", "learning", "career_mobility"], "roles_allowed": ["group_user"]},
            "datapoints": cfg["datapoints"]}
     (d / "policy.yaml").write_text(yaml.safe_dump(pol, sort_keys=False))
     (d / "results_calendar.yaml").write_text(yaml.safe_dump({"windows": [{"start": "2026-10-15", "end": "2026-11-14", "reason": "Q2 results window (mock)"}]}))
@@ -239,7 +243,7 @@ def validate(results):
         if not any(not e["consent"] for e in cfg["experts"]): errs.append(f"{name}: needs at least one opted-out expert")
         if re.search(r"[\w.]+@[\w.]+\.\w+|(?<![\w-])\+?\d[\d -]{8,}\d(?![\w-])", public): errs.append(f"{name}: looks like contact data in public files")
         if "$" in "".join(f["text"] for f in facts): errs.append(f"{name}: unresolved placeholder in facts")
-        dbname = GEN[name][0]
+        dbname = GEN.get(name, (None, None))[0]
         for dpid, dpc in cfg["datapoints"].items():
             for v in dpc.get("views", []):
                 con_ = sqlite3.connect(d / dbname)
@@ -281,6 +285,8 @@ def main():
     if errs:
         print("\nVALIDATION FAILED"); [print(" -", e) for e in errs]; sys.exit(1)
     print("\nVALIDATION OK")
+    from knowledge.packgen import build_all  # noqa: E402  packs and vector indexes after the node data
+    print("packs:", json.dumps(build_all(build_vectors="--no-vectors" not in sys.argv)))
 
 
 if __name__ == "__main__":

@@ -59,3 +59,11 @@ mcp<2
 # ── Testing ───────────────────────────────────────────────────────────────────
 pytest
 pytest-asyncio
+
+# ── Knowledge mesh: packs, vector search, graph ──────────────────────────────
+jsonschema
+faiss-cpu
+numpy
+onnxruntime
+tokenizers
+networkx

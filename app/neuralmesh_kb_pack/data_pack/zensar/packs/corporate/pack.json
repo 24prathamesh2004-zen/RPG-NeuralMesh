@@ -1,0 +1,58 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "zensar.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "zensar",
+    "domain": "corporate",
+    "title": "Zensar corporate functions",
+    "owner_role": "Policy owners",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "zensar:F-01",
+      "catalogue_id": "F-01",
+      "title": "Policies and SOPs",
+      "sensitivity": "Internal",
+      "ceiling": "RAG",
+      "owner_role": "Policy owners",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "zensar:F-01-01",
+      "datapoint": "zensar:F-01",
+      "title": "Responsible AI usage policy",
+      "kind": "policy",
+      "version": "2026-01",
+      "tags": [
+        "policy",
+        "ai",
+        "data-handling"
+      ],
+      "summary": "Policy for using AI tools, covering data handling, review and logging.",
+      "body_file": "source/F-01-01.md",
+      "concepts": [
+        "concept:responsible-ai-use"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How NeuralMesh Works</title>
+<style>
+:root { --bg:#f6f7fb; --card:#fff; --ink:#111827; --ink2:#374151; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff; --accent:#4f46e5; --accent-ink:#3730a3;
+  --red-bg:#fee2e2; --red-ink:#b91c1c; --amber-bg:#fef3c7; --amber-ink:#b45309; --green-bg:#dcfce7; --green-ink:#15803d; --blue-bg:#dbeafe; --blue-ink:#1d4ed8; --grey-bg:#f1f5f9; --grey-ink:#475569;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --red-bg:#3b1218; --red-ink:#fca5a5; --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; } }
+:root[data-theme="dark"] { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --red-bg:#3b1218; --red-ink:#fca5a5; --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1240px; margin:0 auto; padding:28px 16px 56px; }
+h1 { font-size:26px; line-height:1.25; margin:0 0 6px; } .lead { color:var(--muted); margin:0 0 20px; max-width:880px; }
+.tabs { display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:22px; position:sticky; top:0; background:var(--bg); z-index:5; }
+.tab { appearance:none; border:0; background:none; color:var(--muted); font:inherit; font-weight:700; padding:10px 14px; border-bottom:3px solid transparent; cursor:pointer; }
+.tab[aria-selected="true"] { color:var(--accent-ink); border-bottom-color:var(--accent); }
+.panel { display:none; } .panel.on { display:block; }
+h2 { font-size:19px; margin:0 0 4px; } h2.gap { margin-top:34px; } .sub { color:var(--muted); margin:0 0 16px; font-size:14px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); }
+.facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:22px; }
+.fact { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow); }
+.fact b { display:block; font-size:26px; line-height:1.1; color:var(--accent-ink); } .fact span { font-size:13.5px; color:var(--ink2); }
+.layout { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:18px; align-items:start; }
+.steps { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.step { display:flex; gap:14px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); }
+.snum { flex:0 0 32px; height:32px; border-radius:999px; background:var(--accent); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.snum.b { background:var(--grey-ink); }
+.step > div { min-width:0; } .step h3 { margin:4px 0 4px; font-size:16px; } .step p { margin:0; color:var(--ink2); font-size:14.5px; overflow-wrap:anywhere; }
+.step .ex { margin-top:8px; font-size:13.5px; color:var(--ink2); background:var(--soft); border-radius:10px; padding:8px 12px; }
+.ex span { font-weight:800; color:var(--accent-ink); margin-right:8px; }
+.where { margin-top:6px; font-size:12.5px; color:var(--muted); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }
+.side { display:flex; flex-direction:column; gap:14px; position:sticky; top:60px; }
+.side h3 { margin:0 0 8px; font-size:15.5px; } .side p { margin:0 0 8px; font-size:14px; color:var(--ink2); } .side p:last-child { margin-bottom:0; }
+.side ul { margin:0; padding-left:18px; font-size:14px; color:var(--ink2); } .side li { margin:3px 0; }
+.mini { width:100%; border-collapse:collapse; font-size:14px; } .mini th,.mini td { padding:7px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+.mini th { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; }
+.tablebox { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow-x:auto; box-shadow:var(--shadow); margin-bottom:8px; }
+.tablebox table { width:100%; border-collapse:collapse; min-width:760px; }
+.tablebox th { text-align:left; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:11px 12px; border-bottom:1px solid var(--line); }
+.tablebox td { padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
+.tablebox tr:last-child td { border-bottom:0; }
+code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; background:var(--grey-bg); color:var(--grey-ink); padding:1px 5px; border-radius:6px; }
+.pill { display:inline-block; font-size:12px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; }
+.p-green { background:var(--green-bg); color:var(--green-ink); } .p-amber { background:var(--amber-bg); color:var(--amber-ink); } .p-red { background:var(--red-bg); color:var(--red-ink); } .p-blue { background:var(--blue-bg); color:var(--blue-ink); } .p-grey { background:var(--grey-bg); color:var(--grey-ink); }
+.dgm { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:var(--shadow); margin-bottom:10px; overflow-x:auto; }
+.dgm svg { display:block; width:100%; height:auto; min-width:720px; }
+.dgm-cap { font-size:13.5px; color:var(--ink2); margin:0 0 22px; }
+svg .bx { fill:var(--card); stroke:var(--line); stroke-width:1.5; }
+svg .bx-a { fill:var(--soft); stroke:var(--accent); stroke-width:1.5; }
+svg .bx-g { fill:var(--green-bg); stroke:var(--green-ink); stroke-width:1.2; }
+svg .bx-r { fill:var(--red-bg); stroke:var(--red-ink); stroke-width:1.2; }
+svg .bx-y { fill:var(--amber-bg); stroke:var(--amber-ink); stroke-width:1.2; }
+svg .bx-b { fill:var(--blue-bg); stroke:var(--blue-ink); stroke-width:1.2; }
+svg .zone { fill:none; stroke:var(--line); stroke-width:1.5; stroke-dasharray:6 5; }
+svg text { fill:var(--ink); font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+svg .t-b { font-weight:700; } svg .t-s { font-size:11.5px; fill:var(--ink2); } svg .t-z { font-size:12px; font-weight:700; fill:var(--muted); letter-spacing:.04em; }
+svg .ar { stroke:var(--muted); stroke-width:1.6; fill:none; marker-end:url(#ah); }
+svg .ar-a { stroke:var(--accent); stroke-width:1.8; fill:none; marker-end:url(#aha); }
+svg .ar-d { stroke:var(--muted); stroke-width:1.4; fill:none; stroke-dasharray:5 4; marker-end:url(#ah); }
+svg .ahead { fill:var(--muted); } svg .ahead-a { fill:var(--accent); }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.two .card h3 { margin:0 0 8px; font-size:15.5px; } .two .card ul { margin:0; padding-left:18px; color:var(--ink2); font-size:14px; } .two .card li { margin:4px 0; }
+.note { font-size:13.5px; color:var(--ink2); background:var(--amber-bg); border-radius:10px; padding:10px 14px; margin:0 0 18px; }
+.note b { color:var(--amber-ink); }
+@media (max-width:980px) { .layout { grid-template-columns:1fr; } .side { position:static; } .facts { grid-template-columns:repeat(2,minmax(0,1fr)); } .two { grid-template-columns:1fr; } }
+@media (max-width:520px) { .facts { grid-template-columns:1fr; } h1 { font-size:22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>How NeuralMesh Works</h1>
+<p class="lead">Each group company keeps its own knowledge on its own node. A central graph knows which company holds what. A question goes only to the nodes that hold an answer, each node decides what may leave, and the result comes back as evidence records with citations, for the Ask page and for other applications such as SkillForge.</p>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-tab="flow" aria-selected="true">How it works</button>
+  <button class="tab" role="tab" data-tab="diagrams" aria-selected="false">Diagrams (5)</button>
+  <button class="tab" role="tab" data-tab="contract" aria-selected="false">Contracts and the graph</button>
+  <button class="tab" role="tab" data-tab="updates" aria-selected="false">Updating the knowledge</button>
+  <button class="tab" role="tab" data-tab="checks" aria-selected="false">Checks run</button>
+  <button class="tab" role="tab" data-tab="next" aria-selected="false">Next steps and pending points</button>
+</div>
+
+<!-- ───────────── How it works ───────────── -->
+<section class="panel on" id="flow">
+<div class="facts">
+  <div class="fact"><b>4</b><span>company nodes: CEAT, KEC International, Zensar, Harrisons Malayalam (ports 8101 to 8104)</span></div>
+  <div class="fact"><b>19</b><span>knowledge packs across the four nodes, each checked against the pack schema</span></div>
+  <div class="fact"><b>149</b><span>entities in the central graph: 47 documents, 37 concepts, 29 datapoints, 14 experts, 8 domains, 7 skills, 4 companies, 3 roles</span></div>
+  <div class="fact"><b>7</b><span>steps for every question, from finding the concepts to the checked answer</span></div>
+</div>
+
+<div class="layout">
+<div>
+<h2>In one line</h2>
+<p class="sub">Input is knowledge packs that follow the pack contract. The domain graph is the router in the middle. Output is evidence records that follow the evidence contract. The graph decides where to ask, and the nodes decide what may leave.</p>
+
+<h2 class="gap">Part 1. Building the mesh (before any question)</h2>
+<p class="sub">Runs when a company adds or changes its knowledge. Nothing here calls an answer model.</p>
+<ol class="steps">
+<li class="step"><div class="snum b">B1</div><div><h3>Each company describes its knowledge as datapoints and documents</h3>
+<p>A datapoint is one area of knowledge with an owner, a sensitivity (Internal, Confidential, Restricted), a ceiling on what may leave (metadata only, summary, cited chunks, live aggregates) and the purposes it may be used for. Documents sit under a datapoint and are tagged with group concepts and skills.</p>
+<div class="ex"><span>Example</span>Harrisons datapoint O-05 "Aggregated latex-spoilage and estate trends", Internal, ceiling summary, with document O-05-02 "Spoilage by collection-to-factory time band".</div>
+<div class="where">neuralmesh_kb_pack/kb/&lt;node&gt;.yaml, kb/annotations.yaml</div></div></li>
+<li class="step"><div class="snum b">B2</div><div><h3>The pack builder writes knowledge packs and validates them</h3>
+<p>The builder turns the YAML into 19 knowledge packs and checks every pack against the pack JSON Schema, together with the group packs (the vocabulary of 37 concepts, the approved links, and the skills and talent packs).</p>
+<div class="where">neuralmesh_kb_pack/kbgen.py, knowledge/packgen.py, knowledge/validator.py</div></div></li>
+<li class="step"><div class="snum b">B3</div><div><h3>Each node builds its own search indexes</h3>
+<p>A keyword index (SQLite FTS5 with word stemming, so "failures" finds "failure reports") and a vector index per pack (FAISS with the all-MiniLM-L6-v2 embedding model). Only text the node may release goes into the indexes.</p>
+<div class="where">knowledge/vector_index.py, mcp_nodes/knowledge_view.py</div></div></li>
+<li class="step"><div class="snum b">B4</div><div><h3>Each node starts from its registry entry and offers seven tools</h3>
+<p>Tools over MCP: health, describe_capabilities, search, summarize, find_experts, request_access and export_graph. Every call passes the node's policy enforcement point first. A new node needs a registry entry and a pack, no code.</p>
+<div class="where">config/nodes.yaml, python -m mcp_nodes &lt;id&gt;, mcp_nodes/server.py, mcp_nodes/policy.py</div></div></li>
+<li class="step"><div class="snum b">B5</div><div><h3>The central graph is built from the group packs and the node exports</h3>
+<p>The mesh calls export_graph on every node. Each node returns its datapoints, document titles, concept tags, roles and consented experts, never document text. The graph store saves them by ID: a second load updates in place, and an item a node no longer exports is marked retired, never deleted. A link between two companies counts only after both owners approve it.</p>
+<div class="ex"><span>Example</span>CEAT export: 36 entities and 109 relationships. KEC: 27 and 65. Zensar: 16 and 38. Harrisons: 18 and 47.</div>
+<div class="where">services/graph_store.py (SQLite), services/mesh_graph.py (NetworkX), services/mesh_runtime.py</div></div></li>
+</ol>
+
+<h2 class="gap">Part 2. Answering a question (7 steps)</h2>
+<p class="sub">One LangGraph flow: resolve, route, fan_out, scope, expand, build_answer, assemble. The person does not choose a node.</p>
+<ol class="steps">
+<li class="step"><div class="snum">1</div><div><h3>Resolve: find the concepts in the question</h3>
+<p>Email addresses and phone numbers are removed from the question first. Then the question is matched against concept and skill names and their aliases as whole phrases. When no phrase matches, it is compared by meaning with every concept, and a score of 0.45 or more counts. Company names in the question are noted.</p>
+<div class="ex"><span>Example</span>"latex going bad before it reaches the factory" names no concept, but matches the concept "Latex pre-coagulation" by meaning with a score of 0.50.</div>
+<div class="where">services/mesh_graph.py resolve, services/context/pii.py</div></div></li>
+<li class="step"><div class="snum">2</div><div><h3>Route: walk the graph from concepts to companies</h3>
+<p>From each concept the graph follows approved RELATED_TO, BROADER and SAME_AS links one hop, then finds the documents that mention those concepts, their datapoints and the companies that hold them. When the question names a company, only that company is kept, plus another company whose document has an approved link to it. When no concept is found, a classifier step picks the companies.</p>
+<div class="ex"><span>Example</span>From "Latex pre-coagulation" the graph reaches 7 documents in three companies: Harrisons O-05-01, O-05-03, F-01-02 and F-01-05, CEAT E-02-01 and E-03-02, and KEC E-05-01. So CEAT, Harrisons and KEC are asked.</div>
+<div class="where">services/mesh_graph.py route and _narrow, GET /api/v1/mesh/routing shows the result without asking</div></div></li>
+<li class="step"><div class="snum">3</div><div><h3>Fan out: ask the routed nodes in parallel</h3>
+<p>Each routed node receives a signed token for that node and the purpose. The node checks every datapoint: purpose allowed, ceiling, never-leave rule, consent and access grants. It searches with keyword and vector search, merges both lists with the routed concepts by reciprocal rank fusion, and returns evidence records. A withheld item comes back as a title with the decision and the rule, never its text. A node that is down makes the answer partial, not failed.</p>
+<div class="ex"><span>Example</span>CEAT's E-01 compound formulation records come back as "BLOCKED_BY_POLICY, rule R-NL-01" with no content.</div>
+<div class="where">services/neuralmesh.py fan_out, mcp_nodes/server.py search, mcp_nodes/policy.py</div></div></li>
+<li class="step"><div class="snum">4</div><div><h3>Scope: choose the documents for the answer</h3>
+<p>Sentences that read like instructions to a model are removed from the evidence and the record is flagged. The top 12 documents are taken in turn from each node's own ranking, so one node cannot crowd out another. A re-rank step marks documents that do not fit the question. Those move to "also found" and are still shown. If the re-rank rejects all of them, the top three stay.</p>
+<div class="where">services/context/scoping.py, services/context/records.py</div></div></li>
+<li class="step"><div class="snum">5</div><div><h3>Expand: add the approved links between documents</h3>
+<p>The graph adds approved CORROBORATES, CONFLICTS_WITH, ADDRESSES_GAP and SUPERSEDES links that touch the chosen documents. When a link points to a document of another node, that node is asked for its summary through its own policy. Links to a node that blocked the question are left out.</p>
+<div class="where">services/mesh_graph.py expand, services/neuralmesh.py expand</div></div></li>
+<li class="step"><div class="snum">6</div><div><h3>Build the answer: context, model, checks</h3>
+<p>The context builder fits the evidence into 24,000 characters in a fixed order: question, routing explanation, links, aggregates, summaries, chunks, withheld items. What does not fit is counted in an omission note. The model policy picks the model for the step (group gateway, local or cloud), and no Confidential or Restricted record goes to a cloud model. The written answer must pass seven checks by code. A failed answer is not shown, and the reason is.</p>
+<div class="ex"><span>Checks</span>1 every sentence cites a document in the bundle, 2 no canary string, 3 no content of a withheld item, 4 a conflict is shown on both sides, 5 no removed instruction repeated, 6 no email address or phone number, 7 at most 10 sentences.</div>
+<div class="where">services/context/builder.py, policy.py, answer.py, check.py, config/model_policy.json</div></div></li>
+<li class="step"><div class="snum">7</div><div><h3>Assemble: return the result and write the audit</h3>
+<p>The response holds the answer (or the reason there is none), the evidence records, the "also found" list, the withheld items, the links, the routing and the check results. Each model call is written to a hash-chained central audit with no question or answer text. Identical questions are served from the answer cache and the re-rank cache.</p>
+<div class="where">services/neuralmesh.py, services/context/llm.py (audit), services/context/cache.py</div></div></li>
+</ol>
+</div>
+
+<aside class="side">
+<div class="card"><h3>Input, graph, output</h3>
+<table class="mini">
+<tr><th>Part</th><th>What it is</th></tr>
+<tr><td><b>Input</b></td><td>Knowledge packs in the pack format, plus each node's graph export. Checked by the pack schema.</td></tr>
+<tr><td><b>Graph</b></td><td>The domain graph: concepts, documents, datapoints, companies, skills, roles, experts and approved links. Used to route and to expand. Holds no document text.</td></tr>
+<tr><td><b>Output</b></td><td>Evidence records, <code>schema_version</code> 1.0, plus the checked answer. The same shape for the Ask page and for SkillForge.</td></tr>
+</table></div>
+<div class="card"><h3>Who decides what</h3>
+<ul>
+<li>The graph decides which companies to ask.</li>
+<li>Each node decides what may leave it, per datapoint.</li>
+<li>Code checks every written answer before it is shown.</li>
+<li>Owners of both companies approve a link between them.</li>
+</ul></div>
+<div class="card"><h3>Who uses the output</h3>
+<p><b>Ask page</b> of NeuralMesh, for people of the group companies.</p>
+<p><b>SkillForge</b>, through six context tools on <code>/api/v1/context</code> and the MCP gateway on port 8100: role_context, skill_context, ask, learning_sources, find_mentors, vocabulary_export. SkillForge also sends its talent packs to <code>/api/v1/context/talent-packs</code>.</p></div>
+</aside>
+</div>
+</section>
+
+<!-- ───────────── Diagrams ───────────── -->
+<section class="panel" id="diagrams">
+<svg width="0" height="0" style="position:absolute"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahead"/></marker>
+<marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahead-a"/></marker>
+</defs></svg>
+
+<h2>1. Architecture</h2>
+<p class="sub">Where each part runs, and which ports it uses on a development machine.</p>
+<div class="dgm"><svg viewBox="0 0 1180 520" role="img" aria-label="Architecture of NeuralMesh">
+<rect class="zone" x="10" y="10" width="250" height="500" rx="14"/><text class="t-z" x="26" y="34">CALLERS</text>
+<rect class="zone" x="290" y="10" width="520" height="500" rx="14"/><text class="t-z" x="306" y="34">CENTRAL MESH</text>
+<rect class="zone" x="840" y="10" width="330" height="500" rx="14"/><text class="t-z" x="856" y="34">COMPANY NODES (each keeps its data)</text>
+
+<rect class="bx-b" x="30" y="60" width="210" height="70" rx="10"/><text class="t-b" x="44" y="88">Ask page (React UI)</text><text class="t-s" x="44" y="108">port 5173, a person's token</text>
+<rect class="bx-b" x="30" y="200" width="210" height="80" rx="10"/><text class="t-b" x="44" y="228">SkillForge</text><text class="t-s" x="44" y="248">service token, role context_client</text><text class="t-s" x="44" y="264">and talent_exporter</text>
+<rect class="bx" x="30" y="360" width="210" height="70" rx="10"/><text class="t-b" x="44" y="388">Governance screens</text><text class="t-s" x="44" y="408">link approvals, access grants</text>
+
+<rect class="bx-a" x="310" y="60" width="230" height="70" rx="10"/><text class="t-b" x="324" y="88">Mesh API (FastAPI)</text><text class="t-s" x="324" y="108">port 8000, /mesh and /context</text>
+<rect class="bx" x="310" y="200" width="230" height="80" rx="10"/><text class="t-b" x="324" y="228">MCP gateway</text><text class="t-s" x="324" y="248">port 8100, six context tools</text><text class="t-s" x="324" y="264">scope neuralmesh.context</text>
+<rect class="bx-a" x="570" y="60" width="220" height="100" rx="10"/><text class="t-b" x="584" y="88">Orchestrator (LangGraph)</text><text class="t-s" x="584" y="108">resolve, route, fan_out,</text><text class="t-s" x="584" y="124">scope, expand, build_answer,</text><text class="t-s" x="584" y="140">assemble</text>
+<rect class="bx-g" x="570" y="190" width="220" height="90" rx="10"/><text class="t-b" x="584" y="218">Domain graph</text><text class="t-s" x="584" y="238">SQLite store, NetworkX in memory</text><text class="t-s" x="584" y="254">149 entities, no document text</text><text class="t-s" x="584" y="270">links need both owners</text>
+<rect class="bx" x="570" y="310" width="220" height="80" rx="10"/><text class="t-b" x="584" y="338">Context layer</text><text class="t-s" x="584" y="358">scope, builder, model policy,</text><text class="t-s" x="584" y="374">7 checks, caches</text>
+<rect class="bx-y" x="310" y="310" width="230" height="80" rx="10"/><text class="t-b" x="324" y="338">Answer model</text><text class="t-s" x="324" y="358">group gateway, local or cloud</text><text class="t-s" x="324" y="374">by the model policy</text>
+<rect class="bx" x="310" y="420" width="480" height="66" rx="10"/><text class="t-b" x="324" y="446">Central audit (hash-chained)</text><text class="t-s" x="324" y="466">every model call and failed check, no question or answer text</text>
+
+<rect class="bx" x="860" y="56" width="290" height="96" rx="10"/><text class="t-b" x="874" y="82">CEAT node, port 8101</text><text class="t-s" x="874" y="102">policy point, then search over</text><text class="t-s" x="874" y="118">keyword and vector indexes</text><text class="t-s" x="874" y="134">6 packs, own audit</text>
+<rect class="bx" x="860" y="166" width="290" height="70" rx="10"/><text class="t-b" x="874" y="192">KEC International, port 8102</text><text class="t-s" x="874" y="212">6 packs</text>
+<rect class="bx" x="860" y="250" width="290" height="70" rx="10"/><text class="t-b" x="874" y="276">Zensar, port 8103</text><text class="t-s" x="874" y="296">4 packs</text>
+<rect class="bx" x="860" y="334" width="290" height="70" rx="10"/><text class="t-b" x="874" y="360">Harrisons Malayalam, port 8104</text><text class="t-s" x="874" y="380">3 packs</text>
+<rect class="bx-r" x="860" y="420" width="290" height="66" rx="10"/><text class="t-b" x="874" y="446">Never leaves a node</text><text class="t-s" x="874" y="466">raw rows, Restricted files, expert names</text>
+
+<path class="ar-a" d="M240,95 H308"/>
+<path class="ar-a" d="M240,240 H308"/>
+<path class="ar" d="M240,395 C275,395 275,120 308,118"/>
+<path class="ar" d="M425,200 V132"/>
+<path class="ar-a" d="M540,100 H568"/>
+<path class="ar" d="M680,160 V188"/>
+<path class="ar" d="M680,280 V308"/>
+<path class="ar" d="M570,350 H542"/>
+<path class="ar-d" d="M680,390 V418"/>
+<path class="ar-a" d="M790,100 H858"/>
+<path class="ar-a" d="M790,110 C825,110 825,200 858,200"/>
+<path class="ar-a" d="M790,120 C830,120 830,284 858,284"/>
+<path class="ar-a" d="M790,130 C835,130 835,368 858,368"/>
+</svg></div>
+<p class="dgm-cap">Blue arrows carry a question. Each node answers only through its policy point, and the central mesh never holds a node's document text in its graph.</p>
+
+<h2>2. Input, graph, output</h2>
+<p class="sub">The contract on each side of the graph.</p>
+<div class="dgm"><svg viewBox="0 0 1180 330" role="img" aria-label="Input contract, domain graph, output contract">
+<rect class="zone" x="10" y="10" width="330" height="310" rx="14"/><text class="t-z" x="26" y="34">INPUT (pack contract)</text>
+<rect class="zone" x="390" y="10" width="400" height="310" rx="14"/><text class="t-z" x="406" y="34">DOMAIN GRAPH</text>
+<rect class="zone" x="840" y="10" width="330" height="310" rx="14"/><text class="t-z" x="856" y="34">OUTPUT (evidence contract)</text>
+
+<rect class="bx" x="30" y="52" width="290" height="56" rx="10"/><text class="t-b" x="44" y="76">Group vocabulary pack</text><text class="t-s" x="44" y="94">37 concepts with aliases, owned by the mesh</text>
+<rect class="bx" x="30" y="118" width="290" height="56" rx="10"/><text class="t-b" x="44" y="142">Group links pack</text><text class="t-s" x="44" y="160">cross-company links, both owners approve</text>
+<rect class="bx" x="30" y="184" width="290" height="56" rx="10"/><text class="t-b" x="44" y="208">Skills and talent packs</text><text class="t-s" x="44" y="226">from SkillForge: skills, roles, requirements</text>
+<rect class="bx" x="30" y="250" width="290" height="56" rx="10"/><text class="t-b" x="44" y="274">Node exports (export_graph)</text><text class="t-s" x="44" y="292">datapoints, titles, concept tags, experts</text>
+
+<rect class="bx-g" x="410" y="52" width="360" height="120" rx="10"/><text class="t-b" x="424" y="78">Entities</text>
+<text class="t-s" x="424" y="100">Concept, Skill, Domain, Subsidiary,</text><text class="t-s" x="424" y="118">Datapoint, Document, Role, Expert</text>
+<text class="t-s" x="424" y="140">saved by ID, updated in place,</text><text class="t-s" x="424" y="158">retired when a source drops them</text>
+<rect class="bx-g" x="410" y="184" width="360" height="122" rx="10"/><text class="t-b" x="424" y="210">Relationships</text>
+<text class="t-s" x="424" y="232">structure: MENTIONS, IN_DATAPOINT, OWNED_BY,</text><text class="t-s" x="424" y="250">IN_DOMAIN, ROLE_AT, EXPLAINS_SKILL, HAS_SKILL</text>
+<text class="t-s" x="424" y="272">routing hops: RELATED_TO, BROADER, SAME_AS</text><text class="t-s" x="424" y="290">judgement: CORROBORATES, CONFLICTS_WITH, ...</text>
+
+<rect class="bx-b" x="860" y="52" width="290" height="120" rx="10"/><text class="t-b" x="874" y="78">Evidence record</text><text class="t-s" x="874" y="100">kind: summary, chunk, aggregate,</text><text class="t-s" x="874" y="118">metadata, relationship, expert</text><text class="t-s" x="874" y="140">node, document, citation, decision,</text><text class="t-s" x="874" y="158">rule, stale, superseded_by, suspicious</text>
+<rect class="bx-b" x="860" y="184" width="290" height="56" rx="10"/><text class="t-b" x="874" y="208">Checked answer</text><text class="t-s" x="874" y="226">every sentence cites an evidence record</text>
+<rect class="bx-b" x="860" y="250" width="290" height="56" rx="10"/><text class="t-b" x="874" y="274">Routing explanation</text><text class="t-s" x="874" y="292">concepts, companies asked, method</text>
+
+<path class="ar" d="M320,80 H408"/><path class="ar" d="M320,146 C365,146 365,120 408,118"/>
+<path class="ar" d="M320,212 C365,212 365,240 408,240"/><path class="ar" d="M320,278 C365,278 365,250 408,250"/>
+<path class="ar-a" d="M770,112 H858"/><text class="t-s" x="782" y="104">route</text>
+<path class="ar-a" d="M770,245 C815,245 815,212 858,212"/><text class="t-s" x="782" y="266">expand</text>
+</svg></div>
+<p class="dgm-cap">The graph is not the output. It decides where to ask and which links to add. The output is the evidence the nodes released, in one record shape.</p>
+
+<h2>3. One question, step by step</h2>
+<p class="sub">The seven steps of the orchestrator, with the example "latex going bad before it reaches the factory".</p>
+<div class="dgm"><svg viewBox="0 0 1180 300" role="img" aria-label="The seven steps of one question">
+<g>
+<rect class="bx-a" x="10"  y="40" width="150" height="110" rx="10"/><text class="t-b" x="22" y="64">1 Resolve</text><text class="t-s" x="22" y="86">contact details out</text><text class="t-s" x="22" y="102">meaning match 0.50</text><text class="t-s" x="22" y="118">"Latex</text><text class="t-s" x="22" y="134">pre-coagulation"</text>
+<rect class="bx-a" x="178" y="40" width="150" height="110" rx="10"/><text class="t-b" x="190" y="64">2 Route</text><text class="t-s" x="190" y="86">graph walk</text><text class="t-s" x="190" y="102">concept to 7 documents</text><text class="t-s" x="190" y="118">to datapoints</text><text class="t-s" x="190" y="134">to 3 companies</text>
+<rect class="bx-a" x="346" y="40" width="150" height="110" rx="10"/><text class="t-b" x="358" y="64">3 Fan out</text><text class="t-s" x="358" y="86">parallel MCP calls</text><text class="t-s" x="358" y="102">node policy decides</text><text class="t-s" x="358" y="118">hybrid search</text><text class="t-s" x="358" y="134">evidence records</text>
+<rect class="bx-a" x="514" y="40" width="150" height="110" rx="10"/><text class="t-b" x="526" y="64">4 Scope</text><text class="t-s" x="526" y="86">strip instructions</text><text class="t-s" x="526" y="102">top 12, in turn</text><text class="t-s" x="526" y="118">re-rank, the rest</text><text class="t-s" x="526" y="134">to "also found"</text>
+<rect class="bx-a" x="682" y="40" width="150" height="110" rx="10"/><text class="t-b" x="694" y="64">5 Expand</text><text class="t-s" x="694" y="86">approved links</text><text class="t-s" x="694" y="102">between the chosen</text><text class="t-s" x="694" y="118">documents, summary</text><text class="t-s" x="694" y="134">from a linked node</text>
+<rect class="bx-a" x="850" y="40" width="150" height="110" rx="10"/><text class="t-b" x="862" y="64">6 Build answer</text><text class="t-s" x="862" y="86">24,000 characters</text><text class="t-s" x="862" y="102">model by policy</text><text class="t-s" x="862" y="118">7 checks by code</text><text class="t-s" x="862" y="134">fail: not shown</text>
+<rect class="bx-g" x="1018" y="40" width="150" height="110" rx="10"/><text class="t-b" x="1030" y="64">7 Assemble</text><text class="t-s" x="1030" y="86">answer or reason</text><text class="t-s" x="1030" y="102">evidence, withheld</text><text class="t-s" x="1030" y="118">links, routing</text><text class="t-s" x="1030" y="134">audit entry</text>
+</g>
+<path class="ar-a" d="M160,95 H176"/><path class="ar-a" d="M328,95 H344"/><path class="ar-a" d="M496,95 H512"/><path class="ar-a" d="M664,95 H680"/><path class="ar-a" d="M832,95 H848"/><path class="ar-a" d="M1000,95 H1016"/>
+<rect class="bx-y" x="178" y="190" width="150" height="74" rx="10"/><text class="t-b" x="190" y="214">No concept found</text><text class="t-s" x="190" y="234">classifier picks the</text><text class="t-s" x="190" y="250">companies</text>
+<rect class="bx-r" x="346" y="190" width="150" height="74" rx="10"/><text class="t-b" x="358" y="214">Withheld</text><text class="t-s" x="358" y="234">title, decision, rule</text><text class="t-s" x="358" y="250">no text</text>
+<rect class="bx-y" x="514" y="190" width="150" height="74" rx="10"/><text class="t-b" x="526" y="214">All rejected</text><text class="t-s" x="526" y="234">top 3 stay, the</text><text class="t-s" x="526" y="250">reason says so</text>
+<rect class="bx-r" x="850" y="190" width="150" height="74" rx="10"/><text class="t-b" x="862" y="214">Check failed</text><text class="t-s" x="862" y="234">evidence shown,</text><text class="t-s" x="862" y="250">answer hidden</text>
+<path class="ar-d" d="M253,150 V188"/><path class="ar-d" d="M421,150 V188"/><path class="ar-d" d="M589,150 V188"/><path class="ar-d" d="M925,150 V188"/>
+</svg></div>
+<p class="dgm-cap">The boxes under a step, on the dashed arrows, are its other outcomes. None of them ends the flow: the person always gets the evidence and the reason.</p>
+
+<h2>4. Building and refreshing the graph</h2>
+<p class="sub">From a company's YAML to the graph the router reads.</p>
+<div class="dgm"><svg viewBox="0 0 1180 250" role="img" aria-label="Building and refreshing the graph">
+<rect class="bx" x="10" y="60" width="170" height="90" rx="10"/><text class="t-b" x="22" y="86">Company YAML</text><text class="t-s" x="22" y="106">datapoints, documents,</text><text class="t-s" x="22" y="122">concept and skill tags</text>
+<rect class="bx" x="210" y="60" width="170" height="90" rx="10"/><text class="t-b" x="222" y="86">Pack builder</text><text class="t-s" x="222" y="106">19 packs</text><text class="t-s" x="222" y="122">schema validation</text>
+<rect class="bx" x="410" y="60" width="170" height="90" rx="10"/><text class="t-b" x="422" y="86">Node indexes</text><text class="t-s" x="422" y="106">keyword (FTS5)</text><text class="t-s" x="422" y="122">vector (FAISS)</text>
+<rect class="bx" x="610" y="60" width="170" height="90" rx="10"/><text class="t-b" x="622" y="86">export_graph</text><text class="t-s" x="622" y="106">titles and tags,</text><text class="t-s" x="622" y="122">never text</text>
+<rect class="bx-g" x="810" y="60" width="170" height="90" rx="10"/><text class="t-b" x="822" y="86">Graph store</text><text class="t-s" x="822" y="106">update by ID</text><text class="t-s" x="822" y="122">retire what is gone</text>
+<rect class="bx-g" x="1010" y="60" width="160" height="90" rx="10"/><text class="t-b" x="1022" y="86">Graph in memory</text><text class="t-s" x="1022" y="106">NetworkX, plus a</text><text class="t-s" x="1022" y="122">concept meaning index</text>
+<path class="ar" d="M180,105 H208"/><path class="ar" d="M380,105 H408"/><path class="ar" d="M580,105 H608"/><path class="ar" d="M780,105 H808"/><path class="ar" d="M980,105 H1008"/>
+<rect class="bx-b" x="610" y="180" width="370" height="54" rx="10"/><text class="t-b" x="622" y="204">Group packs and SkillForge talent packs</text><text class="t-s" x="622" y="222">vocabulary, links, skills, roles, loaded the same way</text>
+<path class="ar" d="M895,180 V152"/>
+<text class="t-s" x="610" y="40">POST /api/v1/mesh/graph/refresh asks every node again</text>
+</svg></div>
+<p class="dgm-cap">Refresh is safe to repeat. A document, role or node that disappears from its source is retired with the links that touch it, so it leaves routing and the context tools.</p>
+
+<h2>5. SkillForge using the mesh</h2>
+<p class="sub">SkillForge sends its skills and roles in, and reads context out. It never sees a node directly.</p>
+<div class="dgm"><svg viewBox="0 0 1180 260" role="img" aria-label="SkillForge and the mesh">
+<rect class="bx-b" x="10" y="40" width="250" height="180" rx="10"/><text class="t-b" x="24" y="66">SkillForge</text><text class="t-s" x="24" y="90">journey A: questions about a job</text><text class="t-s" x="24" y="108">journey B: CV against a role</text><text class="t-s" x="24" y="126">journey C: learning and mentors</text><text class="t-s" x="24" y="156">owns: group.skills pack and</text><text class="t-s" x="24" y="174">one talent pack per company</text>
+<rect class="bx-a" x="330" y="40" width="300" height="70" rx="10"/><text class="t-b" x="344" y="66">POST /context/talent-packs</text><text class="t-s" x="344" y="86">talent_exporter only, unknown skills refused</text>
+<rect class="bx-a" x="330" y="140" width="300" height="80" rx="10"/><text class="t-b" x="344" y="166">Six context tools</text><text class="t-s" x="344" y="186">role_context, skill_context, ask,</text><text class="t-s" x="344" y="202">learning_sources, find_mentors, vocabulary_export</text>
+<rect class="bx-g" x="700" y="40" width="220" height="70" rx="10"/><text class="t-b" x="714" y="66">Domain graph</text><text class="t-s" x="714" y="86">roles, skills, requirements</text>
+<rect class="bx" x="700" y="140" width="220" height="80" rx="10"/><text class="t-b" x="714" y="166">Orchestrator and nodes</text><text class="t-s" x="714" y="186">same policy as a person's</text><text class="t-s" x="714" y="202">question, per datapoint</text>
+<rect class="bx-b" x="980" y="90" width="190" height="80" rx="10"/><text class="t-b" x="994" y="116">Evidence records</text><text class="t-s" x="994" y="136">schema_version 1.0</text><text class="t-s" x="994" y="152">no names, no contact details</text>
+<path class="ar-a" d="M260,75 H328"/><path class="ar-a" d="M630,75 H698"/>
+<path class="ar-a" d="M260,180 H328"/><path class="ar" d="M630,180 H698"/><path class="ar" d="M810,110 V138"/>
+<path class="ar" d="M920,180 C950,180 950,130 978,130"/>
+<path class="ar-d" d="M1075,170 C1075,245 135,245 135,222"/>
+</svg></div>
+<p class="dgm-cap">The dashed arrow is the evidence going back to SkillForge. SkillForge's own screens and journeys are built in the SkillForge repository.</p>
+</section>
+
+<!-- ───────────── Contracts and the graph ───────────── -->
+<section class="panel" id="contract">
+<h2>The evidence record</h2>
+<p class="sub">Every item that leaves the mesh has this shape, <code>schema_version</code> 1.0. Defined in <code>app/contracts/evidence.py</code>.</p>
+<div class="tablebox"><table>
+<tr><th>Field</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><code>evidence_id</code></td><td>Unique ID of the record</td><td><code>harrisons:O-05-02</code></td></tr>
+<tr><td><code>kind</code></td><td>summary, chunk, aggregate, metadata (a withheld title), relationship or expert</td><td>summary</td></tr>
+<tr><td><code>node</code>, <code>datapoint</code>, <code>document</code>, <code>title</code></td><td>Where the record comes from</td><td>harrisons, O-05, "Spoilage by collection-to-factory time band"</td></tr>
+<tr><td><code>mode</code>, <code>sensitivity</code></td><td>How much was released and how sensitive the datapoint is</td><td>SUM, Internal</td></tr>
+<tr><td><code>decision</code>, <code>rule_id</code>, <code>reason</code></td><td>The node's policy decision for this item</td><td>BLOCKED_BY_POLICY, R-NL-01</td></tr>
+<tr><td><code>text</code>, <code>citation</code></td><td>The released text and the citation the answer must use</td><td><code>[harrisons:O-05-02]</code></td></tr>
+<tr><td><code>version</code>, <code>stale</code>, <code>superseded_by</code></td><td>Whether a newer document replaces this one</td><td><code>ceat:E-03-06</code> has superseded_by <code>ceat:E-03-02</code></td></tr>
+<tr><td><code>suspicious</code></td><td>Instruction-like text was removed from this record</td><td>true for the planted document of scenario S8</td></tr>
+<tr><td><code>concepts</code>, <code>score</code>, <code>rank</code></td><td>Concepts tagged on the document and its search rank at the node</td><td><code>concept:latex-pre-coagulation</code>, rank 1</td></tr>
+<tr><td><code>relationship</code>, <code>expert</code></td><td>Filled for a link record or a consented expert (role and skills, no name)</td><td>ADDRESSES_GAP with both approvals</td></tr>
+</table></div>
+
+<h2 class="gap">Entities in the graph</h2>
+<p class="sub">Counts from the running graph on 2026-11-05.</p>
+<div class="tablebox"><table>
+<tr><th>Entity</th><th>Count</th><th>Comes from</th><th>Used for</th></tr>
+<tr><td>Document</td><td>47</td><td>node exports</td><td>routing targets, links, citations</td></tr>
+<tr><td>Concept</td><td>37</td><td>group vocabulary pack</td><td>matching a question by phrase or meaning</td></tr>
+<tr><td>Datapoint</td><td>29</td><td>node exports</td><td>the unit the node's policy decides on</td></tr>
+<tr><td>Expert</td><td>14</td><td>node exports, consented only</td><td>find_experts and find_mentors, no names</td></tr>
+<tr><td>Domain</td><td>8</td><td>group vocabulary pack</td><td>grouping datapoints, for example operations or quality</td></tr>
+<tr><td>Skill</td><td>7</td><td>group.skills pack from SkillForge</td><td>skill_context, learning_sources, mentors</td></tr>
+<tr><td>Subsidiary</td><td>4</td><td>node exports</td><td>the companies a question goes to</td></tr>
+<tr><td>Role</td><td>3</td><td>talent packs from SkillForge</td><td>role_context with required skills and levels</td></tr>
+</table></div>
+
+<h2 class="gap">Relationships in the graph</h2>
+<div class="tablebox"><table>
+<tr><th>Group</th><th>Types</th><th>Who sets them</th><th>Used in</th></tr>
+<tr><td>Structure</td><td>MENTIONS, IN_DATAPOINT, OWNED_BY, IN_DOMAIN, ROLE_AT, EXPLAINS_SKILL, HAS_SKILL, EVIDENCED_BY, PART_OF_SKILL, PREREQUISITE_OF, REQUIRES_SKILL</td><td>the node exports and the talent packs</td><td>route (concept to document to company)</td></tr>
+<tr><td>Routing hops</td><td>RELATED_TO, BROADER, SAME_AS</td><td>the group vocabulary pack</td><td>route, one hop from a concept</td></tr>
+<tr><td>Judgement</td><td>CORROBORATES, CONFLICTS_WITH, ADDRESSES_GAP, SUPERSEDES</td><td>proposed in the links pack, approved by the owners of both companies</td><td>expand, and check rule 4 for conflicts</td></tr>
+</table></div>
+
+<h2 class="gap">Search at the node</h2>
+<div class="two">
+<div class="card"><h3>Keyword and vector</h3><ul>
+<li>Keyword: SQLite FTS5 per node with Porter stemming and a stopword list. A question of stopwords only finds nothing.</li>
+<li>Vector: FAISS inner-product index per pack, all-MiniLM-L6-v2 run through ONNX Runtime.</li>
+<li>Both lists and the routed concepts are merged by reciprocal rank fusion with k = 60.</li>
+</ul></div>
+<div class="card"><h3>What the node checks per datapoint</h3><ul>
+<li>The purpose of the question is in <code>purposes_allowed</code> (rule R-PURPOSE-01).</li>
+<li>The ceiling: metadata only, summary, cited chunks or live aggregates.</li>
+<li>Never-leave datapoints return the title only, with the rule.</li>
+<li>Confidential bodies need an approved access grant. Experts need consent.</li>
+</ul></div>
+</div>
+</section>
+
+<!-- ───────────── Updating the knowledge ───────────── -->
+<section class="panel" id="updates">
+<h2>How a change reaches an answer</h2>
+<p class="sub">Each of these seven changes was made on the running stack, followed to an answer, and then undone. No change needs code.</p>
+<div class="tablebox"><table>
+<tr><th>Change</th><th>What to do</th><th>What happens</th></tr>
+<tr><td>A new document at a company</td><td>Add it to the company YAML, run the pack builder, restart that node, refresh the graph</td><td>Found by keyword and by meaning, exported to the graph, routed and cited in an answer. When removed again, its graph entries are retired.</td></tr>
+<tr><td>A new alias for a concept</td><td>Add it to the group vocabulary pack, refresh the graph</td><td>A phrase that matched nothing before routes to the right company. No node changes.</td></tr>
+<tr><td>A new role from SkillForge</td><td>SkillForge posts its talent pack to <code>/context/talent-packs</code></td><td>role_context returns the role with its skills at once. A role missing from a later export is retired and returns 404.</td></tr>
+<tr><td>A link between two companies</td><td>Propose it in the links pack, both owners approve on the Governance screen</td><td>It counts only after both approve. A rejection stands. An approved link is added to answers by the expand step.</td></tr>
+<tr><td>Access to a gated document</td><td>Request access, the datapoint owner approves</td><td>The body is released as cited chunks, and withheld again after the grant is revoked. The node audit records request, review and search, without the justification text.</td></tr>
+<tr><td>A fifth company node</td><td>Add a registry entry in <code>nodes.yaml</code> and its pack, start it with <code>python -m mcp_nodes &lt;id&gt;</code></td><td>Routed and answered like the other four, and its never-leave rules apply. Removed from the registry, it is retired in the graph.</td></tr>
+<tr><td>A node goes down</td><td>Nothing</td><td>The answer is partial, the node is marked unavailable, and evidence from the other nodes still comes back.</td></tr>
+</table></div>
+
+<h2 class="gap">Commands</h2>
+<div class="two">
+<div class="card"><h3>Rebuild and refresh</h3><ul>
+<li><code>python neuralmesh_kb_pack/kbgen.py</code> writes and validates the packs</li>
+<li><code>bash scripts/dev_stack.sh restart-node &lt;id&gt;</code> restarts one node</li>
+<li><code>POST /api/v1/mesh/graph/refresh</code> reloads every node export</li>
+<li><code>GET /api/v1/mesh/routing?question=...</code> shows the route without asking</li>
+</ul></div>
+<div class="card"><h3>Run and check</h3><ul>
+<li><code>bash scripts/dev_stack.sh start</code>, <code>status</code>, <code>stop</code> (from <code>app/</code>)</li>
+<li><code>make test</code>, <code>make live-check</code>, <code>make eval-recall</code></li>
+<li><code>python -m evaluations.golden_answers</code></li>
+<li><code>node evaluations/ui_render_check.mjs</code></li>
+</ul></div>
+</div>
+</section>
+
+<!-- ───────────── Checks run ───────────── -->
+<section class="panel" id="checks">
+<h2>Checks run on 2026-11-05</h2>
+<p class="sub">All on the branch <code>dev_raja</code>, against the running stack where the check says so.</p>
+<p class="note"><b>About the answer model.</b> No model key and no local model runtime exist on this machine, so answers were written by a stand-in server that composes sentences from the evidence by rule. The results prove that routing, policy, budget, checks, caches, audit and screens work around a model. They say nothing about the wording a real model writes.</p>
+<div class="tablebox"><table>
+<tr><th>Check</th><th>Result</th><th>What it covers</th></tr>
+<tr><td>Test suite (<code>make test</code>)</td><td><span class="pill p-green">89 passed</span></td><td>Packs, policy, graph store, routing, scope, builder, the 7 check rules, context tools, caches, company entries after a refresh, one role link, the record contract of every context tool</td></tr>
+<tr><td>Golden scenarios through the API, no node chosen</td><td><span class="pill p-green">10 of 10</span></td><td>Routing, citations, withheld items with decision and rule, strings and experts that must not appear</td></tr>
+<tr><td>Live wiring check (<code>make live-check</code>)</td><td><span class="pill p-green">24 of 24</span></td><td>API, MCP gateway, nodes, an expired token, 20 parallel questions with the audit chain intact, three stand-in misbehaviours caught by the checks</td></tr>
+<tr><td>Browser check in Chromium</td><td><span class="pill p-green">22 of 22</span></td><td>Ask page, Mesh Nodes with the graph explorer (search, connections, tree view), Governance and Dashboard</td></tr>
+<tr><td>Reworded questions, every required datapoint in the top 10</td><td><span class="pill p-amber">12 of 18</span></td><td>Hybrid search. Keyword search alone finds 7 of 18</td></tr>
+<tr><td>Change flows on the running stack</td><td><span class="pill p-green">7 of 7</span></td><td>The seven changes in the tab "Updating the knowledge", each undone afterwards</td></tr>
+</table></div>
+</section>
+
+<!-- ───────────── Next steps ───────────── -->
+<section class="panel" id="next">
+<h2>Next steps</h2>
+<p class="sub">In the order they unblock each other.</p>
+<ol class="steps">
+<li class="step"><div class="snum">1</div><div><h3>Connect a real answer model</h3><p>Set the group gateway key, or install a local model, and run the golden scenarios again. Measure the median answer time against the 10-second target. Only Internal bundles may go to a cloud model, so a Groq key alone answers fewer questions.</p></div></li>
+<li class="step"><div class="snum">2</div><div><h3>Load the real SkillForge export</h3><p>Replace the sample <code>group.skills</code> and <code>ceat.talent</code> packs with the SkillForge export of 17 roles and 57 requirements, through <code>/context/talent-packs</code>.</p></div></li>
+<li class="step"><div class="snum">3</div><div><h3>SkillForge builds journeys A, B and C on the six context tools</h3><p>Questions about a job, a CV against a role (with the 50 labelled CVs), and learning sources with mentors. This work is in the SkillForge repository.</p></div></li>
+<li class="step"><div class="snum">4</div><div><h3>Raise recall on reworded questions</h3><p>6 of the 18 reworded questions still miss a required datapoint in the top 10. Add the missing aliases to the vocabulary or tags to the documents, then run <code>make eval-recall</code> again.</p></div></li>
+<li class="step"><div class="snum">5</div><div><h3>Phase 5: production identity and storage</h3><p>Entra ID in place of the development tokens, Neo4j in place of the SQLite graph store, a job that proposes links between documents, and the second wave of company nodes.</p></div></li>
+<li class="step"><div class="snum">6</div><div><h3>Commit the work</h3><p>Nothing on <code>dev_raja</code> is committed yet, including the planning documents in <code>planning_docs/</code>.</p></div></li>
+</ol>
+
+<h2 class="gap">Pending points</h2>
+<div class="tablebox"><table>
+<tr><th>Point</th><th>Status</th><th>Detail</th></tr>
+<tr><td>A short company name did not narrow the route</td><td><span class="pill p-green">fixed</span></td><td>Loading the group vocabulary pack replaced the aliases, level and profile that each node export gave its company, so "Harrisons" or "KEC" alone did not narrow a question. A company entry now comes only from that company's node export, and a pack adds it only before the node has exported. Live, "How does Harrisons handle latex spoilage?" now routes to Harrisons only.</td></tr>
+<tr><td>Two links from a role to its company</td><td><span class="pill p-green">fixed</span></td><td>A talent pack import added a second ROLE_AT link that was never retired, so a dropped role kept an approved link. The node export and the talent pack now write the same link, and it is retired with the last source that still lists the role. Live: 3 roles, 3 approved ROLE_AT links, and no approved link touches a retired entity.</td></tr>
+<tr><td>Fields outside the evidence record contract</td><td><span class="pill p-green">fixed</span></td><td>An expert record keeps role, level, evidence and the name rule inside its expert field. A learning source carries <code>explains_level</code> and <code>delivery</code> as contract fields. The <code>withheld</code> list of a query holds evidence records, a link has the RelationshipRef shape, and <code>/mesh/query</code> states <code>schema_version</code> 1.0.</td></tr>
+<tr><td>Single words as concept names</td><td><span class="pill p-blue">product owner to decide</span></td><td>Should "latex" or "cold-chain" alone resolve to a concept, or should the vocabulary hold phrases only? Today such a question goes to the classifier.</td></tr>
+<tr><td>Aggregate views as evidence</td><td><span class="pill p-blue">product owner to decide</span></td><td>Should the views of O-05, E-02 and O-06 come back as evidence of kind aggregate? Today their numbers reach answers only through the approved summaries.</td></tr>
+<tr><td>Expert ID on the Expert Finder card</td><td><span class="pill p-blue">product owner to decide</span></td><td>The card shows role, company, skills and evidence, but not the pseudonymous expert ID.</td></tr>
+<tr><td>Real answer model and answer time</td><td><span class="pill p-amber">not done</span></td><td>With the stand-in a question takes 0.05 to 0.2 seconds, which says nothing about a model's share.</td></tr>
+<tr><td>Real SkillForge export and journeys</td><td><span class="pill p-amber">not done</span></td><td>17 roles, 57 requirements, journeys A to C, 50 labelled CVs.</td></tr>
+<tr><td>Phase 5</td><td><span class="pill p-grey">planned</span></td><td>Entra ID, Neo4j, link extraction job, second wave of nodes.</td></tr>
+<tr><td>Scope presets in the top bar</td><td><span class="pill p-grey">fixed lists</span></td><td>Only "All connected companies" reads the node list from the API.</td></tr>
+<tr><td>Embedding model on another machine</td><td><span class="pill p-grey">setup</span></td><td>The model is read from a cached ONNX copy here. Another machine sets <code>NEURALMESH_EMBEDDING_MODEL_DIR</code>.</td></tr>
+<tr><td>Mentors in the first SkillForge release</td><td><span class="pill p-grey">SkillForge decision</span></td><td><code>find_mentors</code> exists on the mesh and returns no names. Using it or not does not change the mesh.</td></tr>
+</table></div>
+</section>
+</div>
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tab');
+  function show(id) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.tab === id)); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    try { localStorage.setItem('nm-how-tab', id); } catch (e) {}
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.dataset.tab); }); });
+  try { var s = localStorage.getItem('nm-how-tab'); if (s && document.getElementById(s)) show(s); } catch (e) {}
+})();
+</script>
+</body>
+</html>

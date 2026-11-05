@@ -1,0 +1,152 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.talent",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "talent",
+    "title": "KEC International roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    }
+  ],
+  "documents": [],
+  "experts": [
+    {
+      "id": "kec:expert/KE-1",
+      "role": "Programme director - international integration",
+      "skills": [
+        {
+          "skill": "skill:hr",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "cross-border integration",
+        "mobilisation",
+        "labour"
+      ],
+      "evidence": [
+        "kec:L-02-01",
+        "kec:L-02-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Vikram Rao (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-2",
+      "role": "Contracts and claims counsel",
+      "skills": [
+        {
+          "skill": "skill:finance",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "claims",
+        "payment terms",
+        "LD clauses"
+      ],
+      "evidence": [
+        "kec:C-02-01",
+        "kec:C-02-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Sana Qureshi (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-3",
+      "role": "Cables materials engineer",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "elastomers",
+        "ageing tests"
+      ],
+      "evidence": [
+        "kec:E-05-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Pooja Bansal (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-4",
+      "role": "Project planning lead",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "delay analysis",
+        "scheduling"
+      ],
+      "evidence": [
+        "kec:O-06-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Deepak Joshi (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-5",
+      "role": "Bid manager",
+      "skills": [
+        {
+          "skill": "skill:finance",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "bidding"
+      ],
+      "evidence": [
+        "kec:C-01-01"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ]
+}

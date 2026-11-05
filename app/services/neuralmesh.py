@@ -1,20 +1,43 @@
-"""Central LangGraph fan-out to independent subsidiary MCP servers."""
+"""Central LangGraph orchestrator over the independent subsidiary MCP servers.
+
+Steps: resolve, route, fan out, scope, expand, build, answer, check (plan v2, section 3.6). The answer model reads
+evidence records only. When no approved model can run, the response carries the evidence and citations alone.
+"""
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
+import inspect
+import json
+import uuid
+from dataclasses import dataclass, field
 from typing import Any, Protocol, TypedDict
 from urllib.parse import urlsplit
 
+from jose import JWTError, jwt
 from langgraph.graph import END, StateGraph
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
-from jose import JWTError, jwt
 
 from api.auth import API_AUDIENCE, POC_ISSUER, issue_poc_token
+from contracts.evidence import EvidenceRecord
+from services.context import builder, check, records, scoping
+from services.context.answer import PROMPT_VERSION, answer as write_answer
+from services.context.cache import ANSWER_CACHE, RERANK_CACHE, bundle_key, rerank_key
+from services.context.llm import ChatBackend, make_caller
+from services.context.pii import strip_contact_details
+from services.context.policy import choice_for
+from services.mesh_graph import MeshGraph
 from shared.config import Settings
+from shared.registry import node_ids, registered_nodes
 
-NODE_IDS = ("ceat", "kec", "zensar", "harrisons")
+NODE_IDS = node_ids()
+MESH_SERVICE_ROLE = "mesh_service"
+
+CLASSIFY_PROMPT = (
+    "You choose which knowledge nodes of the RPG group can answer a question, from a short profile of each node. "
+    "Judge by subject matter, not by a shared word. Several nodes may fit, or none. "
+    'Reply with ONLY a JSON object: {"nodes": ["<node id>"], "reason": "<=25 words"}'
+)
 
 
 class NodeTokenProvider(Protocol):
@@ -22,16 +45,8 @@ class NodeTokenProvider(Protocol):
 
 
 class NodeTransport(Protocol):
-    async def search(
-        self,
-        url: str,
-        token: str,
-        *,
-        query: str,
-        purpose: str,
-        mode: str | None,
-        as_of: str | None,
-    ) -> dict[str, Any]: ...
+    async def search(self, url: str, token: str, *, query: str, purpose: str, mode: str | None,
+                     as_of: str | None) -> dict[str, Any]: ...
 
     async def call_tool(self, url: str, token: str, tool: str, arguments: dict[str, Any]) -> dict[str, Any]: ...
 
@@ -41,43 +56,30 @@ class NodeTokenError(Exception):
 
 
 class PocNodeTokenProvider:
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, node_urls: dict[str, str] | None = None) -> None:
         self.settings = settings
-        self.node_urls = {
-            "ceat": settings.neuralmesh_ceat_url,
-            "kec": settings.neuralmesh_kec_url,
-            "zensar": settings.neuralmesh_zensar_url,
-            "harrisons": settings.neuralmesh_harrisons_url,
-        }
+        self.node_urls = node_urls or {n.node_id: n.url for n in registered_nodes()}
 
-    async def token_for_node(self, user_assertion: str, node_id: str) -> str:
+    def _audience(self, node_id: str) -> str:
         url = self.node_urls.get(node_id)
         if not url:
             raise NodeTokenError("No endpoint is configured for this node")
+        parts = urlsplit(url)
+        return f"{parts.scheme}://{parts.netloc}"
+
+    async def token_for_node(self, user_assertion: str, node_id: str) -> str:
+        audience = self._audience(node_id)
         try:
-            user = jwt.decode(
-                user_assertion,
-                self.settings.app_secret_key,
-                algorithms=["HS256"],
-                issuer=POC_ISSUER,
-                audience=API_AUDIENCE,
-                options={"require_exp": True, "require_sub": True},
-            )
+            user = jwt.decode(user_assertion, self.settings.app_secret_key, algorithms=["HS256"], issuer=POC_ISSUER,
+                              audience=API_AUDIENCE, options={"require_exp": True, "require_sub": True})
         except JWTError as exc:
             raise NodeTokenError("The API session is invalid or expired") from exc
+        return issue_poc_token({"sub": user["sub"], "company": user["company"], "roles": user["roles"],
+                                "scope": "neuralmesh.query"}, audience=audience, hours=1)
 
-        audience = urlsplit(url)
-        node_audience = f"{audience.scheme}://{audience.netloc}"
-        return issue_poc_token(
-            {
-                "sub": user["sub"],
-                "company": user["company"],
-                "roles": user["roles"],
-                "scope": "neuralmesh.query",
-            },
-            audience=node_audience,
-            hours=1,
-        )
+    async def service_token_for_node(self, node_id: str) -> str:
+        return issue_poc_token({"sub": "svc:mesh-registry", "company": "group", "roles": [MESH_SERVICE_ROLE],
+                                "scope": "neuralmesh.query"}, audience=self._audience(node_id), hours=1)
 
 
 class MCPNodeTransport:
@@ -86,45 +88,140 @@ class MCPNodeTransport:
             async with ClientSession(reader, writer) as session:
                 await session.initialize()
                 result = await session.call_tool(tool, arguments)
-
         if result.isError:
             raise RuntimeError(f"MCP tool {tool} returned an error")
         if isinstance(result.structuredContent, dict):
             return result.structuredContent
         raise RuntimeError(f"MCP tool {tool} returned no structured result")
 
-    async def search(
-        self,
-        url: str,
-        token: str,
-        *,
-        query: str,
-        purpose: str,
-        mode: str | None,
-        as_of: str | None,
-    ) -> dict[str, Any]:
+    async def search(self, url: str, token: str, *, query: str, purpose: str, mode: str | None, as_of: str | None,
+                     domains: list[str] | None = None, concepts: list[str] | None = None) -> dict[str, Any]:
         arguments: dict[str, Any] = {"query": query, "purpose": purpose}
-        if mode is not None:
-            arguments["mode"] = mode
-        if as_of is not None:
-            arguments["as_of"] = as_of
-
+        for key, value in (("mode", mode), ("as_of", as_of), ("domains", domains), ("concepts", concepts)):
+            if value:
+                arguments[key] = value
         return await self.call_tool(url, token, "search", arguments)
 
 
-@dataclass(frozen=True)
+def _accepts(fn: Any, name: str) -> bool:
+    try:
+        return name in inspect.signature(fn).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+class MeshQueryState(TypedDict, total=False):
+    question: str
+    nodes: list[str] | None
+    purpose: str
+    mode: str | None
+    as_of: str | None
+    user_assertion: str
+    company: str
+    roles: list[str]
+    trace_id: str
+    resolved: dict[str, Any]
+    routing: dict[str, Any]
+    node_results: list[dict[str, Any]]
+    records: list[dict[str, Any]]
+    withheld_records: list[dict[str, Any]]
+    scope: dict[str, Any]
+    relationships: dict[str, Any]
+    context: dict[str, Any]
+    answer: dict[str, Any]
+    model_calls: list[dict[str, Any]]
+    sources: list[dict[str, Any]]
+    withheld: list[dict[str, Any]]
+    status: str
+
+
+@dataclass
 class MeshOrchestrator:
     node_urls: dict[str, str]
     token_provider: NodeTokenProvider
     transport: NodeTransport
+    mesh: MeshGraph | None = None
+    backend: ChatBackend | None = None
+    app_env: str = "development"
+    canaries: list[str] = field(default_factory=list)
 
-    async def fan_out(self, state: dict[str, Any]) -> dict[str, Any]:
-        responses = await asyncio.gather(
-            *(self._query_node(state, node_id) for node_id in state["nodes"])
-        )
-        return {"node_results": responses}
+    # ── resolve and route ───────────────────────────────────────────────────
+    async def resolve(self, state: MeshQueryState) -> dict[str, Any]:
+        question, removed = strip_contact_details(state["question"])
+        if self.mesh is None:
+            return {"question": question, "resolved": {"concepts": {}, "named_subsidiaries": [], "contact_details_removed": removed}}
+        resolved = self.mesh.resolve(question)
+        resolved["contact_details_removed"] = removed
+        return {"question": question, "resolved": resolved}
 
-    async def _query_node(self, state: dict[str, Any], node_id: str) -> dict[str, Any]:
+    async def route(self, state: MeshQueryState) -> dict[str, Any]:
+        chosen = [n for n in (state.get("nodes") or []) if n in self.node_urls]
+        resolved = state.get("resolved", {})
+        concepts = sorted(resolved.get("concepts", {}))
+        routing: dict[str, Any] = {"concepts": concepts, "concept_labels": {}, "domains": {}, "narrowed_out": [],
+                                   "named_subsidiaries": resolved.get("named_subsidiaries", []), "datapoints": []}
+        if self.mesh is not None:
+            routing["concept_labels"] = {c: self.mesh.label(c) for c in concepts}
+        if chosen:
+            routing.update(method="user", subsidiaries=chosen)
+            if self.mesh is not None and concepts:
+                graph_route = self.mesh.route(set(concepts), set(resolved.get("named_subsidiaries", [])))
+                routing["domains"] = {k: sorted(v) for k, v in graph_route["domains"].items() if k in chosen}
+            return {"routing": routing}
+        if self.mesh is not None and concepts:
+            graph_route = self.mesh.route(set(concepts), set(resolved.get("named_subsidiaries", [])))
+            subs = sorted(s for s in graph_route["subsidiaries"] if s in self.node_urls)
+            if subs:
+                routing.update(method="graph", subsidiaries=subs,
+                               domains={k: sorted(v) for k, v in graph_route["domains"].items()},
+                               narrowed_out=sorted(graph_route["narrowed_out"]),
+                               datapoints=sorted(graph_route["datapoints"]),
+                               hop_concepts=sorted(graph_route["hop_concepts"]))
+                return {"routing": routing}
+        named = [n for n in resolved.get("named_subsidiaries", []) if n in self.node_urls]
+        if named:
+            routing.update(method="named", subsidiaries=named)
+            return {"routing": routing}
+        classified = await self._classify(state)
+        if classified["nodes"]:
+            routing.update(method="classifier", subsidiaries=classified["nodes"], reason=classified["reason"])
+        else:
+            routing.update(method="none", subsidiaries=[], reason=classified["reason"])
+        return {"routing": routing}
+
+    async def _classify(self, state: MeshQueryState) -> dict[str, Any]:
+        if self.mesh is None or self.backend is None:
+            return {"nodes": [], "reason": "No concept matched and no classifier model is configured."}
+        profiles = "\n".join(f"- {n}: {p}" for n, p in self.mesh_profiles().items())
+        calls: list[dict] = []
+        call = make_caller(self.backend, app_env=self.app_env, trace_id=state.get("trace_id", ""),
+                           sensitivities={"Internal"}, all_synthetic=True, calls=calls)
+        text = await asyncio.to_thread(call, "classify", CLASSIFY_PROMPT, f"Nodes:\n{profiles}\n\nQuestion: {state['question']}")
+        if text is None:
+            return {"nodes": [], "reason": "The classifier could not run."}
+        try:
+            cleaned = text.strip().strip("`")
+            cleaned = cleaned[4:] if cleaned.lower().startswith("json") else cleaned
+            parsed = json.loads(cleaned)
+            nodes = [n for n in parsed.get("nodes", []) if n in self.node_urls]
+            return {"nodes": nodes, "reason": str(parsed.get("reason", ""))[:200]}
+        except (ValueError, AttributeError):
+            return {"nodes": [], "reason": "The classifier reply could not be read."}
+
+    def mesh_profiles(self) -> dict[str, str]:
+        if self.mesh is None:
+            return {}
+        g = self.mesh.graph
+        return {n.split(":", 1)[1]: d.get("profile", "") for n, d in g.nodes(data=True)
+                if d.get("type") == "Subsidiary" and d.get("profile")}
+
+    # ── fan out ─────────────────────────────────────────────────────────────
+    async def fan_out(self, state: MeshQueryState) -> dict[str, Any]:
+        nodes = state.get("routing", {}).get("subsidiaries") or state.get("nodes") or []
+        responses = await asyncio.gather(*(self._query_node(state, node_id) for node_id in nodes))
+        return {"node_results": list(responses)}
+
+    async def _query_node(self, state: MeshQueryState, node_id: str) -> dict[str, Any]:
         url = self.node_urls[node_id]
         try:
             token = await self.token_provider.token_for_node(state["user_assertion"], node_id)
@@ -132,55 +229,153 @@ class MeshOrchestrator:
             return {"node_id": node_id, "status": "AUTHENTICATION_FAILED", "results": [], "withheld": []}
         except Exception:
             return {"node_id": node_id, "status": "NODE_UNAVAILABLE", "results": [], "withheld": []}
-
+        routing = state.get("routing", {})
+        kwargs: dict[str, Any] = {"query": state["question"], "purpose": state["purpose"], "mode": state.get("mode"),
+                                  "as_of": state.get("as_of")}
+        domains = routing.get("domains", {}).get(node_id)
+        concepts = routing.get("concepts", []) + routing.get("hop_concepts", [])
+        if domains and _accepts(self.transport.search, "domains"):
+            kwargs["domains"] = domains
+        if concepts and _accepts(self.transport.search, "concepts"):
+            kwargs["concepts"] = concepts
         try:
-            response = await self.transport.search(
-                url,
-                token,
-                query=state["question"],
-                purpose=state["purpose"],
-                mode=state.get("mode"),
-                as_of=state.get("as_of"),
-            )
+            response = await self.transport.search(url, token, **kwargs)
             if not isinstance(response, dict):
                 raise RuntimeError("Invalid MCP response")
             return {**response, "node_id": node_id}
         except Exception:
             return {"node_id": node_id, "status": "NODE_UNAVAILABLE", "results": [], "withheld": []}
 
-    async def call_node_tool(
-        self,
-        user_assertion: str,
-        node_id: str,
-        tool: str,
-        arguments: dict[str, Any],
-    ) -> dict[str, Any]:
+    async def call_node_tool(self, user_assertion: str, node_id: str, tool: str, arguments: dict[str, Any]) -> dict[str, Any]:
         url = self.node_urls[node_id]
         token = await self.token_provider.token_for_node(user_assertion, node_id)
         return await self.transport.call_tool(url, token, tool, arguments)
 
+    async def export_node_graph(self, node_id: str) -> dict[str, Any]:
+        url = self.node_urls[node_id]
+        token = await self.token_provider.service_token_for_node(node_id)  # type: ignore[attr-defined]
+        return await self.transport.call_tool(url, token, "export_graph", {})
 
-class MeshQueryState(TypedDict, total=False):
-    question: str
-    nodes: list[str]
-    purpose: str
-    mode: str | None
-    as_of: str | None
-    user_assertion: str
-    node_results: list[dict[str, Any]]
-    sources: list[dict[str, Any]]
-    withheld: list[dict[str, Any]]
-    status: str
+    # ── scope and expand ────────────────────────────────────────────────────
+    def _caller(self, state: MeshQueryState, calls: list[dict], recs: list[EvidenceRecord]):
+        if self.backend is None:
+            return None
+        sens = {r.sensitivity for r in recs if r.sensitivity}
+        return make_caller(self.backend, app_env=self.app_env, trace_id=state.get("trace_id", ""), sensitivities=sens,
+                           all_synthetic=True, calls=calls)
 
+    async def scope(self, state: MeshQueryState) -> dict[str, Any]:
+        released, withheld = records.from_node_results(state.get("node_results", []))
+        released = [records.strip_injection(r) for r in released]
+        selected, overflow = scoping.select(released)
+        calls = list(state.get("model_calls", []))
+        key = rerank_key(state["question"], selected, choice_for("rerank").model) if (self.backend and selected) else None
+        stored = RERANK_CACHE.get(key) if key else None
+        if stored is not None:
+            result = scoping.apply_verdicts(selected, stored)
+        else:
+            call = self._caller(state, calls, released)
+            result = await asyncio.to_thread(scoping.rerank, state["question"], selected, call)
+            if key and result.rerank == "done":
+                RERANK_CACHE.put(key, result.verdicts)
+        if selected and not result.selected:
+            kept = dict(list(selected.items())[:3])  # a re-rank is a precision boost, never an empty answer
+            for doc in kept:
+                result.also_found.pop(doc, None)
+            result.selected = kept
+            result.rerank += "_all_rejected_kept_top3"
+        result.also_found.update(overflow)
+        return {
+            "records": [r.model_dump() for recs in result.selected.values() for r in recs],
+            "withheld_records": [r.model_dump() for r in withheld],
+            "scope": {"rerank": result.rerank, "verdicts": result.verdicts,
+                      "also_found": [r.model_dump() for recs in result.also_found.values() for r in recs]},
+            "model_calls": calls,
+        }
 
-def build_mesh_graph(orchestrator: MeshOrchestrator):
-    graph = StateGraph(MeshQueryState)
-    graph.add_node("fan_out", orchestrator.fan_out)
-    graph.add_node("assemble", _assemble_results)
-    graph.set_entry_point("fan_out")
-    graph.add_edge("fan_out", "assemble")
-    graph.add_edge("assemble", END)
-    return graph.compile()
+    async def expand(self, state: MeshQueryState) -> dict[str, Any]:
+        if self.mesh is None:
+            return {"relationships": {"used": [], "proposed": [], "hidden": []}}
+        selected = [EvidenceRecord.model_validate(r) for r in state.get("records", [])]
+        documents = {r.document for r in selected if r.document}
+        blocked = {n["node_id"] for n in state.get("node_results", []) if n.get("status") == "BLOCKED_BY_POLICY"}
+        links = self.mesh.expand(documents, blocked)
+        available = {n["node_id"] for n in state.get("node_results", []) if n.get("status") == "ok"}
+        added: list[dict] = []
+        for link in links["used"]:
+            for end in (link["source"], link["target"]):
+                node_id = end.split(":", 1)[0]
+                if end in documents or node_id not in self.node_urls or node_id in blocked:
+                    continue
+                if node_id not in available and node_id not in (state.get("routing", {}).get("subsidiaries") or []):
+                    continue
+                try:
+                    summary = await self.call_node_tool(state["user_assertion"], node_id, "summarize",
+                                                        {"document_id": end.split(":", 1)[1], "purpose": state["purpose"]})
+                except Exception:
+                    continue
+                record = records.from_summary(summary)
+                if record is not None:
+                    added.append(record.model_dump())
+                    documents.add(end)
+        return {"relationships": links, "records": state.get("records", []) + added}
+
+    # ── build, answer and check ─────────────────────────────────────────────
+    async def build_answer(self, state: MeshQueryState) -> dict[str, Any]:
+        recs = [EvidenceRecord.model_validate(r) for r in state.get("records", [])]
+        withheld = [EvidenceRecord.model_validate(r) for r in state.get("withheld_records", [])]
+        rels = [records.from_relationship(link) for link in state.get("relationships", {}).get("used", [])]
+        routing = state.get("routing", {})
+        labels = routing.get("concept_labels", {})
+        explanation = (f"Method: {routing.get('method')}. Concepts: {', '.join(labels.get(c, c) for c in routing.get('concepts', [])) or 'none'}. "
+                       f"Subsidiaries asked: {', '.join(routing.get('subsidiaries', [])) or 'none'}.")
+        built = builder.build(state["question"], state["purpose"], state.get("company", ""), explanation, rels, recs, withheld)
+        context = {"chars": built.chars, "omitted": built.omitted, "included": built.included, "skipped_reason": built.skipped_reason}
+        calls = list(state.get("model_calls", []))
+        outcome: dict[str, Any] = {"text": None, "status": "evidence_only", "reason": None, "checks": [], "cached": False}
+        if not recs:
+            released_any = any(n.get("results") for n in state.get("node_results", []))
+            outcome["reason"] = ("Every released record was set aside by the re-rank step, so no answer was written."
+                                 if released_any else "No evidence was released for this question.")
+            return {"context": context, "answer": outcome, "model_calls": calls}
+        if built.skipped_reason:
+            outcome["reason"] = f"Answer step skipped: {built.skipped_reason}."
+            return {"context": context, "answer": outcome, "model_calls": calls}
+        if self.backend is None:
+            outcome["reason"] = "No answer model is configured, so the evidence is shown alone."
+            return {"context": context, "answer": outcome, "model_calls": calls}
+
+        model = choice_for("answer").model
+        key = bundle_key(state["question"], state["purpose"], state.get("company", ""), state.get("roles", []),
+                         state.get("as_of"), recs, [r.evidence_id for r in rels], model, PROMPT_VERSION)
+        partial = any(n.get("status") != "ok" for n in state.get("node_results", []))
+        cached = ANSWER_CACHE.get(key)
+        if cached is not None:
+            return {"context": context, "answer": {**cached, "cached": True}, "model_calls": calls}
+
+        call = self._caller(state, calls, recs)
+        text = await asyncio.to_thread(write_answer, call, built.prompt)
+        if text is None:
+            last = calls[-1] if calls else {}
+            outcome["reason"] = f"The answer model did not run ({last.get('decision', 'unavailable')}: {last.get('reason', '')})."
+            return {"context": context, "answer": outcome, "model_calls": calls}
+
+        also = {r["document"] or r["evidence_id"] for r in state.get("scope", {}).get("also_found", [])}
+        conflicts = [(link["source"], link["target"]) for link in state.get("relationships", {}).get("used", [])
+                     if link["type"] == "CONFLICTS_WITH"]
+        removed = [i for r in recs if r.suspicious for i in records.removed_instructions(r)]
+        bundle_ids = set(built.included) | {r.document for r in recs if r.document} | {w.evidence_id for w in withheld}
+        failures = check.run_checks(text, bundle_ids, also - bundle_ids, withheld, conflicts, removed, self.canaries)
+        outcome.update(checks=failures)
+        if failures:
+            outcome.update(status="check_failed", reason=f"The written answer failed {len(failures)} check(s) and is not shown.")
+            from services.context.llm import audit
+            audit({"event": "answer_check_failed", "trace_id": state.get("trace_id"), "rules": sorted({f["rule"] for f in failures})})
+            return {"context": context, "answer": outcome, "model_calls": calls}
+        outcome.update(text=text, status="answered", citations=builder.cited_ids(text))
+        if not partial:
+            ANSWER_CACHE.put(key, {k: v for k, v in outcome.items() if k != "cached"})
+        return {"context": context, "answer": outcome, "model_calls": calls}
 
 
 def _assemble_results(state: MeshQueryState) -> dict[str, Any]:
@@ -188,20 +383,36 @@ def _assemble_results(state: MeshQueryState) -> dict[str, Any]:
     sources = [item for node in node_results for item in node.get("results", [])]
     withheld = [item for node in node_results for item in node.get("withheld", [])]
     unavailable = {"NODE_UNAVAILABLE", "AUTHENTICATION_FAILED"}
-    status = "partial" if any(node.get("status") in unavailable for node in node_results) else "ok"
-    return {
-        "sources": sources,
-        "withheld": withheld,
-        "status": status,
-        "user_assertion": "",
-    }
+    if not node_results and not (state.get("routing", {}).get("subsidiaries")):
+        status = "needs_node_choice"
+    else:
+        status = "partial" if any(node.get("status") in unavailable for node in node_results) else "ok"
+    return {"sources": sources, "withheld": withheld, "status": status, "user_assertion": ""}
 
 
-def create_orchestrator(settings: Settings) -> MeshOrchestrator:
-    node_urls = {
-        "ceat": settings.neuralmesh_ceat_url,
-        "kec": settings.neuralmesh_kec_url,
-        "zensar": settings.neuralmesh_zensar_url,
-        "harrisons": settings.neuralmesh_harrisons_url,
-    }
-    return MeshOrchestrator(node_urls, PocNodeTokenProvider(settings), MCPNodeTransport())
+def build_mesh_graph(orchestrator: MeshOrchestrator):
+    graph = StateGraph(MeshQueryState)
+    graph.add_node("resolve", orchestrator.resolve)
+    graph.add_node("route", orchestrator.route)
+    graph.add_node("fan_out", orchestrator.fan_out)
+    graph.add_node("scope", orchestrator.scope)
+    graph.add_node("expand", orchestrator.expand)
+    graph.add_node("build_answer", orchestrator.build_answer)
+    graph.add_node("assemble", _assemble_results)
+    graph.set_entry_point("resolve")
+    for a, b in (("resolve", "route"), ("route", "fan_out"), ("fan_out", "scope"), ("scope", "expand"),
+                 ("expand", "build_answer"), ("build_answer", "assemble")):
+        graph.add_edge(a, b)
+    graph.add_edge("assemble", END)
+    return graph.compile()
+
+
+def new_trace_id() -> str:
+    return str(uuid.uuid4())
+
+
+def create_orchestrator(settings: Settings, mesh: MeshGraph | None = None, backend: ChatBackend | None = None,
+                        canaries: list[str] | None = None) -> MeshOrchestrator:
+    node_urls = {n.node_id: n.url for n in registered_nodes()}
+    return MeshOrchestrator(node_urls, PocNodeTokenProvider(settings, dict(node_urls)), MCPNodeTransport(), mesh=mesh,
+                            backend=backend, app_env=settings.app_env, canaries=canaries or [])

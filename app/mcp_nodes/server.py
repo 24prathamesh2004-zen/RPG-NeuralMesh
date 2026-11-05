@@ -5,7 +5,7 @@ import os
 import re
 import sqlite3
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
@@ -18,9 +18,14 @@ from mcp.server.fastmcp import FastMCP
 
 from mcp_nodes.auth import caller_context_from_token, load_auth_config
 from mcp_nodes.access_store import AccessStore
+from mcp_nodes.knowledge_view import NodeKnowledge, fts_query, hybrid_rank, load_node_knowledge
 from mcp_nodes.policy import PolicyDecision, authorize_caller, evaluate_access
+from shared.registry import node_ids
 
-NODE_IDS = ("ceat", "kec", "zensar", "harrisons")
+NODE_IDS = node_ids()
+SEARCH_LIMIT = 10
+MESH_SERVICE_ROLE = "mesh_service"
+_KIND_OF_MODE = {"SUM": "summary", "RAG": "chunk", "LIVE": "aggregate", "MD": "metadata"}
 _PACK_ROOT = Path(__file__).resolve().parents[1] / "neuralmesh_kb_pack" / "data_pack"
 _STATE_ROOT = Path(__file__).resolve().parents[1] / ".neuralmesh" / "nodes"
 
@@ -39,6 +44,7 @@ class NodeConfig:
     index_path: Path
     grants_path: Path
     audit_path: Path
+    knowledge: NodeKnowledge = field(default_factory=NodeKnowledge)
 
 
 def _read_mapping(path: Path) -> dict[str, Any]:
@@ -107,6 +113,13 @@ def load_node_config(node_id: str, data_root: Path | None = None) -> NodeConfig:
                 raise ValueError(f"Node {node_id} has an invalid blackout window")
         calendar_windows = tuple(windows)
 
+    knowledge = load_node_knowledge(node_dir)
+    datapoints = {
+        code: {**dp, "purposes_allowed": knowledge.datapoint_purposes[code]}
+        if code in knowledge.datapoint_purposes else dp
+        for code, dp in datapoints.items()
+    }
+
     return NodeConfig(
         node_id=node_id,
         display=str(node.get("display", node_id)),
@@ -120,6 +133,7 @@ def load_node_config(node_id: str, data_root: Path | None = None) -> NodeConfig:
         index_path=node_dir / "index.db",
         grants_path=_STATE_ROOT / node_id / "grants.db",
         audit_path=_STATE_ROOT / node_id / "audit.jsonl",
+        knowledge=knowledge,
     )
 
 
@@ -157,12 +171,104 @@ def capabilities_payload(config: NodeConfig, caller: Any) -> dict[str, Any]:
             }
             for datapoint_id, datapoint in sorted(config.datapoints.items())
         ],
+        "packs": pack_listing(config),
+        "profile": node_profile(config),
+    }
+
+
+def pack_listing(config: NodeConfig) -> list[dict[str, Any]]:
+    return [
+        {
+            "pack_id": pack["pack"]["pack_id"],
+            "domain": pack["pack"]["domain"],
+            "documents": len(pack.get("documents", [])),
+            "embedding_model": pack["pack"].get("index", {}).get("embedding_model"),
+            "published_at": pack["pack"]["published_at"],
+        }
+        for pack in config.knowledge.packs
+    ]
+
+
+def node_profile(config: NodeConfig, concept_labels: dict[str, str] | None = None) -> str:
+    """Short text built from listed metadata only: no summary, no body, nothing of a hidden datapoint."""
+    parts = [f"{config.display}, level {config.level}, {len(config.knowledge.packs)} packs."]
+    concepts: list[str] = []
+    for pack in config.knowledge.packs:
+        listed = [d for d in pack.get("datapoints", []) if d.get("graph_visibility", "listed") == "listed"]
+        if not listed:
+            continue
+        docs = [d for d in pack.get("documents", []) if d["datapoint"] in {x["id"] for x in listed}]
+        datapoints = ", ".join(f"{d['catalogue_id']} {d['title']} ({d['ceiling']})" for d in listed)
+        parts.append(f"{pack['pack']['domain'].capitalize()}: {len(docs)} documents in {datapoints}.")
+        for doc in docs:
+            concepts.extend(c for c in doc.get("concepts", []) if c not in concepts)
+    if concepts:
+        names = [(concept_labels or {}).get(c, c.split(":", 1)[1].replace("-", " ")) for c in concepts]
+        parts.append("Concepts: " + ", ".join(names) + ".")
+    parts.append(f"{sum(1 for e in config.experts if e.get('consent') is True)} consented experts.")
+    return " ".join(parts)
+
+
+def export_graph_node(config: NodeConfig, caller: Any) -> dict[str, Any]:
+    """Metadata-only part of the node's packs for the central mesh graph. Only the mesh service identity may call it."""
+    if MESH_SERVICE_ROLE not in caller.roles:
+        return {"node_id": config.node_id, "decision": "BLOCKED_BY_POLICY", "rule_id": "R-EXPORT-01"}
+    datapoints, documents, experts, relationships = [], [], [], []
+    for pack in config.knowledge.packs:
+        listed = set()
+        for dp in pack.get("datapoints", []):
+            datapoints.append({k: dp[k] for k in ("id", "catalogue_id", "title", "sensitivity", "ceiling", "owner_role",
+                                                  "purposes_allowed", "graph_visibility") if k in dp}
+                              | {"domain": pack["pack"]["domain"], "never_leave": bool(dp.get("never_leave"))})
+            if dp.get("graph_visibility", "listed") == "listed":
+                listed.add(dp["id"])
+        for doc in pack.get("documents", []):
+            if doc["datapoint"] not in listed:
+                continue
+            documents.append({k: doc[k] for k in ("id", "datapoint", "title", "kind", "version", "tags", "concepts",
+                                                   "skills", "supersedes") if k in doc})
+        for expert in pack.get("experts", []):
+            if expert.get("consent") is True:
+                experts.append({k: expert[k] for k in ("id", "role", "skills", "keywords", "evidence")})
+        relationships.extend(r for r in pack.get("relationships", []) if r.get("status") == "approved")
+    entities = [e for pack in config.knowledge.packs for e in pack.get("entities", [])]
+    return {
+        "node_id": config.node_id,
+        "decision": "ALLOWED",
+        "display": config.display,
+        "level": config.level,
+        "packs": pack_listing(config),
+        "datapoints": datapoints,
+        "documents": documents,
+        "experts": experts,
+        "entities": entities,
+        "relationships": relationships,
+        "profile": node_profile(config),
     }
 
 
 def _fts_query(query: str) -> str:
-    tokens = re.findall(r"[\w-]+", query, flags=re.UNICODE)[:24]
-    return " OR ".join(f'"{token.replace(chr(34), "")}"' for token in tokens)
+    return fts_query(query)
+
+
+def _evidence_fields(config: NodeConfig, row_key: str, mode: str, released: bool, score: float | None,
+                     rank: int | None) -> dict[str, Any]:
+    """Fields of the evidence record contract (contracts/evidence.py) for one returned row."""
+    document = row_key.split("#", 1)[0]
+    doc = config.knowledge.documents.get(document, {})
+    kind = _KIND_OF_MODE.get(mode, "metadata") if released else "metadata"
+    return {
+        "schema_version": "1.0",
+        "evidence_id": row_key,
+        "kind": kind,
+        "node": config.node_id,
+        "document": document if not document.endswith(":live") else None,
+        "pack_version": doc.get("pack_version"),
+        "superseded_by": config.knowledge.superseded_by.get(document),
+        "concepts": list(doc.get("concepts", [])),
+        "score": round(score, 6) if score is not None else None,
+        "rank": rank,
+    }
 
 
 def search_node(
@@ -175,6 +281,9 @@ def search_node(
     as_of: date | None = None,
     access_store: AccessStore | None = None,
     trace_id: str | None = None,
+    domains: list[str] | None = None,
+    concepts: list[str] | None = None,
+    limit: int = SEARCH_LIMIT,
 ) -> dict[str, Any]:
     caller_decision = authorize_caller(config, caller)
     if caller_decision.code == "BLOCKED_BY_POLICY":
@@ -190,24 +299,32 @@ def search_node(
     if not normalized_query:
         return {"node_id": config.node_id, "results": [], "withheld": [], "status": "empty_query"}
 
+    ranked, trace = hybrid_rank(
+        config.index_path,
+        config.knowledge,
+        query[:1000],
+        domains=set(domains) if domains else None,
+        concepts=set(concepts) if concepts else None,
+        limit=max(1, min(limit, 30)),
+    )
     connection = sqlite3.connect(f"file:{config.index_path.as_posix()}?mode=ro", uri=True)
     connection.row_factory = sqlite3.Row
     try:
-        rows = connection.execute(
-            """SELECT text, title, doc_id, dp, mode, sens, version, stale,
-                      bm25(idx) AS rank
-               FROM idx WHERE idx MATCH ? ORDER BY rank LIMIT 30""",
-            (normalized_query,),
-        ).fetchall()
-    except sqlite3.OperationalError:
-        rows = []
+        by_key = {
+            row["doc_id"]: row
+            for row in connection.execute(
+                f"SELECT text, title, doc_id, dp, mode, sens, version, stale FROM idx WHERE doc_id IN ({','.join('?' * len(ranked))})",
+                [key for key, _, _ in ranked],
+            ).fetchall()
+        } if ranked else {}
     finally:
         connection.close()
+    rows = [(by_key[key], score, rank) for key, score, rank in ranked if key in by_key]
 
     results: list[dict[str, Any]] = []
     withheld: list[dict[str, Any]] = []
     trace_id = trace_id or str(uuid.uuid4())
-    for row in rows:
+    for row, score, rank in rows:
         requested_mode = mode or row["mode"]
         grant = (
             access_store.active_grant(caller, row["dp"], requested_mode, purpose)
@@ -236,6 +353,10 @@ def search_node(
         }
 
         if row["mode"] == "MD" and requested_mode == "MD":
+            if decision.code == "ALLOWED":
+                # metadata may be listed, so the item says what policy decides about the content itself
+                decision = evaluate_access(config, caller, row["dp"], "SUM", as_of=as_of)
+                item["decision"], item["rule_id"] = decision.code, decision.rule_id
             item["reason"] = decision.reason
             withheld.append(item)
         elif decision.code in ("ALLOWED", "ALLOWED_SUMMARY_ONLY"):
@@ -288,11 +409,23 @@ def search_node(
                 grant_id=grant["grant_id"] if grant is not None else None,
             )
 
+    scored = {row["doc_id"]: (score, rank) for row, score, rank in rows}
+    for released, items in ((True, results), (False, withheld)):
+        for item in items:
+            score, rank = scored.get(item["doc_id"], (None, None))
+            item.update(_evidence_fields(config, item["doc_id"], item["mode"], released, score, rank))
+            item["datapoint"] = f"{config.node_id}:{item['datapoint_id']}"
+            item["version"] = str(by_key[item["doc_id"]]["version"]) if item["doc_id"] in by_key else None
+            item["reason"] = item.get("reason")
+            if not released:
+                item.pop("text", None)
+
     return {
         "node_id": config.node_id,
         "results": results,
         "withheld": withheld,
         "status": "ok",
+        "search": {**trace, "domains": sorted(domains or []), "concepts": sorted(concepts or [])},
     }
 
 
@@ -332,6 +465,20 @@ def _read_source_metadata(config: NodeConfig, document_id: str) -> dict[str, Any
         return None
     metadata = yaml.safe_load(metadata_text)
     return metadata if isinstance(metadata, dict) else None
+
+
+def _summary_record(config: NodeConfig, metadata: dict, datapoint: Mapping[str, Any], decision: PolicyDecision,
+                    *, released: bool) -> dict[str, Any]:
+    document = str(metadata.get("id"))
+    fields = _evidence_fields(config, document, "SUM", released, None, None)
+    fields.update({
+        "datapoint": f"{config.node_id}:{metadata.get('datapoint_id')}",
+        "version": str(metadata.get("version")),
+        "mode": "SUM" if released else "MD",
+        "sensitivity": datapoint.get("sensitivity"),
+        "rule_id": decision.rule_id,
+    })
+    return fields
 
 
 def summarize_node(
@@ -380,9 +527,10 @@ def summarize_node(
             "rule_id": decision.rule_id,
             "datapoint_id": datapoint_id,
             "title": metadata.get("title"),
-            "citation": f"{config.display} · {datapoint_id} · {metadata.get('id', document_id)}",
+            "citation": f"{config.display} · {datapoint_id} · {str(metadata.get('id', document_id)).split(':', 1)[-1]}",
             "stale": int(str(metadata.get("version", "2026"))[:4]) < 2021,
             "summary": metadata.get("approved_summary"),
+            **_summary_record(config, metadata, datapoint, decision, released=True),
         }
     else:
         response = {
@@ -393,6 +541,7 @@ def summarize_node(
             "title": metadata.get("title"),
             "summary": metadata.get("approved_summary") if decision.code == "NEEDS_APPROVAL" else None,
             "reason": decision.reason,
+            **_summary_record(config, metadata, datapoint, decision, released=False),
         }
 
     store.log_decision(
@@ -415,6 +564,7 @@ def find_experts_node(
     store: AccessStore,
     *,
     trace_id: str | None = None,
+    concepts: list[str] | None = None,
 ) -> dict[str, Any]:
     caller_decision = authorize_caller(config, caller)
     if caller_decision.code == "BLOCKED_BY_POLICY":
@@ -428,6 +578,10 @@ def find_experts_node(
         searchable = " ".join([str(expert.get("role", "")), *expert.get("skills", [])]).lower()
         expert_tokens = set(re.findall(r"[a-z0-9]+", searchable))
         score = len(query_tokens.intersection(expert_tokens))
+        evidence_concepts = {
+            c for doc_id in expert.get("evidence", []) for c in config.knowledge.documents.get(doc_id, {}).get("concepts", [])
+        }
+        score += 2 * len(set(concepts or ()).intersection(evidence_concepts))
         if score:
             matches.append((score, expert))
 
@@ -441,6 +595,11 @@ def find_experts_node(
             "evidence": expert["evidence"],
             "match_score": score,
             "name_available_after_intro_approval": True,
+            "schema_version": "1.0",
+            "evidence_id": f"{config.node_id}:expert/{expert['id']}",
+            "kind": "expert",
+            "node": config.node_id,
+            "citation": f"{config.display} · F-04 · {expert['id']}",
         }
         grant = store.active_grant(
             caller,
@@ -618,6 +777,8 @@ def create_server(
         purpose: str,
         mode: str | None = None,
         as_of: str | None = None,
+        domains: list[str] | None = None,
+        concepts: list[str] | None = None,
     ) -> dict[str, Any]:
         """Search this subsidiary's local approved index and return cited policy-allowed results."""
         caller = caller_context_from_token(get_access_token(), purpose)
@@ -633,6 +794,8 @@ def create_server(
             mode=mode,
             as_of=requested_date,
             access_store=access_store,
+            domains=domains,
+            concepts=concepts,
         )
 
     @server.tool()
@@ -642,10 +805,16 @@ def create_server(
         return summarize_node(config, caller, document_id, purpose, access_store)
 
     @server.tool()
-    def find_experts(query: str, purpose: str) -> dict[str, Any]:
-        """Find opted-in experts by role and skills; names require a separate approved introduction."""
+    def find_experts(query: str, purpose: str, concepts: list[str] | None = None) -> dict[str, Any]:
+        """Find opted-in experts by role, skills and the concepts of their evidence; names need an approved introduction."""
         caller = caller_context_from_token(get_access_token(), purpose)
-        return find_experts_node(config, caller, query, purpose, access_store)
+        return find_experts_node(config, caller, query, purpose, access_store, concepts=concepts)
+
+    @server.tool()
+    def export_graph() -> dict[str, Any]:
+        """Metadata-only export of this node's packs for the central mesh graph (mesh service identity only)."""
+        caller = caller_context_from_token(get_access_token(), "problem_solving")
+        return export_graph_node(config, caller)
 
     @server.tool()
     def request_access(

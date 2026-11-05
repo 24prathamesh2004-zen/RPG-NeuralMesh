@@ -258,7 +258,7 @@ html { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
 .mesh-node-card-stats strong { color: var(--mesh-ink); font-size: 15px; }
 .mesh-node-card-stats span { color: var(--mesh-muted); font-size: 9px; }
 .mesh-node-expand { display: flex; width: 100%; align-items: center; justify-content: space-between; border: 0; border-top: 1px solid #eef0f7; background: transparent; padding: 9px 0 0; color: var(--mesh-green); font-size: 10px; font-weight: 750; cursor: pointer; }
-.mesh-capability-list { display: grid; max-height: 190px; overflow: auto; margin-top: 6px; }
+.mesh-capability-list { display: grid; max-height: 280px; overflow: auto; margin-top: 6px; }
 .mesh-capability-list > div { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid #f0f1f7; padding: 7px 0; }
 .mesh-capability-list > div span { display: grid; gap: 2px; color: var(--mesh-muted); font-size: 9px; }
 .mesh-capability-list b { color: var(--mesh-ink); font-size: 9px; }
@@ -562,3 +562,35 @@ html { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
 .sidebar-link:hover svg {
   @apply opacity-90;
 }
+
+/* Mesh v2: answers, graph and links */
+.ask-not-in-evidence { color: #a61e4d; }
+.mesh-graph-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 10px 0; }
+.mesh-graph-counts { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; }
+.mesh-graph-counts button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--mesh-line, #e3e6e8); background: #fff; border-radius: 999px; padding: 4px 10px; font: inherit; cursor: pointer; color: #343a40; }
+.mesh-graph-counts button.off { opacity: .45; text-decoration: line-through; }
+.mesh-graph-counts i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.mesh-graph-search { display: flex; gap: 6px; align-items: center; }
+.mesh-graph-search input { font: inherit; font-size: 13px; border: 1px solid var(--mesh-line, #e3e6e8); border-radius: 8px; padding: 6px 10px; min-width: 180px; }
+.mesh-graph-body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px; }
+.mesh-graph-canvas-wrap { position: relative; }
+.mesh-graph-canvas { width: 100%; height: 560px; border: 1px solid var(--mesh-line, #e3e6e8); border-radius: 10px; background: #fbfcfc; }
+.mesh-graph-hint { position: absolute; left: 10px; bottom: 8px; font-size: 11.5px; color: #868e96; background: rgba(255,255,255,.85); padding: 2px 6px; border-radius: 6px; }
+.mesh-graph-menu { position: fixed; z-index: 50; background: #fff; border: 1px solid var(--mesh-line, #e3e6e8); border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.12); padding: 4px; display: flex; flex-direction: column; }
+.mesh-graph-menu button { font: inherit; font-size: 13px; text-align: left; background: none; border: 0; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.mesh-graph-menu button:hover { background: #f1f3f5; }
+.mesh-graph-detail { border: 1px solid var(--mesh-line, #e3e6e8); border-radius: 10px; padding: 12px 14px; height: 560px; overflow-y: auto; font-size: 13px; background: #fff; }
+.mesh-graph-detail h3 { margin: 8px 0 2px; font-size: 15px; }
+.mesh-graph-detail code { font-size: 11.5px; color: #495057; word-break: break-all; }
+.mesh-graph-detail p { margin: 6px 0; color: #495057; }
+.mesh-graph-type { display: inline-block; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.mesh-graph-actions { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+.mesh-graph-group h4 { margin: 10px 0 4px; font-size: 11.5px; letter-spacing: .03em; color: #495057; }
+.mesh-graph-group ul { margin: 0; padding-left: 16px; }
+.mesh-graph-group li { margin: 2px 0; }
+.mesh-graph-group li button { font: inherit; background: none; border: 0; padding: 0; color: #1c7ed6; cursor: pointer; text-align: left; }
+.mesh-graph-group em { color: #f08c00; font-style: normal; font-size: 11.5px; }
+.mesh-graph-empty { color: #868e96; }
+@media (max-width: 1100px) { .mesh-graph-body { grid-template-columns: 1fr; } .mesh-graph-detail { height: auto; max-height: 420px; } }
+.mesh-node-profile { font-size: 12px; line-height: 1.6; margin: 8px 0; }
+.mesh-alert.note { background: #f1f3f5; color: #343a40; border: 1px solid #dee2e6; }

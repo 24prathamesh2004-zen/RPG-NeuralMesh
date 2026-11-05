@@ -1,0 +1,206 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "harrisons.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "harrisons",
+    "domain": "corporate",
+    "title": "Harrisons Malayalam corporate functions",
+    "owner_role": "Head Estate Operations",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "faiss_index_type": "Flat"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "harrisons:F-01",
+      "catalogue_id": "F-01",
+      "title": "Estate SOPs (collection, preservation, transport)",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head Estate Operations",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    },
+    {
+      "id": "harrisons:F-02",
+      "catalogue_id": "F-02",
+      "title": "Title-dispute file",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "General Counsel",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-02"
+    }
+  ],
+  "documents": [
+    {
+      "id": "harrisons:F-01-01",
+      "datapoint": "harrisons:F-01",
+      "title": "SOP - Latex collection and cup handling",
+      "kind": "sop",
+      "version": "2026-01",
+      "tags": [
+        "sop",
+        "collection",
+        "latex",
+        "cups"
+      ],
+      "summary": "Rounds start at first light; cups are emptied within the agreed window after tapping; latex is strained into rinsed, covered buckets kept in shade; collection time is logged at the collection point.",
+      "body_file": "source/F-01-01.md",
+      "concepts": [
+        "concept:latex-collection-and-transport"
+      ],
+      "skills": [
+        {
+          "skill": "skill:rubber-plantation-management",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:F-01-02",
+      "datapoint": "harrisons:F-01",
+      "title": "SOP - Anticoagulant dosing and field preservation",
+      "kind": "sop",
+      "version": "2026-01",
+      "tags": [
+        "sop",
+        "anticoagulant",
+        "preservation",
+        "dosing"
+      ],
+      "summary": "Anticoagulant is prepared in measured batches by trained staff, dosed at the collection point on schedule, recorded per round, and increased on rain days.",
+      "body_file": "source/F-01-02.md",
+      "concepts": [
+        "concept:anticoagulant-preservation"
+      ],
+      "skills": [
+        {
+          "skill": "skill:rubber-plantation-management",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:F-01-03",
+      "datapoint": "harrisons:F-01",
+      "title": "SOP - Transport and factory receipt",
+      "kind": "sop",
+      "version": "2026-01",
+      "tags": [
+        "sop",
+        "transport",
+        "receipt",
+        "factory"
+      ],
+      "summary": "Loads leave on a fixed schedule in cleaned, covered vehicles; arrival time and visible coagulum or contamination are logged at receipt; quality results are filed per day, not per lot.",
+      "body_file": "source/F-01-03.md",
+      "concepts": [
+        "concept:latex-collection-and-transport",
+        "concept:incoming-quality-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:rubber-plantation-management",
+          "level": "L"
+        },
+        {
+          "skill": "skill:quality-management",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:F-01-04",
+      "datapoint": "harrisons:F-01",
+      "title": "SOP - Contamination control at collection points",
+      "kind": "sop",
+      "version": "2026-01",
+      "tags": [
+        "sop",
+        "contamination",
+        "hygiene"
+      ],
+      "summary": "Collection points are cleaned daily, strainers are checked at the start of each round, and foreign matter is recorded against the round and discussed weekly.",
+      "body_file": "source/F-01-04.md",
+      "concepts": [
+        "concept:contamination-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:rubber-plantation-management",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:F-01-05",
+      "datapoint": "harrisons:F-01",
+      "title": "SOP - Monsoon operating procedure",
+      "kind": "sop",
+      "version": "2026-01",
+      "tags": [
+        "sop",
+        "monsoon",
+        "rain",
+        "rain-guards"
+      ],
+      "summary": "Rain guards are fitted before the season; on rain days rounds are shorter and more frequent, anticoagulant dosing is increased and transport is prioritised.",
+      "body_file": "source/F-01-05.md",
+      "concepts": [
+        "concept:monsoon-operations",
+        "concept:anticoagulant-preservation",
+        "concept:latex-collection-and-transport"
+      ],
+      "skills": [
+        {
+          "skill": "skill:rubber-plantation-management",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:F-02-01",
+      "datapoint": "harrisons:F-02",
+      "title": "Title-dispute file (restricted)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "legal",
+        "restricted"
+      ],
+      "summary": "Restricted legal file. Metadata only.",
+      "body_file": "source/F-02-01.md",
+      "concepts": [
+        "concept:title-dispute"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-HARR-TITLE-5520",
+        "document": "harrisons:F-02-01"
+      }
+    ]
+  }
+}

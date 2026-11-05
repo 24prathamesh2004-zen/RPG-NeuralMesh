@@ -1,10 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { Activity, AlertTriangle, Boxes, ChevronDown, ChevronUp, LoaderCircle, RefreshCw } from 'lucide-react'
-import { getMeshNodes } from '../services/api'
-import type { MeshNodeInfo } from '../services/api'
+import { getMeshGraph, getMeshNodes, refreshMeshGraph } from '../services/api'
+import type { MeshGraphView, MeshNodeInfo } from '../services/api'
+import MeshGraphExplorer from '../components/MeshGraphExplorer'
 
 const NODE_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d' }
+function MeshGraphPanel() {
+  const [graph, setGraph] = useState<MeshGraphView | null>(null)
+  const [busy, setBusy] = useState(false)
+  const load = async (refresh = false) => {
+    setBusy(true)
+    try {
+      if (refresh) await refreshMeshGraph()
+      setGraph((await getMeshGraph()).data)
+    } finally {
+      setBusy(false)
+    }
+  }
+  useEffect(() => { void load() }, [])
+  if (!graph) return null
+  return (
+    <section className="mesh-section-panel">
+      <div className="mesh-side-heading"><h2>Mesh graph</h2><button type="button" className="mesh-outline-action" onClick={() => void load(true)} disabled={busy}><RefreshCw size={14} className={busy ? 'animate-spin' : ''} />Reload from nodes</button></div>
+      <MeshGraphExplorer graph={graph} />
+      <p className="mesh-node-profile">{Object.entries(graph.exports ?? {}).map(([n, s]) => `${n}: ${s}`).join(' · ')}</p>
+    </section>
+  )
+}
 
 export default function MeshNodesPage() {
   const [nodes, setNodes] = useState<MeshNodeInfo[]>([])
@@ -41,11 +64,13 @@ export default function MeshNodesPage() {
           <div className="mesh-node-level"><span>{node.level}</span><span>Schema {node.schema_version}</span></div>
           <div className="mesh-node-card-stats"><div><strong>{node.datapoint_count}</strong><span>Datapoints</span></div><div><strong>{node.port}</strong><span>Local port</span></div></div>
           <button type="button" className="mesh-node-expand" onClick={() => setExpanded(expanded === node.node_id ? null : node.node_id)}>{expanded === node.node_id ? 'Hide capabilities' : 'View capabilities'}{expanded === node.node_id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
+          {expanded === node.node_id && node.profile && <p className="mesh-node-profile">{node.profile}</p>}
           {expanded === node.node_id && <div className="mesh-capability-list">{node.datapoints.map((dp) => <div key={String(dp.datapoint_id)}><span><b>{String(dp.datapoint_id)}</b>{String(dp.title)}</span><em>{String(dp.exposure_ceiling)}</em></div>)}</div>}
           {node.error && <p className="mesh-node-error">{node.error}</p>}
         </article>)}
       </section>
       {!loading && nodes.length === 0 && !error && <div className="ask-empty-results">No node registry results returned.</div>}
+      <MeshGraphPanel />
     </div>
   )
 }
