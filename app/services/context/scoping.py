@@ -6,15 +6,11 @@ import json
 from dataclasses import dataclass, field
 
 from contracts.evidence import EvidenceRecord
+from services.context import prompts
 
 TOP_DOCUMENTS = 12
 TEXTS_PER_DOCUMENT = 3
 
-RERANK_PROMPT = (
-    "You decide whether each document is relevant to the question, using only the given texts of that document. "
-    "Reply with ONLY a JSON array, no prose: "
-    '[{"document": "<id>", "relevant": true|false, "reason": "<=15 words"}]'
-)
 
 
 @dataclass
@@ -67,7 +63,8 @@ def rerank(question: str, selected: dict[str, list[EvidenceRecord]], call_model)
         texts = [r.text for r in recs if r.text][:TEXTS_PER_DOCUMENT]
         blocks.append(f"Document: {doc}\nTitle: {recs[0].title}\n" + "\n".join(f"- {t}" for t in texts))
     prompt = f"Question:\n{question}\n\nDocuments:\n\n" + "\n\n".join(blocks)
-    text = call_model("rerank", RERANK_PROMPT, prompt)
+    rerank_prompt = prompts.load("rerank")
+    text = call_model("rerank", rerank_prompt.text, prompt, prompt_version=rerank_prompt.version)
     if text is None:
         scope.rerank = "skipped_model_unavailable"
         return scope

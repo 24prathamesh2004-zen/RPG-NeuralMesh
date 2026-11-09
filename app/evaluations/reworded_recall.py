@@ -80,7 +80,12 @@ def main() -> None:
     from pathlib import Path
 
     golden = yaml.safe_load((Path(__file__).resolve().parents[1] / "neuralmesh_kb_pack" / "kb" / "golden.yaml").read_text())["scenarios"]
-    golden = [s for s in golden if s["id"] != "S4"]
+    # Scenarios without reworded questions here (S11 to S15, the wave 2 nodes) are left out and named: the labelled
+    # questions of evaluations/labelled_questions.py cover the documents of those nodes.
+    left_out = [s["id"] for s in golden if s["id"] not in REWORDED]
+    golden = [s for s in golden if s["id"] != "S4" and s["id"] in REWORDED]
+    if left_out:
+        print(f"No reworded questions for {', '.join(left_out)}, so they are left out of this measure")
     with mock.patch.object(knowledge_view, "_vector_keys", lambda *a, **k: []):
         kw_hits, total, kw_missed = measure(golden)
     hy_hits, _, hy_missed = measure(golden)

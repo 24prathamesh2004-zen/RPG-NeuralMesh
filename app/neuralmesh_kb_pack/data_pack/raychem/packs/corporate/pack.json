@@ -1,0 +1,67 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "corporate",
+    "title": "Raychem RPG corporate functions",
+    "owner_role": "General Counsel",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "raychem:F-02",
+      "catalogue_id": "F-02",
+      "title": "Partner agreement and pricing file",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "General Counsel",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-06"
+    }
+  ],
+  "documents": [
+    {
+      "id": "raychem:F-02-01",
+      "datapoint": "raychem:F-02",
+      "title": "Partner agreement and pricing file (restricted)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "agreement",
+        "pricing",
+        "restricted"
+      ],
+      "summary": "Restricted commercial file. Metadata only.",
+      "body_file": "source/F-02-01.md",
+      "concepts": [
+        "concept:cable-accessory-failure-analysis"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-RAYC-PRICE-4417",
+        "document": "raychem:F-02-01"
+      }
+    ]
+  }
+}

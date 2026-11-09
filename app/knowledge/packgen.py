@@ -4,12 +4,13 @@
 
 kb/<node>.yaml + kb/annotations.yaml + data_pack/<node>/source front matter
   -> data_pack/<node>/packs/<domain>/pack.json        one pack per subsidiary and domain (19 for the pilot)
-  -> data_pack/<node>/packs/<domain>/build/            vectors.faiss and chunks.db, built from the rows of index.db
+  -> data_pack/<node>/packs/<domain>/build/chroma/     the Chroma store of the pack, built from the rows of index.db
 The packs are validated together with the group packs (group/*.pack.json). Any error stops the build.
 """
 from __future__ import annotations
 
 import json
+import os
 import re
 import sqlite3
 import sys
@@ -18,15 +19,15 @@ from pathlib import Path
 import yaml
 
 from knowledge import embedder
-from knowledge.validator import validate_packs
+from knowledge.validator import PackCheckFailed, validate_packs
 from knowledge.vector_index import ChunkRow, VectorIndex
 from shared.registry import embedding_model_name, node_ids
 
 KB_PACK = Path(__file__).resolve().parents[1] / "neuralmesh_kb_pack"
 KB = KB_PACK / "kb"
-DATA = KB_PACK / "data_pack"
+DATA = Path(os.getenv("NEURALMESH_DATA_PACK", str(KB_PACK / "data_pack")))
 GROUP = KB_PACK / "group"
-TALENT_IMPORT = KB_PACK / "talent_import"
+TALENT_IMPORT = Path(os.getenv("NEURALMESH_TALENT_IMPORT", str(KB_PACK / "talent_import")))
 FORMAT = {"format": "neuralmesh.knowledge-pack", "format_version": "1.0"}
 DOMAIN_OF_LETTER = {"E": "engineering", "O": "operations", "C": "commercial", "R": "research",
                     "F": "corporate", "L": "lessons", "M": "mesh", "T": "talent"}
@@ -101,7 +102,7 @@ def build_node_packs(node: str, annotations: dict) -> dict[str, dict]:
                 "title": f"{cfg['display']} {DOMAIN_TITLES[domain]}", "owner_role": "Node owner",
                 "maturity_level": cfg["level"], "language": "en", "published_at": published, "synthetic": True,
                 "index": {"embedding_model": embedding_model_name(), "dimensions": 384, "chunk_chars": 600,
-                          "chunk_overlap_chars": 0, "faiss_index_type": "Flat"}},
+                          "chunk_overlap_chars": 0, "vector_store": "chroma"}},
                 "datapoints": [], "documents": []}
         return packs[domain]
 
@@ -166,12 +167,19 @@ def build_node_packs(node: str, annotations: dict) -> dict[str, dict]:
     return packs
 
 
-def merge_talent_import(node: str, pack: dict) -> dict:
+def _kept(folder: Path, name: str, incoming: dict[str, dict] | None) -> dict | None:
+    """The kept import of this name: the incoming one when an import is being checked, else the file."""
+    if incoming and name in incoming:
+        return incoming[name]
+    path = folder / f"{name}.pack.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
+def merge_talent_import(node: str, pack: dict, folder: Path | None = None, incoming: dict[str, dict] | None = None) -> dict:
     """A talent pack exported by SkillForge for this subsidiary adds its T-01 datapoint, roles and REQUIRES_SKILL."""
-    path = TALENT_IMPORT / f"{node}.talent.pack.json"
-    if not path.is_file():
+    imported = _kept(folder or TALENT_IMPORT, f"{node}.talent", incoming)
+    if imported is None:
         return pack
-    imported = json.loads(path.read_text(encoding="utf-8"))
     known = {d["id"] for d in pack.get("datapoints", [])}
     pack["datapoints"] += [d for d in imported.get("datapoints", []) if d["id"] not in known]
     pack["documents"] += imported.get("documents", [])
@@ -181,10 +189,17 @@ def merge_talent_import(node: str, pack: dict) -> dict:
     return pack
 
 
-def load_group_packs() -> list[tuple[str, dict]]:
+def load_group_packs(folder: Path | None = None, incoming: dict[str, dict] | None = None) -> list[tuple[str, dict]]:
+    """The group packs: the mesh's own and the group packs applications sent, with ``incoming`` in place of the kept
+    file of the same name while an import is checked."""
+    talent = folder or TALENT_IMPORT
     out = [(p.name, json.loads(p.read_text(encoding="utf-8"))) for p in sorted(GROUP.glob("*.pack.json"))]
-    if TALENT_IMPORT.is_dir():
-        out += [(p.name, json.loads(p.read_text(encoding="utf-8"))) for p in sorted(TALENT_IMPORT.glob("group.*.pack.json"))]
+    names = {p.name[: -len(".pack.json")] for p in talent.glob("group.*.pack.json")} if talent.is_dir() else set()
+    names |= {name for name in (incoming or {}) if name.startswith("group.")}
+    for name in sorted(names):
+        pack = _kept(talent, name, incoming)
+        if pack is not None:
+            out.append((f"{name}.pack.json", pack))
     return out
 
 
@@ -194,6 +209,45 @@ def index_rows(node: str) -> list[tuple]:
         return con.execute("SELECT text, title, doc_id, dp, mode, sens, version, stale FROM idx").fetchall()
     finally:
         con.close()
+
+
+def plan_talent_packs(nodes: list[str], talent_folder: Path | None = None, incoming: dict[str, dict] | None = None):
+    """The talent pack of each node in ``nodes`` rebuilt from the kept talent imports, with ``incoming`` (kept name to
+    pack) in place of the kept files of the same name, and the strict check of these packs together with every other
+    pack on disk and the group packs, as build_all checks them. Writes nothing. The import tool runs this before it
+    writes, so a pack is refused with the real reason instead of failing at the rebuild."""
+    folder = talent_folder or TALENT_IMPORT
+    annotations = yaml.safe_load((KB / "annotations.yaml").read_text(encoding="utf-8"))
+    built: dict[str, dict] = {}
+    for node in nodes:
+        packs = build_node_packs(node, annotations)
+        if "talent" in packs:
+            built[f"{node}.talent"] = merge_talent_import(node, packs["talent"], folder, incoming)
+    on_disk = []
+    for path in sorted(DATA.glob("*/packs/*/pack.json")):
+        pack = json.loads(path.read_text(encoding="utf-8"))
+        if pack["pack"]["pack_id"] not in built:
+            on_disk.append((f"{pack['pack']['pack_id']}.pack.json", pack))
+    named = [(f"{pid}.pack.json", p) for pid, p in built.items()] + on_disk + load_group_packs(folder, incoming)
+    return built, validate_packs(named, strict=True)
+
+
+def rebuild_talent_packs(nodes: list[str], talent_folder: Path | None = None) -> list[str]:
+    """Rebuild only the talent pack of each node in ``nodes`` from the kept talent imports, after an application sent
+    new packs through the import tool. The packs are checked as plan_talent_packs checks them, and nothing is written
+    when a check fails. The nodes read their pack files again when the files change (mcp_nodes/server.py), so no node
+    restarts. The vector stores are not rebuilt: a talent import carries role profiles, not indexed text."""
+    built, report = plan_talent_packs(nodes, talent_folder)
+    if report.errors:
+        raise PackCheckFailed("Pack validation failed: " + " | ".join(report.errors[:5]))
+    for pid, pack in built.items():
+        node, domain = pid.split(".")
+        out_dir = DATA / node / "packs" / domain
+        out_dir.mkdir(parents=True, exist_ok=True)
+        tmp = out_dir / ".pack.json.tmp"  # written beside the pack and renamed: a node reads the old file or the new one
+        tmp.write_text(json.dumps(pack, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        os.replace(tmp, out_dir / "pack.json")
+    return sorted(built)
 
 
 def build_all(build_vectors: bool = True) -> dict:
@@ -234,7 +288,7 @@ def build_all(build_vectors: bool = True) -> dict:
                 stored = index.all_text()
                 leaked = [c for c in canaries if c in stored]
                 if leaked:
-                    raise SystemExit(f"Canary leaked into the vector chunk table of {node}.{domain}: {leaked}")
+                    raise SystemExit(f"Canary leaked into the Chroma store of {node}.{domain}: {leaked}")
     return summary
 
 

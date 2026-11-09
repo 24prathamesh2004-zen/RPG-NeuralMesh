@@ -1,14 +1,15 @@
 {
   "note": "Approved models per step. Tiers: gateway (the group's approved model gateway), local (inside the group network), cloud (a public API, development with synthetic packs only). In strict mode, on outside development, a cloud model or a model missing here stops the service at start.",
-  "development_cloud_for_synthetic_confidential": false,
+  "development_cloud_for_synthetic_confidential": true,
   "models": {
     "group-gateway": {"id": "gpt-4.1-mini", "tier": "gateway", "base_url": "https://gateway.rpg.example/openai/v1", "api_key_env": "NEURALMESH_GATEWAY_API_KEY"},
     "local-ollama": {"id": "llama3.1:8b", "tier": "local", "base_url": "http://127.0.0.1:11434/v1", "api_key_env": ""},
-    "groq-dev": {"id": "llama-3.3-70b-versatile", "tier": "cloud", "base_url": "https://api.groq.com/openai/v1", "api_key_env": "NEURALMESH_GROQ_API_KEY"}
+    "groq-dev": {"id": "llama-3.3-70b-versatile", "tier": "cloud", "base_url": "https://api.groq.com/openai/v1", "api_key_env": "NEURALMESH_GROQ_API_KEY"},
+    "claude-dev": {"id": "claude-sonnet-5-5", "tier": "cloud", "provider": "anthropic", "base_url": "https://api.anthropic.com", "api_key_env": "NEURALMESH_ANTHROPIC_API_KEY"}
   },
   "steps": {
-    "answer": {"model": "groq-dev", "max_input_tokens": 8000, "max_output_tokens": 1200},
-    "rerank": {"model": "groq-dev", "max_input_tokens": 2500, "max_output_tokens": 300},
-    "classify": {"model": "groq-dev", "max_input_tokens": 600, "max_output_tokens": 100}
+    "answer": {"model": "claude-dev", "max_input_tokens": 8000, "max_output_tokens": 1200},
+    "rerank": {"model": "claude-dev", "max_input_tokens": 2500, "max_output_tokens": 300},
+    "classify": {"model": "claude-dev", "max_input_tokens": 600, "max_output_tokens": 100}
   }
 }

@@ -1,0 +1,121 @@
+node: raychem
+display: Raychem RPG
+port: 8105
+level: L1
+backend: "Synthetic: installation and service manuals, test reports and field service records"
+datapoints:
+  E-01: {title: Installation and testing procedures, sensitivity: Internal, ceiling: SUM, owner_role: Head of Engineering}
+  O-02: {title: Field service and failure analysis, sensitivity: Internal, ceiling: SUM, owner_role: Head of Field Service}
+  C-03: {title: Application notes for customers and electric mobility, sensitivity: Internal, ceiling: SUM, owner_role: Head of Applications}
+  L-01: {title: Lessons from field failures, sensitivity: Confidential, ceiling: SUM, owner_role: Head of Quality}
+  F-02: {title: Partner agreement and pricing file, sensitivity: Restricted, ceiling: MD, never_leave: true, owner_role: General Counsel, rule_id: R-NL-06}
+  F-04: {title: Expert directory (consent-based), sensitivity: Confidential, ceiling: LIVE, consent_required: true, owner_role: CHRO}
+docs:
+  - id: E-01-01
+    dp: E-01
+    title: Procedure - Cable joint installation
+    version: "2026-02"
+    tags: [joint, installation, cable-preparation, shrink-kit]
+    summary: A joint is installed in five steps. Strip the cable to the marked lengths, clean and degrease the insulation, fit the connector, place the shrink sleeve and heat it evenly from the centre outwards. The work stops if rain or dust reaches the open cable.
+    body: >-
+      A joint is installed in five steps. First the cable ends are stripped to the lengths marked on the kit sheet. The insulation is then cleaned and degreased with the approved wipes. The connector is crimped and checked for gaps. The shrink sleeve is placed over the connector and heated evenly from the centre outwards. Work stops if rain or dust reaches the open cable.
+  - id: E-01-02
+    dp: E-01
+    title: Procedure - Cold-shrink and heat-shrink termination
+    version: "2026-02"
+    tags: [termination, cold-shrink, heat-shrink, outdoor]
+    summary: Cold-shrink terminations suit confined spaces because they need no flame. Heat-shrink terminations suit outdoor work where a torch is allowed. Both need a clean stress-control layer and a sealed lug end.
+    body: >-
+      Cold-shrink terminations are placed over the prepared cable and released by pulling out the removable core. They need no flame and suit confined spaces. Heat-shrink terminations are shrunk with a torch and suit outdoor work. Both types need a clean stress-control layer. The lug end is sealed with mastic. The installer records the batch number of the kit.
+  - id: E-01-03
+    dp: E-01
+    title: Procedure - Tests before energising
+    version: "2026-03"
+    tags: [testing, insulation-resistance, withstand, partial-discharge, energising]
+    summary: Before energising, the installer measures insulation resistance, applies a high voltage withstand test for the agreed time and, for cables above medium voltage, runs a partial discharge test. An insulation reading below the site limit, or a partial discharge reading above it, stops energising.
+    body: >-
+      Before energising, insulation resistance is measured between each core and earth. A high voltage withstand test is applied for the agreed time and the leakage current is watched. For cables above medium voltage, a partial discharge test is run and the level is compared with the site limit. A reading below the insulation limit or above the discharge limit stops energising. Each result is written in the test report.
+  - id: E-01-04
+    dp: E-01
+    title: Procedure - Connecting cables to transformers and switchgear
+    version: "2026-03"
+    tags: [transformer, switchgear, bushing, connection, torque]
+    summary: At a transformer or switchgear bushing, the installer checks the phase marking, fits the termination to the bushing and tightens the lug to the set torque. The earth continuity is checked before the cover is closed.
+    body: >-
+      At a transformer or switchgear bushing, the installer first checks the phase marking against the single line diagram. The termination is fitted to the bushing with the correct stress cone. The lug is tightened to the set torque and marked with a paint line. Earth continuity is checked before the cover is closed. Clearances to the cover are measured and written in the job card.
+  - id: O-02-01
+    dp: O-02
+    title: Field service visit routine
+    version: "2026-01"
+    tags: [field-service, visit, safety, job-card]
+    summary: A service visit starts with the permit to work and a safety briefing. The engineer inspects accessories for tracking, heat marks and loose lugs, takes thermal readings and closes the job card with photos and findings.
+    body: >-
+      A service visit starts with the permit to work and a safety briefing. The engineer inspects each accessory for tracking, heat marks, cracked sleeves and loose lugs. Thermal readings are taken under load and compared with the previous visit. Findings are closed on the job card with photos. A defect that affects safety is reported to the control room before the engineer leaves the site.
+  - id: O-02-02
+    dp: O-02
+    title: Failure analysis of a failed cable joint
+    version: "2026-02"
+    tags: [failure-analysis, joint, breakdown, evidence]
+    summary: The failed joint is kept in place until photos are taken. The team cuts it open, finds where the breakdown started, and checks four causes in order. These are preparation errors, water entry, a connector defect and overload. The finding is filed with the cause.
+    body: >-
+      The failed joint is kept in place until photos are taken. It is then cut open along its length. The team finds where the breakdown path started. Four causes are checked in order, namely preparation errors, water entry, a connector defect and overload of the circuit. The finding is filed with the cause. Where the cause is a preparation error, the installer team gets a refresher session.
+  - id: O-02-03
+    dp: O-02
+    title: Digital job records and quality sign-off
+    version: "2026-03"
+    tags: [quality, digital-records, job-card, traceability]
+    summary: Every installation has a digital job record with the kit batch, test readings and photos. A second engineer signs off the record before the circuit is handed over. Records with missing readings are returned within 2 working days.
+    body: >-
+      Every installation has a digital job record. It holds the kit batch, the test readings and photos of each step. A second engineer reviews the record and signs it off before the circuit is handed over. Records with missing readings are returned to the installer within 2 working days. Monthly, the quality team counts returned records per installer team and shares the trend.
+  - id: C-03-01
+    dp: C-03
+    title: Application note - Charging station cable accessories
+    version: "2026-02"
+    tags: [electric-mobility, charging, accessories, sealing]
+    summary: Charging stations need sealed accessories rated for outdoor use, repeated plugging and vibration. The note lists how to choose a sealed joint or termination by cable size, voltage level and exposure to water.
+    body: >-
+      Charging stations need sealed accessories rated for outdoor use. The cables see repeated plugging, vibration and water spray. The note lists how to choose a sealed joint or termination by cable size, voltage level and exposure to water. Cold-shrink kits are preferred in tight cabinets. The note advises a test reading at every accessory before the station opens to users.
+  - id: C-03-02
+    dp: C-03
+    title: Application note - Vehicle wiring accessories
+    version: "2026-03"
+    tags: [vehicle-wiring, harness, heat-shrink, high-voltage]
+    summary: High voltage wiring in electric vehicles uses heat-shrink sleeves with an adhesive lining to seal harness splices and connector backs. The note sets selection rules by temperature class and bend radius.
+    body: >-
+      High voltage wiring in electric vehicles uses heat-shrink sleeves with an adhesive lining. They seal harness splices and the backs of connectors. Selection depends on the temperature class near the battery and on the bend radius of the route. Orange sleeves mark high voltage runs. A sample splice is cut open at each batch to check that the lining has flowed.
+  - id: L-01-01
+    dp: L-01
+    title: Lesson - Moisture entry at outdoor terminations
+    version: "2026-02"
+    tags: [lesson, moisture, termination, monsoon]
+    summary: In 3 of 5 sites with early termination failures, water entered at an unsealed lug end. The fix is to seal every lug end with mastic and to add a visual check of the seal to the job card.
+    body: >-
+      In 3 of 5 sites with early termination failures, water entered at an unsealed lug end. The lug end was left open after the crimp and no one checked it. The fix is to seal every lug end with mastic. A visual check of the seal is added to the job card. The check is photographed.
+  - id: L-01-02
+    dp: L-01
+    title: Lesson - Handover notes between shifts and teams
+    version: "2026-03"
+    tags: [lesson, handover, communication, reporting]
+    summary: A half-finished joint was energised because the shift handover note said only "joint done". Handover notes now list each step done, each test result and the next step, and the incoming engineer reads them aloud to the outgoing one.
+    body: >-
+      A half-finished joint was energised because the shift handover note said only "joint done". The test step had not been run. Handover notes now list each step done, each test result and the next step. The incoming engineer reads the note aloud to the outgoing one. Questions are settled before the outgoing engineer leaves.
+  - id: F-02-01
+    dp: F-02
+    title: Partner agreement and pricing file (restricted)
+    version: "2026-01"
+    tags: [agreement, pricing, restricted]
+    summary: Restricted commercial file. Metadata only.
+    private_body: "Mock partner agreement file. CANARY-RAYC-PRICE-4417"
+facts:
+  - {id: RY1, dp: E-01, text: "A joint is installed in five steps, and work stops if rain or dust reaches the open cable."}
+  - {id: RY2, dp: E-01, text: "Energising stops if insulation resistance is below the limit or partial discharge is above the site limit."}
+  - {id: RY3, dp: O-02, text: "Failed joints are checked for four causes in order: preparation, water entry, connector defect and overload."}
+  - {id: RY4, dp: L-01, text: "In 3 of 5 sites with early termination failures, water entered at an unsealed lug end."}
+  - {id: RY5, dp: C-03, text: "Charging station accessories must be sealed and rated for outdoor use, plugging and vibration."}
+  - {id: RY6, dp: F-02, text: "The partner agreement and pricing file is never exposed."}
+experts:
+  - {id: RE-1, role: Senior application engineer, skills: [cable accessory selection, transformer connections, electric mobility applications], evidence: [C-03-01, C-03-02, E-01-04], consent: true, private_name: "Ravi Menon (fictional)"}
+  - {id: RE-2, role: Field service lead, skills: [joint installation, failure analysis, pre-energising tests], evidence: [E-01-01, E-01-03, O-02-02], consent: true, private_name: "Kavita Rao (fictional)"}
+  - {id: RE-3, role: Quality engineer, skills: [job record sign-off, traceability, lessons review], evidence: [O-02-03, L-01-01], consent: true, private_name: "Arjun Desai (fictional)"}
+  - {id: RE-4, role: Senior installation technician, skills: [termination fitting, torque checks, handover notes], evidence: [E-01-02, L-01-02], consent: false, private_name: "Opted out (fictional)"}
+canaries: [CANARY-RAYC-PRICE-4417]

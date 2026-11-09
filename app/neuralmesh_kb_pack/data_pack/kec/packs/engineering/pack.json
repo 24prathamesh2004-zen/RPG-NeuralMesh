@@ -17,7 +17,7 @@
       "dimensions": 384,
       "chunk_chars": 600,
       "chunk_overlap_chars": 0,
-      "faiss_index_type": "Flat"
+      "vector_store": "chroma"
     }
   },
   "datapoints": [
@@ -31,7 +31,8 @@
       "purposes_allowed": [
         "problem_solving",
         "compliance",
-        "bid_support"
+        "bid_support",
+        "inspection"
       ]
     },
     {
@@ -92,6 +93,27 @@
           "skill": "skill:engineering",
           "level": "M"
         }
+      ]
+    },
+    {
+      "id": "kec:E-04-03",
+      "datapoint": "kec:E-04",
+      "title": "Standard - Patrol priority for tower members (P1, P2, P3)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "standard",
+        "patrol",
+        "priority",
+        "tower",
+        "rust",
+        "zinc",
+        "bent"
+      ],
+      "summary": "P1 is a bent member or a crack at a joint, to be made safe within 48 hours. P2 is zinc loss with rust on more than a quarter of a member, to be scheduled within the quarter. P3 is surface rust with the zinc coat intact, recorded and re-checked at the next patrol.",
+      "body_file": "source/E-04-03.md",
+      "concepts": [
+        "concept:tower-design-standard"
       ]
     }
   ]

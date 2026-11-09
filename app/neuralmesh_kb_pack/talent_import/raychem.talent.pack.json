@@ -1,0 +1,208 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.talent",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "talent",
+    "title": "Raychem roles and required skills",
+    "owner_role": "CHRO",
+    "language": "en",
+    "published_at": "2026-11-09",
+    "synthetic": true,
+    "maturity_level": "L2"
+  },
+  "datapoints": [
+    {
+      "id": "raychem:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
+    }
+  ],
+  "documents": [
+    {
+      "id": "raychem:T-01-7",
+      "datapoint": "raychem:T-01",
+      "title": "Application Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "application-engineer"
+      ],
+      "summary": "The Application Engineer role requires Business Functional Knowledge at intermediate level, Electrical Power, Cable & Transformer at advanced level and Mobility, EV & Electrical Applications at intermediate level."
+    },
+    {
+      "id": "raychem:T-01-8",
+      "datapoint": "raychem:T-01",
+      "title": "Field Service Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "field-service-engineer"
+      ],
+      "summary": "The Field Service Engineer role requires Cable Accessory Installation at intermediate level, Electrical Power, Cable & Transformer at intermediate level, Manufacturing, Engineering, Quality & Digital at intermediate level and Professional Workplace at intermediate level."
+    }
+  ],
+  "entities": [
+    {
+      "id": "raychem:role/application-engineer",
+      "type": "Role",
+      "label": "Application Engineer",
+      "subsidiary": "raychem",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/7"
+        }
+      ]
+    },
+    {
+      "id": "raychem:role/field-service-engineer",
+      "type": "Role",
+      "label": "Field Service Engineer",
+      "subsidiary": "raychem",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/8"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:raychem.talent/req-21",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/application-engineer",
+      "to": "skill:business-functional-knowledge",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-19",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/application-engineer",
+      "to": "skill:electrical-power-cable-and-transformer",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-20",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/application-engineer",
+      "to": "skill:mobility-ev-and-electrical-applications",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-54",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/field-service-engineer",
+      "to": "skill:cable-accessory-installation",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-22",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/field-service-engineer",
+      "to": "skill:electrical-power-cable-and-transformer",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-23",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/field-service-engineer",
+      "to": "skill:manufacturing-engineering-quality-and-digital",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:raychem.talent/req-24",
+      "type": "REQUIRES_SKILL",
+      "from": "raychem:role/field-service-engineer",
+      "to": "skill:professional-workplace",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    }
+  ]
+}

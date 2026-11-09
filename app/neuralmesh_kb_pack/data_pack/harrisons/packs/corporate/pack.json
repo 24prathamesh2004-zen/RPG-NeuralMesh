@@ -17,7 +17,7 @@
       "dimensions": 384,
       "chunk_chars": 600,
       "chunk_overlap_chars": 0,
-      "faiss_index_type": "Flat"
+      "vector_store": "chroma"
     }
   },
   "datapoints": [
@@ -32,7 +32,8 @@
         "problem_solving",
         "compliance",
         "bid_support",
-        "learning"
+        "learning",
+        "inspection"
       ]
     },
     {

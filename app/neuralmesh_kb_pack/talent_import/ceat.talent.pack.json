@@ -6,12 +6,12 @@
     "scope": "subsidiary",
     "subsidiary": "ceat",
     "domain": "talent",
-    "title": "SAMPLE until SkillForge exports it: CEAT roles and required skills",
+    "title": "CEAT roles and required skills",
     "owner_role": "CHRO",
-    "maturity_level": "L2",
     "language": "en",
-    "published_at": "2026-11-04",
-    "synthetic": true
+    "published_at": "2026-11-09",
+    "synthetic": true,
+    "maturity_level": "L2"
   },
   "datapoints": [
     {
@@ -32,23 +32,40 @@
   ],
   "documents": [
     {
-      "id": "ceat:T-01-01",
+      "id": "ceat:T-01-4",
+      "datapoint": "ceat:T-01",
+      "title": "Process Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "process-engineer"
+      ],
+      "summary": "The Process Engineer role requires Engineering at intermediate level, HR at beginner level and Manufacturing at advanced level."
+    },
+    {
+      "id": "ceat:T-01-5",
       "datapoint": "ceat:T-01",
       "title": "Quality Engineer role profile",
       "kind": "role_profile",
       "version": "2026-11",
       "tags": [
         "role",
-        "quality",
-        "engineering"
+        "quality-engineer"
       ],
-      "summary": "The Quality Engineer role requires Engineering at advanced level, and Manufacturing, R&D / NPD and Quality Management at intermediate level.",
-      "skills": [
-        {
-          "skill": "skill:quality-management",
-          "level": "M"
-        }
-      ]
+      "summary": "The Quality Engineer role requires Engineering at advanced level, Manufacturing at intermediate level, Quality Management at intermediate level and R&D / NPD at intermediate level."
+    },
+    {
+      "id": "ceat:T-01-6",
+      "datapoint": "ceat:T-01",
+      "title": "Sales Executive role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "sales-executive"
+      ],
+      "summary": "The Sales Executive role requires Finance at intermediate level, HR at beginner level and Manufacturing at beginner level."
     }
   ],
   "entities": [
@@ -61,7 +78,7 @@
       "external_refs": [
         {
           "scheme": "SkillForge",
-          "uri": "job_roles/CEAT/Process Engineer"
+          "uri": "job_roles/4"
         }
       ]
     },
@@ -74,7 +91,7 @@
       "external_refs": [
         {
           "scheme": "SkillForge",
-          "uri": "job_roles/CEAT/Quality Engineer"
+          "uri": "job_roles/5"
         }
       ]
     },
@@ -87,31 +104,14 @@
       "external_refs": [
         {
           "scheme": "SkillForge",
-          "uri": "job_roles/CEAT/Sales Executive"
+          "uri": "job_roles/6"
         }
       ]
     }
   ],
   "relationships": [
     {
-      "id": "rel:ceat.talent/001",
-      "type": "REQUIRES_SKILL",
-      "from": "ceat:role/process-engineer",
-      "to": "skill:manufacturing",
-      "properties": {
-        "level": "A",
-        "importance": "required"
-      },
-      "confidence": 1,
-      "status": "approved",
-      "provenance": {
-        "method": "imported",
-        "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
-      }
-    },
-    {
-      "id": "rel:ceat.talent/002",
+      "id": "rel:ceat.talent/req-11",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/process-engineer",
       "to": "skill:engineering",
@@ -124,11 +124,11 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/003",
+      "id": "rel:ceat.talent/req-12",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/process-engineer",
       "to": "skill:hr",
@@ -141,16 +141,16 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/004",
+      "id": "rel:ceat.talent/req-10",
       "type": "REQUIRES_SKILL",
-      "from": "ceat:role/quality-engineer",
+      "from": "ceat:role/process-engineer",
       "to": "skill:manufacturing",
       "properties": {
-        "level": "M",
+        "level": "A",
         "importance": "required"
       },
       "confidence": 1,
@@ -158,11 +158,11 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/005",
+      "id": "rel:ceat.talent/req-14",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/quality-engineer",
       "to": "skill:engineering",
@@ -175,14 +175,14 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/006",
+      "id": "rel:ceat.talent/req-13",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/quality-engineer",
-      "to": "skill:r-and-d-npd",
+      "to": "skill:manufacturing",
       "properties": {
         "level": "M",
         "importance": "required"
@@ -192,11 +192,11 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/007",
+      "id": "rel:ceat.talent/req-53",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/quality-engineer",
       "to": "skill:quality-management",
@@ -209,11 +209,28 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/008",
+      "id": "rel:ceat.talent/req-15",
+      "type": "REQUIRES_SKILL",
+      "from": "ceat:role/quality-engineer",
+      "to": "skill:r-and-d-npd",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:ceat.talent/req-16",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/sales-executive",
       "to": "skill:finance",
@@ -226,11 +243,11 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/009",
+      "id": "rel:ceat.talent/req-17",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/sales-executive",
       "to": "skill:hr",
@@ -243,11 +260,11 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     },
     {
-      "id": "rel:ceat.talent/010",
+      "id": "rel:ceat.talent/req-18",
       "type": "REQUIRES_SKILL",
       "from": "ceat:role/sales-executive",
       "to": "skill:manufacturing",
@@ -260,7 +277,7 @@
       "provenance": {
         "method": "imported",
         "by_role": "SkillForge loader",
-        "created_at": "2026-11-04"
+        "created_at": "2026-11-09"
       }
     }
   ]

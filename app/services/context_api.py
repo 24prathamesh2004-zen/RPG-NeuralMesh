@@ -6,20 +6,20 @@ level, no CV and no name. Results are evidence records of contracts/evidence.py 
 """
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
-from itertools import combinations
 from pathlib import Path
 from typing import Any
 
 from api.auth import issue_poc_token
-from knowledge.validator import validate_packs
 from services.context.records import from_summary
-from services.mesh_runtime import GROUP_FOLDERS, KB_PACK, MeshRuntime
+from services.mesh_runtime import TALENT_IMPORT as _KEPT, MeshRuntime
 
 LEVEL_ORDER = {"L": 1, "M": 2, "A": 3}
-SIMILAR_MIN_SHARE = 0.6
-TALENT_IMPORT = KB_PACK / "talent_import"
+# Two roles are similar when they share at least two required skills, and the shared skills are at least half of
+# the required skills of the smaller role (Process Engineer and Quality Engineer of CEAT share 2 of 3).
+SIMILAR_MIN_SHARED = 2
+SIMILAR_MIN_SHARE = 0.5
+TALENT_IMPORT = _KEPT
 
 
 @dataclass(frozen=True)
@@ -27,10 +27,13 @@ class EndUser:
     user_id: str
     company: str
     roles: tuple[str, ...]
+    app: str = "skillforge"  # the registered application the call came from (config/applications)
 
     def assertion(self) -> str:
-        """A short-lived API assertion for this end user, from which node tokens are minted as for any user."""
-        return issue_poc_token({"sub": f"skillforge:{self.user_id}", "company": self.company, "roles": list(self.roles)}, hours=1)
+        """A short-lived API assertion for this end user, from which node tokens are minted as for any user. The subject
+        names the application, so a node's audit says which application asked for whom."""
+        sub = self.user_id if self.user_id.startswith(f"{self.app}:") else f"{self.app}:{self.user_id}"
+        return issue_poc_token({"sub": sub, "company": self.company, "roles": list(self.roles)}, hours=1)
 
 
 class NotFound(LookupError):
@@ -47,10 +50,17 @@ def _skill_id(value: str) -> str:
 def _required(rt: MeshRuntime, role_id: str) -> list[dict[str, Any]]:
     out = []
     for skill, data in rt.mesh.neighbours(role_id, "REQUIRES_SKILL"):
+        if not _live(rt, skill, "Skill"):  # a retired skill is no longer required, whatever link is left
+            continue
         props = data["properties"]
         out.append({"skill": skill, "label": rt.mesh.label(skill), "level": props.get("level"),
                     "importance": props.get("importance")})
     return sorted(out, key=lambda s: s["skill"])
+
+
+def _current(rt: MeshRuntime, entity_id: str) -> str:
+    """The entity that took the place of a joined entry (its "replaces" list), or the ID itself."""
+    return rt.mesh.graph.graph.get("replaced_by", {}).get(entity_id, entity_id)
 
 
 def _live(rt: MeshRuntime, entity_id: str, kind: str) -> bool:
@@ -62,29 +72,50 @@ def _roles(rt: MeshRuntime) -> list[str]:
     return sorted(n for n, d in rt.mesh.graph.nodes(data=True) if d.get("type") == "Role" and not d.get("retired"))
 
 
+def _joined_skills(rt: MeshRuntime) -> dict[str, str]:
+    """Skills a person joined with an approved SAME_AS link, each mapped to one id of its group (the smallest), so the
+    joined skills count as one skill."""
+    g = rt.mesh.graph
+    parent: dict[str, str] = {}
+
+    def find(x: str) -> str:
+        while parent.get(x, x) != x:
+            x = parent[x]
+        return x
+
+    for a, b, d in g.edges(data=True):
+        if d["type"] == "SAME_AS" and d["status"] == "approved" and _live(rt, a, "Skill") and _live(rt, b, "Skill"):
+            ra, rb = find(a), find(b)
+            if ra != rb:
+                parent[max(ra, rb)] = min(ra, rb)
+    return {x: find(x) for x in parent}
+
+
 def similar_roles(rt: MeshRuntime, role_id: str) -> list[dict[str, Any]]:
-    """SIMILAR_TO, computed by code: shared skills divided by all skills of both roles, at least 60%."""
-    mine = {s["skill"] for s in _required(rt, role_id)}
+    """Roles that need much the same skills, computed by code: they share at least two required skills, and the shared
+    skills are at least half of the required skills of the smaller role. shared_skill_share is the shared skills divided
+    by the smaller role's required skills. Roles of every company are compared. A role of another company is found only
+    when its skills have the same ids, so the group's skill list has joined their names, or a person joined them with an
+    approved SAME_AS link."""
+    joined = _joined_skills(rt)
+    mine = {joined.get(s["skill"], s["skill"]) for s in _required(rt, role_id)}
     out = []
     for other in _roles(rt):
         if other == role_id:
             continue
-        theirs = {s["skill"] for s in _required(rt, other)}
-        union = mine | theirs
-        share = len(mine & theirs) / len(union) if union else 0.0
+        theirs = {joined.get(s["skill"], s["skill"]) for s in _required(rt, other)}
+        shared = mine & theirs
+        smaller = min(len(mine), len(theirs))
+        if len(shared) < SIMILAR_MIN_SHARED or not smaller:
+            continue
+        share = len(shared) / smaller
         if share >= SIMILAR_MIN_SHARE:
             out.append({"role": other, "label": rt.mesh.label(other), "subsidiary": other.split(":", 1)[0],
-                        "shared_skill_share": round(share, 2)})
-    return sorted(out, key=lambda r: -r["shared_skill_share"])
-
-
-def similar_role_pairs(rt: MeshRuntime) -> list[tuple[str, str, float]]:
-    pairs = []
-    for a, b in combinations(_roles(rt), 2):
-        sa, sb = {s["skill"] for s in _required(rt, a)}, {s["skill"] for s in _required(rt, b)}
-        if sa | sb and len(sa & sb) / len(sa | sb) >= SIMILAR_MIN_SHARE:
-            pairs.append((a, b, round(len(sa & sb) / len(sa | sb), 2)))
-    return pairs
+                        "shared_skill_share": round(share, 2), "shared": len(shared)})
+    out.sort(key=lambda r: (-r["shared_skill_share"], -r["shared"], r["label"] or r["role"]))
+    for r in out:
+        r.pop("shared")
+    return out
 
 
 def _skill_documents(rt: MeshRuntime, skill: str) -> list[tuple[str, str | None]]:
@@ -153,7 +184,7 @@ def role_context(rt: MeshRuntime, role_id: str | None = None, title: str | None 
 
 
 async def skill_context(rt: MeshRuntime, user: EndUser, skill: str, level: str | None, purpose: str) -> dict[str, Any]:
-    skill = _skill_id(skill)
+    skill = _current(rt, _skill_id(skill))
     g = rt.mesh.graph
     if not _live(rt, skill, "Skill"):
         raise NotFound(skill)
@@ -177,7 +208,7 @@ async def skill_context(rt: MeshRuntime, user: EndUser, skill: str, level: str |
 async def learning_sources(rt: MeshRuntime, user: EndUser, skill: str, target_level: str) -> dict[str, Any]:
     """Documents whose datapoint allows learning and whose EXPLAINS_SKILL level reaches the target. Own company
     first, then newer versions. Superseded and stale documents are dropped. Delivered by reference."""
-    skill = _skill_id(skill)
+    skill = _current(rt, _skill_id(skill))
     g = rt.mesh.graph
     if not _live(rt, skill, "Skill"):
         raise NotFound(skill)
@@ -214,7 +245,7 @@ async def learning_sources(rt: MeshRuntime, user: EndUser, skill: str, target_le
 
 
 def find_mentors(rt: MeshRuntime, skill: str) -> dict[str, Any]:
-    skill = _skill_id(skill)
+    skill = _current(rt, _skill_id(skill))
     if not _live(rt, skill, "Skill"):
         raise NotFound(skill)
     return {"schema_version": "1.0", "skill": skill, "mentors": _experts_for(rt, skill),
@@ -247,42 +278,7 @@ def vocabulary_export(rt: MeshRuntime) -> dict[str, Any]:
             "entities": entities, "relationships": rels, "embedding_model": embedding_model_name()}
 
 
-# ── talent pack import from SkillForge ──────────────────────────────────────
-def import_talent_packs(rt: MeshRuntime, packs: list[dict[str, Any]]) -> dict[str, Any]:
-    """Accept SkillForge's export: one group.skills pack (skills with aliases, PREREQUISITE_OF) and one
-    <company>.talent pack per subsidiary (roles with aliases, T-01 role profiles, REQUIRES_SKILL).
-    Validated with the group packs. Unknown skill IDs are errors (strict). Nothing about people is accepted."""
-    for pack in packs:
-        pid = pack.get("pack", {}).get("pack_id", "")
-        if pid != "group.skills" and not pid.endswith(".talent"):
-            raise ValueError(f"{pid or 'a pack'} is not group.skills or <company>.talent")
-        if pack.get("experts"):
-            raise ValueError(f"{pid} carries experts. The expert directory stays with each node's own pack.")
-    incoming = {p["pack"]["pack_id"] for p in packs}
-    existing = []
-    for folder in GROUP_FOLDERS:
-        for path in sorted(folder.glob("*.pack.json")) if folder.is_dir() else []:
-            pack = json.loads(path.read_text(encoding="utf-8"))
-            if pack["pack"]["pack_id"] not in incoming and (pack["pack"]["scope"] == "group" or folder == TALENT_IMPORT):
-                existing.append((path.name, pack))
-    named = existing + [(f"{p['pack']['pack_id']}.pack.json", p) for p in packs]
-    report = validate_packs(named, strict=False)
-    known_skills = {e["id"] for _, p in named for e in p.get("entities", []) if e["type"] == "Skill"}
-    unknown = sorted({r["to"] for p in packs for r in p.get("relationships", [])
-                      if r["type"] == "REQUIRES_SKILL" and r["to"] not in known_skills})
-    errors = list(report.errors) + [f"unknown skill ID {s}" for s in unknown]
-    if errors:
-        return {"accepted": False, "errors": errors, "warnings": report.warnings}
-    TALENT_IMPORT.mkdir(parents=True, exist_ok=True)
-    for pack in packs:
-        path = TALENT_IMPORT / f"{pack['pack']['pack_id']}.pack.json"
-        path.write_text(json.dumps(pack, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        rt.mesh.load_group_pack(pack, source=f"talent:{pack['pack']['pack_id']}")
-    rt.mesh.rebuild()
-    roles = sum(1 for p in packs for e in p.get("entities", []) if e["type"] == "Role")
-    reqs = sum(1 for p in packs for r in p.get("relationships", []) if r["type"] == "REQUIRES_SKILL")
-    return {"accepted": True, "packs": sorted(incoming), "roles": roles, "requirements": reqs, "warnings": report.warnings,
-            "note": "Subsidiary talent packs reach each node's own pack on the next pack build (knowledge.packgen)."}
+# Talent packs arrive through the import tool of the contract (services/context_import.py).
 
 
 def talent_import_folder() -> Path:

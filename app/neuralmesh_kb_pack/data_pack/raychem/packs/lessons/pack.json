@@ -1,0 +1,94 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.lessons",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "lessons",
+    "title": "Raychem RPG lessons learned",
+    "owner_role": "Head of Quality",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "raychem:L-01",
+      "catalogue_id": "L-01",
+      "title": "Lessons from field failures",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head of Quality",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "raychem:L-01-01",
+      "datapoint": "raychem:L-01",
+      "title": "Lesson - Moisture entry at outdoor terminations",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "lesson",
+        "moisture",
+        "termination",
+        "monsoon"
+      ],
+      "summary": "In 3 of 5 sites with early termination failures, water entered at an unsealed lug end. The fix is to seal every lug end with mastic and to add a visual check of the seal to the job card.",
+      "body_file": "source/L-01-01.md",
+      "concepts": [
+        "concept:cable-termination",
+        "concept:cable-accessory-failure-analysis"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing-engineering-quality-and-digital",
+          "level": "A"
+        },
+        {
+          "skill": "skill:cable-accessory-installation",
+          "level": "A"
+        }
+      ]
+    },
+    {
+      "id": "raychem:L-01-02",
+      "datapoint": "raychem:L-01",
+      "title": "Lesson - Handover notes between shifts and teams",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "lesson",
+        "handover",
+        "communication",
+        "reporting"
+      ],
+      "summary": "A half-finished joint was energised because the shift handover note said only \"joint done\". Handover notes now list each step done, each test result and the next step, and the incoming engineer reads them aloud to the outgoing one.",
+      "body_file": "source/L-01-02.md",
+      "concepts": [
+        "concept:knowledge-transfer"
+      ],
+      "skills": [
+        {
+          "skill": "skill:professional-workplace-skills",
+          "level": "A"
+        }
+      ]
+    }
+  ]
+}

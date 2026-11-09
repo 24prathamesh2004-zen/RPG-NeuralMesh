@@ -1,152 +1,83 @@
-"""Context API for SkillForge: the six context tools and the talent pack import, under /api/v1/context.
+"""The context contract over REST, under /api/v1/context (planning_docs/RPG_NeuralMesh_Generic_Context_Delivery_Standard_Plan.md).
 
-The caller is SkillForge's service identity (role context_client). Each request names the end user
-(an opaque user ID, the company and the roles) and the purpose, so every node applies its policy to the real
-user. No level, CV or name is accepted or returned.
+    POST /api/v1/context/<tool>     one request envelope, one answer or a refusal that says what is needed
+    GET  /api/v1/context/contract   the published bundle: every schema of the contract and its SHA-256 hash
+
+The caller is a registered application's service identity (role context_client, config/applications/<app>.yaml).
+Each request names the end user (an opaque reference, the company and the roles in the application) and the purpose,
+so every node applies its policy to the real user. The checks and the tools are in services/context_dispatch.py.
 """
 from __future__ import annotations
 
-from typing import Literal
+import asyncio
+import json
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError, jwt
-from pydantic import BaseModel, Field, field_validator
+import jwt
+from jwt import PyJWTError as JWTError
 
 from api.auth import API_AUDIENCE, POC_ISSUER
-from services import context_api
-from services.context.pii import strip_contact_details
+from contracts.context import http_status_of, problem
+from services.context_catalogue import bundle
+from services.context_dispatch import dispatch
 from services.mesh_runtime import runtime
 from shared.config import get_settings
-from shared.registry import node_ids
 
 router = APIRouter()
-_bearer = HTTPBearer(auto_error=True)
+_bearer = HTTPBearer(auto_error=False)
 CONTEXT_CLIENT_ROLE = "context_client"
-TALENT_EXPORTER_ROLE = "talent_exporter"
-ContextPurpose = Literal["problem_solving", "learning", "career_mobility"]
-Level = Literal["L", "M", "A"]
+BODY_BYTES = 8_000_000
 
 
-def require_context_client(creds: HTTPAuthorizationCredentials = Depends(_bearer)) -> dict:
+class ProblemError(Exception):
+    """An identity or envelope fault answered with the contract's problem body (api/main.py registers the handler)."""
+
+    def __init__(self, code: str, detail: str) -> None:
+        super().__init__(detail)
+        self.status = http_status_of(code)
+        self.body = problem(code, detail, http=True).model_dump(mode="json", exclude_none=True)
+
+
+def problem_response(exc: ProblemError) -> JSONResponse:
+    headers = {"WWW-Authenticate": "Bearer"} if exc.status == 401 else None
+    return JSONResponse(exc.body, status_code=exc.status, media_type="application/problem+json", headers=headers)
+
+
+def require_context_client(creds: HTTPAuthorizationCredentials | None = Depends(_bearer)) -> dict:
+    if creds is None:
+        raise ProblemError("unauthenticated", "Send the application's service token as a Bearer token.")
     try:
         claims = jwt.decode(creds.credentials, get_settings().app_secret_key, algorithms=["HS256"], issuer=POC_ISSUER,
-                            audience=API_AUDIENCE, options={"require_exp": True, "require_sub": True})
+                            audience=API_AUDIENCE, options={"require": ["exp", "sub"]})
     except JWTError as exc:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid or expired service token") from exc
+        raise ProblemError("unauthenticated", "The service token is invalid or expired.") from exc
     if CONTEXT_CLIENT_ROLE not in claims.get("roles", []):
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "This route is for the context client service identity")
+        raise ProblemError("not_allowed", "This route is for a registered application's service identity.")
     return claims
 
 
-class EndUserIn(BaseModel):
-    user_id: str = Field(min_length=1, max_length=120)
-    company: str
-    roles: list[str] = Field(default_factory=lambda: ["group_user"], min_length=1)
-
-    @field_validator("company")
-    @classmethod
-    def registered(cls, value: str) -> str:
-        if value not in node_ids():
-            raise ValueError("The company has no registered Mesh Node")
-        return value
-
-    def end_user(self) -> context_api.EndUser:
-        return context_api.EndUser(self.user_id, self.company, tuple(self.roles))
+@router.get("/contract")
+async def contract(client: dict = Depends(require_context_client)) -> dict:
+    """The published contract. An application compares its sha256 with the one of its pinned copy."""
+    return bundle()
 
 
-class RoleContextIn(BaseModel):
-    role_id: str | None = None
-    title: str | None = None
-    company: str | None = None
-
-
-class SkillContextIn(BaseModel):
-    user: EndUserIn
-    skill: str
-    level: Level | None = None
-    purpose: ContextPurpose = "learning"
-
-
-class AskIn(BaseModel):
-    user: EndUserIn
-    question: str = Field(min_length=3, max_length=2000)
-    purpose: ContextPurpose = "learning"
-
-
-class LearningIn(BaseModel):
-    user: EndUserIn
-    skill: str
-    target_level: Level
-
-
-class MentorsIn(BaseModel):
-    skill: str
-
-
-class TalentImportIn(BaseModel):
-    packs: list[dict] = Field(min_length=1, max_length=20)
-
-
-@router.post("/role_context")
-async def role_context(body: RoleContextIn, client: dict = Depends(require_context_client)) -> dict:
+@router.post("/{tool}")
+async def call_tool(tool: str, request: Request, client: dict = Depends(require_context_client)) -> JSONResponse:
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > BODY_BYTES:  # refused before any of it is read. The status stays the contract's own for this problem
+        return problem_response(ProblemError("not_an_envelope", f"The body is larger than {BODY_BYTES:,} bytes."))
+    raw = bytearray()
+    async for chunk in request.stream():  # read up to the limit, never the whole of a larger body
+        raw += chunk
+        if len(raw) > BODY_BYTES:
+            return problem_response(ProblemError("not_an_envelope", f"The body is larger than {BODY_BYTES:,} bytes."))
     try:
-        return context_api.role_context(runtime(), body.role_id, body.title, body.company)
-    except context_api.NotFound as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, f"Unknown role {exc}") from exc
-    except ValueError as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
-
-
-@router.post("/skill_context")
-async def skill_context(body: SkillContextIn, client: dict = Depends(require_context_client)) -> dict:
-    try:
-        return await context_api.skill_context(runtime(), body.user.end_user(), body.skill, body.level, body.purpose)
-    except context_api.NotFound as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, f"Unknown skill {exc}") from exc
-
-
-@router.post("/ask")
-async def ask(body: AskIn, client: dict = Depends(require_context_client)) -> dict:
-    from api.routers.mesh import run_query  # the router's compiled flow, shared with /mesh/query
-
-    question, removed = strip_contact_details(body.question)
-    user = body.user.end_user()
-    result = await run_query(question=question, purpose=body.purpose, nodes=None, mode=None, as_of=None,
-                             user_assertion=user.assertion(), company=user.company, roles=list(user.roles))
-    result["contact_details_removed"] = removed
-    return {"schema_version": "1.0", **result}
-
-
-@router.post("/learning_sources")
-async def learning_sources(body: LearningIn, client: dict = Depends(require_context_client)) -> dict:
-    try:
-        return await context_api.learning_sources(runtime(), body.user.end_user(), body.skill, body.target_level)
-    except context_api.NotFound as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, f"Unknown skill {exc}") from exc
-
-
-@router.post("/find_mentors")
-async def find_mentors(body: MentorsIn, client: dict = Depends(require_context_client)) -> dict:
-    try:
-        return context_api.find_mentors(runtime(), body.skill)
-    except context_api.NotFound as exc:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, f"Unknown skill {exc}") from exc
-
-
-@router.get("/vocabulary_export")
-async def vocabulary_export(client: dict = Depends(require_context_client)) -> dict:
-    return context_api.vocabulary_export(runtime())
-
-
-@router.post("/talent-packs")
-async def import_talent_packs(body: TalentImportIn, client: dict = Depends(require_context_client)) -> dict:
-    if TALENT_EXPORTER_ROLE not in client.get("roles", []):
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "Only the talent exporter identity may import talent packs")
-    try:
-        result = context_api.import_talent_packs(runtime(), body.packs)
-    except ValueError as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
-    if not result["accepted"]:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, result)
-    return result
+        body = json.loads(bytes(raw) or b"null")
+    except ValueError:
+        body = None
+    status_code, payload = await dispatch(client, tool, body, await asyncio.to_thread(runtime))
+    return JSONResponse(payload, status_code=status_code,
+                        media_type="application/json" if status_code == 200 else "application/problem+json")

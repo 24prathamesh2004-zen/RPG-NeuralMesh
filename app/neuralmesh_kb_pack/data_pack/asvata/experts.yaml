@@ -1,0 +1,51 @@
+- id: AE-1
+  role: Senior carbon analyst
+  skills:
+  - carbon inventory
+  - emission factors
+  - unit checks
+  evidence:
+  - asvata:R-01-01
+  - asvata:R-01-02
+  - asvata:L-01-02
+  consent: true
+  private:
+    name: Farah Qureshi (fictional)
+- id: AE-2
+  role: Data analysis lead
+  skills:
+  - data cleaning
+  - outlier checks
+  - trend reading
+  evidence:
+  - asvata:R-01-03
+  - asvata:R-01-04
+  consent: true
+  private:
+    name: Imran Sheikh (fictional)
+- id: AE-3
+  role: Engagement coordinator
+  skills:
+  - project planning
+  - weekly status
+  - client updates
+  evidence:
+  - asvata:C-01-02
+  - asvata:C-01-03
+  - asvata:L-01-01
+  consent: true
+  private:
+    name: Leena Thomas (fictional)
+- id: AE-4
+  role: Compliance and service desk supervisor
+  skills:
+  - compliance checklists
+  - filing calendar
+  - client requests
+  evidence:
+  - asvata:F-01-01
+  - asvata:F-01-02
+  - asvata:C-01-01
+  consent: false
+  private:
+    name: Opted out (fictional)

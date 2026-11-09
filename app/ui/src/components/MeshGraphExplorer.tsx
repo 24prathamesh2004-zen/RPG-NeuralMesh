@@ -7,20 +7,22 @@ import type { MeshGraphView } from '../services/api'
 // progressive expansion instead of drawing every entity at once, nodes hidden and never removed, an edge hidden when
 // either end is hidden, a tree view from a right-click, Escape back to the full view.
 
-export const TYPE_ORDER = ['Subsidiary', 'Domain', 'Datapoint', 'Document', 'Concept', 'Skill', 'Role', 'Expert']
+export const TYPE_ORDER = ['Subsidiary', 'Domain', 'Datapoint', 'Document', 'Concept', 'Skill', 'Role', 'Expert', 'Asset', 'AssetFamily', 'Condition', 'ConditionFamily', 'GradeScale', 'CoverType', 'View', 'ReviewStatus', 'Inspection']
 export const TYPE_COLOURS: Record<string, string> = {
   Subsidiary: '#212529', Domain: '#868e96', Datapoint: '#1c7ed6', Document: '#74c0fc', Concept: '#f08c00',
   Skill: '#2f9e44', Role: '#ae3ec9', Expert: '#e64980',
+  Asset: '#c2255c', AssetFamily: '#a61e4d', Condition: '#e8590c', ConditionFamily: '#d9480f', GradeScale: '#2b8a3e', CoverType: '#0b7285',
+  View: '#868e96', ReviewStatus: '#adb5bd', Inspection: '#5f3dc4',
 }
-const COMPANY_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d' }
+const COMPANY_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d', raychem: '#862e9c' }
 const EDGE_COLOURS: Record<string, string> = {
   CONFLICTS_WITH: '#e03131', CORROBORATES: '#2f9e44', ADDRESSES_GAP: '#f08c00', SUPERSEDES: '#9c36b5',
-  RELATED_TO: '#4c6ef5', BROADER: '#4c6ef5', SAME_AS: '#4c6ef5',
+  RELATED_TO: '#4c6ef5', BROADER: '#4c6ef5', SAME_AS: '#4c6ef5', SIMILAR_TO: '#868e96', GOVERNED_BY: '#2b8a3e',
 }
 const LINK_TYPES = new Set(['CONFLICTS_WITH', 'CORROBORATES', 'ADDRESSES_GAP', 'SUPERSEDES'])
 const START_TYPES = new Set(['Subsidiary', 'Datapoint'])
-const SHAPES: Record<string, string> = { Subsidiary: 'box', Domain: 'diamond', Datapoint: 'dot', Document: 'dot', Concept: 'triangle', Skill: 'star', Role: 'square', Expert: 'dot' }
-const SIZES: Record<string, number> = { Domain: 12, Datapoint: 12, Document: 8, Concept: 11, Skill: 14, Role: 11, Expert: 8 }
+const SHAPES: Record<string, string> = { Subsidiary: 'box', Domain: 'diamond', Datapoint: 'dot', Document: 'dot', Concept: 'triangle', Skill: 'star', Role: 'square', Expert: 'dot', Asset: 'hexagon', AssetFamily: 'hexagon', Condition: 'triangleDown', ConditionFamily: 'triangleDown', GradeScale: 'diamond', CoverType: 'diamond', View: 'dot', ReviewStatus: 'dot', Inspection: 'square' }
+const SIZES: Record<string, number> = { Domain: 12, Datapoint: 12, Document: 8, Concept: 11, Skill: 14, Role: 11, Expert: 8, Asset: 12, AssetFamily: 13, Condition: 9, ConditionFamily: 11, GradeScale: 10, CoverType: 9, View: 7, ReviewStatus: 7, Inspection: 9 }
 
 type GNode = MeshGraphView['nodes'][number]
 type GEdge = MeshGraphView['edges'][number]

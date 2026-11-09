@@ -20,14 +20,14 @@ graph_for.cache_clear = _COMPILED.clear  # type: ignore[attr-defined]
 
 
 async def run_query(graph, *, question: str, purpose: str, nodes: list[str] | None, mode: str | None, as_of: str | None,
-                    user_assertion: str, company: str, roles: list[str]) -> dict:
+                    user_assertion: str, company: str, roles: list[str], context: dict | None = None) -> dict:
     """Run the full flow and shape the response. Shared by /mesh/query and the SkillForge context API.
     evidence, also_found and withheld are evidence records, relationships have the RelationshipRef shape.
     node_results and sources are the nodes' own search output, kept for the Ask page."""
     trace_id = new_trace_id()
     result = await graph.ainvoke({
         "question": question, "nodes": nodes, "purpose": purpose, "mode": mode, "as_of": as_of,
-        "user_assertion": user_assertion, "company": company, "roles": roles, "trace_id": trace_id,
+        "user_assertion": user_assertion, "company": company, "roles": roles, "trace_id": trace_id, "context": context,
     })
     answer = result.get("answer", {})
     links = result.get("relationships", {})
@@ -50,6 +50,7 @@ async def run_query(graph, *, question: str, purpose: str, nodes: list[str] | No
         "omitted": result.get("context", {}).get("omitted", 0),
         "model_calls": result.get("model_calls", []),
         "trace_id": trace_id,
+        "steps": result.get("steps", []),
         "node_results": result.get("node_results", []),
         "sources": result.get("sources", []),
         "withheld": result.get("withheld_records", []),

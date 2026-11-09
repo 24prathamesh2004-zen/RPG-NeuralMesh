@@ -8,6 +8,7 @@ defaults:
   - bid_support
   - learning
   - career_mobility
+  - inspection
   roles_allowed:
   - group_user
 datapoints:

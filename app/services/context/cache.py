@@ -45,8 +45,8 @@ class AnswerCache:
             self._data.clear()
 
 
-def rerank_key(question: str, selected: dict[str, list[EvidenceRecord]], model: str) -> str:
-    parts = {"q": " ".join(question.lower().split()), "model": model,
+def rerank_key(question: str, selected: dict[str, list[EvidenceRecord]], model: str, prompt_version: str = "") -> str:
+    parts = {"q": " ".join(question.lower().split()), "model": model, "prompt": prompt_version,
              "docs": sorted(f"{doc}|{recs[0].version}|{recs[0].mode}" for doc, recs in selected.items())}
     return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
 

@@ -1,0 +1,139 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "asvata.talent",
+    "scope": "subsidiary",
+    "subsidiary": "asvata",
+    "domain": "talent",
+    "title": "Asvata roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "asvata:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    }
+  ],
+  "documents": [],
+  "experts": [
+    {
+      "id": "asvata:expert/AE-1",
+      "role": "Senior carbon analyst",
+      "skills": [
+        {
+          "skill": "skill:carbon-accounting",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "carbon inventory",
+        "emission factors",
+        "unit checks"
+      ],
+      "evidence": [
+        "asvata:R-01-01",
+        "asvata:R-01-02",
+        "asvata:L-01-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Farah Qureshi (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-2",
+      "role": "Data analysis lead",
+      "skills": [
+        {
+          "skill": "skill:data-analysis-basics",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "data cleaning",
+        "outlier checks",
+        "trend reading"
+      ],
+      "evidence": [
+        "asvata:R-01-03",
+        "asvata:R-01-04"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Imran Sheikh (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-3",
+      "role": "Engagement coordinator",
+      "skills": [
+        {
+          "skill": "skill:project-management",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "project planning",
+        "weekly status",
+        "client updates"
+      ],
+      "evidence": [
+        "asvata:C-01-02",
+        "asvata:C-01-03",
+        "asvata:L-01-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Leena Thomas (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-4",
+      "role": "Compliance and service desk supervisor",
+      "skills": [
+        {
+          "skill": "skill:compliance-basics",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "compliance checklists",
+        "filing calendar",
+        "client requests"
+      ],
+      "evidence": [
+        "asvata:F-01-01",
+        "asvata:F-01-02",
+        "asvata:C-01-01"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ]
+}

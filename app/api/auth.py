@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError, jwt
+import jwt
+from jwt import PyJWTError as JWTError
 
 from shared.config import get_settings
 
@@ -27,6 +28,15 @@ def issue_poc_token(claims: dict, *, audience: str = API_AUDIENCE, hours: int = 
     return jwt.encode(payload, get_settings().app_secret_key, algorithm=POC_TOKEN_ALGORITHM)
 
 
+def require_role(role: str):
+    """A dependency that needs one role in the token, for example mesh_admin on graph refresh and import."""
+    async def check(user: dict = Depends(require_user)) -> dict:
+        if role not in user.get("roles", []):
+            raise HTTPException(status.HTTP_403_FORBIDDEN, f"This action needs the {role} role")
+        return user
+    return check
+
+
 async def require_user(
     creds: HTTPAuthorizationCredentials = Depends(_bearer),
 ) -> dict:
@@ -38,7 +48,7 @@ async def require_user(
             algorithms=[POC_TOKEN_ALGORITHM],
             issuer=POC_ISSUER,
             audience=API_AUDIENCE,
-            options={"require_exp": True, "require_sub": True},
+            options={"require": ["exp", "sub"]},
         )
     except JWTError as exc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid or expired session") from exc

@@ -1,0 +1,47 @@
+node: raychem
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
+  roles_allowed:
+  - group_user
+datapoints:
+  E-01:
+    title: Installation and testing procedures
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Engineering
+  O-02:
+    title: Field service and failure analysis
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Field Service
+  C-03:
+    title: Application notes for customers and electric mobility
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Applications
+  L-01:
+    title: Lessons from field failures
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head of Quality
+  F-02:
+    title: Partner agreement and pricing file
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: General Counsel
+    rule_id: R-NL-06
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

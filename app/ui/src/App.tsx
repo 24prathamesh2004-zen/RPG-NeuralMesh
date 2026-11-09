@@ -5,11 +5,11 @@ import AskPage from './pages/AskPage'
 import AuthPage from './pages/AuthPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
+import ApplicationsPage from './pages/ApplicationsPage'
+import DomainsPage from './pages/DomainsPage'
 import ExpertFinderPage from './pages/ExpertFinderPage'
 import GovernancePage from './pages/GovernancePage'
 import MeshNodesPage from './pages/MeshNodesPage'
-import PlaygroundPage from './pages/PlaygroundPage'
-import SettingsPage from './pages/SettingsPage'
 
 function AuthenticatedApp() {
   const { user, loading } = useAuth()
@@ -25,8 +25,8 @@ function AuthenticatedApp() {
         <Route path="/nodes" element={<MeshNodesPage />} />
         <Route path="/governance" element={<GovernancePage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/playground" element={<PlaygroundPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/domains" element={<DomainsPage />} />
+        <Route path="/applications" element={<ApplicationsPage />} />
         <Route path="*" element={<Navigate to="/ask" replace />} />
       </Routes>
     </AppShell>
@@ -36,7 +36,7 @@ function AuthenticatedApp() {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="*" element={<AuthenticatedApp />} />

@@ -1,6 +1,6 @@
 """What a node knows about its own packs: documents, concepts, versions, and the hybrid search over them.
 
-Search runs FTS5 keyword search over the node's index.db and FAISS vector search over each pack's
+Search runs FTS5 keyword search over the node's index.db and vector search over the Chroma store in each pack's
 build folder, then merges the two ranked lists (and a list of documents that mention the routed concepts)
 by reciprocal rank fusion: each row scores 1 / (60 + rank) in each list and the scores are added.
 """

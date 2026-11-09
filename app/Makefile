@@ -1,14 +1,11 @@
-.PHONY: help install dev worker migrate revision test lint seed-demo compose-up compose-down packs nodes gateway mesh-stop eval-recall live-check
+.PHONY: help install dev test seed-demo compose-up compose-down packs nodes gateway mesh-stop eval-recall live-check similarity
 
 help:
 	@echo "install       Create venv and install requirements"
 	@echo "dev           Run FastAPI with reload (port 8000)"
-	@echo "worker        Run the Temporal worker"
-	@echo "migrate       Apply DB migrations (alembic upgrade head)"
-	@echo "revision      Autogenerate a migration (m='message')"
 	@echo "test          Run pytest"
 	@echo "seed-demo     Seed local synthetic presentation accounts and requests"
-	@echo "compose-up    Start full local stack (postgres, redis, temporal, phoenix)"
+	@echo "compose-up    Start the nodes, the API and the gateway as containers"
 	@echo "compose-down  Stop local stack"
 	@echo "packs         Rebuild the data pack, the 19 knowledge packs and their vector indexes"
 	@echo "nodes         Start the four subsidiary MCP nodes in the background (8101 to 8104)"
@@ -16,21 +13,13 @@ help:
 	@echo "mesh-stop     Stop the nodes, the gateway and the API"
 	@echo "eval-recall   Keyword against hybrid recall on the reworded golden questions"
 	@echo "live-check    Check the wiring of the running API, gateway and nodes"
+	@echo "similarity    Compute the SIMILAR_TO links of the similarity layer"
 
 install:
-	python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
+	python -m venv .venv && . .venv/bin/activate && pip install -r requirements.lock
 
 dev:
 	uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
-
-worker:
-	python -m workers.worker
-
-migrate:
-	alembic upgrade head
-
-revision:
-	alembic revision --autogenerate -m "$(m)"
 
 test:
 	pytest -q
@@ -62,3 +51,6 @@ eval-recall:
 
 live-check:
 	python -m evaluations.live_wiring_check
+
+similarity:
+	python -m scripts.similarity_job

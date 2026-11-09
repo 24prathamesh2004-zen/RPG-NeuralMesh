@@ -1,0 +1,47 @@
+node: asvata
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
+  roles_allowed:
+  - group_user
+datapoints:
+  R-01:
+    title: Carbon accounting and data analysis methods
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Analytics
+  F-01:
+    title: Compliance checklists and calendars
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Compliance Services
+  C-01:
+    title: Client service and engagement practice
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head of Client Services
+  L-01:
+    title: Lessons from engagements
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head of Delivery
+  C-02:
+    title: Client engagement contract file
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: General Counsel
+    rule_id: R-NL-05
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

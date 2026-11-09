@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from shared.registry import node_ids
 
-MeshPurpose = Literal["problem_solving", "compliance", "bid_support", "learning", "career_mobility"]
+MeshPurpose = Literal["problem_solving", "compliance", "bid_support", "learning", "career_mobility", "inspection"]
 ExposureMode = Literal["MD", "SUM", "RAG", "LIVE"]
 
 
@@ -63,6 +63,7 @@ class MeshQueryResponse(BaseModel):
     omitted: int = 0
     model_calls: list[dict] = Field(default_factory=list)
     trace_id: str | None = None
+    steps: list[dict] = Field(default_factory=list)
     node_results: list[MeshNodeResponse]
     sources: list[dict]
     withheld: list[dict]

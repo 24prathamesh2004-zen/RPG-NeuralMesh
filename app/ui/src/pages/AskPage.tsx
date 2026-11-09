@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { CSSProperties } from 'react'
-import { AlertTriangle, ArrowUpRight, CircleCheck, Clock3, GitBranch, LoaderCircle, LockKeyhole, Send, ServerOff } from 'lucide-react'
+import { AlertTriangle, ArrowUpRight, Check, CircleCheck, GitBranch, LoaderCircle, LockKeyhole, Send, ServerOff } from 'lucide-react'
 import { getMeshNodes, queryMesh } from '../services/api'
 import type { CompanyId, MeshPurpose, MeshQueryResponse } from '../services/api'
 import { useMeshScope } from '../context/MeshScopeContext'
+import { answerSentences, citationsAsNumbers, modeLabel, plainReason, plainWithheld, ruleMeaning } from '../lib/format'
 
 const NODES: { id: CompanyId; label: string; tone: string }[] = [
   { id: 'ceat', label: 'CEAT', tone: '#e8590c' },
@@ -26,9 +27,16 @@ const ROUTE_LABELS: Record<string, string> = {
   graph: 'Routed by the mesh graph',
   classifier: 'Routed from node profiles',
   named: 'Routed to the companies named',
+  own: 'No company matched the wording, so your own company was asked',
   user: 'Nodes you chose',
   none: 'No node matched',
 }
+
+const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
+// An answer sentence for the page: each citation as the number of its evidence card, and the marker of what the
+// evidence does not hold in words.
+const shownSentence = (sentence: string, documents: string[]) =>
+  citationsAsNumbers(plainWithheld(sentence), documents).replace(/^\[NOT IN EVIDENCE\]\s*/, 'Not in the evidence: ')
 
 export default function AskPage() {
   const [question, setQuestion] = useState(EXAMPLE_QUESTION)
@@ -38,7 +46,7 @@ export default function AskPage() {
   const [nodeList, setNodeList] = useState(NODES)
   useEffect(() => {
     getMeshNodes()
-      .then(({ data }) => setNodeList(data.nodes.map((node) => ({ id: node.node_id, label: node.company, tone: NODES.find((item) => item.id === node.node_id)?.tone ?? '#68756d' }))))
+      .then(({ data }) => setNodeList(data.nodes.map((node) => ({ id: node.node_id, label: node.company, tone: node.tone ?? NODES.find((item) => item.id === node.node_id)?.tone ?? '#68756d' }))))
       .catch(() => undefined)
   }, [])
   const displayNode = (id: string) => nodeList.find((node) => node.id === id)?.label ?? id
@@ -61,6 +69,7 @@ export default function AskPage() {
     try {
       const { data } = await queryMesh({ question: question.trim(), nodes: chooseNodes ? selectedNodes : undefined, purpose })
       setResponse(data)
+      if (data.routing.method === 'none') setChooseNodes(true)  // nothing matched: the company list opens for a choice
     } catch (requestError: unknown) {
       const message = (requestError as { response?: { data?: { detail?: string } } })
         .response?.data?.detail
@@ -101,7 +110,7 @@ export default function AskPage() {
                   return (
                       <label key={node.id} className={`ask-node-chip ${active ? 'selected' : ''}`} style={{ '--node-tone': node.tone } as CSSProperties}>
                       <input type="checkbox" checked={active} onChange={() => toggleNode(node.id)} />
-                      <span className="ask-node-dot" />
+                      {active ? <Check size={13} className="ask-node-check" /> : <span className="ask-node-dot" />}
                       {node.label}
                     </label>
                   )
@@ -136,15 +145,15 @@ export default function AskPage() {
       {response && (
         <div className="ask-results-grid">
           <section className="ask-results-section" aria-labelledby="evidence-heading">
-            <div className="ask-section-heading"><h2 id="evidence-heading">Retrieved evidence</h2><span>{response.sources.length} sources · {new Set(response.sources.map((item) => String(item.node_id ?? String(item.doc_id ?? '').split(':')[0]))).size} companies</span></div>
+            <div className="ask-section-heading"><h2 id="evidence-heading">Retrieved evidence</h2><span>{response.sources.length} {response.sources.length === 1 ? 'source' : 'sources'} · {plural(new Set(response.sources.map((item) => String(item.node_id ?? String(item.doc_id ?? '').split(':')[0]))).size, 'company', 'companies')}</span></div>
             {response.routing.method && <div className="mesh-answer-panel"><div className="mesh-answer-title"><GitBranch size={13} /> {ROUTE_LABELS[response.routing.method] ?? response.routing.method}</div>
-              <p>{(response.routing.subsidiaries ?? []).map(displayNode).join(', ') || 'None'}{response.routing.concepts?.length ? ` · ${response.routing.concepts.map((c) => response.routing.concept_labels?.[c] ?? c).join(', ')}` : ''}</p></div>}
+              <p>{(response.routing.subsidiaries ?? []).map(displayNode).join(', ') || 'None'}{response.routing.concepts?.length ? ` · topics: ${response.routing.concepts.map((c) => response.routing.concept_labels?.[c] ?? c).join(', ')}` : ''}</p></div>}
             {response.answer
-              ? <div className="mesh-answer-panel"><div className="mesh-answer-title">Answer{response.cached ? ' · reused' : ''}</div>{response.answer.split(/(?<=[.!?\]])\s+(?=[A-Z[])/).map((sentence, index) => <p key={index} className={sentence.startsWith('[NOT IN EVIDENCE]') ? 'ask-not-in-evidence' : ''}>{sentence}</p>)}</div>
+              ? <div className="mesh-answer-panel"><div className="mesh-answer-title">Answer{response.cached ? ' · reused from the same question asked before' : ''}</div>{answerSentences(response.answer).map((sentence, index) => <p key={index} className={sentence.startsWith('[NOT IN EVIDENCE]') ? 'ask-not-in-evidence' : ''}>{shownSentence(sentence, response.sources.map((s) => String(s.doc_id ?? '')))}</p>)}</div>
               : response.answer_reason && <div className="mesh-alert note">{response.answer_reason}</div>}
             {response.omitted > 0 && <div className="mesh-alert note">Partial set: {response.omitted} {response.omitted === 1 ? 'item was' : 'items were'} left out for size or replaced by a newer version.</div>}
             {response.relationships.length > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title">Approved links</div>
-              {response.relationships.map((link) => <p key={link.id}><b>{link.source_title ?? link.source}</b> {LINK_LABELS[link.type] ?? link.type} <b>{link.target_title ?? link.target}</b>{link.note ? ` · ${link.note}` : ''} <span className="ask-source-meta">({link.source} and {link.target})</span></p>)}</div>}
+              {response.relationships.map((link) => <p key={link.id} title={`${link.source} and ${link.target}`}><b>{link.source_title ?? link.source}</b> {LINK_LABELS[link.type] ?? link.type} <b>{link.target_title ?? link.target}</b>{link.note ? ` · ${link.note}` : ''}</p>)}</div>}
             {response.sources.length ? <div className="ask-source-list">
               {response.sources.map((source, index) => {
                 const nodeId = String(source.node_id ?? String(source.doc_id ?? '').split(':')[0])
@@ -157,7 +166,7 @@ export default function AskPage() {
                     </div>
                     <p className="ask-source-text">{String(source.text ?? source.summary ?? '')}</p>
                     {typeof source.superseded_by === 'string' && <p className="ask-source-meta">Replaced by {source.superseded_by}</p>}
-                    <div className="ask-source-footer"><span className="ask-mode-tag">{String(source.mode ?? 'approved summary')}</span><span className="ask-citation"><CircleCheck size={13} />{String(source.citation ?? 'Citation available')}</span>
+                    <div className="ask-source-footer"><span className="ask-mode-tag" title={`Shared as: ${String(source.mode ?? 'SUM')}`}>{modeLabel(String(source.mode ?? 'SUM'))}</span><span className="ask-citation"><CircleCheck size={13} />{String(source.citation ?? 'Citation available')}</span>
                       {typeof source.doc_id === 'string' && <span title={source.doc_id} className="ask-source-ref"><ArrowUpRight size={13} />Source ref</span>}
                     </div>
                   </article>
@@ -168,18 +177,18 @@ export default function AskPage() {
 
           <aside className="ask-side-column">
             {response.also_found.length > 0 && <section className="mesh-side-panel">
-              <div className="mesh-side-heading"><h2>Also found</h2><span>{response.also_found.length}</span></div>
+              <div className="mesh-side-heading"><h2>Found, not used in the answer</h2><span>{response.also_found.length}</span></div>
               <ul className="mesh-node-responses">{response.also_found.map((item) => <li key={item.evidence_id}><span className="mesh-response-copy"><strong>{item.title ?? item.evidence_id}</strong><small>{item.citation}</small></span></li>)}</ul>
             </section>}
             <section className="mesh-side-panel">
               <div className="mesh-side-heading"><h2>Node responses</h2><span>{response.node_results.length}</span></div>
               <ul className="mesh-node-responses">
-                {response.node_results.map((node) => <li key={node.node_id}><span className={`mesh-response-icon ${node.status === 'ok' ? 'good' : 'bad'}`}>{node.status === 'ok' ? <CircleCheck size={15} /> : node.status.includes('UNAVAILABLE') ? <ServerOff size={15} /> : <AlertTriangle size={15} />}</span><span className="mesh-response-copy"><strong>{displayNode(node.node_id)}</strong><small>{node.status === 'ok' ? `${node.results.length} allowed · ${node.withheld.length} withheld` : node.status}</small></span><span className="mesh-response-latency"><Clock3 size={12} />Node</span></li>)}
+                {response.node_results.map((node) => <li key={node.node_id}><span className={`mesh-response-icon ${node.status === 'ok' ? 'good' : 'bad'}`}>{node.status === 'ok' ? <CircleCheck size={15} /> : node.status.includes('UNAVAILABLE') ? <ServerOff size={15} /> : <AlertTriangle size={15} />}</span><span className="mesh-response-copy"><strong>{displayNode(node.node_id)}</strong><small>{node.status === 'ok' ? `${node.results.length} allowed · ${node.withheld.length} withheld` : node.status}</small></span></li>)}
               </ul>
             </section>
             {response.withheld.length > 0 && <section className="mesh-side-panel withheld-panel">
               <div className="mesh-side-heading"><h2><LockKeyhole size={15} />Withheld by policy</h2><span>{response.withheld.length}</span></div>
-              <ul>{response.withheld.map((item, index) => <li key={`${String(item.evidence_id ?? index)}-${index}`}><strong>{String(item.title ?? item.datapoint ?? 'Restricted item')}</strong><small>{String(item.reason ?? item.rule_id ?? item.decision ?? 'Not available')}</small></li>)}</ul>
+              <ul>{response.withheld.map((item, index) => <li key={`${String(item.evidence_id ?? index)}-${index}`}><strong>{String(item.title ?? item.datapoint ?? 'Restricted item')}</strong><small>{plainReason(String(item.reason ?? '')) || ruleMeaning(String(item.rule_id ?? '')) || 'Not available'}</small></li>)}</ul>
             </section>}
           </aside>
         </div>

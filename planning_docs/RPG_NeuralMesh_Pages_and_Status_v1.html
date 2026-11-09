@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuralMesh Pages and Status</title>
+<style>
+:root { --bg:#f6f7fb; --card:#fff; --ink:#111827; --ink2:#374151; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff; --accent:#4f46e5; --accent-ink:#3730a3;
+  --red-bg:#fee2e2; --red-ink:#b91c1c; --amber-bg:#fef3c7; --amber-ink:#b45309; --green-bg:#dcfce7; --green-ink:#15803d; --blue-bg:#dbeafe; --blue-ink:#1d4ed8; --grey-bg:#f1f5f9; --grey-ink:#475569;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --red-bg:#3b1218; --red-ink:#fca5a5; --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; } }
+:root[data-theme="dark"] { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --red-bg:#3b1218; --red-ink:#fca5a5; --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1240px; margin:0 auto; padding:28px 16px 56px; }
+h1 { font-size:26px; line-height:1.25; margin:0 0 6px; } .lead { color:var(--ink2); margin:0 0 20px; max-width:900px; }
+.tabs { display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:22px; position:sticky; top:0; background:var(--bg); z-index:5; }
+.tab { appearance:none; border:0; background:none; color:var(--muted); font:inherit; font-weight:700; padding:10px 14px; border-bottom:3px solid transparent; cursor:pointer; }
+.tab[aria-selected="true"] { color:var(--accent-ink); border-bottom-color:var(--accent); }
+.tab:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.panel { display:none; } .panel.on { display:block; }
+h2 { font-size:19px; margin:0 0 4px; } h2.gap { margin-top:34px; } .sub { color:var(--muted); margin:0 0 16px; font-size:14px; }
+.facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:22px; }
+.fact { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow); }
+.fact b { display:block; font-size:26px; line-height:1.1; color:var(--accent-ink); } .fact span { font-size:13.5px; color:var(--ink2); }
+.path { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:0 0 24px; font-size:14px; }
+.path span.s { background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-weight:600; }
+.path span.a { color:var(--muted); }
+.pages { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.page { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); min-width:0; }
+.page-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; margin-bottom:8px; }
+.page-head h3 { margin:0; font-size:17px; } .route { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--muted); }
+.page h4 { margin:12px 0 4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.page ul { margin:0; padding-left:18px; color:var(--ink2); font-size:14px; } .page li { margin:3px 0; overflow-wrap:anywhere; }
+.page.wide { grid-column:1 / -1; }
+.subtabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:6px; }
+.subtabs > div { border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+.subtabs b { display:block; font-size:14px; margin-bottom:4px; } .subtabs p { margin:0; font-size:13.5px; color:var(--ink2); }
+.pill { display:inline-block; font-size:12px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; }
+.p-green { background:var(--green-bg); color:var(--green-ink); } .p-amber { background:var(--amber-bg); color:var(--amber-ink); } .p-red { background:var(--red-bg); color:var(--red-ink); }
+.p-blue { background:var(--blue-bg); color:var(--blue-ink); } .p-grey { background:var(--grey-bg); color:var(--grey-ink); }
+.tablebox { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow-x:auto; box-shadow:var(--shadow); margin-bottom:8px; }
+.tablebox table { width:100%; border-collapse:collapse; min-width:760px; }
+.tablebox th { text-align:left; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:11px 12px; border-bottom:1px solid var(--line); }
+.tablebox td { padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
+.tablebox tr:last-child td { border-bottom:0; }
+.tablebox td:first-child { font-weight:600; }
+code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; background:var(--grey-bg); color:var(--grey-ink); padding:1px 5px; border-radius:6px; }
+.note { font-size:13.5px; color:var(--ink2); background:var(--soft); border-radius:10px; padding:10px 14px; margin:0 0 18px; }
+.checked { font-size:13.5px; color:var(--ink2); background:var(--green-bg); border-radius:10px; padding:10px 14px; margin:0 0 18px; }
+.checked b { color:var(--green-ink); }
+.decisions { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 20px; box-shadow:var(--shadow); }
+.decisions ol { margin:0; padding-left:20px; color:var(--ink2); font-size:14px; } .decisions li { margin:5px 0; }
+.terms { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.terms div { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+.terms b { display:block; font-size:14.5px; } .terms span { font-size:14px; color:var(--ink2); }
+@media (max-width:980px) { .pages, .terms { grid-template-columns:1fr; } .facts { grid-template-columns:repeat(2,minmax(0,1fr)); } .subtabs { grid-template-columns:1fr 1fr; } }
+@media (max-width:520px) { .facts, .subtabs { grid-template-columns:1fr; } h1 { font-size:22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>NeuralMesh Pages and Status</h1>
+<p class="lead">RPG NeuralMesh lets a person in one RPG company ask a question and get an answer from what the other companies have written down. Each company keeps its documents on its own node, a server it runs, and the node decides what leaves the company. The centre holds only titles, links and counts.</p>
+
+<div class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab" role="tab" data-tab="pages" aria-selected="true">Pages and how they help</button>
+  <button class="tab" role="tab" data-tab="status" aria-selected="false">Implemented and not implemented</button>
+  <button class="tab" role="tab" data-tab="terms" aria-selected="false">Words used</button>
+</div>
+
+<section class="panel on" id="pages" role="tabpanel">
+  <div class="facts">
+    <div class="fact"><b>7</b><span>company nodes: CEAT, KEC International, Zensar, Harrisons Malayalam, Raychem RPG, RPG Life Sciences and Asvata</span></div>
+    <div class="fact"><b>9</b><span>pages, from sign-in to Admin</span></div>
+    <div class="fact"><b>35</b><span>knowledge packs at the nodes, the files that describe each company's datapoints and documents</span></div>
+    <div class="fact"><b>14</b><span>tools that applications such as SkillForge call through one contract</span></div>
+  </div>
+
+  <h2>A typical visit</h2>
+  <p class="sub">The order most people use the pages in.</p>
+  <div class="path"><span class="s">Sign in</span><span class="a">→</span><span class="s">Ask NeuralMesh</span><span class="a">→</span><span class="s">Expert Finder</span><span class="a">→</span><span class="s">Governance, where owners decide</span><span class="a">→</span><span class="s">Mesh Nodes and Applications, to see what is connected</span></div>
+
+  <h2>The pages</h2>
+  <p class="sub">What each page shows, how it helps, and what a person can check there.</p>
+  <div class="pages">
+
+    <article class="page">
+      <div class="page-head"><h3>Sign in</h3><span class="route">/auth</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>Sign-in with email and password. The demo accounts are listed, one per role, with a shared demo password.</li>
+        <li>Sign-up with a company picked from the companies that have a node, and an optional expert profile (job title and skills) that makes the person findable in the Expert Finder.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>Every question and every decision carries the person's company and roles, so each node applies its rules to the right reader.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>The top bar shows who is signed in and for which company.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Dashboard</h3><span class="route">/</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>Nodes online (7 of 7), source records copied to the centre (0), companies in your scope and pending approvals.</li>
+        <li>Each company with its level and health, the latest decisions of the nodes, search decisions by node, and how many were allowed and blocked.</li>
+        <li>A value estimate, marked as illustrative and not measured.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>One look tells whether every company is connected and what the nodes decided lately.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>That every node is healthy before a demonstration, and that no source record was copied to the centre.</li></ul>
+    </article>
+
+    <article class="page wide">
+      <div class="page-head"><h3>Ask NeuralMesh</h3><span class="route">/ask</span><span class="pill p-grey">everyone</span><span class="pill p-blue">AI writes the answer, code checks it</span></div>
+      <h4>What you see</h4>
+      <ul><li>A question in your own words, a purpose (problem solving, compliance, bid support, learning or career mobility) and an optional choice of companies.</li>
+        <li>The routing line: how the companies were picked and which topics were found. The graph picks them from the topics of the question, then from the companies the question names, then a model reads the company profiles, then the asker's own company is asked. A person can also choose the companies.</li>
+        <li>The answer, written by the model (Claude Sonnet 5.5) from the evidence the nodes released and nothing else. Each citation shows as the number of its evidence card, and a sentence the evidence does not hold starts with "Not in the evidence:".</li>
+        <li>Approved links between companies, the evidence cards with how far each is shared, the items withheld with a plain reason, and the answer of each node.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>A person finds what another company learned, for example how CEAT trends rubber quality per supplier lot for Harrisons Malayalam's latex spoilage, without asking around.</li>
+        <li>Each sentence shows the document it stands on, so the reader can judge it.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>Code checks every answer against seven rules before it is shown: every sentence cites a released record, no test string and no withheld text appears, both sides of a conflict between two documents are shown, no removed instruction, email address or phone number appears, and the answer has at most 10 sentences. When a rule fails, the model writes the answer once more with the rule named, and a second failure is explained in words.</li>
+        <li>When every document that matched is withheld for the chosen purpose, the page says so and suggests asking with another purpose.</li>
+        <li>A document that never leaves its company can show by its title in the withheld list of a question that matched it, with the reason. Its text never leaves.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Expert Finder</h3><span class="route">/experts</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>People who opted in, found by their role, their skills and the topics of their evidence documents, with company and evidence titles. No names.</li>
+        <li>"Request intro" asks the owning company to introduce you.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>Find who in the group has done the work before, with consent on both sides.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>A name shows only to the person who asked, after the owning company approves the introduction for 24 hours.</li>
+        <li>A colleague of your own company is marked "your company". Evidence from a document that never leaves its company is not shown to other companies.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Mesh Nodes</h3><span class="route">/nodes</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>One card per company node: health, level (L1 summaries only, L2 summaries and passages), pack format, datapoints and knowledge packs.</li>
+        <li>"View capabilities": each datapoint and how far it is shared (title only, approved summary, document passages or live lookup), and the node's profile.</li>
+        <li>The mesh graph: an explorer of companies, datapoints, documents, topics, skills, roles and experts with their links, and six graph checks that say what to do when one finds items.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>Shows what each company offers the group and how far, without opening a document.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>A datapoint that never leaves its company is listed only to that company and to mesh admins.</li></ul>
+    </article>
+
+    <article class="page wide">
+      <div class="page-head"><h3>Governance</h3><span class="route">/governance</span><span class="pill p-grey">everyone</span><span class="pill p-amber">owner decisions simulated for demo accounts</span></div>
+      <h4>What you see, in four tabs</h4>
+      <div class="subtabs">
+        <div><b>Approvals</b><p>Requests for access to documents and for expert introductions. The owning company approves for 24 hours or denies. Other companies see "Waiting for" that company.</p></div>
+        <div><b>Links between companies</b><p>Links between documents of two companies, for example a CEAT practice that addresses a gap Harrisons Malayalam states. Each company approves its own end, and a link joins answers only after both did.</p></div>
+        <div><b>Application entries</b><p>Links an application proposed between its own vocabulary and the companies' data, such as an asset of Snap and Score that belongs to an asset family, grouped by kind. Each side approves its own end.</p></div>
+        <div><b>Decision log</b><p>Every decision of every node: time, decision, node, who asked, action, datapoint and the rule in words. No question text, no content, no person. "Check the chains" recomputes the hash chain of all seven ledgers.</p></div>
+      </div>
+      <h4>How it helps</h4>
+      <ul><li>The owner of each company keeps control of what leaves it, and anyone can see that the rules were applied.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>A changed, added or removed entry of a ledger breaks its chain, and "Check the chains" names the node.</li>
+        <li>In this pilot nobody signs in as a company owner: the demo accounts act for the owner roles.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Domains</h3><span class="route">/domains</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>The layers of the graph: the core knowledge layer and the inspection layer of Snap and Score.</li>
+        <li>Each kind of entity with its live count and meaning, each kind of link with its ends, its group and how many are approved and proposed, and the latest load of every source.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>Shows what the graph can hold and what is in it now, so the team behind a new application sees where its data fits.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>References a source could not resolve, and how many links still wait for approval.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Applications</h3><span class="route">/applications</span><span class="pill p-grey">everyone</span></div>
+      <h4>What you see</h4>
+      <ul><li>The applications connected to NeuralMesh, SkillForge and Snap and Score, from their registry files: the identity they use, the tools they call and what they loaded.</li>
+        <li>For SkillForge, the packs it sends: how many are kept, when one last loaded, the latest send (loaded, unchanged, refused) and the reason of any pack refused and not loaded since.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>One place to see that an application is connected, that its data arrived and why a pack was refused.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>An application reads evidence only through the same tools as a person and never holds another company's documents.</li></ul>
+    </article>
+
+    <article class="page">
+      <div class="page-head"><h3>Admin</h3><span class="route">/admin</span><span class="pill p-grey">for the mesh team</span></div>
+      <h4>What you see</h4>
+      <ul><li>The registered node endpoints, the model used for each step (classify, re-rank, answer), the guardrails, and the shared vocabulary: topics with their other names.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>The mesh team sees which model writes answers, which nodes are registered and which names lead to which topic.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>Outside development, strict mode refuses a cloud model and no Confidential record goes to a cloud model. In this development pilot synthetic Confidential records may, because every pack is synthetic.</li></ul>
+    </article>
+
+  </div>
+</section>
+
+<section class="panel" id="status" role="tabpanel">
+  <p class="checked"><b>Checked on 8 November 2026 on the final code:</b> 179 tests, live wiring 34 of 34, golden scenarios 15 of 15, browser checks 23 of 23, SkillForge's live contract test 10 of 10, and walk-throughs of every page by agents acting as first-time users. All work since commit <code>e313d01</code> of 5 November is not committed.</p>
+
+  <h2>Implemented</h2>
+  <p class="sub">Built, running and checked.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Area</th><th>What works</th><th>How it was checked</th></tr></thead>
+    <tbody>
+      <tr><td>Company nodes</td><td>Seven nodes, each with its own knowledge packs, sharing policy and decision ledger, all started from one registry of nodes.</td><td>179 tests, live wiring 34 of 34</td></tr>
+      <tr><td>Search at a node</td><td>Keyword search, vector search and the routed topics merged. The purpose is checked for each datapoint, and only text the node may release is indexed.</td><td>The right document in the top 10 for 162 of 162 labelled questions (keyword search alone 94 percent), and 12 of 18 reworded questions with every required datapoint</td></tr>
+      <tr><td>Routing</td><td>The graph, the companies named, a model reading the company profiles, the asker's own company, or the person's own choice.</td><td>Golden scenarios 15 of 15</td></tr>
+      <tr><td>Answers</td><td>Written by the model from released evidence only, seven code checks with one second try, numbered citations, an answer cache for repeated questions.</td><td>Golden scenarios, browser checks</td></tr>
+      <tr><td>Privacy rules</td><td>Never-leave datapoints, a purpose check per datapoint, withheld items with reasons, and test strings (canaries) that must never reach an index or an answer.</td><td>Tests, live wiring, agent walk-throughs as two companies</td></tr>
+      <tr><td>Approvals and links</td><td>Access requests and introductions decided by the owning company, links between companies approved by each side, entries of applications reviewed side by side.</td><td>Tests, with owner decisions simulated for demo accounts</td></tr>
+      <tr><td>Decision ledger</td><td>Every decision logged at its node in a hash chain, and a check of all seven chains on the Governance page.</td><td>Live: intact at all 7 nodes</td></tr>
+      <tr><td>Contract for applications</td><td>One contract, version 1.1, with 14 tools over the REST API and the MCP gateway. A refusal says what is needed. SkillForge keeps a pinned copy and tests it live.</td><td>SkillForge's live contract test 10 of 10</td></tr>
+      <tr><td>Talent import</td><td>SkillForge's skill list, roles and required skills arrive through the import tool, checked with every pack before anything is written. A skill Group HR joined is followed by its "replaces" list.</td><td>Tests, live send of 8 November</td></tr>
+      <tr><td>Inspection layer</td><td>Snap and Score's vocabulary loaded as proposed entries, live lookups, inspection records and their history.</td><td>Tests</td></tr>
+      <tr><td>Pages in plain words</td><td>Nine pages, with every code also shown in words, checked at 1500 and 390 pixels wide.</td><td>Browser checks, agent walk-throughs</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 class="gap">Not implemented</h2>
+  <p class="sub">Not built, not measured or waiting for a decision.</p>
+  <div class="tablebox"><table>
+    <thead><tr><th>Item</th><th>State</th><th>What it means today</th></tr></thead>
+    <tbody>
+      <tr><td>Corporate sign-in (Entra ID)</td><td><span class="pill p-amber">not built</span></td><td>Demo accounts with a shared password. Owner decisions are simulated for the demo accounts.</td></tr>
+      <tr><td>Real company data</td><td><span class="pill p-amber">not built</span></td><td>All content of the seven nodes is synthetic. Asvata's content was written only from its two SkillForge roles.</td></tr>
+      <tr><td>Neo4j graph database</td><td><span class="pill p-grey">planned</span></td><td>The graph runs on SQLite with NetworkX and holds 415 live entities and 869 live links today.</td></tr>
+      <tr><td>Link extraction job</td><td><span class="pill p-grey">planned</span></td><td>Links between companies come from the packs. No job looks for new ones on a schedule.</td></tr>
+      <tr><td>RPG Ventures node</td><td><span class="pill p-amber">not built</span></td><td>RPG Ventures has no node, so it cannot answer or be asked.</td></tr>
+      <tr><td>Answer time</td><td><span class="pill p-amber">not measured</span></td><td>The plan's goal of a median answer under 10 seconds was not timed on Claude.</td></tr>
+      <tr><td>Aggregate views as evidence</td><td><span class="pill p-amber">not built</span></td><td>The numbers of the views reach answers only through approved summaries.</td></tr>
+      <tr><td>Learning releases</td><td><span class="pill p-amber">not built</span></td><td>A copy of another company's material into a SkillForge topic until a date, after the owner's approval. Material is read by reference only.</td></tr>
+      <tr><td>50 labelled CVs</td><td><span class="pill p-amber">not done</span></td><td>No measured precision of the skills proposed from CVs.</td></tr>
+      <tr><td>Similarity by behaviour</td><td><span class="pill p-amber">not built</span></td><td>Roles count as similar only by the required skills they share.</td></tr>
+      <tr><td>Service tokens that renew</td><td><span class="pill p-amber">not built</span></td><td>SkillForge's token lasts 12 hours and is renewed by hand.</td></tr>
+      <tr><td>Scope presets in the top bar</td><td><span class="pill p-grey">fixed lists</span></td><td>Only "All connected companies" reads the companies from the registry.</td></tr>
+      <tr><td>Commit</td><td><span class="pill p-amber">open</span></td><td>Nothing since commit <code>e313d01</code> is committed.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 class="gap">Decisions for the product owner</h2>
+  <p class="sub">Working as built, but the intended behaviour is not settled.</p>
+  <div class="decisions"><ol>
+    <li>Should single words such as "latex" lead to a topic, or should the vocabulary hold phrases only?</li>
+    <li>Should the aggregate views of O-05, E-02 and O-06 come back as evidence?</li>
+    <li>Should the Expert Finder card show the expert's ID?</li>
+    <li>Should the name of a colleague of the asker's own company show without an introduction?</li>
+    <li>A person of another company sees the title of a never-leave document that matched a question, marked as withheld. Is that intended?</li>
+    <li>An answer routed by the graph lists the approved links of its documents, which can name a company that was not asked. Is that intended?</li>
+  </ol></div>
+</section>
+
+<section class="panel" id="terms" role="tabpanel">
+  <h2>Words used</h2>
+  <p class="sub">The terms of the pages, each in one line.</p>
+  <div class="terms">
+    <div><b>Node</b><span>A company's own server. It keeps the company's documents and decides what leaves.</span></div>
+    <div><b>Knowledge pack</b><span>A file that lists a company's datapoints, documents and their links for one domain.</span></div>
+    <div><b>Datapoint</b><span>A group of documents with one owner and one sharing rule, for example E-03 materials handling learnings.</span></div>
+    <div><b>Never-leave datapoint</b><span>A datapoint whose documents never leave the company, for example CEAT's compound formulations.</span></div>
+    <div><b>Purpose</b><span>Why a question is asked. A datapoint lists the purposes it is shared for.</span></div>
+    <div><b>Evidence record</b><span>A summary or passage a node released, with its citation. It is the only input the model writes from.</span></div>
+    <div><b>Routing</b><span>Picking the companies a question goes to.</span></div>
+    <div><b>Topic</b><span>A concept of the shared vocabulary, such as incoming quality control, with its other names.</span></div>
+    <div><b>Withheld</b><span>A document that matched but that the node did not release, shown by its title with the reason.</span></div>
+    <div><b>Approved link</b><span>A link between documents of two companies that both owners approved.</span></div>
+    <div><b>Decision ledger</b><span>The log of a node's decisions, chained by hash so a change shows.</span></div>
+    <div><b>Context contract</b><span>The one request and answer format every application uses, version 1.1, with 14 tools.</span></div>
+    <div><b>Talent pack</b><span>SkillForge's skill list or one company's roles and required skills, sent to NeuralMesh.</span></div>
+    <div><b>Mesh admin</b><span>A person who runs the mesh, such as the presenter account. Sees every company's never-leave datapoints by title.</span></div>
+  </div>
+</section>
+</div>
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tab');
+  function show(id) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.tab === id)); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    try { localStorage.setItem('nm-pages-tab', id); } catch (e) {}
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.dataset.tab); }); });
+  try { var s = localStorage.getItem('nm-pages-tab'); if (s && document.getElementById(s)) show(s); } catch (e) {}
+})();
+</script>
+</body>
+</html>

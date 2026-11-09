@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowRight, Network, UserRoundPlus } from 'lucide-react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { getCompanies } from '../services/api'
 import type { CompanyId } from '../services/api'
 
+// Shown until the API answers with the registered companies (GET /auth/companies)
 const COMPANIES: { id: CompanyId; label: string }[] = [
   { id: 'ceat', label: 'CEAT' },
   { id: 'kec', label: 'KEC International' },
@@ -29,6 +31,10 @@ export default function AuthPage() {
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [company, setCompany] = useState<CompanyId>('ceat')
+  const [companies, setCompanies] = useState(COMPANIES)
+  useEffect(() => {
+    getCompanies().then(({ data }) => { if (data.companies.length) setCompanies(data.companies) }).catch(() => undefined)
+  }, [])
   const [expertOptIn, setExpertOptIn] = useState(false)
   const [expertTitle, setExpertTitle] = useState('')
   const [expertSkills, setExpertSkills] = useState('')
@@ -117,12 +123,12 @@ export default function AuthPage() {
                 <label className="block text-sm font-medium text-stone-700">
                   Subsidiary
                   <select value={company} onChange={(event) => setCompany(event.target.value as CompanyId)} className="auth-input mt-1.5">
-                    {COMPANIES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+                    {companies.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
                   </select>
                 </label>
                 <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-stone-200 bg-white p-3 text-sm text-stone-700">
                   <input type="checkbox" checked={expertOptIn} onChange={(event) => setExpertOptIn(event.target.checked)} className="mt-0.5 accent-indigo-600" />
-                  <span><span className="block font-medium">I want to be discoverable as an expert</span><span className="mt-1 block text-xs text-stone-500">Only role and skills are searchable. Your name requires an approved introduction.</span></span>
+                  <span><span className="block font-medium">I want to be discoverable as an expert</span><span className="mt-1 block text-xs text-stone-600">Only role and skills are searchable. Your name requires an approved introduction.</span></span>
                 </label>
                 {expertOptIn && (
                   <>
@@ -157,7 +163,7 @@ export default function AuthPage() {
               <p>Shared demo password: <code>{DEMO_PASSWORD}</code></p>
             </section>
           )}
-          <p className="mt-5 text-center text-xs text-stone-500">POC accounts use synthetic data and are stored locally.</p>
+          <p className="mt-5 text-center text-xs text-stone-600">POC accounts use synthetic data and are stored locally.</p>
           <Link to="/" className="sr-only">Back to dashboard</Link>
         </div>
       </section>

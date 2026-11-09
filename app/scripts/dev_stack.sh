@@ -27,6 +27,10 @@ all_ports() { echo 11435 8000 8100 5173; for n in $(nodes); do port_of "$n"; don
 
 case "${1:-status}" in
   start)
+    # the Chroma stores are generated, not kept in git: build them when a pack has none
+    if [ -n "$(find neuralmesh_kb_pack/data_pack -name pack.json -path '*/packs/*' -exec sh -c '[ -f "$(dirname "$1")/build/chroma/chroma.sqlite3" ] || echo "$1"' _ {} \;)" ]; then
+      "$PY" -m knowledge.packgen > "$LOGS/packgen.log" 2>&1 || { echo "pack build failed, see $LOGS/packgen.log"; exit 1; }
+    fi
     nohup "$PY" -m evaluations.standin_model_server > "$LOGS/standin.log" 2>&1 < /dev/null &
     for n in $(nodes); do start_node "$n"; done
     sleep 5

@@ -23,3 +23,18 @@ nodes:
     port: 8104
     level: L1
     tone: "#5c940d"
+  - id: raychem
+    display: Raychem RPG
+    port: 8105
+    level: L1
+    tone: "#d6336c"
+  - id: rpgls
+    display: RPG Life Sciences
+    port: 8106
+    level: L1
+    tone: "#0c8599"
+  - id: asvata
+    display: Asvata
+    port: 8107
+    level: L1
+    tone: "#e67700"

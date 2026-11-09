@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import asyncio
 import json
-import sqlite3
 from pathlib import Path
 
 import pytest
@@ -61,7 +60,7 @@ def run(orchestrator, question, nodes=None, purpose="problem_solving", company="
 
 # ── phase 0: registry ───────────────────────────────────────────────────────
 def test_registry_is_the_single_node_list():
-    assert node_ids() == ("ceat", "kec", "zensar", "harrisons")
+    assert node_ids() == ("ceat", "kec", "zensar", "harrisons", "raychem", "rpgls", "asvata")
     assert NODE_IDS == node_ids()
 
 
@@ -72,7 +71,7 @@ def test_query_schema_accepts_no_node_choice_and_rejects_unknown_nodes():
 
     assert MeshQueryRequest(question="Which delays repeat?", purpose="problem_solving").nodes is None
     with pytest.raises(ValidationError):
-        MeshQueryRequest(question="Which delays repeat?", nodes=["raychem"], purpose="problem_solving")
+        MeshQueryRequest(question="Which delays repeat?", nodes=["ventures"], purpose="problem_solving")
 
 
 # ── phase 1: packs, hybrid search, evidence records ─────────────────────────
@@ -82,16 +81,20 @@ def test_built_packs_validate_together_with_the_group_packs():
     packs += [(p.name, json.loads(p.read_text())) for p in (APP / "neuralmesh_kb_pack" / "talent_import").glob("group.*.pack.json")]
     report = validate_packs(packs, strict=True)
     assert report.errors == []
-    assert len([p for p in packs if p[1]["pack"]["scope"] == "subsidiary"]) == 19
+    subsidiary = [p for p in packs if p[1]["pack"]["scope"] == "subsidiary"]
+    assert len(subsidiary) == 35 and {p[1]["pack"]["subsidiary"] for p in subsidiary} == set(node_ids())
 
 
 @needs_model
-def test_no_canary_in_any_vector_chunk_table():
-    for db in (APP / "neuralmesh_kb_pack" / "data_pack").glob("*/packs/*/build/chunks.db"):
-        con = sqlite3.connect(db)
-        text = " ".join(r[0] or "" for r in con.execute("SELECT title || ' ' || text FROM chunks"))
-        con.close()
-        assert not [c for c in CANARIES if c in text], db
+def test_no_canary_in_any_vector_store():
+    from knowledge.vector_index import VectorIndex
+
+    builds = list((APP / "neuralmesh_kb_pack" / "data_pack").glob("*/packs/*/build"))
+    packs = list((APP / "neuralmesh_kb_pack" / "data_pack").glob("*/packs/*/pack.json"))
+    assert len(builds) == len(packs) and all(VectorIndex(b).exists() for b in builds)
+    for build in builds:
+        text = VectorIndex(build).all_text()
+        assert not [c for c in CANARIES if c in text], build
 
 
 def test_every_search_item_is_a_valid_evidence_record():
@@ -221,11 +224,59 @@ def test_planted_instruction_never_reaches_the_prompt(local_policy):
 
 
 def test_uncited_or_invented_citation_fails_the_check(local_policy):
-    orchestrator, _, _ = build_mesh(backend=FakeBackend(reply="Spoilage falls when lots are trended. Also see [ceat:X-99-99]."))
+    backend = FakeBackend(reply="Spoilage falls when lots are trended. Also see [ceat:X-99-99].")
+    orchestrator, _, _ = build_mesh(backend=backend)
     result = run(orchestrator, GOLDEN[0]["question"])
     assert result["answer"]["status"] == "check_failed"
     assert result["answer"]["text"] is None
     assert {f["rule"] for f in result["answer"]["checks"]} == {1}
+    # one second try that names the broken rules, then a reason in words, never a count of checks
+    answers = [user for step, user in backend.calls if step == "answer"]
+    assert len(answers) == 2 and "Your first answer broke these rules" in answers[1] and "ceat:X-99-99" in answers[1]
+    reason = result["answer"]["reason"]
+    assert reason.startswith("The written answer is not shown, because a sentence cited no record and it cited a record")
+    assert "check(s)" not in reason
+
+
+class _FixesOnTheSecondTry(FakeBackend):
+    def complete(self, choice, system, user):
+        if choice.step == "answer" and not any(step == "answer" for step, _ in self.calls):
+            self.calls.append((choice.step, user))
+            return "Spoilage falls when lots are trended.", 100, 20
+        return super().complete(choice, system, user)
+
+
+def test_a_second_try_with_the_rule_named_gives_a_checked_answer(local_policy):
+    backend = _FixesOnTheSecondTry()
+    orchestrator, _, _ = build_mesh(backend=backend)
+    result = run(orchestrator, GOLDEN[0]["question"])
+    assert result["answer"]["status"] == "answered" and result["answer"]["checks"] == []
+    assert [step for step, _ in backend.calls].count("answer") == 2
+
+
+class _ClassifiesNothing(FakeBackend):
+    def complete(self, choice, system, user):
+        if choice.step == "classify":
+            self.calls.append((choice.step, user))
+            return '{"nodes": [], "reason": "no profile fits"}', 50, 5
+        return super().complete(choice, system, user)
+
+
+def test_a_question_no_company_matches_goes_to_the_askers_own_company(local_policy):
+    orchestrator, _, _ = build_mesh(backend=_ClassifiesNothing())
+    own = run(orchestrator, "What do we do when a reading is outside its limit?", company="rpgls")
+    assert own["routing"]["method"] == "own" and own["routing"]["subsidiaries"] == ["rpgls"]
+    group = run(orchestrator, "What do we do when a reading is outside its limit?", company="group", roles=("group_user", "mesh_admin"))
+    assert group["routing"]["method"] == "none" and group["status"] == "needs_node_choice"
+
+
+def test_with_companies_chosen_a_link_to_another_company_is_hidden():
+    _, _, mesh = build_mesh()
+    docs = {"ceat:E-03-01", "ceat:E-03-05"}
+    assert any("harrisons" in l["source"] + l["target"] for l in mesh.expand(docs)["used"])
+    chosen = mesh.expand(docs, only={"ceat", "kec"})
+    assert all("harrisons" not in l["source"] + l["target"] for l in chosen["used"])
+    assert any("harrisons" in l["source"] + l["target"] for l in chosen["hidden"])
 
 
 def test_identical_queries_make_one_answer_call(local_policy):
@@ -237,7 +288,13 @@ def test_identical_queries_make_one_answer_call(local_policy):
     assert second["answer"]["cached"] is True and second["scope"]["rerank"] == "cached"
 
 
-def test_confidential_bundle_never_reaches_a_cloud_model():
+def test_confidential_bundle_never_reaches_a_cloud_model(tmp_path, monkeypatch):
+    """The development switch for synthetic Confidential records is off here, as it is outside development."""
+    data = json.loads((APP / "config" / "model_policy.json").read_text())
+    data["development_cloud_for_synthetic_confidential"] = False
+    path = tmp_path / "policy.json"
+    path.write_text(json.dumps(data))
+    monkeypatch.setenv("NEURALMESH_MODEL_POLICY", str(path))
     model_policy._load.cache_clear()
     backend = FakeBackend()
     orchestrator, _, _ = build_mesh(backend=backend)
@@ -245,6 +302,7 @@ def test_confidential_bundle_never_reaches_a_cloud_model():
     assert backend.calls == []
     assert result["answer"]["status"] == "evidence_only"
     assert any(c["decision"] == "blocked_by_policy" for c in result["model_calls"])
+    model_policy._load.cache_clear()
 
 
 def test_strict_mode_refuses_a_cloud_model_outside_development():
@@ -274,6 +332,32 @@ def test_check_rules_on_conflict_and_contact_details():
     failures = run_checks("CEAT integrates early [ceat:L-01-01]. Call 98765 43210 [ceat:L-01-01].",
                           {"ceat:L-01-01", "zensar:C-05-01"}, set(), [], [("ceat:L-01-01", "zensar:C-05-01")], [], [])
     assert {f["rule"] for f in failures} == {4, 6}
+
+
+def test_checks_accept_the_marker_sentence_and_the_withheld_template():
+    from services.context.check import run_checks, sentences
+    withheld = [EvidenceRecord(evidence_id="ceat:E-01-01", kind="metadata", node="ceat", datapoint="ceat:E-01",
+                               title="Compound formulations and material specs", reason="formulation data never leaves CEAT",
+                               rule_id="R-NL-01", decision="BLOCKED_BY_POLICY")]
+    answer = ("[NOT IN EVIDENCE] The tread compound formulation. "
+              "Withheld: Compound formulations and material specs, reason: formulation data never leaves CEAT [ceat:E-01-01]. "
+              "Lots are trended per supplier at receipt [ceat:E-03-01].")
+    assert len(sentences(answer)) == 3
+    assert run_checks(answer, {"ceat:E-03-01", "ceat:E-01-01"}, set(), withheld, [], [], []) == []
+    bad = "Withheld: Compound formulations and material specs, which use 40 percent natural rubber [ceat:E-01-01]."
+    assert [f["rule"] for f in run_checks(bad, {"ceat:E-01-01"}, set(), withheld, [], [], [])] == [3]
+
+
+def test_prompts_are_versioned_files_and_every_step_is_timed(local_policy):
+    from services.context import prompts
+
+    assert prompts.versions() == {"answer": "mesh_answer_v4", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1"}
+    assert all(prompts.load(step).text for step in prompts.versions())
+    orchestrator, _, _ = build_mesh(backend=FakeBackend())
+    result = run(orchestrator, GOLDEN[0]["question"])
+    assert [s["step"] for s in result["steps"]] == ["resolve", "route", "fan_out", "scope", "expand", "build_answer", "assemble"]
+    assert all(isinstance(s["ms"], int) for s in result["steps"])
+    assert all(c.get("prompt_version") for c in result["model_calls"])
 
 
 # ── findings of the end-to-end verification run ─────────────────────────────
@@ -355,6 +439,27 @@ def test_vector_index_build_is_deterministic(tmp_path):
     assert a.search(query) == b.search(query)
 
 
+
+@needs_model
+def test_vector_store_rebuild_embeds_only_changed_chunks_and_deletes_removed_ones(tmp_path, monkeypatch):
+    from knowledge import vector_index
+    from knowledge.vector_index import ChunkRow, VectorIndex
+
+    def row(i, text):
+        return ChunkRow(f"ceat:E-03-0{i}", "E-03", "SUM", "Confidential", "2026-03", 0, text, "t")
+
+    embedded: list[str] = []
+    real = embedder.embed
+    monkeypatch.setattr(vector_index.embedder, "embed", lambda texts: embedded.extend(texts) or real(texts))
+    store = VectorIndex(tmp_path)
+    assert store.build([row(1, "Lots are trended per supplier."), row(2, "Rubber is stored off the floor.")]) == 2
+    embedded.clear()
+    assert store.build([row(1, "Lots are trended per supplier."), row(3, "Each lot has a time to use.")]) == 2
+    assert embedded == ["t. Each lot has a time to use."]
+    assert "stored off the floor" not in store.all_text()
+    keys = [k for k, _ in store.search(real(["time to use of a lot"])[0])]
+    assert keys[0] == "ceat:E-03-03" and "ceat:E-03-02" not in keys
+
 def test_validator_refuses_a_document_id_defined_twice():
     pack = json.loads((APP / "neuralmesh_kb_pack" / "data_pack" / "ceat" / "packs" / "engineering" / "pack.json").read_text())
     other = json.loads(json.dumps(pack))
@@ -376,3 +481,36 @@ def test_bundle_key_changes_when_a_document_version_changes():
 def test_expired_token_is_refused(client):
     token = issue_poc_token({"sub": "u", "company": "ceat", "roles": ["group_user"]}, hours=-1)
     assert client.get("/api/v1/mesh/nodes", headers={"Authorization": f"Bearer {token}"}).status_code == 401
+
+
+def test_an_abbreviation_never_ends_a_sentence_of_the_answer():
+    from services.context.check import sentences
+
+    assert sentences("Teams use tools, e.g. Spark, in production [a#1]. Lots are trended [b#2].") == [
+        "Teams use tools, e.g. Spark, in production [a#1].", "Lots are trended [b#2]."]
+    assert sentences("Lots are kept [c#1]. [NOT IN EVIDENCE] Line No. 3 rules. Losses are 1.1% [h#1].") == [
+        "Lots are kept [c#1].", "[NOT IN EVIDENCE] Line No. 3 rules.", "Losses are 1.1% [h#1]."]
+
+
+
+def test_an_answer_with_every_match_withheld_for_the_purpose_says_to_try_another_purpose(local_policy):
+    orchestrator, _, _ = build_mesh(backend=FakeBackend())
+    out = run(orchestrator, "Who can teach professional workplace skills?", purpose="career_mobility")
+    assert out["records"] == [] and any(w["rule_id"] == "R-PURPOSE-01" for w in out["withheld_records"])
+    assert out["answer"]["reason"] == ("The documents that match are not shared for the purpose career mobility. "
+                                       "If the question has another purpose, ask it again with that purpose.")
+
+
+def test_the_capabilities_of_a_node_list_a_never_leave_datapoint_only_to_its_company_and_mesh_admins():
+    from mcp_nodes.auth import CallerContext
+    from mcp_nodes.server_config import capabilities_payload, load_node_config, node_profile
+
+    config = load_node_config("ceat")
+    hidden = {k for k, v in config.datapoints.items() if v.get("never_leave")}
+    assert hidden
+    listed = lambda company, roles: {d["datapoint_id"] for d in capabilities_payload(  # noqa: E731
+        config, CallerContext(f"{company}-user", company, frozenset(roles), "problem_solving"))["datapoints"]}
+    assert not listed("kec", {"group_user"}) & hidden
+    assert hidden <= listed("ceat", {"group_user"}) and hidden <= listed("zensar", {"group_user", "mesh_admin"})
+    profile = node_profile(config)
+    assert not any(config.datapoints[d]["title"] in profile for d in hidden)

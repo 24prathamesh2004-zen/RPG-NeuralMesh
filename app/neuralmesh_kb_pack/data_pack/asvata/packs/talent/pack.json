@@ -1,0 +1,328 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "asvata.talent",
+    "scope": "subsidiary",
+    "subsidiary": "asvata",
+    "domain": "talent",
+    "title": "Asvata roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-09",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "asvata:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    },
+    {
+      "id": "asvata:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
+    }
+  ],
+  "documents": [
+    {
+      "id": "asvata:T-01-16",
+      "datapoint": "asvata:T-01",
+      "title": "Analyst role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "analyst"
+      ],
+      "summary": "The Analyst role requires Business Communication at intermediate level, Carbon Accounting at intermediate level, Compliance Basics at intermediate level and Data Analysis Basics at advanced level."
+    },
+    {
+      "id": "asvata:T-01-17",
+      "datapoint": "asvata:T-01",
+      "title": "Associate role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "associate"
+      ],
+      "summary": "The Associate role requires Business Communication at intermediate level, Customer Service at intermediate level and Project Management at beginner level."
+    }
+  ],
+  "experts": [
+    {
+      "id": "asvata:expert/AE-1",
+      "role": "Senior carbon analyst",
+      "skills": [
+        {
+          "skill": "skill:carbon-accounting",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "carbon inventory",
+        "emission factors",
+        "unit checks"
+      ],
+      "evidence": [
+        "asvata:R-01-01",
+        "asvata:R-01-02",
+        "asvata:L-01-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Farah Qureshi (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-2",
+      "role": "Data analysis lead",
+      "skills": [
+        {
+          "skill": "skill:data-analysis-basics",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "data cleaning",
+        "outlier checks",
+        "trend reading"
+      ],
+      "evidence": [
+        "asvata:R-01-03",
+        "asvata:R-01-04"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Imran Sheikh (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-3",
+      "role": "Engagement coordinator",
+      "skills": [
+        {
+          "skill": "skill:project-management",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "project planning",
+        "weekly status",
+        "client updates"
+      ],
+      "evidence": [
+        "asvata:C-01-02",
+        "asvata:C-01-03",
+        "asvata:L-01-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Leena Thomas (fictional)"
+      }
+    },
+    {
+      "id": "asvata:expert/AE-4",
+      "role": "Compliance and service desk supervisor",
+      "skills": [
+        {
+          "skill": "skill:compliance-basics",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "compliance checklists",
+        "filing calendar",
+        "client requests"
+      ],
+      "evidence": [
+        "asvata:F-01-01",
+        "asvata:F-01-02",
+        "asvata:C-01-01"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "asvata:role/analyst",
+      "type": "Role",
+      "label": "Analyst",
+      "subsidiary": "asvata",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/16"
+        }
+      ]
+    },
+    {
+      "id": "asvata:role/associate",
+      "type": "Role",
+      "label": "Associate",
+      "subsidiary": "asvata",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/17"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:asvata.talent/req-46",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/analyst",
+      "to": "skill:business-communication",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-57",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/analyst",
+      "to": "skill:carbon-accounting",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-47",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/analyst",
+      "to": "skill:compliance-basics",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-45",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/analyst",
+      "to": "skill:data-analysis-basics",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-48",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/associate",
+      "to": "skill:business-communication",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-49",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/associate",
+      "to": "skill:customer-service",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:asvata.talent/req-50",
+      "type": "REQUIRES_SKILL",
+      "from": "asvata:role/associate",
+      "to": "skill:project-management",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    }
+  ]
+}

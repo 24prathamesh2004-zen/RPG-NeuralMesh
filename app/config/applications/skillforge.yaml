@@ -1,0 +1,33 @@
+# One registry file per application (planning_docs/RPG_NeuralMesh_Generic_Context_Delivery_Standard_Plan.md, 2.1).
+# NeuralMesh checks every call of this application against these lists. A new application adds a file like this one.
+id: skillforge
+name: SkillForge
+domain: talent
+identity: svc:skillforge                 # the subject of the service token that signs the application's calls
+token_roles: [context_client, talent_exporter]
+companies: [ceat, kec, zensar, harrisons, raychem, rpgls, asvata, ventures]   # the companies it may speak for
+roles:                                   # its role names and the NeuralMesh role each becomes. mesh_admin is never granted
+  map: {user: group_user, admin: group_user, lead: group_user, content_author: group_user, reviewer: group_user,
+        proctor: group_user, auditor: group_user, service: service}
+  default: group_user
+purposes: [learning, career_mobility, problem_solving]
+tools: [role_context, skill_context, ask, learning_sources, find_mentors, vocabulary_export, entity, related, similar, import]
+# The entity types its read tools (entity, related, similar) and the suggestions of a refusal may show. Documents and
+# datapoints are shown only when their datapoint allows the purpose of the call.
+reads: [Subsidiary, Domain, Concept, Skill, Role, Document, Datapoint, Expert]
+imports:                                 # the packs it may send through the import tool, what each may hold, and the name NeuralMesh keeps
+  - pack: group.skillforge-skills
+    as: group.skills
+    entities: [Skill]
+    relationships: [PREREQUISITE_OF]
+  - pack: "{company}.talent"
+    as: "{company}.talent"
+    entities: [Role]
+    relationships: [REQUIRES_SKILL]
+    datapoints: [T-01]
+    documents: [role_profile]
+graph_sources: ["pack:group.skills", "talent:"]
+facts:                                   # the numbers the Applications page shows, counted in the graph
+  roles: {count: Role}
+  skills: {count: Skill}
+note: Reads evidence records by reference. Sends talent packs (roles and required skills). Nothing about people.

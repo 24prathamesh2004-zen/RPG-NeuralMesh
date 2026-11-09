@@ -52,7 +52,7 @@
     "purpose": {
       "description": "Why the caller asks. problem_solving, compliance and bid_support exist today. learning and career_mobility are added for SkillForge.",
       "type": "string",
-      "enum": ["problem_solving", "compliance", "bid_support", "learning", "career_mobility"]
+      "enum": ["problem_solving", "compliance", "bid_support", "learning", "career_mobility", "inspection"]
     },
     "level": {
       "description": "Proficiency level on the SkillForge calibre scale: L beginner, M intermediate, A advanced.",
@@ -84,7 +84,7 @@
             "dimensions": {"type": "integer", "minimum": 64, "maximum": 4096},
             "chunk_chars": {"type": "integer", "minimum": 200, "maximum": 4000},
             "chunk_overlap_chars": {"type": "integer", "minimum": 0, "maximum": 1000},
-            "faiss_index_type": {"type": "string", "enum": ["Flat", "HNSW"]}
+            "vector_store": {"type": "string", "enum": ["chroma"], "description": "Embedded Chroma store in the build folder of the pack"}
           }
         }
       },
@@ -173,6 +173,7 @@
         "type": {"type": "string", "enum": ["Subsidiary", "Domain", "Concept", "Skill", "Role", "Asset"]},
         "label": {"type": "string", "minLength": 2, "maxLength": 200},
         "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true, "description": "Other names used in documents, CVs and questions. Used to resolve free text to this entity."},
+        "replaces": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true, "description": "IDs of entries that were joined into this one, for example a skill that Group HR joined to this skill. Every reference to one of these IDs in any loaded pack means this entity. No entity may define a replaced ID."},
         "description": {"type": "string"},
         "domain": {"$ref": "#/$defs/domain_id"},
         "subsidiary": {"$ref": "#/$defs/subsidiary_id"},

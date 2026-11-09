@@ -1,0 +1,50 @@
+- id: RE-1
+  role: Senior application engineer
+  skills:
+  - cable accessory selection
+  - transformer connections
+  - electric mobility applications
+  evidence:
+  - raychem:C-03-01
+  - raychem:C-03-02
+  - raychem:E-01-04
+  consent: true
+  private:
+    name: Ravi Menon (fictional)
+- id: RE-2
+  role: Field service lead
+  skills:
+  - joint installation
+  - failure analysis
+  - pre-energising tests
+  evidence:
+  - raychem:E-01-01
+  - raychem:E-01-03
+  - raychem:O-02-02
+  consent: true
+  private:
+    name: Kavita Rao (fictional)
+- id: RE-3
+  role: Quality engineer
+  skills:
+  - job record sign-off
+  - traceability
+  - lessons review
+  evidence:
+  - raychem:O-02-03
+  - raychem:L-01-01
+  consent: true
+  private:
+    name: Arjun Desai (fictional)
+- id: RE-4
+  role: Senior installation technician
+  skills:
+  - termination fitting
+  - torque checks
+  - handover notes
+  evidence:
+  - raychem:E-01-02
+  - raychem:L-01-02
+  consent: false
+  private:
+    name: Opted out (fictional)

@@ -216,7 +216,7 @@ def build_node(name):
                 "consent": e["consent"], "private": {"name": e["private_name"]}} for e in cfg["experts"]]
     (d / "experts.yaml").write_text(yaml.safe_dump(experts, sort_keys=False))
     pol = {"node": name, "schema_version": SCHEMA, "calendar": "results_calendar.yaml",
-           "defaults": {"purposes_allowed": ["problem_solving", "compliance", "bid_support", "learning", "career_mobility"], "roles_allowed": ["group_user"]},
+           "defaults": {"purposes_allowed": ["problem_solving", "compliance", "bid_support", "learning", "career_mobility", "inspection"], "roles_allowed": ["group_user"]},
            "datapoints": cfg["datapoints"]}
     (d / "policy.yaml").write_text(yaml.safe_dump(pol, sort_keys=False))
     (d / "results_calendar.yaml").write_text(yaml.safe_dump({"windows": [{"start": "2026-10-15", "end": "2026-11-14", "reason": "Q2 results window (mock)"}]}))

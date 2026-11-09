@@ -10,14 +10,14 @@
     "owner_role": "CHRO",
     "maturity_level": "L1",
     "language": "en",
-    "published_at": "2026-11-05",
+    "published_at": "2026-11-09",
     "synthetic": true,
     "index": {
       "embedding_model": "all-MiniLM-L6-v2",
       "dimensions": 384,
       "chunk_chars": 600,
       "chunk_overlap_chars": 0,
-      "faiss_index_type": "Flat"
+      "vector_store": "chroma"
     }
   },
   "datapoints": [
@@ -36,9 +36,49 @@
         "career_mobility"
       ],
       "consent_required": true
+    },
+    {
+      "id": "harrisons:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
     }
   ],
-  "documents": [],
+  "documents": [
+    {
+      "id": "harrisons:T-01-14",
+      "datapoint": "harrisons:T-01",
+      "title": "Estate Manager role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "estate-manager"
+      ],
+      "summary": "The Estate Manager role requires Plantation Labour Welfare at advanced level, Rubber Plantation Management at advanced level and Tea Cultivation at intermediate level."
+    },
+    {
+      "id": "harrisons:T-01-15",
+      "datapoint": "harrisons:T-01",
+      "title": "Agronomist role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "agronomist"
+      ],
+      "summary": "The Agronomist role requires Crop Protection at advanced level, Sustainable Agriculture at intermediate level, Sustainable Agriculture Standards at intermediate level and Tea Cultivation at intermediate level."
+    }
+  ],
   "experts": [
     {
       "id": "harrisons:expert/HE-1",
@@ -125,6 +165,155 @@
       "consent": false,
       "private": {
         "name": "Opted out (fictional)"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "harrisons:role/estate-manager",
+      "type": "Role",
+      "label": "Estate Manager",
+      "subsidiary": "harrisons",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/14"
+        }
+      ]
+    },
+    {
+      "id": "harrisons:role/agronomist",
+      "type": "Role",
+      "label": "Agronomist",
+      "subsidiary": "harrisons",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/15"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:harrisons.talent/req-41",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/estate-manager",
+      "to": "skill:plantation-labour-welfare",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-39",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/estate-manager",
+      "to": "skill:rubber-plantation-management",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-40",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/estate-manager",
+      "to": "skill:tea-cultivation",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-42",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/agronomist",
+      "to": "skill:crop-protection",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-43",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/agronomist",
+      "to": "skill:sustainable-agriculture",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-56",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/agronomist",
+      "to": "skill:sustainable-agriculture-standards",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:harrisons.talent/req-44",
+      "type": "REQUIRES_SKILL",
+      "from": "harrisons:role/agronomist",
+      "to": "skill:tea-cultivation",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
       }
     }
   ]

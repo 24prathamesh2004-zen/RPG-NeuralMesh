@@ -17,7 +17,7 @@
       "dimensions": 384,
       "chunk_chars": 600,
       "chunk_overlap_chars": 0,
-      "faiss_index_type": "Flat"
+      "vector_store": "chroma"
     }
   },
   "datapoints": [
@@ -46,7 +46,8 @@
       "purposes_allowed": [
         "problem_solving",
         "compliance",
-        "bid_support"
+        "bid_support",
+        "inspection"
       ],
       "upgrade_with_approval": "RAG",
       "views": [
@@ -308,6 +309,28 @@
       "body_file": "source/E-01-02.md",
       "concepts": [
         "concept:compound-formulation"
+      ]
+    },
+    {
+      "id": "ceat:E-02-05",
+      "datapoint": "ceat:E-02",
+      "title": "Standard - Visual grading of finished tyres at the plant (A, B, C, Reject)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "standard",
+        "grading",
+        "visual",
+        "tyre",
+        "bulge",
+        "cut",
+        "sidewall"
+      ],
+      "summary": "Grade A has no visible bulge, cut or crack on sidewall, tread, shoulder or bead. Grade B allows one surface cut under 10 mm with no bulge. Grade C allows surface cuts and uneven wear marks but no bulge and no crack. Any bulge, any crack or any bead damage is Reject.",
+      "body_file": "gated/E-02-05.md",
+      "gated": true,
+      "concepts": [
+        "concept:failure-pattern"
       ]
     }
   ],

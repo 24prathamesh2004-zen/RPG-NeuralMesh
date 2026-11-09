@@ -4,8 +4,8 @@ import { Activity, AlertTriangle, Boxes, ChevronDown, ChevronUp, LoaderCircle, R
 import { getMeshGraph, getMeshNodes, refreshMeshGraph } from '../services/api'
 import type { MeshGraphView, MeshNodeInfo } from '../services/api'
 import MeshGraphExplorer from '../components/MeshGraphExplorer'
+import { levelWords, modeLabel, profileWords } from '../lib/format'
 
-const NODE_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d' }
 function MeshGraphPanel() {
   const [graph, setGraph] = useState<MeshGraphView | null>(null)
   const [busy, setBusy] = useState(false)
@@ -24,7 +24,8 @@ function MeshGraphPanel() {
     <section className="mesh-section-panel">
       <div className="mesh-side-heading"><h2>Mesh graph</h2><button type="button" className="mesh-outline-action" onClick={() => void load(true)} disabled={busy}><RefreshCw size={14} className={busy ? 'animate-spin' : ''} />Reload from nodes</button></div>
       <MeshGraphExplorer graph={graph} />
-      <p className="mesh-node-profile">{Object.entries(graph.exports ?? {}).map(([n, s]) => `${n}: ${s}`).join(' · ')}</p>
+      <p className="mesh-node-profile">{Object.entries(graph.exports ?? {}).map(([n, s]) => `${n}: ${s}`).join(' · ')}{graph.revision != null && ` · revision ${graph.revision}`}</p>
+      {graph.checks && graph.checks.length > 0 && <ul className="mesh-graph-checks">{graph.checks.map((c) => <li key={c.rule}><span className={`mesh-result-state ${c.ok ? 'success' : 'warning'}`}>{c.ok ? 'ok' : `${c.failures} found`}</span><span>{c.meaning}</span>{!c.ok && <small>{c.examples.join(', ')}{c.action ? ` · ${c.action}` : ''}</small>}</li>)}</ul>}
     </section>
   )
 }
@@ -53,19 +54,20 @@ export default function MeshNodesPage() {
   const connected = nodes.filter((node) => node.status === 'healthy').length
   return (
     <div className="mesh-data-page">
-      <header className="mesh-page-heading"><div><div className="mesh-eyebrow">Subsidiary connectivity</div><h1>Mesh Nodes</h1><p>Each subsidiary operates an independent MCP server and keeps control of its own exposure policy.</p></div><button type="button" className="mesh-outline-action" onClick={() => void refresh()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh status</button></header>
+      <header className="mesh-page-heading"><div><div className="mesh-eyebrow">Subsidiary connectivity</div><h1>Mesh Nodes</h1><p>Each subsidiary operates an independent MCP server and keeps control of its own exposure policy. Documents and their text stay at the node. The centre holds only titles, links and counts.</p></div><button type="button" className="mesh-outline-action" onClick={() => void refresh()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh status</button></header>
       <section className="mesh-node-summary"><span className="mesh-node-summary-icon"><Activity size={18} /></span><strong>{connected} / {nodes.length || 4}</strong><span>nodes responding now</span><span className="mesh-node-summary-note">Live MCP health checks</span></section>
       {error && <div className="mesh-alert error"><AlertTriangle size={17} />{error}</div>}
       {loading && nodes.length === 0 && <div className="mesh-alert pending"><LoaderCircle size={17} className="animate-spin" />Checking each subsidiary server…</div>}
       <section className="mesh-node-cards">
-        {nodes.map((node) => <article className="mesh-node-card" key={node.node_id} style={{ '--node-tone': NODE_TONES[node.node_id] ?? '#68708f' } as CSSProperties}>
+        {nodes.map((node) => <article className="mesh-node-card" key={node.node_id} style={{ '--node-tone': node.tone ?? '#68708f' } as CSSProperties}>
           <div className="mesh-node-card-top"><span className="mesh-node-company-mark"><Boxes size={17} /></span><span className={`mesh-result-state ${node.status === 'healthy' ? 'success' : 'warning'}`}><i />{node.status === 'healthy' ? 'Healthy' : 'Unavailable'}</span></div>
           <h2>{node.company}</h2><p>{node.owner}</p>
-          <div className="mesh-node-level"><span>{node.level}</span><span>Schema {node.schema_version}</span></div>
-          <div className="mesh-node-card-stats"><div><strong>{node.datapoint_count}</strong><span>Datapoints</span></div><div><strong>{node.port}</strong><span>Local port</span></div></div>
+          <div className="mesh-node-level"><span>{levelWords(node.level)}</span><span>Pack format {node.schema_version}</span></div>
+          <div className="mesh-node-card-stats"><div><strong>{node.datapoint_count}</strong><span>Datapoints</span></div><div><strong>{node.packs?.length ?? 0}</strong><span>Knowledge packs</span></div></div>
           <button type="button" className="mesh-node-expand" onClick={() => setExpanded(expanded === node.node_id ? null : node.node_id)}>{expanded === node.node_id ? 'Hide capabilities' : 'View capabilities'}{expanded === node.node_id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
-          {expanded === node.node_id && node.profile && <p className="mesh-node-profile">{node.profile}</p>}
-          {expanded === node.node_id && <div className="mesh-capability-list">{node.datapoints.map((dp) => <div key={String(dp.datapoint_id)}><span><b>{String(dp.datapoint_id)}</b>{String(dp.title)}</span><em>{String(dp.exposure_ceiling)}</em></div>)}</div>}
+          {expanded === node.node_id && node.profile && <p className="mesh-node-profile">{profileWords(node.profile)}</p>}
+          {expanded === node.node_id && <div className="mesh-capability-list">{node.datapoints.map((dp) => <div key={String(dp.datapoint_id)}><span><b>{String(dp.datapoint_id)}</b>{String(dp.title)}</span><em title={`Exposure ${String(dp.exposure_ceiling)}`}>{modeLabel(String(dp.exposure_ceiling))}</em></div>)}
+            <p className="mesh-panel-footnote">How far each datapoint is shared at most. A datapoint that never leaves its company is listed only to that company. Its documents are never shared: a person of another company sees at most the title of a document that matched a question, marked as withheld.</p></div>}
           {node.error && <p className="mesh-node-error">{node.error}</p>}
         </article>)}
       </section>

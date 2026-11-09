@@ -1,0 +1,22 @@
+# Snap and Score: visual inspection. Its ontology is loaded from neuralmesh_kb_pack/applications/snapscore.
+id: snapscore
+name: Snap and Score
+domain: inspection
+identity: svc:snapscore
+token_roles: [context_client]
+companies: [ceat, harrisons, kec, raychem]
+roles:
+  map: {}
+  default: group_user
+purposes: [inspection, problem_solving]
+tools: [entity, related, similar, live, ask, inspection_profile, inspection_history, record_inspection]
+reads: [Subsidiary, Domain, Concept, Asset, AssetFamily, Condition, ConditionFamily, CoverType, GradeScale, Inspection, ReviewStatus, View, Document, Datapoint]
+imports: []
+graph_sources: ["app:snapscore"]
+facts:
+  assets: {count: Asset}
+  standards_links: {edges: GOVERNED_BY}
+  inspections_recorded: {count: Inspection}
+  latest_inspection: {latest: Inspection, field: inspected_at}
+  proposed_entries: {proposed_from: "app:"}
+note: Its ontology is a draft loaded as proposed entries. Cover status is a live lookup, images stay with the application.

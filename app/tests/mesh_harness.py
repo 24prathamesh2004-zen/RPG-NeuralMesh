@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from jose import jwt
+import jwt
 
 from mcp_nodes.access_store import AccessStore
 from mcp_nodes.auth import CallerContext
@@ -18,6 +18,7 @@ from mcp_nodes.server import (
     export_graph_node,
     find_experts_node,
     load_node_config,
+    lookup_node,
     search_node,
     summarize_node,
 )
@@ -43,7 +44,7 @@ class LocalTransport:
         return next(n for n, c in self.configs.items() if c.port == port)
 
     def _caller(self, token: str, purpose: str) -> CallerContext:
-        claims = jwt.get_unverified_claims(token)
+        claims = jwt.decode(token, options={"verify_signature": False})
         return CallerContext(claims["sub"], claims["company"], frozenset(claims["roles"]), purpose)
 
     async def search(self, url: str, token: str, *, query: str, purpose: str, mode: str | None = None,
@@ -72,6 +73,8 @@ class LocalTransport:
         if tool == "find_experts":
             return find_experts_node(config, caller, arguments["query"], arguments["purpose"], store,
                                      concepts=arguments.get("concepts"))
+        if tool == "lookup":
+            return lookup_node(config, caller, arguments["fact"], arguments["key"], store)
         raise AssertionError(f"tool {tool} is not part of the harness")
 
 

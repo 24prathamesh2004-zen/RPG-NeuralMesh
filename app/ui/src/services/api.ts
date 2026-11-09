@@ -13,7 +13,8 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-export type CompanyId = 'ceat' | 'kec' | 'zensar' | 'harrisons'
+// A company with a Mesh Node, as config/nodes.yaml names it (ceat, kec, raychem, ...)
+export type CompanyId = string
 
 export interface ExpertProfile {
   job_title: string
@@ -85,7 +86,7 @@ export interface MeshLink {
 }
 
 export interface MeshRouting {
-  method?: 'graph' | 'classifier' | 'user' | 'named' | 'none'
+  method?: 'graph' | 'classifier' | 'user' | 'named' | 'own' | 'context' | 'none'
   concepts?: string[]
   concept_labels?: Record<string, string>
   subsidiaries?: string[]
@@ -115,6 +116,7 @@ export interface MeshQueryResponse {
 export interface MeshNodeInfo {
   node_id: CompanyId
   company: string
+  tone?: string
   status: string
   level: string
   port: number
@@ -127,11 +129,16 @@ export interface MeshNodeInfo {
   error?: string
 }
 
+export interface GraphCheck { rule: string; meaning: string; failures: number; examples: string[]; ok: boolean; action?: string }
+
 export interface MeshGraphView {
   nodes: { id: string; type: string; label: string; subsidiary?: string | null }[]
   edges: { id: string; type: string; source: string; target: string; status: string }[]
   counts: Record<string, number>
   exports: Record<string, string>
+  revision?: number
+  checks?: GraphCheck[]
+  reports?: Record<string, { nodes: number; edges: number; warnings: number; retired_edges: number; retired_nodes: number }>
 }
 
 export interface ExpertMatch {
@@ -141,6 +148,8 @@ export interface ExpertMatch {
   role: string
   skills: string[]
   evidence: string[]
+  // the titles of the evidence documents, in the order of evidence
+  evidence_titles?: string[]
   match_score: number
   name?: string
   name_available_after_intro_approval: boolean
@@ -170,6 +179,10 @@ export interface AuditEntry {
   caller_company?: string
   action: string
   datapoint_id: string
+  // the datapoint's title, absent for a never-leave datapoint of another company
+  datapoint_title?: string | null
+  // the title is kept back: the datapoint never leaves the node's company
+  datapoint_hidden?: boolean
   decision: string
   rule_id: string
   request_id?: string | null
@@ -222,6 +235,7 @@ export const signIn = (email: string, password: string) =>
   api.post<AccountResponse>('/auth/signin', { email, password })
 
 export const getCurrentUser = () => api.get<UserAccount>('/auth/me')
+export const getCompanies = () => api.get<{ companies: { id: CompanyId; label: string }[] }>('/auth/companies')
 
 export const queryMesh = (payload: {
   question: string
@@ -234,6 +248,35 @@ export const getMeshLinks = () => api.get<{ links: MeshLink[] }>('/mesh/graph/li
 export const reviewMeshLink = (id: string, subsidiary: string, decision: 'approve' | 'reject') =>
   api.post<MeshLink>(`/mesh/graph/links/${id}/review`, { subsidiary, decision })
 
+// Entries an application proposed for the graph, by application and link type. A side approves an entry for its own
+// company, and "group" is the side a mesh admin approves as curator.
+export interface ProposalEntry {
+  id: string
+  source: string
+  target: string
+  source_title: string
+  target_title: string
+  status: 'proposed' | 'approved' | 'rejected'
+  sides: string[]
+  reviewed_by: string[]
+  you_review: string[]
+}
+export interface ProposalGroup {
+  application: string
+  name: string
+  type: string
+  counts: { proposed: number; approved: number; rejected: number }
+  sides: string[]
+  pending_for_you: number
+  entries: ProposalEntry[]
+  // the kinds of entity at each end of the group's links ("Asset", "AssetFamily")
+  from_types?: string[]
+  to_types?: string[]
+}
+export const getProposals = () => api.get<{ groups: ProposalGroup[]; your_sides: string[] }>('/mesh/proposals')
+export const reviewProposals = (payload: { decision: 'approve' | 'reject'; ids?: string[]; application?: string; type?: string }) =>
+  api.post<{ reviewed: number; decision: string }>('/mesh/proposals/review', payload)
+
 export const getDashboardSnapshot = () => api.get<DashboardSnapshot>('/mesh/dashboard')
 export const getMeshNodes = () => api.get<{ nodes: MeshNodeInfo[] }>('/mesh/nodes')
 export const searchExperts = (payload: { query: string; purpose: string; nodes: CompanyId[] }) =>
@@ -243,13 +286,38 @@ export const requestExpertIntroduction = (nodeId: CompanyId, payload: { expert_i
 export const getGovernanceSnapshot = () => api.get<{ pending: GovernanceRequest[]; audit: AuditEntry[]; mode: string }>('/mesh/governance')
 export const reviewAccessRequest = (nodeId: CompanyId, requestId: string, decision: 'approve' | 'deny', hours = 24) =>
   api.post(`/mesh/governance/${nodeId}/requests/${requestId}/review`, { decision, hours })
+export interface GraphDomains {
+  domains: { domain: string; entities: number; links: number
+    node_types: { type: string; count: number; description: string }[]
+    edge_types: { type: string; from: string[]; to: string[]; group: string; symmetric: boolean; counts: Record<string, number> }[] }[]
+  groups: Record<string, string[]>
+  sources: Record<string, { nodes: number; edges: number; warnings: number }>
+  revision: number
+  checks: GraphCheck[]
+}
+export interface ConnectedApplication {
+  id: string; name: string; domain: string; identity: string; tools: string[]
+  loaded: { sources: string[]; entities: number; links: number; warnings: number }
+  facts: Record<string, string | number | null>
+  note: string
+  imports?: {
+    kept: number
+    last_loaded_at: string | null
+    last_send: { at: string; loaded: number; unchanged: number; refused: number } | null
+    // every pack whose latest result is a refusal
+    refused: { pack_id: string; at: string; reason: string | null }[]
+  }
+}
+export const getGraphDomains = () => api.get<GraphDomains>('/mesh/domains')
+export interface AuditChainCheck { nodes: { node_id: string; company: string; entries: number; valid: boolean }[]; valid: boolean }
+export const verifyAuditChains = () => api.get<AuditChainCheck>('/mesh/governance/audit/verify')
+export const getApplications = () => api.get<{ applications: ConnectedApplication[]; revision: number }>('/mesh/applications')
 export const getAdminSnapshot = () => api.get<{
   registry: MeshNodeInfo[]
   ontology: { concept: string; aliases: string[] }[]
   guardrails: { id: string; label: string; enabled: boolean }[]
-  model: string
-  groq_configured: boolean
   orchestrator_stage: string
+  model_policy: { strict_mode: boolean; answer_model_ready: boolean; steps: Record<string, { model: string; tier: string; max_input_tokens: number }> }
 }>('/mesh/admin')
 
 export default api

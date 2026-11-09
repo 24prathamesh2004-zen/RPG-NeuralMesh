@@ -1,0 +1,146 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.talent",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "talent",
+    "title": "Raychem RPG roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "raychem:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    }
+  ],
+  "documents": [],
+  "experts": [
+    {
+      "id": "raychem:expert/RE-1",
+      "role": "Senior application engineer",
+      "skills": [
+        {
+          "skill": "skill:electrical-power-cable-and-transformer",
+          "level": "A"
+        },
+        {
+          "skill": "skill:mobility-ev-and-electrical-applications",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "cable accessory selection",
+        "transformer connections",
+        "electric mobility applications"
+      ],
+      "evidence": [
+        "raychem:C-03-01",
+        "raychem:C-03-02",
+        "raychem:E-01-04"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Ravi Menon (fictional)"
+      }
+    },
+    {
+      "id": "raychem:expert/RE-2",
+      "role": "Field service lead",
+      "skills": [
+        {
+          "skill": "skill:cable-accessory-installation",
+          "level": "A"
+        },
+        {
+          "skill": "skill:electrical-power-cable-and-transformer",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "joint installation",
+        "failure analysis",
+        "pre-energising tests"
+      ],
+      "evidence": [
+        "raychem:E-01-01",
+        "raychem:E-01-03",
+        "raychem:O-02-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Kavita Rao (fictional)"
+      }
+    },
+    {
+      "id": "raychem:expert/RE-3",
+      "role": "Quality engineer",
+      "skills": [
+        {
+          "skill": "skill:manufacturing-engineering-quality-and-digital",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "job record sign-off",
+        "traceability",
+        "lessons review"
+      ],
+      "evidence": [
+        "raychem:O-02-03",
+        "raychem:L-01-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Arjun Desai (fictional)"
+      }
+    },
+    {
+      "id": "raychem:expert/RE-4",
+      "role": "Senior installation technician",
+      "skills": [
+        {
+          "skill": "skill:cable-accessory-installation",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "termination fitting",
+        "torque checks",
+        "handover notes"
+      ],
+      "evidence": [
+        "raychem:E-01-02",
+        "raychem:L-01-02"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ]
+}

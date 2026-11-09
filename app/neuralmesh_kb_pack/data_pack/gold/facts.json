@@ -148,5 +148,113 @@
     "id": "H6",
     "dp": "F-02",
     "text": "Row-level estate and worker data, and the title-dispute file, are never exposed."
+  },
+  {
+    "node": "raychem",
+    "id": "RY1",
+    "dp": "E-01",
+    "text": "A joint is installed in five steps, and work stops if rain or dust reaches the open cable."
+  },
+  {
+    "node": "raychem",
+    "id": "RY2",
+    "dp": "E-01",
+    "text": "Energising stops if insulation resistance is below the limit or partial discharge is above the site limit."
+  },
+  {
+    "node": "raychem",
+    "id": "RY3",
+    "dp": "O-02",
+    "text": "Failed joints are checked for four causes in order: preparation, water entry, connector defect and overload."
+  },
+  {
+    "node": "raychem",
+    "id": "RY4",
+    "dp": "L-01",
+    "text": "In 3 of 5 sites with early termination failures, water entered at an unsealed lug end."
+  },
+  {
+    "node": "raychem",
+    "id": "RY5",
+    "dp": "C-03",
+    "text": "Charging station accessories must be sealed and rated for outdoor use, plugging and vibration."
+  },
+  {
+    "node": "raychem",
+    "id": "RY6",
+    "dp": "F-02",
+    "text": "The partner agreement and pricing file is never exposed."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS1",
+    "dp": "O-01",
+    "text": "Hot work, confined space entry and maintenance in solvent areas need a signed work permit."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS2",
+    "dp": "E-01",
+    "text": "A suspected out-of-specification result opens a formal investigation within 1 working day if no lab error is found."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS3",
+    "dp": "E-01",
+    "text": "Cleaning validation needs 3 consecutive successful runs."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS4",
+    "dp": "F-01",
+    "text": "The effect of each corrective and preventive action is checked after 3 months."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS5",
+    "dp": "C-01",
+    "text": "Complaints about promotion go to the compliance lead within 2 working days."
+  },
+  {
+    "node": "rpgls",
+    "id": "LS6",
+    "dp": "F-02",
+    "text": "The regulatory inspection response file is never exposed."
+  },
+  {
+    "node": "asvata",
+    "id": "AS1",
+    "dp": "R-01",
+    "text": "Every emission factor line records the factor source and year, and a reviewer re-calculates 5 lines of every 50."
+  },
+  {
+    "node": "asvata",
+    "id": "AS2",
+    "dp": "R-01",
+    "text": "A client data set with more than 5 percent missing values in a key column goes back to the client."
+  },
+  {
+    "node": "asvata",
+    "id": "AS3",
+    "dp": "F-01",
+    "text": "Reminders for a filing go out at 20, 10 and 3 working days before the internal date."
+  },
+  {
+    "node": "asvata",
+    "id": "AS4",
+    "dp": "C-01",
+    "text": "Client requests are acknowledged within 4 working hours."
+  },
+  {
+    "node": "asvata",
+    "id": "AS5",
+    "dp": "L-01",
+    "text": "In 3 of 5 recent engagements the client data arrived late."
+  },
+  {
+    "node": "asvata",
+    "id": "AS6",
+    "dp": "C-02",
+    "text": "Client engagement contract files are never exposed outside Asvata."
   }
 ]

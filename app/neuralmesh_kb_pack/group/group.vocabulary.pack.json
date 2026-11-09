@@ -53,30 +53,6 @@
       "label": "Talent and learning"
     },
     {
-      "id": "org:ceat",
-      "type": "Subsidiary",
-      "label": "CEAT",
-      "subsidiary": "ceat"
-    },
-    {
-      "id": "org:kec",
-      "type": "Subsidiary",
-      "label": "KEC International",
-      "subsidiary": "kec"
-    },
-    {
-      "id": "org:zensar",
-      "type": "Subsidiary",
-      "label": "Zensar Technologies",
-      "subsidiary": "zensar"
-    },
-    {
-      "id": "org:harrisons",
-      "type": "Subsidiary",
-      "label": "Harrisons Malayalam",
-      "subsidiary": "harrisons"
-    },
-    {
       "id": "concept:incoming-quality-control",
       "type": "Concept",
       "label": "Incoming quality control",
@@ -516,6 +492,271 @@
         "water recycling",
         "energy use"
       ]
+    },
+    {
+      "id": "concept:cable-joint-installation",
+      "type": "Concept",
+      "label": "Cable joint installation",
+      "aliases": [
+        "joint fitting",
+        "jointing procedure",
+        "splice installation"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:cable-termination",
+      "type": "Concept",
+      "label": "Cable termination",
+      "aliases": [
+        "termination kit",
+        "end termination",
+        "cable end fitting"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:pre-energising-tests",
+      "type": "Concept",
+      "label": "Pre-energising tests",
+      "aliases": [
+        "commissioning tests",
+        "insulation resistance test",
+        "partial discharge test",
+        "withstand test"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:transformer-switchgear-connection",
+      "type": "Concept",
+      "label": "Transformer and switchgear connection",
+      "aliases": [
+        "bushing connection",
+        "switchgear termination",
+        "transformer cable box"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:field-service-routine",
+      "type": "Concept",
+      "label": "Field service routine",
+      "aliases": [
+        "service visit",
+        "site inspection routine",
+        "preventive visit"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:cable-accessory-failure-analysis",
+      "type": "Concept",
+      "label": "Cable accessory failure analysis",
+      "aliases": [
+        "joint failure analysis",
+        "breakdown investigation",
+        "failed joint teardown"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:installation-quality-records",
+      "type": "Concept",
+      "label": "Installation quality records",
+      "aliases": [
+        "job record sign-off",
+        "digital job card",
+        "installation traceability"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:ev-charging-accessories",
+      "type": "Concept",
+      "label": "Electric vehicle charging and wiring accessories",
+      "aliases": [
+        "charging station cable accessories",
+        "vehicle harness sleeves",
+        "high voltage vehicle wiring"
+      ],
+      "domain": "commercial"
+    },
+    {
+      "id": "concept:batch-record-practice",
+      "type": "Concept",
+      "label": "Batch record practice",
+      "aliases": [
+        "batch manufacturing record",
+        "batch documentation",
+        "record entries"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:line-clearance",
+      "type": "Concept",
+      "label": "Line clearance",
+      "aliases": [
+        "line clearance check",
+        "changeover clearance",
+        "area clearance"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:work-permit-control",
+      "type": "Concept",
+      "label": "Work permit control",
+      "aliases": [
+        "permit to work",
+        "hot work permit",
+        "solvent area permit"
+      ],
+      "domain": "operations"
+    },
+    {
+      "id": "concept:out-of-specification-handling",
+      "type": "Concept",
+      "label": "Out-of-specification handling",
+      "aliases": [
+        "OOS investigation",
+        "failed test result",
+        "suspect result"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:cleaning-validation",
+      "type": "Concept",
+      "label": "Cleaning validation",
+      "aliases": [
+        "residue limit study",
+        "cleaning verification",
+        "validated cleaning"
+      ],
+      "domain": "engineering"
+    },
+    {
+      "id": "concept:deviation-and-capa",
+      "type": "Concept",
+      "label": "Deviation and CAPA",
+      "aliases": [
+        "corrective and preventive action",
+        "deviation investigation",
+        "CAPA tracking"
+      ],
+      "domain": "corporate"
+    },
+    {
+      "id": "concept:regulatory-change-control",
+      "type": "Concept",
+      "label": "Regulatory change control",
+      "aliases": [
+        "change request",
+        "variation notification",
+        "prior approval decision"
+      ],
+      "domain": "corporate"
+    },
+    {
+      "id": "concept:ethical-promotion",
+      "type": "Concept",
+      "label": "Ethical promotion",
+      "aliases": [
+        "promotion code",
+        "prescriber engagement rules",
+        "sample handling"
+      ],
+      "domain": "commercial"
+    },
+    {
+      "id": "concept:carbon-inventory-boundary",
+      "type": "Concept",
+      "label": "Carbon inventory boundary",
+      "aliases": [
+        "emissions boundary",
+        "inventory scope",
+        "reporting boundary"
+      ],
+      "domain": "research"
+    },
+    {
+      "id": "concept:emission-factor-selection",
+      "type": "Concept",
+      "label": "Emission factor selection",
+      "aliases": [
+        "emission factors",
+        "factor choice",
+        "carbon conversion factor"
+      ],
+      "domain": "research"
+    },
+    {
+      "id": "concept:data-quality-check",
+      "type": "Concept",
+      "label": "Data quality check",
+      "aliases": [
+        "data cleaning",
+        "data validation",
+        "dataset check"
+      ],
+      "domain": "research"
+    },
+    {
+      "id": "concept:compliance-checklist",
+      "type": "Concept",
+      "label": "Compliance checklist",
+      "aliases": [
+        "compliance review checklist",
+        "evidence checklist",
+        "sign-off checklist"
+      ],
+      "domain": "corporate"
+    },
+    {
+      "id": "concept:compliance-calendar",
+      "type": "Concept",
+      "label": "Compliance calendar",
+      "aliases": [
+        "filing calendar",
+        "deadline calendar",
+        "reporting deadlines"
+      ],
+      "domain": "corporate"
+    },
+    {
+      "id": "concept:client-service-desk",
+      "type": "Concept",
+      "label": "Client service desk",
+      "aliases": [
+        "service desk",
+        "client request handling",
+        "ticket handling"
+      ],
+      "domain": "commercial"
+    },
+    {
+      "id": "concept:client-status-update",
+      "type": "Concept",
+      "label": "Client status update",
+      "aliases": [
+        "client update",
+        "weekly status",
+        "status report"
+      ],
+      "domain": "commercial"
+    },
+    {
+      "id": "concept:engagement-plan",
+      "type": "Concept",
+      "label": "Engagement plan",
+      "aliases": [
+        "project plan",
+        "milestone plan",
+        "delivery plan"
+      ],
+      "domain": "commercial"
     }
   ],
   "relationships": [

@@ -24,6 +24,7 @@ class ModelChoice:
     api_key_env: str
     max_input_tokens: int
     max_output_tokens: int
+    provider: str = "openai-compatible"  # or "anthropic"
 
 
 @lru_cache(maxsize=4)
@@ -43,8 +44,9 @@ def choice_for(step: str) -> ModelChoice:
     data = policy()
     name = data["steps"][step]["model"]
     model = data["models"][name]
-    return ModelChoice(step, model["id"], model["tier"], model["base_url"], model.get("api_key_env", ""),
-                       data["steps"][step]["max_input_tokens"], data["steps"][step]["max_output_tokens"])
+    return ModelChoice(step, model["id"], model["tier"], model.get("base_url", ""), model.get("api_key_env", ""),
+                       data["steps"][step]["max_input_tokens"], data["steps"][step]["max_output_tokens"],
+                       model.get("provider", "openai-compatible"))
 
 
 def check_startup(app_env: str) -> list[str]:

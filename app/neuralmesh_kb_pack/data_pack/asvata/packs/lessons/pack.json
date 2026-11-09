@@ -1,0 +1,81 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "asvata.lessons",
+    "scope": "subsidiary",
+    "subsidiary": "asvata",
+    "domain": "lessons",
+    "title": "Asvata lessons learned",
+    "owner_role": "Head of Delivery",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "asvata:L-01",
+      "catalogue_id": "L-01",
+      "title": "Lessons from engagements",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head of Delivery",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "asvata:L-01-01",
+      "datapoint": "asvata:L-01",
+      "title": "Lesson - Client data arriving after the agreed date",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "lesson",
+        "data",
+        "delay",
+        "client",
+        "planning"
+      ],
+      "summary": "In 3 of 5 recent engagements the client data arrived late, which pushed the report by about a week. Engagements that asked for a sample file in week 1 found format problems early. The sample file request is now part of the plan.",
+      "body_file": "source/L-01-01.md",
+      "concepts": [
+        "concept:engagement-plan",
+        "concept:recurring-pattern"
+      ]
+    },
+    {
+      "id": "asvata:L-01-02",
+      "datapoint": "asvata:L-01",
+      "title": "Lesson - Figures changed after a report was issued",
+      "kind": "report",
+      "version": "2026-04",
+      "tags": [
+        "lesson",
+        "restatement",
+        "review",
+        "carbon",
+        "report"
+      ],
+      "summary": "Two reports needed a corrected total because a unit was converted twice. A second-person check of unit conversions would have caught both. The check is now a line on the compliance checklist.",
+      "body_file": "source/L-01-02.md",
+      "concepts": [
+        "concept:emission-factor-selection",
+        "concept:compliance-checklist"
+      ]
+    }
+  ]
+}

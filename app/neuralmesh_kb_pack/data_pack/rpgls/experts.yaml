@@ -1,0 +1,48 @@
+- id: LE-1
+  role: Senior production chemist
+  skills:
+  - batch record review
+  - line clearance
+  - cleaning methods
+  evidence:
+  - rpgls:O-01-01
+  - rpgls:O-01-02
+  consent: true
+  private:
+    name: Neha Kulkarni (fictional)
+- id: LE-2
+  role: Quality assurance manager
+  skills:
+  - deviation investigation
+  - CAPA tracking
+  - batch release
+  evidence:
+  - rpgls:F-01-01
+  - rpgls:E-01-01
+  consent: true
+  private:
+    name: Arvind Menon (fictional)
+- id: LE-3
+  role: Regulatory affairs lead
+  skills:
+  - dossier preparation
+  - change control
+  - notifications
+  evidence:
+  - rpgls:F-01-02
+  - rpgls:F-01-03
+  consent: true
+  private:
+    name: Sunita Iyer (fictional)
+- id: LE-4
+  role: Plant safety officer
+  skills:
+  - work permits
+  - solvent handling
+  - near-miss review
+  evidence:
+  - rpgls:O-01-03
+  - rpgls:O-01-04
+  consent: false
+  private:
+    name: Opted out (fictional)

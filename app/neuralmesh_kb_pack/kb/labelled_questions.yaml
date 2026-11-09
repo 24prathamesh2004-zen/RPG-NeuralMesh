@@ -1,0 +1,719 @@
+note: Written by the answer model from each document's title and summary, to be reviewed
+  by a person. Expected document and datapoint are the ones the question was written
+  from.
+model: claude-sonnet-5-5
+questions:
+- question: What checks do we run when a new batch of raw elastomer arrives, and what
+    limits apply?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-01
+- question: How do we spot supplier quality drift before material gets to the mixing
+    stage?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-01
+- question: How should we keep bales off the floor and away from sunlight in the store?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-02
+- question: Do older stock lots need any extra check before being issued, and what
+    issue order do we follow?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-02
+- question: What do we record when a delivery arrives with damaged wrapping or wet
+    material?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-03
+- question: How do we get evidence to back up complaints to the supplier about foreign
+    matter?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-03
+- question: How do we send quality complaints to vendors and follow up on corrective
+    actions?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-04
+- question: Is there a scorecard comparing vendors on consistency?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-04
+- question: How can we trace a mixing batch back to the vendor lot it came from?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-05
+- question: Who sets the maximum shelf time before a grade must be used?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-05
+- question: Is there an old 2019 note on how the store handled material, and is it
+    still valid?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-06
+- question: Which outdated handling guidance should I ignore?
+  node: ceat
+  datapoint: E-03
+  document: ceat:E-03-06
+- question: What share of failure reports are caused by how material was handled rather
+    than process settings?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-01
+- question: Why do some field failures come from lots used after sitting too long?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-01
+- question: How do I tell whether bubbles and voids in a product come from the process
+    or from the material?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-02
+- question: Which material conditions lead to voids, and how can root-cause time be
+    reduced?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-02
+- question: What should we prioritise in the opening three months after acquiring
+    a company?
+  node: ceat
+  datapoint: L-01
+  document: ceat:L-01-01
+- question: Who should lead the merger work and when should we unify customer data
+    and reporting systems?
+  node: ceat
+  datapoint: L-01
+  document: ceat:L-01-01
+- question: What went wrong with keeping key customers and dealers after the acquisition
+    closed?
+  node: ceat
+  datapoint: L-01
+  document: ceat:L-01-02
+- question: Why did we lose clients early on and when should supplier terms abroad
+    have been checked?
+  node: ceat
+  datapoint: L-01
+  document: ceat:L-01-02
+- question: How did we stop repeated wear on the bearings of a compounding machine?
+  node: ceat
+  datapoint: O-01
+  document: ceat:O-01-01
+- question: Did changing the grease or oil fix recurring failures on the mixing line?
+  node: ceat
+  datapoint: O-01
+  document: ceat:O-01-01
+- question: Why did the vulcanizing machines keep stopping, and was it a steam issue?
+  node: ceat
+  datapoint: O-01
+  document: ceat:O-01-02
+- question: What root cause analysis exists for stoppages linked to faulty steam traps?
+  node: ceat
+  datapoint: O-01
+  document: ceat:O-01-02
+- question: Where and when do close calls with lift trucks happen in our storage areas?
+  node: ceat
+  datapoint: O-02
+  document: ceat:O-02-01
+- question: What measures cut repeat near-misses between vehicles and pedestrians
+    at shift change?
+  node: ceat
+  datapoint: O-02
+  document: ceat:O-02-01
+- question: Is there a restricted record of a rubber mix recipe I can request access
+    to?
+  node: ceat
+  datapoint: E-01
+  document: ceat:E-01-01
+- question: Who owns the confidential ingredient recipe entry labelled A?
+  node: ceat
+  datapoint: E-01
+  document: ceat:E-01-01
+- question: Where can I find the restricted set of raw material specifications labelled
+    B?
+  node: ceat
+  datapoint: E-01
+  document: ceat:E-01-02
+- question: Is there a controlled listing of material requirements and how do I get
+    access?
+  node: ceat
+  datapoint: E-01
+  document: ceat:E-01-02
+- question: Is there a benchmark comparison of finance and capital spending ahead
+    of earnings?
+  node: ceat
+  datapoint: F-06
+  document: ceat:F-06-01
+- question: Can I see the quarterly note on spend levels before results are published?
+  node: ceat
+  datapoint: F-06
+  document: ceat:F-06-01
+- question: What are the dealer rates for our products, and who is allowed to see
+    them?
+  node: ceat
+  datapoint: C-03
+  document: ceat:C-03-01
+- question: Where can I find the confidential price list used for sales partners?
+  node: ceat
+  datapoint: C-03
+  document: ceat:C-03-01
+- question: How do we decide whether a rubber wheel product coming off the line is
+    first quality or should be scrapped?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-05
+- question: Is a small surface cut acceptable for a second-quality rating, and what
+    damage means automatic rejection?
+  node: ceat
+  datapoint: E-02
+  document: ceat:E-02-05
+- question: What went wrong when we switched systems at the newly acquired foreign
+    business, and what should we do first next time?
+  node: kec
+  datapoint: L-02
+  document: kec:L-02-01
+- question: Who should be agreed as responsible for each process before a system go-live
+    is approved?
+  node: kec
+  datapoint: L-02
+  document: kec:L-02-01
+- question: What local employment rules and payment timing issues caught us out when
+    starting up work abroad?
+  node: kec
+  datapoint: L-02
+  document: kec:L-02-02
+- question: How early should we check foreign workforce and contract terms after winning
+    a deal?
+  node: kec
+  datapoint: L-02
+  document: kec:L-02-02
+- question: Where can I find the detailed figures and named parties for disputes and
+    workforce issues from the review?
+  node: kec
+  datapoint: L-02a
+  document: kec:L-02a-01
+- question: Who must authorise access to the detailed appendix on claims?
+  node: kec
+  datapoint: L-02a
+  document: kec:L-02a-01
+- question: Which kind of hold-up is most common across our sample projects?
+  node: kec
+  datapoint: O-06
+  document: kec:O-06-01
+- question: Why do supply of materials get late, and is it linked to purchasing paperwork?
+  node: kec
+  datapoint: O-06
+  document: kec:O-06-01
+- question: What changes were recently made to our pylon engineering standards and
+    why?
+  node: kec
+  datapoint: E-04
+  document: kec:E-04-01
+- question: Which testing results led to updates in structural specifications?
+  node: kec
+  datapoint: E-04
+  document: kec:E-04-01
+- question: How does warm or lengthy storage affect rubber-type insulation used on
+    wires?
+  node: kec
+  datapoint: E-05
+  document: kec:E-05-01
+- question: What shelf-life limits were introduced after heat and ozone exposure trials?
+  node: kec
+  datapoint: E-05
+  document: kec:E-05-01
+- question: Where are the confidential tender rates kept?
+  node: kec
+  datapoint: C-01
+  document: kec:C-01-01
+- question: Can I see the price list used for quoting customers?
+  node: kec
+  datapoint: C-01
+  document: kec:C-01-01
+- question: What wording have we used before for penalties on late delivery in contracts?
+  node: kec
+  datapoint: C-02
+  document: kec:C-02-01
+- question: How did negotiations usually end when a customer asked for delay compensation
+    terms?
+  node: kec
+  datapoint: C-02
+  document: kec:C-02-01
+- question: What invoicing and settlement conditions have we agreed with foreign customers,
+    and how did they affect our cash flow?
+  node: kec
+  datapoint: C-02
+  document: kec:C-02-02
+- question: Are there past examples of how long we wait to get paid on export deals?
+  node: kec
+  datapoint: C-02
+  document: kec:C-02-02
+- question: Why did the tooling keep wearing out on the wire coating machine and what
+    did we change to stop it?
+  node: kec
+  datapoint: O-01
+  document: kec:O-01-01
+- question: How often should we check the forming tool on an insulated wire production
+    line?
+  node: kec
+  datapoint: O-01
+  document: kec:O-01-01
+- question: Where do close calls usually happen when crews climb and work on high
+    steel structures?
+  node: kec
+  datapoint: O-02
+  document: kec:O-02-01
+- question: What safeguards cut repeat incidents when workers swap their safety straps
+    up high?
+  node: kec
+  datapoint: O-02
+  document: kec:O-02-01
+- question: How quickly must a cracked or bent steel pylon part be fixed after an
+    inspection finds it?
+  node: kec
+  datapoint: E-04
+  document: kec:E-04-03
+- question: How do we rank corrosion findings on transmission structures, and when
+    is rust just recorded for the next check?
+  node: kec
+  datapoint: E-04
+  document: kec:E-04-03
+- question: What should we have done by day 30 and day 60 after two companies join
+    up?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-01
+- question: Who owns which processes and how do we announce changes during the first
+    three months after a deal closes?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-01
+- question: How do we hand over a client account to another team without losing know-how?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-02
+- question: What approvals are needed before a new team takes over from the old one?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-02
+- question: How can developers use AI helpers to check code and write tests, and what
+    review is required?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-03
+- question: Are there rules for using AI to draft project documents?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-03
+- question: When should we merge duplicate software tools after an acquisition?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-04
+- question: How do we decide which systems to keep once two companies combine?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-04
+- question: Where can I find tips for people just starting at the company?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-99
+- question: Is there a team page that helps new joiners settle in?
+  node: zensar
+  datapoint: C-05
+  document: zensar:C-05-99
+- question: Did automatically generated test cases save time for authors in a trial?
+  node: zensar
+  datapoint: R-02
+  document: zensar:R-02-01
+- question: Did results of the AI testing trial differ by type of application?
+  node: zensar
+  datapoint: R-02
+  document: zensar:R-02-01
+- question: Can a chatbot over our knowledge base help close recurring support tickets
+    faster?
+  node: zensar
+  datapoint: R-02
+  document: zensar:R-02-02
+- question: What did the support trial show about the quality of sources the assistant
+    needs?
+  node: zensar
+  datapoint: R-02
+  document: zensar:R-02-02
+- question: What are we allowed to enter into AI tools regarding sensitive data?
+  node: zensar
+  datapoint: F-01
+  document: zensar:F-01-01
+- question: Do we need to record or check our use of generative AI at work?
+  node: zensar
+  datapoint: F-01
+  document: zensar:F-01-01
+- question: Which spoilage cause is biggest, and does its share change between summer
+    and winter?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-01
+- question: How much more of our spoilage is due to early clotting in the mid-year
+    months than in the cold months?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-01
+- question: How much more latex gets spoiled when it takes over three and a half hours
+    to reach the factory?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-02
+- question: What is the average loss rate for loads that arrive within two and a half
+    hours?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-02
+- question: Do impurity losses vary much from month to month, or are they steady?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-03
+- question: When do heat-related losses peak and how large are they?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-03
+- question: Do we track quality results for each delivery batch when latex arrives
+    at the factory?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-04
+- question: Why are quality drifts noticed late at the plant?
+  node: harrisons
+  datapoint: O-05
+  document: harrisons:O-05-04
+- question: What is the procedure for emptying cups and handling latex in the field
+    after tapping?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-01
+- question: Where and when do we record the time latex was collected?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-01
+- question: How is anticoagulant prepared and applied in the field, and what changes
+    when it rains?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-02
+- question: Who prepares the anticoagulant doses and where are they recorded?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-02
+- question: What checks and records are made when latex trucks arrive at the factory?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-03
+- question: How are quality results filed after delivery, per day or per batch?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-03
+- question: How often are collection points cleaned and strainers checked?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-04
+- question: How is foreign matter in latex recorded and reviewed?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-04
+- question: What changes do we make to patrol schedules and medication amounts when
+    heavy rain season arrives?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-05
+- question: When do protective covers get installed ahead of the wet weather, and
+    how are vehicles prioritised on stormy days?
+  node: harrisons
+  datapoint: F-01
+  document: harrisons:F-01-05
+- question: Is there a confidential legal folder about a disagreement over property
+    ownership?
+  node: harrisons
+  datapoint: F-02
+  document: harrisons:F-02-01
+- question: Where can I find information about the lawsuit concerning who owns our
+    land, and who may open it?
+  node: harrisons
+  datapoint: F-02
+  document: harrisons:F-02-01
+- question: How many steps does it take to fit a joint on a power cable, and what
+    makes us stop the work?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-01
+- question: Which way do we apply heat to the sleeve when joining two cable ends?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-01
+- question: Which kind of cable end fitting can we use in a tight space where no flame
+    is allowed?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-02
+- question: What must be clean and sealed on both types of cable end fitting?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-02
+- question: What readings must we take before a new circuit is switched on, and which
+    one stops us?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-03
+- question: Is a high-voltage discharge test needed for every cable or only some?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-03
+- question: What do we check at a transformer connection before closing the cover?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-04
+- question: How tight should the lug be fixed on a switchgear connection?
+  node: raychem
+  datapoint: E-01
+  document: raychem:E-01-04
+- question: What does an engineer do from arrival to leaving on a site maintenance
+    visit?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-01
+- question: What signs of wear should be looked for on installed cable accessories?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-01
+- question: What order do we follow to find why a cable connection broke down?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-02
+- question: Do we move a failed cable connection straight away or leave it as found?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-02
+- question: Who has to approve an installation record before the circuit is handed
+    over?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-03
+- question: How fast must a record with missing test numbers be sent back?
+  node: raychem
+  datapoint: O-02
+  document: raychem:O-02-03
+- question: How do we choose a weatherproof cable connection for a car charging point?
+  node: raychem
+  datapoint: C-03
+  document: raychem:C-03-01
+- question: Which conditions must accessories for electric vehicle chargers withstand?
+  node: raychem
+  datapoint: C-03
+  document: raychem:C-03-01
+- question: Which sleeves seal wire splices inside an electric car harness?
+  node: raychem
+  datapoint: C-03
+  document: raychem:C-03-02
+- question: What decides the choice of sleeve for high-voltage car wiring?
+  node: raychem
+  datapoint: C-03
+  document: raychem:C-03-02
+- question: Why did cable ends fail early at several outdoor sites, and how was it
+    fixed?
+  node: raychem
+  datapoint: L-01
+  document: raychem:L-01-01
+- question: What was added to the job card to stop water getting in?
+  node: raychem
+  datapoint: L-01
+  document: raychem:L-01-01
+- question: What went wrong when an unfinished job was switched on after a shift change?
+  node: raychem
+  datapoint: L-01
+  document: raychem:L-01-02
+- question: What must a shift handover note contain now?
+  node: raychem
+  datapoint: L-01
+  document: raychem:L-01-02
+- question: How do we correct a mistake written in a production batch paperwork entry?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-01
+- question: Who checks the paperwork before a batch moves on to the next stage?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-01
+- question: What must be removed from a production line before the next product starts?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-02
+- question: What happens if a cleaned machine sits idle too long before use?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-02
+- question: What precautions apply when drawing flammable liquids from drums?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-03
+- question: Which jobs in solvent areas cannot start without a signed permit?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-03
+- question: How soon after an unsafe event with no injury must it be reported?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-04
+- question: How many similar unsafe events in a month lead to a joint review?
+  node: rpgls
+  datapoint: O-01
+  document: rpgls:O-01-04
+- question: What happens when a lab test reading falls outside the allowed range?
+  node: rpgls
+  datapoint: E-01
+  document: rpgls:E-01-01
+- question: How are samples taken and tested during production and before release?
+  node: rpgls
+  datapoint: E-01
+  document: rpgls:E-01-01
+- question: How do we prove no residue of the earlier product is left on equipment?
+  node: rpgls
+  datapoint: E-01
+  document: rpgls:E-01-02
+- question: How is the shelf life of a medicine supported with data?
+  node: rpgls
+  datapoint: E-01
+  document: rpgls:E-01-02
+- question: Who must review the paperwork and the deviations before a batch can be
+    sold?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-01
+- question: How long after a corrective action do we wait to see if it worked?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-01
+- question: Who decides if a change in a process needs the authority to be told first?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-02
+- question: Can a change to a site or material go ahead before the decision is filed?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-02
+- question: How do we make sure the figures in an application file to the authority
+    are consistent?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-03
+- question: Who checks each section of a submission file against the source data?
+  node: rpgls
+  datapoint: F-01
+  document: rpgls:F-01-03
+- question: What may a sales representative say to a doctor about a medicine?
+  node: rpgls
+  datapoint: C-01
+  document: rpgls:C-01-01
+- question: Where does a complaint about a rep's behaviour go and how fast?
+  node: rpgls
+  datapoint: C-01
+  document: rpgls:C-01-01
+- question: What must a new field representative pass before the first doctor visit?
+  node: rpgls
+  datapoint: C-01
+  document: rpgls:C-01-02
+- question: How are free medicine samples tracked and what happens to ones past their
+    date?
+  node: rpgls
+  datapoint: C-01
+  document: rpgls:C-01-02
+- question: How do we decide which sites and activities to include when counting a
+    company's emissions?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-01
+- question: How should we record what we leave out of the carbon total?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-01
+- question: How do we turn fuel or electricity use into emissions?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-02
+- question: What must be written beside each line of an emissions calculation?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-02
+- question: What do we do first when a customer sends a spreadsheet for analysis?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-03
+- question: When do we send a customer's data file back instead of analysing it?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-03
+- question: Which average should be reported next to the range, and when is a value
+    treated as unusual?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-04
+- question: How do we decide that a monthly change is a real trend?
+  node: asvata
+  datapoint: R-01
+  document: asvata:R-01-04
+- question: What must be attached before a point on the engagement review is complete?
+  node: asvata
+  datapoint: F-01
+  document: asvata:F-01-01
+- question: Who signs the engagement review and when?
+  node: asvata
+  datapoint: F-01
+  document: asvata:F-01-01
+- question: When are reminders sent before a client filing is due?
+  node: asvata
+  datapoint: F-01
+  document: asvata:F-01-02
+- question: What happens if the internal date for a filing is missed?
+  node: asvata
+  datapoint: F-01
+  document: asvata:F-01-02
+- question: How quickly must a customer request be acknowledged and what is told in
+    the first reply?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-01
+- question: When can a customer request be closed?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-01
+- question: How should a customer update be ordered from first line to last?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-02
+- question: How should numbers and terms be written in a client report?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-02
+- question: How many milestones should a client project plan have and who owns them?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-03
+- question: What happens to a stuck task after a week?
+  node: asvata
+  datapoint: C-01
+  document: asvata:C-01-03
+- question: Why did reports slip in recent client projects and what is done about
+    it now?
+  node: asvata
+  datapoint: L-01
+  document: asvata:L-01-01
+- question: Why do we ask the customer for a small example file in the first week?
+  node: asvata
+  datapoint: L-01
+  document: asvata:L-01-01
+- question: What caused two reports to be reissued with a corrected total?
+  node: asvata
+  datapoint: L-01
+  document: asvata:L-01-02
+- question: Which check would have caught the wrong figure before it was sent?
+  node: asvata
+  datapoint: L-01
+  document: asvata:L-01-02

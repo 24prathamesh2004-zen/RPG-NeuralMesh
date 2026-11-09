@@ -13,7 +13,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import auth, context, example, health, mesh
+from api.routers import auth, context, health, mesh
 from observability.tracing import init_tracing, instrument_fastapi
 from shared.config import get_settings
 from shared.logger import get_logger, setup_logging
@@ -28,7 +28,6 @@ APP_VERSION = "1.0.0"
 async def lifespan(app: FastAPI):
     setup_logging()
     init_tracing()
-    # Schema is managed by Alembic — run `alembic upgrade head` before starting
     # (pre-deploy pipeline step or init container), not create_all() on startup.
     log.info("api.startup", env=settings.app_env, version=APP_VERSION)
     from services.mesh_runtime import runtime  # strict mode refuses a cloud model outside development here
@@ -74,6 +73,6 @@ app.add_middleware(
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(health.router, tags=["Health"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
-app.include_router(example.router, prefix="/api/v1/example", tags=["Example"])
 app.include_router(mesh.router, prefix="/api/v1/mesh", tags=["Mesh"])
-app.include_router(context.router, prefix="/api/v1/context", tags=["Context for SkillForge"])
+app.include_router(context.router, prefix="/api/v1/context", tags=["Context for applications"])
+app.add_exception_handler(context.ProblemError, lambda request, exc: context.problem_response(exc))

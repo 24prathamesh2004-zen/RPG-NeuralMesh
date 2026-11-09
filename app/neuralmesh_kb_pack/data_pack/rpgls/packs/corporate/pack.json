@@ -1,0 +1,160 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "rpgls.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "rpgls",
+    "domain": "corporate",
+    "title": "RPG Life Sciences corporate functions",
+    "owner_role": "Head Quality Assurance",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "rpgls:F-01",
+      "catalogue_id": "F-01",
+      "title": "Quality assurance and regulatory procedures",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head Quality Assurance",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "inspection"
+      ]
+    },
+    {
+      "id": "rpgls:F-02",
+      "catalogue_id": "F-02",
+      "title": "Regulatory inspection response file",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Head Regulatory Affairs",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-07"
+    }
+  ],
+  "documents": [
+    {
+      "id": "rpgls:F-01-01",
+      "datapoint": "rpgls:F-01",
+      "title": "Batch release, deviations and CAPA",
+      "kind": "report",
+      "version": "2026-04",
+      "tags": [
+        "qa",
+        "batch-release",
+        "deviation",
+        "capa",
+        "root-cause"
+      ],
+      "summary": "A batch is released only after quality assurance reviews the batch record, test results and all deviations. Each deviation is classed minor, major or critical and investigated to root cause. A corrective and preventive action (CAPA) has an owner and a due date, and its effect is checked after 3 months.",
+      "body_file": "source/F-01-01.md",
+      "concepts": [
+        "concept:deviation-and-capa",
+        "concept:root-cause-analysis"
+      ],
+      "skills": [
+        {
+          "skill": "skill:quality-control-and-assurance",
+          "level": "A"
+        },
+        {
+          "skill": "skill:good-manufacturing-practice",
+          "level": "A"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:F-01-02",
+      "datapoint": "rpgls:F-01",
+      "title": "Change control and regulatory notifications",
+      "kind": "report",
+      "version": "2026-04",
+      "tags": [
+        "regulatory",
+        "change-control",
+        "notification",
+        "impact"
+      ],
+      "summary": "Every change to a process, material, site or specification is raised as a change request and assessed by quality, production and regulatory affairs. Regulatory affairs decides whether the change needs a notification or prior approval. The change is implemented only after that decision is filed.",
+      "body_file": "source/F-01-02.md",
+      "concepts": [
+        "concept:regulatory-change-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:regulatory-affairs",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:F-01-03",
+      "datapoint": "rpgls:F-01",
+      "title": "Dossier preparation and review",
+      "kind": "report",
+      "version": "2026-04",
+      "tags": [
+        "regulatory",
+        "dossier",
+        "submission",
+        "review"
+      ],
+      "summary": "A dossier is built from a checklist of sections owned by named functions. Each section is checked against source data by a second reviewer. Regulatory affairs runs a final consistency review of names, strengths and figures before submission and keeps a log of questions raised by the authority.",
+      "body_file": "source/F-01-03.md",
+      "concepts": [
+        "concept:regulatory-change-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:regulatory-affairs",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:F-02-01",
+      "datapoint": "rpgls:F-02",
+      "title": "Regulatory inspection response file (restricted)",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "regulatory",
+        "inspection",
+        "restricted"
+      ],
+      "summary": "Restricted regulatory file. Metadata only.",
+      "body_file": "source/F-02-01.md",
+      "concepts": [
+        "concept:regulatory-change-control"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-RPGLS-INSPECT-4182",
+        "document": "rpgls:F-02-01"
+      }
+    ]
+  }
+}

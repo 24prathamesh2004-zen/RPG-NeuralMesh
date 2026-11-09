@@ -66,6 +66,10 @@ def implied_type(entity_id: str) -> str | None:
     return None
 
 
+class PackCheckFailed(ValueError):
+    """The strict check of the packs failed. Sending the same packs again cannot pass it."""
+
+
 class Report:
     def __init__(self) -> None:
         self.errors: list[str] = []
@@ -143,7 +147,29 @@ def validate_packs(named_packs: list[tuple[str, dict]], strict: bool = False) ->
         datapoints.update({d["id"]: d for d in pack.get("datapoints", [])})
         documents.update({d["id"]: d for d in pack.get("documents", [])})
 
+    # Joined entries: an entity lists the IDs it replaces (Group HR joined two skills), and a reference to one of them
+    # means that entity, so a pack that still uses the old ID loads unchanged.
+    replaced_by: dict[str, str] = {}
+    for path, pack in packs:
+        scope, sub = pack["pack"]["scope"], pack["pack"]["subsidiary"]
+        for entity in pack.get("entities", []):
+            for old in entity.get("replaces", []):
+                own = namespace(old) in GROUP_NAMESPACES if scope == "group" else namespace(old) == sub
+                if old == entity["id"]:
+                    report.error(path.name, f"{entity['id']} cannot replace itself")
+                elif old in types:
+                    report.error(path.name, f"{entity['id']} replaces {old}, which {owner_pack[old]} still defines")
+                elif old in replaced_by:
+                    report.error(path.name, f"{old} is replaced by both {replaced_by[old]} and {entity['id']}")
+                elif implied_type(old) not in (None, entity["type"]):
+                    report.error(path.name, f"{entity['id']} is a {entity['type']} and cannot replace {old}")
+                elif not own:
+                    report.error(path.name, f"{entity['id']} cannot replace {old}, which is outside the namespace of this pack")
+                else:
+                    replaced_by[old] = entity["id"]
+
     unresolved: Counter[str] = Counter()
+    referenced_in: dict[str, set[str]] = {}
     seen_pairs: dict[tuple[str, str, str], str] = {}
     totals: Counter[str] = Counter()
 
@@ -197,8 +223,14 @@ def validate_packs(named_packs: list[tuple[str, dict]], strict: bool = False) ->
             if a == b:
                 report.error(where, f"{label} points to itself")
             for end in (a, b):
-                if end not in types:
+                if end not in types and end not in replaced_by:
                     unresolved[end] += 1
+                    referenced_in.setdefault(end, set()).add(pid)
+            written = (a, b)
+            a, b = replaced_by.get(a, a), replaced_by.get(b, b)
+            if a == b and written[0] != written[1]:
+                report.warn(where, f"{label} joins two entries that are now one, so it is left out")
+                continue
             ta = types.get(a) or implied_type(a)
             tb = types.get(b) or implied_type(b)
             if ta and tb and (ta, tb) not in ENDPOINTS[rtype]:
@@ -218,7 +250,7 @@ def validate_packs(named_packs: list[tuple[str, dict]], strict: bool = False) ->
                     if ns is not None and ns != sub:
                         report.error(where, f"{label} refers to {end}, owned by another subsidiary")
 
-            key = (rtype, *sorted((a, b))) if rtype in SYMMETRIC else (rtype, a, b)
+            key = (rtype, *sorted(written)) if rtype in SYMMETRIC else (rtype, *written)
             if key in seen_pairs:
                 report.error(where, f"{label} repeats a relationship already in {seen_pairs[key]}")
             seen_pairs[key] = pid
@@ -239,10 +271,13 @@ def validate_packs(named_packs: list[tuple[str, dict]], strict: bool = False) ->
                         report.error(other_path.name, f"canary {value} of {path.name} appears in this pack")
 
     for ref, count in sorted(unresolved.items()):
-        message = f"{ref} is referenced {count} time(s) but defined in none of the loaded packs"
+        message = (f"{ref} is referenced {count} time(s) in {', '.join(sorted(referenced_in[ref]))} "
+                   "but defined in none of the loaded packs")
         (report.error if strict else report.warn)("references", message)
 
     report.totals = totals
+    report.replaced_by = replaced_by
+    report.unresolved_in = {ref: sorted(referenced_in[ref]) for ref in unresolved}
     return report
 
 

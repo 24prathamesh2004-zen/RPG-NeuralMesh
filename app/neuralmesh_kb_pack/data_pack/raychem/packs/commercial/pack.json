@@ -1,0 +1,97 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.commercial",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "commercial",
+    "title": "Raychem RPG commercial knowledge",
+    "owner_role": "Head of Applications",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "raychem:C-03",
+      "catalogue_id": "C-03",
+      "title": "Application notes for customers and electric mobility",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head of Applications",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "raychem:C-03-01",
+      "datapoint": "raychem:C-03",
+      "title": "Application note - Charging station cable accessories",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "electric-mobility",
+        "charging",
+        "accessories",
+        "sealing"
+      ],
+      "summary": "Charging stations need sealed accessories rated for outdoor use, repeated plugging and vibration. The note lists how to choose a sealed joint or termination by cable size, voltage level and exposure to water.",
+      "body_file": "source/C-03-01.md",
+      "concepts": [
+        "concept:ev-charging-accessories"
+      ],
+      "skills": [
+        {
+          "skill": "skill:mobility-ev-and-electrical-applications",
+          "level": "M"
+        },
+        {
+          "skill": "skill:business-functional-knowledge",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "raychem:C-03-02",
+      "datapoint": "raychem:C-03",
+      "title": "Application note - Vehicle wiring accessories",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "vehicle-wiring",
+        "harness",
+        "heat-shrink",
+        "high-voltage"
+      ],
+      "summary": "High voltage wiring in electric vehicles uses heat-shrink sleeves with an adhesive lining to seal harness splices and connector backs. The note sets selection rules by temperature class and bend radius.",
+      "body_file": "source/C-03-02.md",
+      "concepts": [
+        "concept:ev-charging-accessories"
+      ],
+      "skills": [
+        {
+          "skill": "skill:mobility-ev-and-electrical-applications",
+          "level": "A"
+        },
+        {
+          "skill": "skill:business-functional-knowledge",
+          "level": "A"
+        }
+      ]
+    }
+  ]
+}

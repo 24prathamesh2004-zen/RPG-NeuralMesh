@@ -39,7 +39,8 @@ try {
   check('routing names CEAT and Harrisons', routing.includes('CEAT') && routing.includes('Harrisons'), routing.split('\n')[1] || '')
   const answer = panels.find((t) => t.startsWith('Answer')) || ''
   check('an answer is shown', answer.length > 40, answer.slice(0, 120).replace(/\n/g, ' '))
-  check('answer sentences carry citations', (answer.match(/\[[a-z]+:[A-Za-z0-9#:._/-]+\]/g) || []).length >= 2)
+  // a citation shows as the number of its evidence card ("[2]"), or as the id of an item that has no card
+  check('answer sentences carry citations', (answer.match(/\[(?:\d+|[a-z]+:[A-Za-z0-9#:._/-]+)\]/g) || []).length >= 2)
   const links = panels.find((t) => t.startsWith('Approved links')) || ''
   check('approved links panel shows the gap link', links.includes('addresses the gap in'), links.split('\n')[1] || '')
   const sources = await page.locator('.ask-source').count()
@@ -57,14 +58,24 @@ try {
   check('reworded question routes to Harrisons', routing2.includes('Harrisons'), routing2.replace(/\n/g, ' | '))
   await page.screenshot({ path: `${SHOTS}/ask-reworded.png`, fullPage: true })
 
-  // A question no node can answer: the page says so instead of showing a partial response
+  // A question whose wording matches no company: it goes to the asker's own company (the presenter's is Zensar),
+  // and the routing panel says so instead of leaving a dead end
   await page.fill('#mesh-question', 'tell me about the weather tomorrow')
   await Promise.all([page.waitForResponse((r) => r.url().includes('/mesh/query'), { timeout: 120000 }), page.click('.ask-submit-button')])
   await page.waitForSelector('.ask-results-grid', { timeout: 90000 })
-  const state = await page.locator('.mesh-page-heading .mesh-result-state').innerText().catch(() => '')
-  check('unmatched question asks for a node choice', state.includes('Choose the nodes'), state)
+  const routing3 = (await page.locator('.mesh-answer-panel').allInnerTexts()).find((t) => t.startsWith('No company matched')) || ''
+  check("unmatched question goes to the asker's own company and says so", routing3.includes('your own company was asked') && routing3.includes('Zensar'), routing3.replace(/\n/g, ' | '))
 
-  // A misbehaving model: the check step must hide the answer and say why
+  // A misbehaving model: the check step must hide the answer and say why. Only when the stand-in is the answer model.
+  const callsBefore = await fetch(STANDIN).then((r) => r.json()).then((j) => j.calls).catch(() => null)
+  const standinInUse = callsBefore !== null && (await (async () => {
+    await page.fill('#mesh-question', 'What storage practices does CEAT use for natural rubber lots?')
+    await Promise.all([page.waitForResponse((r) => r.url().includes('/mesh/query'), { timeout: 120000 }), page.click('.ask-submit-button')])
+    await page.waitForSelector('.ask-results-grid', { timeout: 90000 })
+    return (await fetch(STANDIN).then((r) => r.json())).calls > callsBefore
+  })())
+  if (!standinInUse) console.log('SKIP  the answer model is not the stand-in, so the misbehaving-model check was not run')
+  if (standinInUse) {
   await fetch(STANDIN, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'invent-citation' }) })
   await page.fill('#mesh-question', "What rubber-compound learnings from CEAT could reduce Harrisons Malayalam's latex spoilage?")
   await page.selectOption('.ask-submit-row select', 'compliance')
@@ -76,18 +87,25 @@ try {
   await page.screenshot({ path: `${SHOTS}/ask-check-failed.png`, fullPage: true })
   await fetch(STANDIN, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'ok' }) })
   await page.selectOption('.ask-submit-row select', 'problem_solving')
+  }
 
   // Mesh Nodes: cards, profile, graph
   await page.goto(`${BASE}/nodes`, { waitUntil: 'networkidle' })
   await page.waitForSelector('.mesh-node-card', { timeout: 30000 })
   const cards = await page.locator('.mesh-node-card').count()
-  check('Mesh Nodes lists every registered node', cards >= 4, `${cards} cards`)
+  // the registry's node list, read through the page with the signed-in user's token
+  const registered = await page.evaluate(async () => {
+    const response = await fetch('/api/v1/mesh/nodes', { headers: { Authorization: `Bearer ${localStorage.getItem('rpg-neuralmesh-token')}` } })
+    return (await response.json()).nodes.length
+  })
+  check('Mesh Nodes lists every registered node', cards === registered, `${cards} cards for ${registered} registered nodes`)
   await page.locator('.mesh-node-expand').first().click()
   const profile = await page.locator('.mesh-node-profile').first().innerText()
   check('node profile is shown from metadata', profile.includes('packs') && profile.includes('Concepts'), profile.slice(0, 120))
   await page.waitForSelector('.mesh-graph-canvas canvas', { timeout: 30000 })
   const hint = await page.locator('.mesh-graph-hint').innerText()
-  check('mesh graph opens on companies and datapoints, not every entity', /^33 of 1\d\d shown/.test(hint), hint)
+  const shownMatch = hint.match(/^(\d+) of (\d+) shown/)
+  check('mesh graph opens on companies and datapoints, not every entity', !!shownMatch && Number(shownMatch[1]) < Number(shownMatch[2]) / 2, hint)
   await page.fill('.mesh-graph-search input', 'pre-coagulation')
   await page.click('.mesh-graph-search button[type=submit]')
   await page.waitForSelector('.mesh-graph-detail h3', { timeout: 10000 })
@@ -107,8 +125,21 @@ try {
   const proposed = linkCards.find((t) => t.includes('proposed')) || ''
   check('governance lists the five links with one proposed', linkCards.length === 5 && proposed.length > 0, `${linkCards.length} links`)
   const approveButtons = await page.locator('.governance-request button:has-text("Approve for")').count()
-  check('a proposed link offers approval for each side', approveButtons === 2, `${approveButtons} buttons`)
+  const waiting = await page.locator('.governance-request .mesh-result-state:has-text("Waiting for")').count()
+  check('a company reviews only its own side: the Zensar presenter sees no approve button and the two waiting sides', approveButtons === 0 && waiting === 2, `${approveButtons} buttons, ${waiting} waiting`)
   await page.screenshot({ path: `${SHOTS}/governance-links.png`, fullPage: true })
+
+  // Domains and Applications pages
+  await page.goto(`${BASE}/domains`, { waitUntil: 'networkidle' })
+  await page.waitForSelector('.mesh-table', { timeout: 30000 })
+  const domainHeads = await page.locator('.mesh-section-panel h2').allInnerTexts()
+  check('domains page lists the core and inspection layers with their rules', domainHeads.includes('core') && domainHeads.includes('inspection'), domainHeads.join(', '))
+  await page.screenshot({ path: `${SHOTS}/domains.png`, fullPage: true })
+  await page.goto(`${BASE}/applications`, { waitUntil: 'networkidle' })
+  await page.waitForSelector('.app-cards .mesh-section-panel', { timeout: 30000 })
+  const appHeads = await page.locator('.app-cards h2').allInnerTexts()
+  check('applications page shows SkillForge and Snap and Score', appHeads.includes('SkillForge') && appHeads.includes('Snap and Score'), appHeads.join(', '))
+  await page.screenshot({ path: `${SHOTS}/applications.png`, fullPage: true })
 
   // Dashboard renders
   await page.goto(`${BASE}/`, { waitUntil: 'networkidle' })

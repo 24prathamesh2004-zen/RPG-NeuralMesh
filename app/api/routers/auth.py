@@ -40,6 +40,13 @@ def signin(request: SignInRequest) -> AccountResponse:
     return AccountResponse(access_token=issue_poc_token(claims), user=user)
 
 
+@router.get("/companies")
+def companies() -> dict:
+    """The companies a person can sign up for: the registered Mesh Nodes, by id and name. Read before sign-in."""
+    from api.account_store import COMPANIES
+    return {"companies": [{"id": node_id, "label": label} for node_id, label in COMPANIES.items()]}
+
+
 @router.get("/me")
 def me(user: dict = Depends(require_user)) -> dict:
     full_user = _store.get_user(user["sub"])

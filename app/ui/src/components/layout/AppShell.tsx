@@ -1,11 +1,11 @@
-import { NavLink } from 'react-router-dom'
-import { Activity, Bell, Boxes, CircleHelp, LayoutDashboard, LogOut, Network, ShieldCheck, UsersRound } from 'lucide-react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { Activity, AppWindow, Bell, Boxes, CircleHelp, LayoutDashboard, Layers, LogOut, Network, ShieldCheck, UsersRound } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import { DEFAULT_MESH_SCOPE, MeshScopeProvider } from '../../context/MeshScopeContext'
 import { getMeshNodes } from '../../services/api'
 import type { CompanyId } from '../../services/api'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const NAV = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,6 +13,8 @@ const NAV = [
   { to: '/experts', label: 'Expert Finder', icon: UsersRound },
   { to: '/nodes', label: 'Mesh Nodes', icon: Boxes },
   { to: '/governance', label: 'Governance', icon: ShieldCheck },
+  { to: '/domains', label: 'Domains', icon: Layers },
+  { to: '/applications', label: 'Applications', icon: AppWindow },
   { to: '/admin', label: 'Admin', icon: Activity },
 ]
 
@@ -36,6 +38,17 @@ export default function AppShell({ children }: { children: ReactNode }) {
   }, [])
   const scopes = SCOPES.map((scope) => (scope.id === 'all' ? { ...scope, nodes: allNodes } : scope))
   const scopeId = scopes.find((scope) => scope.nodes.length === selectedNodes.length && scope.nodes.every((node) => selectedNodes.includes(node)))?.id ?? 'custom'
+  // On a phone the menu is one scrolling row: bring the page's tab into view, so the active tab is never off-screen.
+  const { pathname } = useLocation()
+  const navRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const nav = navRef.current
+    const active = nav?.querySelector<HTMLElement>('.mesh-nav-link.active')
+    if (!nav || !active || nav.scrollWidth <= nav.clientWidth) return
+    const navBox = nav.getBoundingClientRect()
+    const tabBox = active.getBoundingClientRect()
+    nav.scrollLeft += tabBox.left + tabBox.width / 2 - (navBox.left + navBox.width / 2)
+  }, [pathname])
   const initials = user?.display_name.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase() ?? 'GS'
 
   return (
@@ -46,7 +59,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <span className="mesh-brand-mark"><Network size={18} /></span>
             <span>RPG NeuralMesh</span>
           </NavLink>
-          <nav className="mesh-nav" aria-label="Main navigation">
+          <nav ref={navRef} className="mesh-nav" aria-label="Main navigation">
             {NAV.map(({ to, label, icon: Icon }) => (
               <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => `mesh-nav-link ${isActive ? 'active' : ''}`}>
                 <Icon size={17} strokeWidth={1.8} />
