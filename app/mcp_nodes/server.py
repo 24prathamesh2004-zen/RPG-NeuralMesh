@@ -29,6 +29,7 @@ from mcp_nodes.server_config import (  # noqa: F401 - re-exported
 from mcp_nodes.search import search_node, summarize_node  # noqa: F401 - re-exported
 from mcp_nodes.experts import find_experts_node, request_intro_node, request_access_node  # noqa: F401 - re-exported
 from mcp_nodes.live import lookup_node, LIVE_DIR  # noqa: F401 - re-exported
+from mcp_nodes.aggregate import aggregate_node  # noqa: F401 - re-exported
 
 
 class LiveNode:
@@ -162,6 +163,12 @@ def create_server(
         """A live fact of this subsidiary (for example cover_status of an asset), read now and never stored in the mesh."""
         caller = caller_context_from_token(get_access_token(), purpose)
         return lookup_node(live.config, caller, fact, key, live.access_store)
+
+    @server.tool()
+    def aggregate(datapoint_id: str, view: str, purpose: str = "problem_solving") -> dict[str, Any]:
+        """A grouped view of this subsidiary's own database (for example spoilage by month), computed now at group level."""
+        caller = caller_context_from_token(get_access_token(), purpose)
+        return aggregate_node(live.config, caller, datapoint_id, view, purpose, live.access_store)
 
     @server.tool()
     def export_graph() -> dict[str, Any]:

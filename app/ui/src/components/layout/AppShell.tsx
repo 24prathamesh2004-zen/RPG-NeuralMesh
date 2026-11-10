@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { Activity, AppWindow, Bell, Boxes, CircleHelp, LayoutDashboard, Layers, LogOut, Network, ShieldCheck, UsersRound } from 'lucide-react'
+import { Activity, AppWindow, Bell, Boxes, CircleHelp, LayoutDashboard, Layers, LogOut, Network, ShieldCheck, UsersRound, Waypoints } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import { DEFAULT_MESH_SCOPE, MeshScopeProvider } from '../../context/MeshScopeContext'
@@ -14,6 +14,7 @@ const NAV = [
   { to: '/nodes', label: 'Mesh Nodes', icon: Boxes },
   { to: '/governance', label: 'Governance', icon: ShieldCheck },
   { to: '/domains', label: 'Domains', icon: Layers },
+  { to: '/context-graph', label: 'Context graph', icon: Waypoints },
   { to: '/applications', label: 'Applications', icon: AppWindow },
   { to: '/admin', label: 'Admin', icon: Activity },
 ]

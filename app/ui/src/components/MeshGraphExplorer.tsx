@@ -14,7 +14,7 @@ export const TYPE_COLOURS: Record<string, string> = {
   Asset: '#c2255c', AssetFamily: '#a61e4d', Condition: '#e8590c', ConditionFamily: '#d9480f', GradeScale: '#2b8a3e', CoverType: '#0b7285',
   View: '#868e96', ReviewStatus: '#adb5bd', Inspection: '#5f3dc4',
 }
-const COMPANY_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d', raychem: '#862e9c' }
+const COMPANY_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d', raychem: '#862e9c', rpgls: '#0c8599', asvata: '#e67700', others: '#868e96' }
 const EDGE_COLOURS: Record<string, string> = {
   CONFLICTS_WITH: '#e03131', CORROBORATES: '#2f9e44', ADDRESSES_GAP: '#f08c00', SUPERSEDES: '#9c36b5',
   RELATED_TO: '#4c6ef5', BROADER: '#4c6ef5', SAME_AS: '#4c6ef5', SIMILAR_TO: '#868e96', GOVERNED_BY: '#2b8a3e',
@@ -28,11 +28,32 @@ type GNode = MeshGraphView['nodes'][number]
 type GEdge = MeshGraphView['edges'][number]
 interface Neighbour { edge: GEdge; other: GNode; outgoing: boolean }
 
+// A fit by vis-network goes by the node shapes, and a label is wider than its node. This fit takes the box of each node
+// with its label, so no label is cut at the edge of the canvas.
+function fitWithMargin(net: Network, ids?: string[], animate = false) {
+  const body = (net as any).body
+  const list = (ids ?? Object.keys(body.nodes)).filter((id) => body.nodes[id] && !body.nodes[id].options.hidden)
+  const canvas = (net as any).canvas.frame.canvas as HTMLCanvasElement
+  if (!list.length || !canvas.clientWidth) { net.fit({ animation: false } as any); return }
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+  const ctx = canvas.getContext('2d')
+  const positions = net.getPositions(list)
+  for (const id of list) {
+    const b = net.getBoundingBox(id), o = body.nodes[id].options, at = positions[id]
+    if (ctx) ctx.font = `${o.font?.bold ? 'bold ' : ''}${o.font?.size ?? 14}px arial`
+    const half = Math.max((b.right - b.left) / 2, (ctx ? ctx.measureText(String(o.label ?? '')).width : 0) / 2 + 4)
+    minX = Math.min(minX, at.x - half); maxX = Math.max(maxX, at.x + half); minY = Math.min(minY, b.top); maxY = Math.max(maxY, b.bottom)
+  }
+  const pad = 16
+  const scale = Math.min(1.2, (canvas.clientWidth - 2 * pad) / Math.max(maxX - minX, 1), (canvas.clientHeight - 2 * pad) / Math.max(maxY - minY, 1))
+  net.moveTo({ position: { x: (minX + maxX) / 2, y: (minY + maxY) / 2 }, scale, ...(animate ? { animation: { duration: 400, easingFunction: 'easeInOutQuad' } } : {}) } as any)
+}
+
 function short(text: string, max = 28) {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text
 }
 
-export default function MeshGraphExplorer({ graph }: { graph: MeshGraphView }) {
+export default function MeshGraphExplorer({ graph, revealAll = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean }) {
   const container = useRef<HTMLDivElement | null>(null)
   const network = useRef<Network | null>(null)
   const nodesDs = useRef<DataSet<any> | null>(null)
@@ -59,7 +80,7 @@ export default function MeshGraphExplorer({ graph }: { graph: MeshGraphView }) {
     return out
   }, [edges, byId])
 
-  const startSet = useCallback(() => new Set(graph.nodes.filter((n) => START_TYPES.has(n.type)).map((n) => n.id)), [graph])
+  const startSet = useCallback(() => new Set(graph.nodes.filter((n) => revealAll || START_TYPES.has(n.type)).map((n) => n.id)), [graph, revealAll])
   useEffect(() => { setRevealed(startSet()); setSelected(null); setTreeRoot(null) }, [startSet])
 
   // Boot the engine once per graph. Every node is in the data set from the start, hidden until revealed.
@@ -92,7 +113,12 @@ export default function MeshGraphExplorer({ graph }: { graph: MeshGraphView }) {
       interaction: { hover: true, tooltipDelay: 150 },
     } as any)
     network.current = net
-    net.on('stabilizationIterationsDone', () => { if (!treeRef.current) net.fit({ animation: false } as any) })
+    net.on('stabilizationIterationsDone', () => { if (!treeRef.current) fitWithMargin(net) })
+    // the layout keeps moving for a moment after the first fit, so it is fitted once more when it has settled
+    let settled = false
+    net.on('stabilized', () => { if (!settled && !treeRef.current) { settled = true; fitWithMargin(net, undefined, true) } })
+    net.on('dragStart', () => { settled = true })
+    net.on('zoom', () => { settled = true })
     net.on('click', (p: any) => { setMenu(null); setSelected(p.nodes?.length ? String(p.nodes[0]) : null) })
     net.on('doubleClick', (p: any) => { if (p.nodes?.length) expand(String(p.nodes[0])) })
     net.on('oncontext', (p: any) => {
@@ -165,7 +191,7 @@ export default function MeshGraphExplorer({ graph }: { graph: MeshGraphView }) {
       .filter((u: any) => (edgeDs.get(u.id) as any)?.hidden !== u.hidden))
     if (treeRoot || fitNext.current) {
       fitNext.current = false
-      setTimeout(() => { try { net.fit({ nodes: [...visible], animation: { duration: 400, easingFunction: 'easeInOutQuad' } } as any) } catch { /* noop */ } }, treeRoot ? 0 : 900)
+      setTimeout(() => { try { fitWithMargin(net, [...visible], true) } catch { /* noop */ } }, treeRoot ? 0 : 900)
     }
   }, [revealed, hiddenTypes, treeRoot, adjacency, byId])
 

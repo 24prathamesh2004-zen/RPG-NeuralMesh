@@ -101,6 +101,9 @@ class MCPNodeTransport:
         return await self.call_tool(url, token, "search", arguments)
 
 
+MAX_AGGREGATE_VIEWS = 4
+
+
 def _accepts(fn: Any, name: str) -> bool:
     try:
         return name in inspect.signature(fn).parameters
@@ -318,10 +321,38 @@ class MeshOrchestrator:
             "model_calls": calls,
         }
 
-    async def expand(self, state: MeshQueryState) -> dict[str, Any]:
-        if self.mesh is None:
-            return {"relationships": {"used": [], "proposed": [], "hidden": []}}
+    async def aggregates(self, state: MeshQueryState) -> list[dict]:
+        """The grouped views of the released datapoints, asked of their nodes now. One record per view, at most
+        MAX_AGGREGATE_VIEWS in a query, and a node's placeholder row for a live datapoint is replaced by the figures."""
         selected = [EvidenceRecord.model_validate(r) for r in state.get("records", [])]
+        released_dps = {r.datapoint for r in selected if r.datapoint}
+        wanted: list[tuple[str, str, str]] = []
+        for node in state.get("node_results", []):
+            for item in node.get("results", []):
+                dp = item.get("datapoint")
+                for view in item.get("views") or []:
+                    key = (node["node_id"], str(dp).split(":", 1)[1] if dp else "", view)
+                    if dp in released_dps and key not in wanted and key[1]:
+                        wanted.append(key)
+        added: list[dict] = []
+        for node_id, dp, view in wanted[:MAX_AGGREGATE_VIEWS]:
+            try:
+                response = await self.call_node_tool(state["user_assertion"], node_id, "aggregate",
+                                                     {"datapoint_id": dp, "view": view, "purpose": state["purpose"]})
+            except Exception:
+                continue
+            if response.get("decision") == "ALLOWED" and response.get("kind") == "aggregate":
+                added.append(records.validate_record(response).model_dump())
+        return added
+
+    async def expand(self, state: MeshQueryState) -> dict[str, Any]:
+        aggregates = await self.aggregates(state)
+        with_figures = {a["datapoint"] for a in aggregates}
+        # a live datapoint's index row is a placeholder ("… live aggregate") that the computed figures replace
+        base = [r for r in state.get("records", []) if not (r.get("kind") == "aggregate" and r.get("datapoint") in with_figures)]
+        if self.mesh is None:
+            return {"relationships": {"used": [], "proposed": [], "hidden": []}, "records": base + aggregates}
+        selected = [EvidenceRecord.model_validate(r) for r in base]
         documents = {r.document for r in selected if r.document}
         blocked = {n["node_id"] for n in state.get("node_results", []) if n.get("status") == "BLOCKED_BY_POLICY"}
         routing = state.get("routing", {})
@@ -345,7 +376,7 @@ class MeshOrchestrator:
                 if record is not None:
                     added.append(record.model_dump())
                     documents.add(end)
-        return {"relationships": links, "records": state.get("records", []) + added}
+        return {"relationships": links, "records": base + aggregates + added}
 
     # ── build, answer and check ─────────────────────────────────────────────
     async def build_answer(self, state: MeshQueryState) -> dict[str, Any]:

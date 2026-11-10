@@ -1,0 +1,11 @@
+node: others
+display: Others
+port: 8108
+level: L2
+backend: "Shared inputs of the group: files that belong to no one company, added by mesh admins from the Context graph page. No built-in documents, no experts."
+datapoints:
+  G-01: {title: Shared inputs of the group, sensitivity: Internal, ceiling: RAG, owner_role: Mesh admin}
+docs: []
+experts: []
+facts: []
+canaries: []

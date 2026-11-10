@@ -130,6 +130,25 @@
       "concepts": [
         "concept:employee-onboarding"
       ]
+    },
+    {
+      "id": "zensar:C-05-U001",
+      "datapoint": "zensar:C-05",
+      "title": "Systems cut-over runbook for an acquired unit",
+      "kind": "playbook",
+      "version": "2026-08",
+      "tags": [
+        "runbook",
+        "cut-over"
+      ],
+      "summary": "Systems cut-over runbook for an acquired unit This runbook is the cut-over part of the integration playbook. It is used when the systems of an acquired unit move to the systems of the buyer. A cut-over starts only after the process owner signs off the target process. Both toolchains stay in use until that sign-off, and the old tools are retired in phases.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:integration-checklist",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/C-05-U001.json"
     }
   ]
 }

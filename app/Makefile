@@ -1,10 +1,12 @@
-.PHONY: help install dev test seed-demo compose-up compose-down packs nodes gateway mesh-stop eval-recall live-check similarity
+.PHONY: help install dev test seed-demo samples-load samples-remove compose-up compose-down packs nodes gateway mesh-stop eval-recall live-check similarity
 
 help:
 	@echo "install       Create venv and install requirements"
 	@echo "dev           Run FastAPI with reload (port 8000)"
 	@echo "test          Run pytest"
 	@echo "seed-demo     Seed local synthetic presentation accounts and requests"
+	@echo "samples-load  Upload the ten sample inputs of the Context graph page (stack running)"
+	@echo "samples-remove  Take the sample inputs out again, after a question. Other uploads stay"
 	@echo "compose-up    Start the nodes, the API and the gateway as containers"
 	@echo "compose-down  Stop local stack"
 	@echo "packs         Rebuild the data pack, the 19 knowledge packs and their vector indexes"
@@ -26,6 +28,12 @@ test:
 
 seed-demo:
 	python -m scripts.seed_demo_accounts
+
+samples-load:
+	python -m scripts.sample_inputs load
+
+samples-remove:
+	python -m scripts.sample_inputs remove
 
 compose-up:
 	docker compose up -d --build
@@ -51,6 +59,12 @@ eval-recall:
 
 live-check:
 	python -m evaluations.live_wiring_check
+
+eval-golden:
+	python -m evaluations.golden_answers
+
+eval-time:
+	python -m evaluations.answer_time
 
 similarity:
 	python -m scripts.similarity_job

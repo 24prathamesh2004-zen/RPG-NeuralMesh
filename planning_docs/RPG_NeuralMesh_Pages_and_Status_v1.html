@@ -116,7 +116,9 @@ code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px
       <ul><li>A question in your own words, a purpose (problem solving, compliance, bid support, learning or career mobility) and an optional choice of companies.</li>
         <li>The routing line: how the companies were picked and which topics were found. The graph picks them from the topics of the question, then from the companies the question names, then a model reads the company profiles, then the asker's own company is asked. A person can also choose the companies.</li>
         <li>The answer, written by the model (Claude Sonnet 5.5) from the evidence the nodes released and nothing else. Each citation shows as the number of its evidence card, and a sentence the evidence does not hold starts with "Not in the evidence:".</li>
-        <li>Approved links between companies, the evidence cards with how far each is shared, the items withheld with a plain reason, and the answer of each node.</li></ul>
+        <li>Approved links between companies, the evidence cards with how far each is shared, the items withheld with a plain reason, and the answer of each node. A summary reached through an approved link has its own card, so every citation points at a card.</li>
+        <li>Grouped figures: when a released item offers a grouped view of its company's own database (CEAT's failure reports by root cause, KEC's delay notes by category, Harrisons Malayalam's spoilage by month and by transport time band, KEC's water and energy figures by year), the node computes the view at that moment and the page shows it as a table card marked "Grouped figures, computed now". Every row covers at least 3 members, smaller groups are dropped at the node, and the answer can cite a row.</li>
+        <li>The answer title shows how long the question took, added up from the steps of the flow.</li></ul>
       <h4>How it helps</h4>
       <ul><li>A person finds what another company learned, for example how CEAT trends rubber quality per supplier lot for Harrisons Malayalam's latex spoilage, without asking around.</li>
         <li>Each sentence shows the document it stands on, so the reader can judge it.</li></ul>
@@ -177,6 +179,19 @@ code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px
       <ul><li>References a source could not resolve, and how many links still wait for approval.</li></ul>
     </article>
 
+    <article class="page wide">
+      <div class="page-head"><h3>Context graph</h3><span class="route">/context-graph</span><span class="pill p-grey">everyone, uploads by the mesh team</span></div>
+      <h4>What you see</h4>
+      <ul><li>Uploaded inputs: the context graphs, each a named set of files a mesh admin added, with a search box over every word of an input (title, file, company, item, kind, tags, first sentences, graph name). A graph shows its inputs, the chosen input's record with what leaves the company in words ("Summary leaves CEAT", "Shared with every connected company"), and the part of the graph all its inputs made, drawn together with each concept once and how it matched (named in the text, all its words in the text, from a tag).</li>
+        <li>Add input: a file (.txt, .md, .csv, .json, .pdf, .docx) for Others, the inputs that belong to no one company and the default choice, or for one of the seven companies and one of its catalogue items, into a new context graph with a name or into an existing one, with the item's sharing rule shown before the file is sent.</li>
+        <li>Search the graph: a word, phrase, tag or catalogue code, the matching entities with their type, company, sharing rule and link count, and one entity with its links by type.</li></ul>
+      <h4>How it helps</h4>
+      <ul><li>Knowledge gets into the mesh from a file, not only from the built packs, by the same path: the company's node, or the shared node for Others, indexes it under the item's rule, and the central graph keeps its title and links only.</li>
+        <li>Inputs on one topic build up one context graph: the second input meets the first at the concepts they share, and the whole graph can be downloaded as JSON, GraphML, CSV or a knowledge pack that carries, for each document, what its item releases. "Ask about this" turns an entity into a question on the Ask page.</li></ul>
+      <h4>What you can check</h4>
+      <ul><li>Whether an upload reached the graph and what it was linked to, that a document under a never-leave item is shown to its own company and the mesh team only, and that a shared input is listed to every company. A mesh admin removes one input or drops a whole graph, and the records stay marked removed.</li></ul>
+    </article>
+
     <article class="page">
       <div class="page-head"><h3>Applications</h3><span class="route">/applications</span><span class="pill p-grey">everyone</span></div>
       <h4>What you see</h4>
@@ -202,24 +217,28 @@ code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px
 </section>
 
 <section class="panel" id="status" role="tabpanel">
-  <p class="checked"><b>Checked on 8 November 2026 on the final code:</b> 179 tests, live wiring 34 of 34, golden scenarios 15 of 15, browser checks 23 of 23, SkillForge's live contract test 10 of 10, and walk-throughs of every page by agents acting as first-time users. All work since commit <code>e313d01</code> of 5 November is not committed.</p>
+  <p class="checked"><b>Checked on 8 and 9 November 2026:</b> 191 tests, live wiring 34 of 34, golden scenarios 15 of 15, browser checks 23 of 23, SkillForge's live contract test 10 of 10, and walk-throughs of every page by agents acting as first-time users. <b>Checked on 10 November 2026 on the final code:</b> 198 tests, live wiring 37 of 37, golden scenarios 15 of 15 with the stand-in model and 15 of 15 with Claude Sonnet 5.5, reworded recall 22 of 28 with hybrid search, and 10 browser checks of the Ask page with the grouped-figure cards. All work since commit <code>e313d01</code> of 5 November is not committed. <b>Checked on 10 November 2026, evening, with the named context graphs and the shared node:</b> 208 tests, live wiring 37 of 37 with eight nodes, golden scenarios 15 of 15, a browser run of the Context graph page 23 of 23.</p>
 
   <h2>Implemented</h2>
   <p class="sub">Built, running and checked.</p>
   <div class="tablebox"><table>
     <thead><tr><th>Area</th><th>What works</th><th>How it was checked</th></tr></thead>
     <tbody>
-      <tr><td>Company nodes</td><td>Seven nodes, each with its own knowledge packs, sharing policy and decision ledger, all started from one registry of nodes.</td><td>179 tests, live wiring 34 of 34</td></tr>
+      <tr><td>Company nodes</td><td>Eight nodes: the seven companies and the shared inputs node Others, each with its own knowledge packs, sharing policy and decision ledger, all started from one registry of nodes.</td><td>208 tests, live wiring 37 of 37</td></tr>
       <tr><td>Search at a node</td><td>Keyword search, vector search and the routed topics merged. The purpose is checked for each datapoint, and only text the node may release is indexed.</td><td>The right document in the top 10 for 162 of 162 labelled questions (keyword search alone 94 percent), and 12 of 18 reworded questions with every required datapoint</td></tr>
       <tr><td>Routing</td><td>The graph, the companies named, a model reading the company profiles, the asker's own company, or the person's own choice.</td><td>Golden scenarios 15 of 15</td></tr>
       <tr><td>Answers</td><td>Written by the model from released evidence only, seven code checks with one second try, numbered citations, an answer cache for repeated questions.</td><td>Golden scenarios, browser checks</td></tr>
       <tr><td>Privacy rules</td><td>Never-leave datapoints, a purpose check per datapoint, withheld items with reasons, and test strings (canaries) that must never reach an index or an answer.</td><td>Tests, live wiring, agent walk-throughs as two companies</td></tr>
       <tr><td>Approvals and links</td><td>Access requests and introductions decided by the owning company, links between companies approved by each side, entries of applications reviewed side by side.</td><td>Tests, with owner decisions simulated for demo accounts</td></tr>
-      <tr><td>Decision ledger</td><td>Every decision logged at its node in a hash chain, and a check of all seven chains on the Governance page.</td><td>Live: intact at all 7 nodes</td></tr>
+      <tr><td>Decision ledger</td><td>Every decision logged at its node in a hash chain, and a check of all eight chains on the Governance page.</td><td>Live: intact at all 8 nodes</td></tr>
+      <tr><td>Context graphs of uploaded inputs</td><td>A mesh admin's file opens a named context graph or is added to one, a graph is dropped as a whole with its records kept, the inputs are searched by any word on them, and a file that belongs to no one company goes to the shared node Others, read by every company and the default choice.</td><td>13 upload tests, a browser run of 23 checks, 25 timed uploads at 0.38 s median</td></tr>
       <tr><td>Contract for applications</td><td>One contract, version 1.1, with 14 tools over the REST API and the MCP gateway. A refusal says what is needed. SkillForge keeps a pinned copy and tests it live.</td><td>SkillForge's live contract test 10 of 10</td></tr>
       <tr><td>Talent import</td><td>SkillForge's skill list, roles and required skills arrive through the import tool, checked with every pack before anything is written. A skill Group HR joined is followed by its "replaces" list.</td><td>Tests, live send of 8 November</td></tr>
       <tr><td>Inspection layer</td><td>Snap and Score's vocabulary loaded as proposed entries, live lookups, inspection records and their history.</td><td>Tests</td></tr>
-      <tr><td>Pages in plain words</td><td>Nine pages, with every code also shown in words, checked at 1500 and 390 pixels wide.</td><td>Browser checks, agent walk-throughs</td></tr>
+      <tr><td>Answer time</td><td>Measured on 10 November with Claude Sonnet 5.5 writing the re-rank verdicts and the answer, every golden question asked twice: a first answer takes a median of 5.3 seconds (90th percentile 8.4 seconds, slowest 8.6 seconds), the two model calls take almost all of it, and the same question asked again takes 0.2 seconds. The plan's target of a median under 10 seconds is met on this machine. The measurement found that the re-rank reply was cut at 300 tokens for 8 or more documents, so the step read no verdicts and ran the model again on every repeat. The cap is now 1,200 tokens and a test guards it.</td><td>The timing script, a test of the cap, golden 15 of 15 with Claude</td></tr>
+      <tr><td>Aggregate views as evidence</td><td>A node computes the grouped views its policy names (five views over three companies) when a question releases their item, drops any group under the minimum size, and returns the rows as one evidence record. The answer prompt places them in a protected block, the golden check requires them for S1 and S3, and the Ask page shows them as table cards.</td><td>6 tests, golden 15 of 15 with the view checks, live wiring 37 of 37, browser checks of the Ask page</td></tr>
+      <tr><td>Uploaded inputs and graph search</td><td>A mesh admin uploads a file for a company's catalogue item. Its text is indexed at that node under the item's rule, its title and concept links reach the central graph, the graph part can be downloaded in four formats, and anyone can search the graph by name, tag or code.</td><td>6 tests, a live upload to CEAT cited by the Ask page, 13 browser checks</td></tr>
+      <tr><td>Pages in plain words</td><td>Ten pages, with every code also shown in words, checked at 1500 and 390 pixels wide.</td><td>Browser checks, agent walk-throughs</td></tr>
     </tbody>
   </table></div>
 
@@ -229,12 +248,11 @@ code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px
     <thead><tr><th>Item</th><th>State</th><th>What it means today</th></tr></thead>
     <tbody>
       <tr><td>Corporate sign-in (Entra ID)</td><td><span class="pill p-amber">not built</span></td><td>Demo accounts with a shared password. Owner decisions are simulated for the demo accounts.</td></tr>
-      <tr><td>Real company data</td><td><span class="pill p-amber">not built</span></td><td>All content of the seven nodes is synthetic. Asvata's content was written only from its two SkillForge roles.</td></tr>
-      <tr><td>Neo4j graph database</td><td><span class="pill p-grey">planned</span></td><td>The graph runs on SQLite with NetworkX and holds 415 live entities and 869 live links today.</td></tr>
+      <tr><td>Upload by a person who is not a mesh admin, templates of fields per kind, owner review before sharing</td><td><span class="pill p-amber">not built</span></td><td>Only a mesh admin uploads, and the upload is in the graph at once. The plan of 9 November describes the three.</td></tr>
+      <tr><td>Real company data</td><td><span class="pill p-amber">not built</span></td><td>All content of the seven company nodes is synthetic, and the shared node Others holds only what is uploaded. Asvata's content was written only from its two SkillForge roles.</td></tr>
+      <tr><td>Neo4j graph database</td><td><span class="pill p-grey">planned</span></td><td>The graph runs on SQLite with NetworkX and holds 419 live entities and 876 live links today.</td></tr>
       <tr><td>Link extraction job</td><td><span class="pill p-grey">planned</span></td><td>Links between companies come from the packs. No job looks for new ones on a schedule.</td></tr>
       <tr><td>RPG Ventures node</td><td><span class="pill p-amber">not built</span></td><td>RPG Ventures has no node, so it cannot answer or be asked.</td></tr>
-      <tr><td>Answer time</td><td><span class="pill p-amber">not measured</span></td><td>The plan's goal of a median answer under 10 seconds was not timed on Claude.</td></tr>
-      <tr><td>Aggregate views as evidence</td><td><span class="pill p-amber">not built</span></td><td>The numbers of the views reach answers only through approved summaries.</td></tr>
       <tr><td>Learning releases</td><td><span class="pill p-amber">not built</span></td><td>A copy of another company's material into a SkillForge topic until a date, after the owner's approval. Material is read by reference only.</td></tr>
       <tr><td>50 labelled CVs</td><td><span class="pill p-amber">not done</span></td><td>No measured precision of the skills proposed from CVs.</td></tr>
       <tr><td>Similarity by behaviour</td><td><span class="pill p-amber">not built</span></td><td>Roles count as similar only by the required skills they share.</td></tr>

@@ -29,11 +29,13 @@ DATA = Path(os.getenv("NEURALMESH_DATA_PACK", str(KB_PACK / "data_pack")))
 GROUP = KB_PACK / "group"
 TALENT_IMPORT = Path(os.getenv("NEURALMESH_TALENT_IMPORT", str(KB_PACK / "talent_import")))
 FORMAT = {"format": "neuralmesh.knowledge-pack", "format_version": "1.0"}
+CONTRIBUTIONS = "contributions"  # data_pack/<node>/contributions/<doc>.json: documents people uploaded, kept across rebuilds
+ADDED_ITEMS = "added_items"  # data_pack/<node>/added_items/<code>.json: catalogue items a mesh admin named at upload, kept across rebuilds
 DOMAIN_OF_LETTER = {"E": "engineering", "O": "operations", "C": "commercial", "R": "research",
-                    "F": "corporate", "L": "lessons", "M": "mesh", "T": "talent"}
+                    "F": "corporate", "L": "lessons", "M": "mesh", "T": "talent", "G": "general"}
 DOMAIN_TITLES = {"engineering": "engineering knowledge", "operations": "operations knowledge", "commercial": "commercial knowledge",
                  "research": "research and pilot results", "corporate": "corporate functions", "lessons": "lessons learned",
-                 "talent": "roles, required skills and expert directory", "mesh": "mesh meta-data"}
+                 "talent": "roles, required skills and expert directory", "mesh": "mesh meta-data", "general": "shared inputs"}
 
 DEFAULT_PURPOSES = ["problem_solving", "compliance", "bid_support"]
 
@@ -189,6 +191,151 @@ def merge_talent_import(node: str, pack: dict, folder: Path | None = None, incom
     return pack
 
 
+def contributions_of(node: str, status: str = "accepted") -> list[dict]:
+    """The uploaded documents of a node with this status, oldest first. Each file holds the document fields of the
+    pack schema plus ``upload`` (who, when, the file name) and ``status``."""
+    folder = DATA / node / CONTRIBUTIONS
+    if not folder.is_dir():
+        return []
+    out = []
+    for path in sorted(folder.glob("*.json")):
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if record.get("status") == status:
+            out.append(record)
+    return out
+
+
+def added_items_of(node: str) -> dict[str, dict]:
+    """The catalogue items a mesh admin added to a node at upload: code -> item fields, oldest code first."""
+    folder = DATA / node / ADDED_ITEMS
+    out: dict[str, dict] = {}
+    for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+        try:
+            item = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        out[item["code"]] = item
+    return out
+
+
+def merge_contributions(node: str, pack: dict) -> dict:
+    """The catalogue items added at upload whose domain is this pack's join its datapoints, then the accepted uploads
+    whose datapoint is in this pack join its documents."""
+    known = {d["id"] for d in pack.get("datapoints", [])}
+    for code, item in added_items_of(node).items():
+        if f"{node}:{code}" not in known and domain_of(code) == pack["pack"]["domain"]:
+            pack["datapoints"].append(_datapoint(node, code, item, list(DEFAULT_PURPOSES)))
+            known.add(f"{node}:{code}")
+    have = {d["id"] for d in pack.get("documents", [])}
+    for record in contributions_of(node):
+        if record["document"]["datapoint"] in known and record["document"]["id"] not in have:
+            # One copy of the text: the upload record keeps it, and the pack points to the record.
+            doc = {k: v for k, v in record["document"].items() if k != "body"}
+            doc["body_file"] = f"{CONTRIBUTIONS}/{doc['id'].split(':', 1)[1]}.json"
+            pack["documents"].append(doc)
+            have.add(doc["id"])
+    return pack
+
+
+def contribution_rows(node: str, pack: dict) -> list[tuple]:
+    """The keyword-index rows of the uploads in this pack, in the shape of index.db: the title for a title-only item,
+    the summary for a summary item, chunks of the body for a full-text item, nothing for a live item."""
+    dps = {d["id"]: d for d in pack.get("datapoints", [])}
+    bodies = {r["document"]["id"]: r["document"].get("body", "") for r in contributions_of(node)}  # the text is read from the record
+    ids = set(bodies)
+    rows = []
+    for doc in pack.get("documents", []):
+        if doc["id"] not in ids:
+            continue
+        dp = dps[doc["datapoint"]]
+        ceiling = dp["ceiling"]
+        tags = " ".join(doc.get("tags", []))
+        version = str(doc.get("version", ""))
+        stale = int(version[:4].isdigit() and int(version[:4]) < 2021)
+        if dp.get("requires_approval") or ceiling == "MD":
+            texts, mode = [(doc["title"], doc["id"])], "MD"
+        elif ceiling == "SUM":
+            texts, mode = [(doc.get("summary", ""), doc["id"])], "SUM"
+        elif ceiling == "RAG":
+            texts, mode = [(c, f"{doc['id']}#{i}") for i, c in enumerate(chunk_text(bodies.get(doc["id"]) or doc.get("body", "")))], "RAG"
+        else:
+            texts, mode = [], "LIVE"
+        for text, key in texts:
+            rows.append((text, doc["title"], tags, key, dp["catalogue_id"], mode, dp["sensitivity"], version, stale))
+    return rows
+
+
+def chunk_text(body: str, size: int = 600) -> list[str]:
+    """Paragraphs, cut at a sentence end when longer than ``size`` characters (the rule of kbgen.py)."""
+    out = []
+    for para in [p.strip() for p in re.split(r"\n\s*\n", body) if p.strip()]:
+        para = " ".join(para.split())
+        while len(para) > size:
+            cut = para.rfind(". ", 0, size) + 1 or size
+            out.append(para[:cut].strip())
+            para = para[cut:].strip()
+        if para:
+            out.append(para)
+    return out
+
+
+def write_index_rows(node: str, pack: dict) -> int:
+    """Replace the index.db rows of the uploads in this pack with rows built now. Returns the number of rows written."""
+    rows = contribution_rows(node, pack)
+    domain = pack["pack"]["domain"]  # only the uploads of this pack: the rows of uploads in the node's other packs stay
+    ids = {r["document"]["id"] for status in ("accepted", "rejected", "removed") for r in contributions_of(node, status)
+           if domain_of(r["document"]["datapoint"].split(":", 1)[1]) == domain}
+    con = sqlite3.connect(DATA / node / "index.db")
+    try:
+        for doc_id in ids:
+            con.execute("DELETE FROM idx WHERE doc_id = ? OR doc_id LIKE ?", (doc_id, doc_id + "#%"))
+        con.executemany("INSERT INTO idx VALUES (?,?,?,?,?,?,?,?,?)", rows)
+        con.commit()
+    finally:
+        con.close()
+    return len(rows)
+
+
+def rebuild_domain_pack(node: str, domain: str, build_vectors: bool = True) -> dict:
+    """Rebuild one pack of a node from the knowledge file, the kept talent import and the accepted uploads, after an
+    upload. Checked with every other pack, written beside the old file and renamed, then the keyword rows and the
+    vectors of the pack are rebuilt. Nothing is written when a check fails."""
+    annotations = yaml.safe_load((KB / "annotations.yaml").read_text(encoding="utf-8"))
+    built = build_node_packs(node, annotations)
+    if domain not in built:
+        raise PackCheckFailed(f"{node} has no {domain} pack")
+    pack = built[domain]
+    if domain == "talent":
+        pack = merge_talent_import(node, pack)
+    pack = merge_contributions(node, pack)
+    others = []
+    for path in sorted(DATA.glob("*/packs/*/pack.json")):
+        if path.parent.parent.parent.name == node and path.parent.name == domain:
+            continue
+        others.append((path.name, json.loads(path.read_text(encoding="utf-8"))))
+    report = validate_packs([(f"{node}.{domain}.pack.json", pack)] + others + load_group_packs(), strict=True)
+    if report.errors:
+        raise PackCheckFailed("Pack validation failed: " + " | ".join(report.errors[:5]))
+    out_dir = DATA / node / "packs" / domain
+    out_dir.mkdir(parents=True, exist_ok=True)
+    tmp = out_dir / ".pack.json.tmp"
+    tmp.write_text(json.dumps(pack, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    os.replace(tmp, out_dir / "pack.json")
+    rows = write_index_rows(node, pack)
+    vectors = None
+    if build_vectors:
+        if not embedder.available():
+            raise PackCheckFailed("The embedding model is missing, so the vector index cannot be built.")
+        chunk_rows = [ChunkRow(doc_id, dp, mode, sens, str(version), int(stale), text or "", title or "")
+                      for text, title, doc_id, dp, mode, sens, version, stale in index_rows(node)
+                      if mode != "LIVE" and domain_of(dp) == domain]
+        vectors = VectorIndex(out_dir / "build").build(chunk_rows)
+    return {"pack_id": pack["pack"]["pack_id"], "documents": len(pack["documents"]), "index_rows": rows, "vectors": vectors}
+
+
 def load_group_packs(folder: Path | None = None, incoming: dict[str, dict] | None = None) -> list[tuple[str, dict]]:
     """The group packs: the mesh's own and the group packs applications sent, with ``incoming`` in place of the kept
     file of the same name while an import is checked."""
@@ -257,6 +404,7 @@ def build_all(build_vectors: bool = True) -> dict:
         for domain, pack in build_node_packs(node, annotations).items():
             if domain == "talent":
                 pack = merge_talent_import(node, pack)
+            pack = merge_contributions(node, pack)
             all_packs[pack["pack"]["pack_id"]] = pack
     named = [(f"{pid}.pack.json", p) for pid, p in all_packs.items()] + load_group_packs()
     report = validate_packs(named, strict=True)
@@ -274,6 +422,9 @@ def build_all(build_vectors: bool = True) -> dict:
         if not embedder.available():
             raise SystemExit("The embedding model is missing, so the vector indexes cannot be built.")
         for node in node_ids():
+            for pid, pack in all_packs.items():  # kbgen.py writes index.db without the uploads, so their rows go back in
+                if pid.startswith(node + "."):
+                    write_index_rows(node, pack)
             cfg = yaml.safe_load((KB / f"{node}.yaml").read_text(encoding="utf-8"))
             canaries = cfg.get("canaries", [])
             by_domain: dict[str, list[ChunkRow]] = {}

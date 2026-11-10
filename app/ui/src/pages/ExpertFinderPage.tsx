@@ -52,8 +52,7 @@ export default function ExpertFinderPage() {
         <div><div className="mesh-eyebrow">People and expertise</div><h1>Expert Finder</h1><p>Search opted-in expertise across the subsidiaries in your current scope.</p></div>
       </header>
       <section className="mesh-section-panel expert-search-panel">
-        <label htmlFor="expert-query">Describe the experience you need</label>
-        <div className="expert-search-row"><div className="expert-query-wrap"><Search size={16} /><input id="expert-query" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && void search()} placeholder={EXAMPLE_QUERY} /></div>
+                <div className="expert-search-row"><div className="expert-field"><label htmlFor="expert-query">Describe the experience you need</label><div className="expert-query-wrap"><Search size={16} /><input id="expert-query" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && void search()} placeholder={EXAMPLE_QUERY} /></div></div>
           <label className="expert-purpose">Purpose<select value={purpose} onChange={(event) => setPurpose(event.target.value as typeof purpose)}><option value="problem_solving">Problem solving</option><option value="compliance">Compliance</option><option value="bid_support">Bid support</option></select></label>
           <button type="button" className="mesh-primary-action" onClick={() => void search()} disabled={busy || !query.trim()}>{busy ? <LoaderCircle size={15} className="animate-spin" /> : <Search size={15} />}Search experts</button>
         </div>

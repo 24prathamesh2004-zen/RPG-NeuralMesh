@@ -1,0 +1,40 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-995e7d67",
+    "name": "AI-assisted delivery pilots"
+  },
+  "document": {
+    "id": "zensar:R-02-U001",
+    "datapoint": "zensar:R-02",
+    "title": "Pilot results, AI-assisted code review in four delivery teams",
+    "kind": "report",
+    "version": "2026-10",
+    "tags": [
+      "pilot",
+      "code-review"
+    ],
+    "summary": "title: Pilot results, AI-assisted code review in four delivery teams summary: Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks. A person approved every change. The median time from opening a change to its approval fell from 19 hours to 11 hours. Errors found in review rose from 3.1 to 4.4 for every 1,000 changed lines.",
+    "body": "title: Pilot results, AI-assisted code review in four delivery teams\n\nsummary: Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks. A person approved every change. The median time from opening a change to its approval fell from 19 hours to 11 hours. Errors found in review rose from 3.1 to 4.4 for every 1,000 changed lines. The effect was large in the two web application teams and small in the mainframe team.\n\nperiod: 6 July to 27 September 2026\n\nchanges_reviewed: 1214\n\nhow_the_pilot_ran: first_pass: The AI assistant commented on every change before a person read it, approval: A person approved or rejected every change, access: The assistant was used through the approved gateway only, data_rule: No confidential data of a customer was put into a prompt, compared_with: The 12 weeks before the pilot, with the same teams and the same applications\n\nteams: team: Team A, application_type: web application, changes_reviewed: 412, median_hours_to_approval_before: 20, median_hours_to_approval_in_the_pilot: 9, errors_found_in_review_for_every_1000_changed_lines_before: 3.4, errors_found_in_review_for_every_1000_changed_lines_in_the_pilot: 5.1, team: Team B, application_type: web application, changes_reviewed: 388, median_hours_to_approval_before: 18, median_hours_to_approval_in_the_pilot: 10, errors_found_in_review_for_every_1000_changed_lines_before: 3.2, errors_found_in_review_for_every_1000_changed_lines_in_the_pilot: 4.8, team: Team C, application_type: data platform, changes_reviewed: 271, median_hours_to_approval_before: 19, median_hours_to_approval_in_the_pilot: 12, errors_found_in_review_for_every_1000_changed_lines_before: 2.9, errors_found_in_review_for_every_1000_changed_lines_in_the_pilot: 3.7, team: Team D, application_type: mainframe, changes_reviewed: 143, median_hours_to_approval_before: 21, median_hours_to_approval_in_the_pilot: 19, errors_found_in_review_for_every_1000_changed_lines_before: 2.6, errors_found_in_review_for_every_1000_changed_lines_in_the_pilot: 2.7\n\nwhat_did_not_work: In the mainframe team the assistant commented on layout and missed errors in the job control files, Comments on generated code were long, and reviewers skipped them after week 3\n\nnext_step: Continue for 12 more weeks in the two web application teams and the data platform team. Stop in the mainframe team until the assistant is tested on its code base.\n\nnote: Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of Zensar.",
+    "concepts": [
+      "concept:ai-assisted-delivery",
+      "concept:pilot-results",
+      "concept:responsible-ai-use"
+    ]
+  },
+  "concept_matches": {
+    "concept:ai-assisted-delivery": "phrase",
+    "concept:pilot-results": "phrase",
+    "concept:responsible-ai-use": "phrase"
+  },
+  "upload": {
+    "file": "ai_code_review_pilot_results.json",
+    "format": "json",
+    "chars": 2518,
+    "sha256": "645277df943de5a034ae15ac1bd2dfc0529e2a239373cae4268ef32562d9886f",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-10-08T08:21:15+00:00"
+  },
+  "sample_input": "ai_code_review_pilot_results.json"
+}

@@ -21,6 +21,7 @@ from mcp_nodes.server import (
     lookup_node,
     search_node,
     summarize_node,
+    aggregate_node,
 )
 from services.context.policy import ModelChoice
 from services.graph_store import GraphStore
@@ -75,6 +76,8 @@ class LocalTransport:
                                      concepts=arguments.get("concepts"))
         if tool == "lookup":
             return lookup_node(config, caller, arguments["fact"], arguments["key"], store)
+        if tool == "aggregate":
+            return aggregate_node(config, caller, arguments["datapoint_id"], arguments["view"], arguments["purpose"], store)
         raise AssertionError(f"tool {tool} is not part of the harness")
 
 

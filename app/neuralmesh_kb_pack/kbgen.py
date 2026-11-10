@@ -240,7 +240,7 @@ def validate(results):
             if doc["dp"] not in cfg["datapoints"]: errs.append(f"{name}: doc {doc['id']} has unknown datapoint")
         for f in cfg["facts"]:
             if f["dp"] not in cfg["datapoints"]: errs.append(f"{name}: fact {f['id']} has unknown datapoint")
-        if not any(not e["consent"] for e in cfg["experts"]): errs.append(f"{name}: needs at least one opted-out expert")
+        if cfg["experts"] and not any(not e["consent"] for e in cfg["experts"]): errs.append(f"{name}: needs at least one opted-out expert")
         if re.search(r"[\w.]+@[\w.]+\.\w+|(?<![\w-])\+?\d[\d -]{8,}\d(?![\w-])", public): errs.append(f"{name}: looks like contact data in public files")
         if "$" in "".join(f["text"] for f in facts): errs.append(f"{name}: unresolved placeholder in facts")
         dbname = GEN.get(name, (None, None))[0]

@@ -3,7 +3,7 @@
     python -m evaluations.golden_answers            # API on 8000, nodes running, S7 reported from the node list
 
 For each scenario the script sends the question with no node choice and checks the golden expectations: routed
-subsidiaries, cited and withheld datapoints, decisions and rules, strings that must not appear, experts that must not
+subsidiaries, cited and withheld datapoints, the aggregate views that must be in the evidence, decisions and rules, strings that must not appear, experts that must not
 be returned, and whether every answer sentence carries a citation or the no-evidence marker. For S1, S2 and S3 it
 also counts how many of the numbers in the gold facts of the cited datapoints appear in the written answer.
 With the stand-in model the numbers come straight from the approved summaries, so a high count shows the evidence
@@ -76,6 +76,10 @@ def main() -> None:
                 problems.append(f"{dp} decision {item and item.get('decision')} rule {item and item.get('rule_id')}")
             if any(e.get("datapoint", "").endswith(dp) for e in body["evidence"]) and sid != "S10":
                 problems.append(f"{dp} text released")
+        aggregates = {e["evidence_id"].split("@", 1)[1] for e in body["evidence"] if e.get("kind") == "aggregate" and "@" in e["evidence_id"]}
+        for view in scenario.get("must_include_data", []):
+            if view not in aggregates:
+                problems.append(f"aggregate view {view} not in the evidence")
         for needle in scenario.get("must_not_contain", []):
             if needle in text:
                 problems.append(f"contains {needle}")

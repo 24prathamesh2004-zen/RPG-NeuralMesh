@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import type { FormEvent } from 'react'
 import type { CSSProperties } from 'react'
 import { AlertTriangle, ArrowUpRight, Check, CircleCheck, GitBranch, LoaderCircle, LockKeyhole, Send, ServerOff } from 'lucide-react'
 import { getMeshNodes, queryMesh } from '../services/api'
-import type { CompanyId, MeshPurpose, MeshQueryResponse } from '../services/api'
+import type { CompanyId, EvidenceRecord, MeshPurpose, MeshQueryResponse } from '../services/api'
 import { useMeshScope } from '../context/MeshScopeContext'
 import { answerSentences, citationsAsNumbers, modeLabel, plainReason, plainWithheld, ruleMeaning } from '../lib/format'
 
@@ -33,13 +34,24 @@ const ROUTE_LABELS: Record<string, string> = {
 }
 
 const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
+// The text of an aggregate record: one note line, then one group per line as "column value, column value".
+const aggregateTable = (text: string) => {
+  const [note, ...lines] = text.split('\n')
+  const tail = lines.find((line) => line.endsWith('not shown.'))
+  const groups = lines.filter((line) => line && line !== tail).map((line) => line.split(', ').map((cell) => {
+    const at = cell.indexOf(' ')
+    return at > 0 ? [cell.slice(0, at), cell.slice(at + 1)] : [cell, '']
+  }))
+  return { note, tail, columns: (groups[0] ?? []).map(([name]) => name.replace(/_/g, ' ')), rows: groups.map((cells) => cells.map(([, value]) => value)) }
+}
 // An answer sentence for the page: each citation as the number of its evidence card, and the marker of what the
 // evidence does not hold in words.
 const shownSentence = (sentence: string, documents: string[]) =>
   citationsAsNumbers(plainWithheld(sentence), documents).replace(/^\[NOT IN EVIDENCE\]\s*/, 'Not in the evidence: ')
 
 export default function AskPage() {
-  const [question, setQuestion] = useState(EXAMPLE_QUESTION)
+  const [params] = useSearchParams()
+  const [question, setQuestion] = useState(params.get('q') || EXAMPLE_QUESTION)
   const { selectedNodes, setSelectedNodes } = useMeshScope()
   const [purpose, setPurpose] = useState<MeshPurpose>('problem_solving')
   const [chooseNodes, setChooseNodes] = useState(false)
@@ -51,6 +63,16 @@ export default function AskPage() {
   }, [])
   const displayNode = (id: string) => nodeList.find((node) => node.id === id)?.label ?? id
   const [response, setResponse] = useState<MeshQueryResponse | null>(null)
+  // the evidence cards: the nodes' search results, then the grouped figures computed for the question
+  const aggregates = response?.evidence.filter((item) => item.kind === 'aggregate') ?? []
+  const sourceIds = new Set((response?.sources ?? []).map((item) => String(item.doc_id ?? '').split('#')[0]))
+  // summaries reached through an approved link come back as evidence only, so they get a card too
+  const linked = response?.evidence.filter((item) => item.kind === 'summary' && !sourceIds.has(item.evidence_id.split('#')[0]) && !sourceIds.has(String(item.document ?? ''))) ?? []
+  const asCard = (item: EvidenceRecord, extra: Record<string, unknown>) => ({ ...item, doc_id: item.evidence_id, node_id: item.node, datapoint_id: item.datapoint?.split(':')[1], ...extra })
+  const cards: Record<string, unknown>[] = response
+    ? [...response.sources, ...linked.map((item) => asCard(item, {})), ...aggregates.map((item) => asCard(item, { aggregate: true }))]
+    : []
+  const seconds = response ? response.steps.reduce((sum, step) => sum + step.ms, 0) / 1000 : 0
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -145,18 +167,19 @@ export default function AskPage() {
       {response && (
         <div className="ask-results-grid">
           <section className="ask-results-section" aria-labelledby="evidence-heading">
-            <div className="ask-section-heading"><h2 id="evidence-heading">Retrieved evidence</h2><span>{response.sources.length} {response.sources.length === 1 ? 'source' : 'sources'} · {plural(new Set(response.sources.map((item) => String(item.node_id ?? String(item.doc_id ?? '').split(':')[0]))).size, 'company', 'companies')}</span></div>
+            <div className="ask-section-heading"><h2 id="evidence-heading">Retrieved evidence</h2><span>{plural(cards.length, 'source', 'sources')} · {plural(new Set(cards.map((item) => String(item.node_id ?? String(item.doc_id ?? '').split(':')[0]))).size, 'company', 'companies')}</span></div>
             {response.routing.method && <div className="mesh-answer-panel"><div className="mesh-answer-title"><GitBranch size={13} /> {ROUTE_LABELS[response.routing.method] ?? response.routing.method}</div>
               <p>{(response.routing.subsidiaries ?? []).map(displayNode).join(', ') || 'None'}{response.routing.concepts?.length ? ` · topics: ${response.routing.concepts.map((c) => response.routing.concept_labels?.[c] ?? c).join(', ')}` : ''}</p></div>}
             {response.answer
-              ? <div className="mesh-answer-panel"><div className="mesh-answer-title">Answer{response.cached ? ' · reused from the same question asked before' : ''}</div>{answerSentences(response.answer).map((sentence, index) => <p key={index} className={sentence.startsWith('[NOT IN EVIDENCE]') ? 'ask-not-in-evidence' : ''}>{shownSentence(sentence, response.sources.map((s) => String(s.doc_id ?? '')))}</p>)}</div>
+              ? <div className="mesh-answer-panel"><div className="mesh-answer-title">Answer · {seconds.toFixed(1)} s{response.cached ? ' · reused from the same question asked before' : ''}</div>{answerSentences(response.answer).map((sentence, index) => <p key={index} className={sentence.startsWith('[NOT IN EVIDENCE]') ? 'ask-not-in-evidence' : ''}>{shownSentence(sentence, cards.map((s) => String(s.doc_id ?? '')))}</p>)}</div>
               : response.answer_reason && <div className="mesh-alert note">{response.answer_reason}</div>}
             {response.omitted > 0 && <div className="mesh-alert note">Partial set: {response.omitted} {response.omitted === 1 ? 'item was' : 'items were'} left out for size or replaced by a newer version.</div>}
             {response.relationships.length > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title">Approved links</div>
               {response.relationships.map((link) => <p key={link.id} title={`${link.source} and ${link.target}`}><b>{link.source_title ?? link.source}</b> {LINK_LABELS[link.type] ?? link.type} <b>{link.target_title ?? link.target}</b>{link.note ? ` · ${link.note}` : ''}</p>)}</div>}
-            {response.sources.length ? <div className="ask-source-list">
-              {response.sources.map((source, index) => {
+            {cards.length ? <div className="ask-source-list">
+              {cards.map((source, index) => {
                 const nodeId = String(source.node_id ?? String(source.doc_id ?? '').split(':')[0])
+                const table = source.aggregate ? aggregateTable(String(source.text ?? '')) : null
                 return (
                     <article key={`${String(source.doc_id ?? index)}-${index}`} className="ask-source" style={{ '--node-tone': nodeList.find((node) => node.id === nodeId)?.tone ?? '#68756d' } as CSSProperties}>
                     <div className="ask-source-title-row">
@@ -164,9 +187,14 @@ export default function AskPage() {
                       <div className="min-w-0 flex-1"><div className="ask-source-title">{String(source.title ?? source.citation ?? 'Cited source')}</div><div className="ask-source-meta">{displayNode(nodeId)} <span>·</span> {String(source.datapoint_id ?? 'SOURCE')}</div></div>
                       {Boolean(source.stale) && <span className="mesh-result-state warning">Stale</span>}
                     </div>
-                    <p className="ask-source-text">{String(source.text ?? source.summary ?? '')}</p>
+                    {table
+                      ? <><p className="ask-source-text">{table.note}</p>
+                        <div className="ask-aggregate-wrap"><table className="ask-aggregate-table"><thead><tr>{table.columns.map((column) => <th key={column}>{column}</th>)}</tr></thead>
+                          <tbody>{table.rows.map((row, rowIndex) => <tr key={rowIndex}>{row.map((value, cellIndex) => <td key={cellIndex}>{value}</td>)}</tr>)}</tbody></table></div>
+                        {table.tail && <p className="ask-source-text">{table.tail}</p>}</>
+                      : <p className="ask-source-text">{String(source.text ?? source.summary ?? '')}</p>}
                     {typeof source.superseded_by === 'string' && <p className="ask-source-meta">Replaced by {source.superseded_by}</p>}
-                    <div className="ask-source-footer"><span className="ask-mode-tag" title={`Shared as: ${String(source.mode ?? 'SUM')}`}>{modeLabel(String(source.mode ?? 'SUM'))}</span><span className="ask-citation"><CircleCheck size={13} />{String(source.citation ?? 'Citation available')}</span>
+                    <div className="ask-source-footer"><span className="ask-mode-tag" title={`Shared as: ${String(source.mode ?? 'SUM')}`}>{source.aggregate ? 'Grouped figures, computed now' : modeLabel(String(source.mode ?? 'SUM'))}</span><span className="ask-citation"><CircleCheck size={13} />{String(source.citation ?? 'Citation available')}</span>
                       {typeof source.doc_id === 'string' && <span title={source.doc_id} className="ask-source-ref"><ArrowUpRight size={13} />Source ref</span>}
                     </div>
                   </article>
@@ -178,7 +206,7 @@ export default function AskPage() {
           <aside className="ask-side-column">
             {response.also_found.length > 0 && <section className="mesh-side-panel">
               <div className="mesh-side-heading"><h2>Found, not used in the answer</h2><span>{response.also_found.length}</span></div>
-              <ul className="mesh-node-responses">{response.also_found.map((item) => <li key={item.evidence_id}><span className="mesh-response-copy"><strong>{item.title ?? item.evidence_id}</strong><small>{item.citation}</small></span></li>)}</ul>
+              <ul className="mesh-node-responses">{response.also_found.map((item) => <li key={item.evidence_id}><span className="mesh-response-copy"><strong title={item.title ?? item.evidence_id}>{item.title ?? item.evidence_id}</strong><small>{item.citation}</small></span></li>)}</ul>
             </section>}
             <section className="mesh-side-panel">
               <div className="mesh-side-heading"><h2>Node responses</h2><span>{response.node_results.length}</span></div>

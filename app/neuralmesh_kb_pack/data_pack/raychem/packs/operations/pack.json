@@ -117,6 +117,26 @@
           "level": "M"
         }
       ]
+    },
+    {
+      "id": "raychem:O-02-U001",
+      "datapoint": "raychem:O-02",
+      "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "kind": "rca",
+      "version": "2026-11",
+      "tags": [
+        "33kv",
+        "teardown"
+      ],
+      "summary": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026. Six failed joints were cut open and checked for the four causes in the set order. Water entry was the cause in 3 joints, a preparation error in 2 and a connector defect in 1. No joint failed from overload.",
+      "concepts": [
+        "concept:cable-accessory-failure-analysis",
+        "concept:cable-joint-installation",
+        "concept:failure-pattern",
+        "concept:installation-quality-records",
+        "concept:root-cause-analysis"
+      ],
+      "body_file": "contributions/O-02-U001.json"
     }
   ]
 }

@@ -111,6 +111,8 @@ export interface MeshQueryResponse {
   node_results: MeshNodeResult[]
   sources: Record<string, unknown>[]
   withheld: Record<string, unknown>[]
+  // the steps of the flow with their time in milliseconds, in order
+  steps: { step: string; ms: number }[]
 }
 
 export interface MeshNodeInfo {
@@ -126,6 +128,7 @@ export interface MeshNodeInfo {
   packs?: { pack_id: string; domain: string; documents: number; published_at: string }[]
   profile?: string
   owner: string
+  shared?: boolean
   error?: string
 }
 
@@ -321,3 +324,69 @@ export const getAdminSnapshot = () => api.get<{
 }>('/mesh/admin')
 
 export default api
+
+// ── Uploaded inputs and graph search ─────────────────────────────────────────
+export interface SharingRule { ceiling: string | null; never_leave: boolean; company?: string | null; item?: string | null; code?: string | null; item_title?: string | null; shared?: boolean }
+export interface ContextGraphRef { id: string; name: string }
+export interface ContextGraphSummary { id: string; name: string; inputs: number; removed: number; nodes: CompanyId[]; companies: string[]; latest: string }
+export interface UploadRecord {
+  node_id: CompanyId
+  company?: string
+  context_graph: ContextGraphRef
+  status: 'accepted' | 'rejected' | 'removed'
+  removed?: { by_role: string; by_company: string; at: string } | null
+  document: { id: string; datapoint: string; title: string; kind: string; kind_label?: string; version: string; tags: string[]; summary?: string; concepts?: string[] }
+  upload: { file: string; format: string; chars: number; sha256: string; by_role: string; by_company: string; by_company_name?: string; at: string }
+  concept_matches?: Record<string, 'phrase' | 'words' | 'tag'>
+  sharing: SharingRule
+  in_graph?: boolean
+  rebuild?: { pack_id: string; documents: number; index_rows: number; vectors: number | null }
+  new_item?: { code: string; title: string; domain: string }
+  kind_detected?: { by: 'model' | 'rules'; reason: string }
+  refresh?: string
+  graph?: UploadGraph | null
+}
+export interface UploadGraph extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { centre: string }
+export interface ContextGraphView extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { id: string; name: string; documents: string[] }
+export interface UploadItem { code: string; title: string; ceiling: string; never_leave: boolean; owner_role?: string | null; domain: string }
+export interface NewItemArea { letter: string; domain: string; title: string }
+export interface GraphSearchResult {
+  id: string; type: string; label: string; subsidiary?: string | null; company?: string | null; owner?: string | null; matched: string
+  sharing: SharingRule | null; connections: Record<string, number>
+}
+export interface GraphEntity {
+  id: string; type: string; label: string; layer: string; owner?: string | null; subsidiary?: string | null; company?: string | null; retired: boolean; aliases: string[]
+  properties: Record<string, unknown>; connections: Record<string, number>; sharing: SharingRule | null
+  related: Record<string, { id: string; type: string; label: string; status: string; edge_status: string; properties?: Record<string, unknown> }[]>
+}
+export interface ExportFormat { id: string; name: string; extension?: string; custom: boolean }
+export interface NewExportFormat { name: string; extension: string; escape: string; header: string; node_line: string; edge_line: string; footer: string }
+export const getUploads = () => api.get<{ uploads: UploadRecord[]; graphs: ContextGraphSummary[]; kinds: string[]; formats: string[]; export_formats: string[]; export_format_list: ExportFormat[] }>('/mesh/uploads')
+export const addExportFormat = (fields: NewExportFormat) => api.post<{ format: ExportFormat; export_format_list: ExportFormat[] }>('/mesh/uploads/formats', fields)
+export interface UploadSuggestion {
+  title: string; tags: string[]; kind: { kind: string; label: string; by: 'model' | 'rules'; reason: string }
+  concepts: { id: string; label: string; how: string }[]
+  graph: { mode: 'append' | 'new'; id: string | null; name: string; shared: string[]; reason: string }
+  decided_by: 'model' | 'code'
+}
+export const suggestUpload = (form: FormData) => api.post<UploadSuggestion>('/mesh/uploads/suggest', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120_000 })
+export interface GraphTemplate { template: unknown; own: boolean; suggested: unknown; fields: Record<string, Record<string, string>>; can_change: boolean }
+// the output template of a context graph: its own when one is kept with it, else the suggested one. Without an id, the suggested one
+export const getGraphTemplate = (graphId?: string) => api.get<GraphTemplate>('/mesh/uploads/json-templates', { params: graphId ? { graph_id: graphId } : {} })
+// without a template the graph is given in the template kept with it
+export const renderJsonTemplate = (graphId: string, template?: unknown) => api.post<{ output: unknown }>('/mesh/uploads/json-templates/render', template === undefined ? { graph_id: graphId } : { graph_id: graphId, template })
+export const uploadExportTemplate = (form: FormData) => api.post<{ format: ExportFormat; export_format_list: ExportFormat[] }>('/mesh/uploads/formats/file', form, { headers: { 'Content-Type': 'multipart/form-data' } })
+export const removeExportFormat = (formatId: string) => api.delete<{ removed: string; export_format_list: ExportFormat[] }>(`/mesh/uploads/formats/${encodeURIComponent(formatId)}`)
+export const getUploadItems = (nodeId: CompanyId) => api.get<{ node_id: CompanyId; items: UploadItem[]; new_item_areas?: NewItemArea[] }>(`/mesh/uploads/items/${nodeId}`)
+export const addUpload = (form: FormData) => api.post<UploadRecord>('/mesh/uploads', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300_000 })
+export const removeUpload = (docId: string) => api.delete<UploadRecord>(`/mesh/uploads/${encodeURIComponent(docId)}`)
+export const getUploadGraph = (docId: string) => api.get<UploadGraph>(`/mesh/uploads/${encodeURIComponent(docId)}/graph`)
+export const downloadUploadGraph = (docId: string, format: string) =>
+  api.get<Blob>(`/mesh/uploads/${encodeURIComponent(docId)}/graph`, { params: { format }, responseType: 'blob' })
+export const getContextGraph = (graphId: string) => api.get<ContextGraphView>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`)
+export const downloadContextGraph = (graphId: string, format: string) =>
+  api.get<Blob>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`, { params: { format }, responseType: 'blob' })
+export const dropContextGraph = (graphId: string) =>
+  api.delete<{ graph: ContextGraphRef; removed: UploadRecord[]; rebuilt: string[]; failed: Record<string, string>; refresh: Record<string, string> }>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`)
+export const searchGraph = (q: string) => api.get<{ query: string; results: GraphSearchResult[]; by_vector: boolean; total: number }>('/mesh/graph/search', { params: { q } })
+export const getGraphEntity = (id: string) => api.get<GraphEntity>(`/mesh/graph/entity/${id}`)

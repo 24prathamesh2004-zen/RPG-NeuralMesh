@@ -87,7 +87,7 @@ def test_each_node_registers_the_common_mcp_tools(node_id, tmp_path):
     tools = asyncio.run(server.list_tools())
 
     assert {tool.name for tool in tools} == {
-        "health", "describe_capabilities", "search", "summarize", "find_experts", "request_access", "export_graph", "lookup"
+        "health", "describe_capabilities", "search", "summarize", "find_experts", "request_access", "export_graph", "lookup", "aggregate"
     }
 
 

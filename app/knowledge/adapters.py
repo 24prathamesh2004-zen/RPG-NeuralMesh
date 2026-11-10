@@ -12,6 +12,7 @@ from typing import Any
 
 from contracts.graph import GraphEdge, GraphNode, Provenance
 from services.ontology import ontology
+from shared.registry import is_shared
 
 _NODE_KEYS = {"id", "type", "label", "aliases", "description", "external_refs"}
 
@@ -72,7 +73,7 @@ def from_node_export(export: dict[str, Any]) -> tuple[list[GraphNode], list[Grap
     by_role = "Node export"
     nodes: list[GraphNode] = [GraphNode(id=f"org:{node}", type="Subsidiary", label=export.get("display", node), owner="Mesh team",
                                         aliases=[node, export.get("display", node)],
-                                        properties={"level": export.get("level"), "profile": export.get("profile", "")})]
+                                        properties={"level": export.get("level"), "profile": export.get("profile", ""), "shared": is_shared(node)})]
     edges: list[GraphEdge] = []
 
     def rel(rtype: str, a: str, b: str, props: dict | None = None) -> None:

@@ -37,7 +37,7 @@ export default function ApplicationsPage() {
             <div className="mesh-section-heading"><div><div className="mesh-eyebrow">{app.domain} domain</div><h2>{app.name}</h2></div><AppWindow size={17} className="mesh-accent-icon" /></div>
             <p className="app-identity"><strong>Identity</strong> <code>{app.identity}</code></p>
             <div className="app-facts">
-              {Object.entries(app.facts).map(([k, v]) => <div key={k}><strong>{formatFact(v)}</strong><span>{k.replace(/_/g, ' ')}</span></div>)}
+              {Object.entries(app.facts).map(([k, v]) => <div key={k}><strong className={/^[\d.,% ]+$/.test(String(formatFact(v))) ? undefined : 'words'}>{formatFact(v)}</strong><span>{k.replace(/_/g, ' ')}</span></div>)}
             </div>
             <h3>Tools it calls</h3>
             <div className="app-tools">{app.tools.map((t) => <code key={t}>{t}</code>)}</div>

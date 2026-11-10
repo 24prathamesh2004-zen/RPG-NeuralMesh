@@ -1,0 +1,57 @@
+{
+  "title": "Pilot results, AI-assisted code review in four delivery teams",
+  "summary": "Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks. A person approved every change. The median time from opening a change to its approval fell from 19 hours to 11 hours. Errors found in review rose from 3.1 to 4.4 for every 1,000 changed lines. The effect was large in the two web application teams and small in the mainframe team.",
+  "period": "6 July to 27 September 2026",
+  "changes_reviewed": 1214,
+  "how_the_pilot_ran": {
+    "first_pass": "The AI assistant commented on every change before a person read it",
+    "approval": "A person approved or rejected every change",
+    "access": "The assistant was used through the approved gateway only",
+    "data_rule": "No confidential data of a customer was put into a prompt",
+    "compared_with": "The 12 weeks before the pilot, with the same teams and the same applications"
+  },
+  "teams": [
+    {
+      "team": "Team A",
+      "application_type": "web application",
+      "changes_reviewed": 412,
+      "median_hours_to_approval_before": 20,
+      "median_hours_to_approval_in_the_pilot": 9,
+      "errors_found_in_review_for_every_1000_changed_lines_before": 3.4,
+      "errors_found_in_review_for_every_1000_changed_lines_in_the_pilot": 5.1
+    },
+    {
+      "team": "Team B",
+      "application_type": "web application",
+      "changes_reviewed": 388,
+      "median_hours_to_approval_before": 18,
+      "median_hours_to_approval_in_the_pilot": 10,
+      "errors_found_in_review_for_every_1000_changed_lines_before": 3.2,
+      "errors_found_in_review_for_every_1000_changed_lines_in_the_pilot": 4.8
+    },
+    {
+      "team": "Team C",
+      "application_type": "data platform",
+      "changes_reviewed": 271,
+      "median_hours_to_approval_before": 19,
+      "median_hours_to_approval_in_the_pilot": 12,
+      "errors_found_in_review_for_every_1000_changed_lines_before": 2.9,
+      "errors_found_in_review_for_every_1000_changed_lines_in_the_pilot": 3.7
+    },
+    {
+      "team": "Team D",
+      "application_type": "mainframe",
+      "changes_reviewed": 143,
+      "median_hours_to_approval_before": 21,
+      "median_hours_to_approval_in_the_pilot": 19,
+      "errors_found_in_review_for_every_1000_changed_lines_before": 2.6,
+      "errors_found_in_review_for_every_1000_changed_lines_in_the_pilot": 2.7
+    }
+  ],
+  "what_did_not_work": [
+    "In the mainframe team the assistant commented on layout and missed errors in the job control files",
+    "Comments on generated code were long, and reviewers skipped them after week 3"
+  ],
+  "next_step": "Continue for 12 more weeks in the two web application teams and the data platform team. Stop in the mainframe team until the assistant is tested on its code base.",
+  "note": "Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of Zensar."
+}

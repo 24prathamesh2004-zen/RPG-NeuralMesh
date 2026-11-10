@@ -1,0 +1,8 @@
+node_id: others
+display: Others
+port: 8108
+level: L2
+schema_version: 1.0.0
+structured_db: null
+backend: 'Shared inputs of the group: files that belong to no one company, added by
+  mesh admins from the Context graph page. No built-in documents, no experts.'

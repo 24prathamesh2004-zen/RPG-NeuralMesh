@@ -3,6 +3,13 @@ note: 'Synthetic annotations of the demo documents and experts: concepts (MENTIO
   in a real deployment.'
 published_at: '2026-11-05'
 datapoint_purposes:
+  others:G-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
   ceat:E-01:
   - problem_solving
   - compliance

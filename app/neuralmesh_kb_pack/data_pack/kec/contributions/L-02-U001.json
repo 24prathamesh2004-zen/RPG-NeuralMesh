@@ -1,0 +1,40 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-e6f6addf",
+    "name": "Overseas acquisition integration"
+  },
+  "document": {
+    "id": "kec:L-02-U001",
+    "datapoint": "kec:L-02",
+    "title": "Integration review, first 100 days of the overseas unit",
+    "kind": "post_mortem",
+    "version": "2026-07",
+    "tags": [
+      "integration-review",
+      "overseas-unit"
+    ],
+    "summary": "Integration review, first 100 days of the overseas unit Review by the project management office of KEC International, July 2026. The purchase and invoice systems of the acquired unit were cut over on day 21, before the process owners were agreed. Site teams rebuilt their old steps as 14 workarounds outside the new system. Local labour, contract and payment terms were first reviewed on day 63.",
+    "body": "Integration review, first 100 days of the overseas unit\nReview by the project management office of KEC International, July 2026.\nThe purchase and invoice systems of the acquired unit were cut over on day 21, before the\nprocess owners were agreed. Site teams rebuilt their old steps as 14 workarounds outside the new\nsystem. Local labour, contract and payment terms were first reviewed on day 63. That review took\nmore time than was planned at close.\nWhat happened in the first 100 days\nDay Event\nDay 0 Close of the acquisition. One integration lead was named. No process owner was\nnamed.\nDay 21 System cut-over for purchase orders and supplier invoices.\nDay 21 to day 45 Site teams kept spreadsheets beside the new system for purchase requests, goods\nreceipts and subcontractor bills. The count on day 45 was 14 workarounds.\nDay 63 First review of local labour rules, contract terms and payment cycles. Subcontractors on\nsite were paid every two weeks, and the group system paid once a month.\nDay 80 Process owners were named for purchase to payment, site payroll and subcontractor\nbilling.\nDay 100 9 of the 14 workarounds were closed. The other 5 each have an owner and a closing\ndate.\nWhy it went this way\nThe cut-over date was fixed in the plan at close and was not tied to a sign-off.\nProcess ownership was treated as a task for the weeks after the cut-over.\nThe review of local labour, contract and payment terms had no date in the plan.\nWhat the next integration should do\n1. Name the owner of each core process before day 0.\n2. Start a system cut-over only after the process owner signs off the target process.\n3. Review local labour, contract and payment terms by day 30.\n4. Keep one list of workarounds, each with an owner and a closing date, and read it every week.\nNumbers of this review\nWhat was counted Count\nWorkarounds counted on day 45 14\nWorkarounds closed by day 100 9\nWorkarounds open on day 100, each with an owner 5\n\nDays from the system cut-over to the naming of the process owners 59\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of KEC International.",
+    "concepts": [
+      "concept:acquisition-integration",
+      "concept:overseas-mobilisation-terms",
+      "concept:process-ownership-before-cut-over"
+    ]
+  },
+  "concept_matches": {
+    "concept:acquisition-integration": "phrase",
+    "concept:overseas-mobilisation-terms": "phrase",
+    "concept:process-ownership-before-cut-over": "phrase"
+  },
+  "upload": {
+    "file": "integration_review_first_100_days.pdf",
+    "format": "pdf",
+    "chars": 2110,
+    "sha256": "c5b8e59258f99f55340f33844294da6a59057b3fe5f72f5216fa77749620aae4",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-07-29T06:42:18+00:00"
+  },
+  "sample_input": "integration_review_first_100_days.pdf"
+}

@@ -119,6 +119,24 @@
         "concept:lot-quality-trending",
         "concept:incoming-quality-control"
       ]
+    },
+    {
+      "id": "harrisons:O-05-U001",
+      "datapoint": "harrisons:O-05",
+      "title": "Latex spoilage by collection-to-factory time, monsoon weeks of 2026",
+      "kind": "aggregate",
+      "version": "2026-09",
+      "tags": [
+        "estates",
+        "monsoon-2026"
+      ],
+      "summary": "week_starting,season,collection_to_factory_time,estates_reporting,latex_spoilage_percent,pre_coagulation_share_of_spoilage_percent 2026-06-01,monsoon,under 2.5 hours,5,4.6,66 2026-06-01,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppressed 2026-06-01,monsoon,over 3.5 hours,6,5.6,71 2026-06-08,monsoon,under 2.5 hours,5,4.9,67 2026-06-08,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppres…",
+      "concepts": [
+        "concept:latex-collection-and-transport",
+        "concept:latex-pre-coagulation",
+        "concept:monsoon-operations"
+      ],
+      "body_file": "contributions/O-05-U001.json"
     }
   ]
 }

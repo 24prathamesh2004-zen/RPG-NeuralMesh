@@ -124,9 +124,10 @@ export const actionWords = (action: string) => ACTIONS[action] ?? action.replace
 // The mesh's one sentence form for a withheld item ("Withheld: <title>, reason: <reason> [<id>].") in plain words,
 // with the reason the Withheld panel gives too and no id.
 export function plainWithheld(sentence: string): string {
-  const item = /^Withheld: (.+?), reason: (.+?)\s*(?:\[[^\]]+\])?\.?$/.exec(sentence)
+  // the prompt's form "Withheld: <title>, reason: <reason> [id]." and the stand-in model's form "Withheld: <title> (<reason>) [id]."
+  const item = /^Withheld: (.+?)(?:, reason: (.+?)| \(([^()]+)\))\s*(?:\[[^\]]+\])?\.?$/.exec(sentence)
   if (!item) return sentence
-  const reason = plainReason(item[2])
+  const reason = plainReason(item[2] ?? item[3] ?? '')
   return `Withheld: ${item[1].replace(/\.$/, '')}. ${reason.charAt(0).toUpperCase()}${reason.slice(1)}.`
 }
 
@@ -137,3 +138,18 @@ export const profileWords = (text: string) =>
 // The level of a node in words, as the dashboard shows it.
 export const levelWords = (level?: string | null) =>
   level === 'L1' ? 'L1 · Summaries only' : level === 'L2' ? 'L2 · Summaries and passages' : String(level ?? '')
+
+// The sharing rule of a catalogue item in plain words, as the Add input and Search pages show it
+export function sharingWords(rule?: { ceiling?: string | null; never_leave?: boolean; company?: string | null; shared?: boolean } | null, company?: string | null): string {
+  if (!rule) return ''
+  if (rule.shared) return 'Shared with every connected company'
+  const who = company || rule.company || 'the company'
+  if (rule.never_leave) return `Never leaves ${who}`
+  switch (String(rule.ceiling ?? '').toUpperCase()) {
+    case 'MD': return `Title only leaves ${who}`
+    case 'SUM': return `Summary leaves ${who}`
+    case 'RAG': return `Full text leaves ${who}`
+    case 'LIVE': return `Asked live from ${who}`
+    default: return ''
+  }
+}

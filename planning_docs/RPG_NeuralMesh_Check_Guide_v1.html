@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuralMesh Check Guide</title>
+<style>
+:root { --bg:#f6f7fb; --card:#fff; --ink:#111827; --ink2:#374151; --muted:#6b7280; --line:#e5e7eb; --soft:#eef2ff; --accent:#4f46e5; --accent-ink:#3730a3;
+  --amber-bg:#fef3c7; --amber-ink:#b45309; --green-bg:#dcfce7; --green-ink:#15803d; --blue-bg:#dbeafe; --blue-ink:#1d4ed8; --grey-bg:#f1f5f9; --grey-ink:#475569;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; } }
+:root[data-theme="dark"] { --bg:#0f1117; --card:#171a23; --ink:#f3f4f6; --ink2:#d1d5db; --muted:#9ca3af; --line:#2a2f3d; --soft:#1e2140; --accent:#818cf8; --accent-ink:#c7d2fe;
+  --amber-bg:#3a2a0c; --amber-ink:#fcd34d; --green-bg:#0f2e1c; --green-ink:#86efac; --blue-bg:#132447; --blue-ink:#93c5fd; --grey-bg:#1f2430; --grey-ink:#cbd5e1; --shadow:none; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1240px; margin:0 auto; padding:28px 16px 56px; }
+h1 { font-size:26px; line-height:1.25; margin:0 0 6px; } .lead { color:var(--ink2); margin:0 0 20px; max-width:960px; }
+.tabs { display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:22px; position:sticky; top:0; background:var(--bg); z-index:5; }
+.tab { appearance:none; border:0; background:none; color:var(--muted); font:inherit; font-weight:700; padding:10px 14px; border-bottom:3px solid transparent; cursor:pointer; }
+.tab[aria-selected="true"] { color:var(--accent-ink); border-bottom-color:var(--accent); }
+.tab:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.panel { display:none; } .panel.on { display:block; }
+h2 { font-size:19px; margin:0 0 4px; } h2.gap { margin-top:34px; } .sub { color:var(--muted); margin:0 0 16px; font-size:14px; }
+h3 { font-size:16.5px; margin:0; }
+.page { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); margin-bottom:16px; }
+.page-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; margin-bottom:8px; }
+.route { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--muted); }
+.pill { display:inline-block; font-size:12px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; }
+.p-green { background:var(--green-bg); color:var(--green-ink); } .p-amber { background:var(--amber-bg); color:var(--amber-ink); }
+.p-blue { background:var(--blue-bg); color:var(--blue-ink); } .p-grey { background:var(--grey-bg); color:var(--grey-ink); }
+.shot { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:10px; margin:10px 0 14px; }
+.shot.tall { max-height:560px; width:auto; max-width:100%; object-fit:cover; object-position:top; }
+.page h4 { margin:12px 0 6px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.page p, .page li { font-size:14px; color:var(--ink2); } .page ul, .page ol { margin:0; padding-left:20px; } .page li { margin:3px 0; }
+.tablebox { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow-x:auto; margin:6px 0 10px; }
+.tablebox table { width:100%; border-collapse:collapse; min-width:760px; }
+.tablebox th { text-align:left; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:10px 12px; border-bottom:1px solid var(--line); }
+.tablebox td { padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:13.5px; color:var(--ink2); }
+.tablebox tr:last-child td { border-bottom:0; } .tablebox td:first-child { font-weight:600; color:var(--ink); }
+.tablebox td.see { color:var(--green-ink); }
+code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; background:var(--grey-bg); color:var(--grey-ink); padding:1px 5px; border-radius:6px; }
+pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; background:var(--grey-bg); color:var(--grey-ink); padding:12px 14px; border-radius:10px; overflow-x:auto; line-height:1.5; margin:8px 0 14px; }
+.note { font-size:13.5px; color:var(--ink2); background:var(--soft); border-radius:10px; padding:10px 14px; margin:0 0 18px; }
+.warn { font-size:13.5px; color:var(--amber-ink); background:var(--amber-bg); border-radius:10px; padding:10px 14px; margin:0 0 18px; }
+.flow { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0 16px; font-size:13.5px; }
+.flow span.s { background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-weight:600; color:var(--ink); }
+.flow span.a { color:var(--muted); }
+.two { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+@media (max-width:980px) { .two { grid-template-columns:1fr; } }
+@media (max-width:520px) { h1 { font-size:22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>NeuralMesh Check Guide</h1>
+<p class="lead">How to check every page and every part of a page of RPG NeuralMesh on the development stack, what each part should show, and where the data on it comes from. The screenshots were taken on 10 November 2026 at 1,500 pixels wide. A sample file for the Context graph page is included, with the result its upload gives, in a named context graph that a second input is added to.</p>
+
+<div class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab" role="tab" data-tab="start" aria-selected="true">Before you start</button>
+  <button class="tab" role="tab" data-tab="pages" aria-selected="false">Check each page</button>
+  <button class="tab" role="tab" data-tab="data" aria-selected="false">Where the data comes from</button>
+  <button class="tab" role="tab" data-tab="sample" aria-selected="false">The sample upload</button>
+</div>
+
+<!-- ───────────────────────── Before you start ───────────────────────── -->
+<section class="panel on" id="start" role="tabpanel">
+  <h2>Start the stack and sign in</h2>
+  <p class="sub">Five minutes, once.</p>
+  <div class="page">
+    <ol>
+      <li>In a terminal: <code>cd ~/Projects/RPG-NeuralMesh/app</code> and <code>bash scripts/dev_stack.sh start</code>. This starts the stand-in model (port 11435), the seven company nodes (ports 8101 to 8107), the shared inputs node Others (8108), the API (8000), the MCP gateway (8100) and the web app (5173). <code>bash scripts/dev_stack.sh status</code> shows one line per port.</li>
+      <li>Open <code>http://127.0.0.1:5173</code>. On the sign-in page pick <b>Group presenter · Zensar</b> (<code>presenter@neuralmesh.local</code>, password <code>MeshPilot!2026</code>). This account is a mesh admin: it can approve requests, reload the graph and upload inputs. The other demo accounts (a CEAT, a KEC, a Zensar and a Harrisons expert) are plain group users of their company.</li>
+      <li>Check the Admin page once: under <b>Answer model</b> it names the model that writes the answers. On the development stack this is <code>standin-evidence-v1</code>, a stand-in that copies the first lines of the evidence. To have Claude Sonnet 5.5 write the answers, restart the API with the real policy: <code>NEURALMESH_MODEL_POLICY=config/model_policy.json bash scripts/dev_stack.sh restart-api</code> (the Anthropic key must be in the API's environment). <code>bash scripts/dev_stack.sh restart-api</code> without the variable goes back to the stand-in.</li>
+      <li>Every document, expert and figure on the pages is synthetic, written for the pilot. Six restricted items hold a test string (a canary, for example <code>CANARY-CEAT-FORMULA-7731</code>) that must never appear on any page. If you ever see a string starting with <code>CANARY-</code>, that is a defect.</li>
+    </ol>
+  </div>
+  <div class="note">How to read the check tables: <b>Do this</b> is the click or the text to type, <b>You should see</b> is the result on 10 November 2026 with the stand-in model, and <b>Comes from</b> names the file or the call behind it. Counts that change with new uploads or new questions (documents, decisions, graph entities) are given as they were on that day.</div>
+</section>
+
+<!-- ───────────────────────── Check each page ───────────────────────── -->
+<section class="panel" id="pages" role="tabpanel">
+  <h2>The nine pages, part by part</h2>
+  <p class="sub">In the order of the left menu. Each page has its screenshot, then one row per part.</p>
+
+  <article class="page">
+    <div class="page-head"><h3>Sign in</h3><span class="route">/auth</span><span class="pill p-grey">everyone</span></div>
+    <img class="shot" src="screenshots/check_guide/01_sign_in.png" alt="The sign-in page with the demo accounts">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Demo accounts</td><td>Click <b>Group presenter · Zensar</b>, then <b>Sign in</b></td><td class="see">The Ask page opens. The top right shows "NeuralMesh Presenter · Zensar"</td><td>The demo accounts of <code>api/auth.py</code>, all synthetic</td></tr>
+      <tr><td>Scope selector (top bar)</td><td>Open the <b>Scope</b> list</td><td class="see">"All connected companies" (the seven companies and the shared inputs node Others, from the registry) and three fixed presets</td><td><code>config/nodes.yaml</code>, read by <code>GET /mesh/nodes</code></td></tr>
+      <tr><td>Wrong password</td><td>Sign out, type any other password</td><td class="see">One error line, no page change</td><td><code>POST /auth/login</code></td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Dashboard</h3><span class="route">/</span><span class="pill p-grey">everyone</span></div>
+    <img class="shot" src="screenshots/check_guide/02_dashboard.png" alt="The dashboard with the four tiles, the company table and the decisions">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Four tiles</td><td>Read them</td><td class="see">"8/8 independent nodes online", "0 source records copied to the centre", "7 companies in your scope" (the shared node is in the scope but is not a company), "3 pending approvals"</td><td>A live <code>health</code> call to each node, the graph store (it holds titles and links, never text), the scope selector, the pending requests of the eight nodes' grant databases</td></tr>
+      <tr><td>Pilot companies table</td><td>Read the level and health columns</td><td class="see">CEAT, KEC and Zensar at "L2 · Summaries and passages", the four others at "L1 · Summaries only", all "Healthy"</td><td><code>level</code> in each node's <code>node.yaml</code>, health from the node</td></tr>
+      <tr><td>Decision outcomes</td><td>Ask one question on the Ask page and come back</td><td class="see">"Search decisions recorded" rises by one for every document a node decided on for the question, and the Allowed and Blocked bars follow</td><td>The last 100 entries of the nodes' decision ledgers (<code>.neuralmesh/nodes/&lt;node&gt;/audit.jsonl</code>), counted by action "search"</td></tr>
+      <tr><td>Node activity</td><td>Read the five rows</td><td class="see">The company whose node decided, the action and the item code, and "asked by" another company when the asker was not of that company. Since 10 November the row names the deciding node. Before it named the asking company</td><td>The same ledgers, newest first</td></tr>
+      <tr><td>Search decisions by node</td><td>Compare with the ledger</td><td class="see">One bar per company. CEAT highest after the flagship question, because most questions reach it</td><td>Ledger entries grouped by node</td></tr>
+      <tr><td>Potential monthly value</td><td>Move the slider</td><td class="see">The rupee figure changes. The block is marked "Illustrative only" and "not measured POC savings"</td><td>A formula on the page with the assumptions printed under it. Not a measurement</td></tr>
+      <tr><td>A node outage</td><td>In a terminal: <code>lsof -nP -iTCP:8102 -sTCP:LISTEN -t | xargs kill</code>, then <b>Refresh</b> the page. Afterwards <code>bash scripts/dev_stack.sh restart-node kec</code></td><td class="see">"6/7", KEC International "Unavailable". After the restart "7/7" again</td><td>The health call fails for the stopped node</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Ask NeuralMesh</h3><span class="route">/ask</span><span class="pill p-grey">everyone</span><span class="pill p-blue">a model writes the answer, code checks it</span></div>
+    <img class="shot tall" src="screenshots/check_guide/03_ask.png" alt="The Ask page after the flagship question, with the answer, the evidence cards and the side panels">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Question and purpose</td><td>Keep the example question ("What rubber-compound learnings from CEAT could reduce Harrisons Malayalam's latex spoilage?"), purpose "Problem solving", click <b>Ask NeuralMesh</b></td><td class="see">"Routed by the mesh graph", CEAT, Harrisons Malayalam and KEC International, topics "Compound formulation, Latex pre-coagulation"</td><td>The concepts of the question are found in the group vocabulary, and the graph names the companies whose documents mention them (<code>resolve</code> and <code>route</code> steps)</td></tr>
+      <tr><td>Answer</td><td>Read the sentences</td><td class="see">Every sentence ends with a card number in brackets. The title says "Answer · 1.1 s" (the time of the whole flow). With the stand-in model the sentences are copied first lines of the evidence</td><td>The answer model writes from the released evidence only, and <code>services/context/check.py</code> checks the seven rules before the answer is shown</td></tr>
+      <tr><td>Same question again</td><td>Click <b>Ask NeuralMesh</b> once more</td><td class="see">"Answer · 0.1 s · reused from the same question asked before"</td><td>The answer cache, keyed on the question and the exact evidence. A changed document gives a new key</td></tr>
+      <tr><td>Approved links</td><td>Read the three lines</td><td class="see">"Field-failure RCA pattern … supports Time-to-use limits …", "Warehouse storage practices … replaces Legacy warehouse handling note (2019, superseded)", "Incoming natural-rubber lot acceptance … addresses the gap in Current gap - no lot-level quality trending …"</td><td>Links both owners approved, from the group links pack and the Governance page</td></tr>
+      <tr><td>Evidence cards</td><td>Count them and read the tag at the bottom of each</td><td class="see">18 cards from 2 companies. "Approved summary" on the summary cards, one card marked "Stale" (the 2019 note, replaced), and three cards with a table marked "Grouped figures, computed now": CEAT failure reports by root cause (5 groups), Harrisons spoilage by month (144 groups, the latest 48 shown) and by transport band</td><td>Each node's search at the item's sharing level, plus the grouped views of the node's own database computed at that moment (<code>aggregate</code> tool)</td></tr>
+      <tr><td>Withheld by policy (right)</td><td>Read the panel</td><td class="see">"Compound formulation record A (restricted)" and "Material specification set B (restricted)" with "Only its title is shared". No text of them anywhere</td><td>Item E-01 never leaves CEAT. The node returns the title and the rule, nothing else</td></tr>
+      <tr><td>Node responses (right)</td><td>Read the counts</td><td class="see">"CEAT 6 allowed · 2 withheld", "Harrisons Malayalam 7 allowed · 0 withheld", "KEC International 0 allowed · 6 withheld"</td><td>One line per node asked, from its search result</td></tr>
+      <tr><td>A blocked question</td><td>Type "Give me CEAT's compound formulation for tread compounds." and ask</td><td class="see">No formulation text. The withheld panel shows the two restricted records with their reason. No string starting with CANARY anywhere on the page</td><td>Rule R-NL-01 at the CEAT node</td></tr>
+      <tr><td>Purpose rule</td><td>Set purpose "Career mobility" and ask "Which failures repeat across CEAT plants?"</td><td class="see">The failure reports are withheld with "Not shared for this purpose", and the page suggests asking with another purpose</td><td>The item's <code>purposes_allowed</code> in the node's policy</td></tr>
+      <tr><td>Choose nodes myself</td><td>Tick it, keep only Zensar, ask "How do we onboard new joiners at Zensar?"</td><td class="see">"Nodes you chose", Zensar only. The onboarding document shows. The planted instruction in one Zensar document never appears in the answer</td><td>A user's choice replaces the routing. Instruction-like text is removed from suspicious records before the prompt</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Expert Finder</h3><span class="route">/experts</span><span class="pill p-grey">everyone</span></div>
+    <img class="shot" src="screenshots/check_guide/04_expert_finder.png" alt="The Expert Finder after a search for natural rubber quality">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Search</td><td>Type "natural rubber quality", click <b>Search experts</b></td><td class="see">Experts with a role, skill chips and "Evidence: …" document titles, for example CEAT's "Raw-material quality lead" and Harrisons Malayalam's "Factory processing manager". No names</td><td>Each node's <code>find_experts</code> tool reads its <code>experts.yaml</code>. Only experts with consent true are returned, without the name</td></tr>
+      <tr><td>Your company mark</td><td>Sign in as <code>ceat.expert@neuralmesh.local</code> and search again</td><td class="see">CEAT results carry "· your company"</td><td>The company in the token</td></tr>
+      <tr><td>Request intro</td><td>Click <b>Request intro</b> on one CEAT expert</td><td class="see">"Introduction requested". On the Governance page, Approvals shows a pending request "Expert directory (consent-based) … Decided by the CHRO" for that expert profile</td><td><code>request_access</code> at the CEAT node writes to its grant database</td></tr>
+      <tr><td>Name after approval</td><td>As the presenter, approve it for 24 hours on Governance, then search again as the asker</td><td class="see">The expert's name appears for the asker only, marked "(fictional)" in the data</td><td>The grant in the node's database, checked on every search</td></tr>
+      <tr><td>Opted-out experts</td><td>Search any topic</td><td class="see">Expert profiles CE-5, KE-5, ZE-4 and HE-4 never appear</td><td>Their consent flag is false in the node files</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Mesh Nodes</h3><span class="route">/nodes</span><span class="pill p-grey">everyone</span><span class="pill p-blue">reload for mesh admins</span></div>
+    <img class="shot tall" src="screenshots/check_guide/05_mesh_nodes.png" alt="The Mesh Nodes page with the eight node cards, CEAT expanded, and the mesh graph">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Header count</td><td>Read it</td><td class="see">"8 / 8 nodes responding now · Live MCP health checks"</td><td>A <code>health</code> call to each node at page load</td></tr>
+      <tr><td>Company cards</td><td>Read the numbers</td><td class="see">CEAT 9 datapoints and 6 packs, KEC 11 and 6, Zensar 4 and 4, Harrisons 4 and 3, Raychem 6 and 6, RPG Life Sciences 6 and 5, Asvata 6 and 5. "Pack format 1.0.0"</td><td>The node's <code>describe_capabilities</code> tool: its policy items and its pack files</td></tr>
+      <tr><td>View capabilities</td><td>Click it on CEAT</td><td class="see">A profile text: "CEAT, level L2, 6 packs. Engineering: 10 documents in E-02 … E-03 … Lessons: 2 documents … Operations: 3 documents … Talent: 3 documents … Concepts: lot acceptance, lot quality trending, … 4 consented experts." Then the nine items with how far each is shared: C-03 Title only, E-01 Title only, E-02 Approved summary, E-03 Approved summary, F-04 Live lookup, F-06 Title only, L-01 Approved summary, O-01 Document passages, O-02 Approved summary</td><td>Listed metadata of the packs only. Never-leave items are counted by title and their documents' concepts are left out of the profile</td></tr>
+      <tr><td>Mesh graph chips</td><td>Read the type counts</td><td class="see">Subsidiary 8 (the seven companies and Others), Domain 9, Datapoint 54, Document 102, Concept 61, Skill 44, Role 17, Expert 23, Asset 20, AssetFamily 8, Condition 27, ConditionFamily 9, GradeScale 5, CoverType 5, View 23, ReviewStatus 3, Inspection 1 (on 10 November, before the sample upload)</td><td>The central graph store: 419 live entities and 876 live links, of which 404 and 844 are shown to a group user (never-leave items of other companies are left out). The store also keeps the retired rows of removed documents and links, 458 entity rows and 970 link rows in all</td></tr>
+      <tr><td>Find an entity</td><td>Type "Lot acceptance", click <b>Find</b>, then click the node</td><td class="see">The concept is highlighted and the right panel lists its connections: broader "Incoming quality control", mentioned by "Incoming natural-rubber lot acceptance and trending", similar to "Lot-level quality trending"</td><td>The NetworkX copy of the store</td></tr>
+      <tr><td>Reload from nodes</td><td>Click it (mesh admin)</td><td class="see">The line under the canvas: "ceat: loaded 40 entities, 117 relationships · kec: loaded 33 … · revision N" with N one higher than before</td><td>The <code>export_graph</code> tool of every node, checked by the intake, written to the store</td></tr>
+      <tr><td>Graph checks</td><td>Read the six lines</td><td class="see">Four "ok", "Every live entity has at least one live link: 6 found" and "Every concept is mentioned by at least one document: 2 found", each with the entities named and "Answers still work"</td><td><code>services/graph_intake.py</code> after every refresh</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Governance</h3><span class="route">/governance</span><span class="pill p-grey">everyone sees</span><span class="pill p-blue">owners decide, the presenter stands in for every owner</span></div>
+    <img class="shot" src="screenshots/check_guide/06_governance_1_approvals_.png" alt="The Governance page, Approvals tab with three pending requests">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Approvals tab</td><td>Read the three cards</td><td class="see">"Post-mortem annex - claims and labour (full text)" of KEC asked by Zensar, decided by the PMO head, and two expert introductions (CEAT profile CE-1, Raychem profile RE-2) decided by the CHRO. Each has <b>Deny</b> and <b>Approve 24 hours</b></td><td>The pending rows of each node's grant database</td></tr>
+      <tr><td>Approve</td><td>Approve the KEC annex, then ask on the Ask page "What went wrong in the first 100 days of our overseas acquisitions and what checklist should we follow?"</td><td class="see">The annex card now carries "Document passages" instead of "Approved summary", for 24 hours. The Dashboard shows 2 pending approvals</td><td>The grant, checked by the KEC node on every search</td></tr>
+      <tr><td>Links between companies</td><td>Open the tab</td><td class="see">Proposed links between documents of two companies with one <b>Approve</b> and <b>Reject</b> per side. A link counts on the Ask page only after both owners approved</td><td>The link reviews in the graph store</td></tr>
+      <tr><td>Application entries</td><td>Open the tab</td><td class="see">201 entries that Snap and Score proposed for the graph (asset families, conditions, grade scales), grouped by application and type, with approve or reject per group or per entry</td><td>The application files under <code>neuralmesh_kb_pack/applications/</code> and their review state</td></tr>
+      <tr><td>Decision log</td><td>Open the tab, then click the fingerprint button next to "Node decision ledger"</td><td class="see">A table of the last 100 decisions with Time, Decision, Node of, Asked by, Action, Datapoint and Rule. Query text never appears. The check answers "The chain is intact at all 7 nodes (N entries)."</td><td>Each node's <code>audit.jsonl</code>, where every line carries the hash of the line before it</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <div class="two">
+  <article class="page">
+    <div class="page-head"><h3>Domains</h3><span class="route">/domains</span><span class="pill p-grey">everyone</span></div>
+    <img class="shot" src="screenshots/check_guide/07_domains.png" alt="The Domains page with the core and inspection layers">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Layers</td><td>Read the two blocks</td><td class="see">"core" with 9 entity types and 19 link types (335 entities, 686 links on 10 November) and "inspection" with 8 types and 10 link types (81 entities, 188 links)</td><td>The graph rules in <code>config/graph</code> and live counts from the store</td></tr>
+      <tr><td>Entities and Links</td><td>Compare a count with the Mesh Nodes chips</td><td class="see">The same number for the same type, for example Concept 61</td><td>One store behind both pages</td></tr>
+      <tr><td>Last loads</td><td>Read the sources</td><td class="see">Three group packs, two Snap and Score files and the eight nodes, each with its entity and link counts and warnings</td><td>The intake report of the last refresh</td></tr>
+    </tbody></table></div>
+    <p>This page answered an error from 9 November to the morning of 10 November, after a refactor left an import in the wrong function. It is fixed, and a test now calls the endpoint.</p>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Applications</h3><span class="route">/applications</span><span class="pill p-grey">everyone</span></div>
+    <img class="shot" src="screenshots/check_guide/08_applications.png" alt="The Applications page with SkillForge and Snap and Score">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Cards</td><td>Read both</td><td class="see">"SkillForge" in the talent domain with the 10 tools it may call and the packs it sends (the group skill list and one talent pack per company), and "Snap and Score" in the inspection domain with 8 tools and "What it loaded: 104 entities, 203 links"</td><td>The registry files <code>config/applications/*.json</code> and the import records of the store</td></tr>
+      <tr><td>What it loaded</td><td>Read the times</td><td class="see">The last load time of each pack. SkillForge sends its packs every hour while it runs, so the time moves only while SkillForge is running</td><td>The import tool of the context contract</td></tr>
+    </tbody></table></div>
+  </article>
+  </div>
+
+  <article class="page">
+    <div class="page-head"><h3>Admin</h3><span class="route">/admin</span><span class="pill p-amber">mesh admins</span></div>
+    <img class="shot tall" src="screenshots/check_guide/09_admin.png" alt="The Admin page with the orchestrator status, the node registry, the answer model and the vocabulary">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Orchestrator status</td><td>Read the strip</td><td class="see">Six steps "Question + purpose → Graph routing → Subsidiary MCP nodes → Policy-filtered evidence → Answer and 7 checks", and "Answer model ready" on the right</td><td>The steps of <code>services/neuralmesh.py</code></td></tr>
+      <tr><td>Node registry</td><td>Read the seven rows</td><td class="see">CEAT :8101/mcp … Asvata :8107/mcp, each "schema 1.0.0" with its datapoint count</td><td><code>config/nodes.yaml</code></td></tr>
+      <tr><td>Answer model</td><td>Read the name</td><td class="see">"standin-evidence-v1 · Key configured" on the development stack, "claude-sonnet-5-5" after a restart with <code>config/model_policy.json</code></td><td>The model policy file the API was started with</td></tr>
+      <tr><td>Shared vocabulary</td><td>Scroll the list</td><td class="see">69 concepts, each with its other names, from "AI-assisted delivery" to "Work permit control"</td><td><code>neuralmesh_kb_pack/group/group.vocabulary.pack.json</code></td></tr>
+      <tr><td>Guardrails</td><td>Read the four lines</td><td class="see">Node-side policy enforcement On, Citations on returned evidence On, Flag instruction-like source text On, Source record migration Off</td><td>Fixed settings of the pilot</td></tr>
+    </tbody></table></div>
+  </article>
+
+  <article class="page">
+    <div class="page-head"><h3>Context graph</h3><span class="route">/context-graph</span><span class="pill p-grey">everyone searches</span><span class="pill p-amber">mesh admins upload and remove</span></div>
+    <h4>Tab 1 · Uploaded inputs</h4>
+    <img class="shot" src="screenshots/check_guide/10_context_graph_inputs.png" alt="The Context graph page, Uploaded inputs tab, with the context graph of the Kochi note">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Search box</td><td>Type "kochi", then "nothing like this"</td><td class="see">The list keeps the graph "Plant storage note, Kochi bales". Then "No input matches nothing like this". When the words are on an input but not in the graph's name, the input is named under the graph row</td><td>Every word of an input (title, id, file, company, item, kind, tags, first sentences, graph name, "removed"), matched in the browser</td></tr>
+      <tr><td>List of context graphs</td><td>Read the rows</td><td class="see">With the sample set loaded (<code>make samples-load</code> in <code>app</code>), five graphs with 11 inputs: "Plant storage note, Kochi bales" (1 input, CEAT), "33 kV cable joint failures" (1, Raychem RPG), "AI-assisted delivery pilots" (2, Others and Zensar), "Natural rubber storage and ageing" (3 inputs and 1 removed, CEAT and Harrisons Malayalam) and "Overseas acquisition integration" (3, KEC International, Others and Zensar). Without the sample set only the Kochi note is listed. <code>make samples-remove</code> takes the sample set out again and leaves the Kochi note. An upload kept before 10 November is its own graph, named after its title</td><td><code>GET /mesh/uploads</code>, the list <code>graphs</code> made from the records under <code>data_pack/&lt;node&gt;/contributions/</code></td></tr>
+      <tr><td>Graph panel</td><td>Click the row</td><td class="see">The name, "1 input · CEAT", the buttons <b>Add input to this graph</b> and <b>Drop graph</b> at the top right (mesh admins only), and the input row: CEAT · Approved materials handling and storage learnings (non-formula) · Note, plant_storage_note.txt, 9 Nov 2026, In the graph</td><td>The record <code>ceat/contributions/E-03-U001.json</code></td></tr>
+      <tr><td>Input detail</td><td>Click the input row</td><td class="see">"Summary leaves CEAT" (the item's sharing rule in words), the first sentences other companies may read, the file name and its size (392 characters). A second click closes it</td><td>The record and the item's ceiling (SUM)</td></tr>
+      <tr><td>What these inputs are linked to</td><td>Look at the canvas and the chips</td><td class="see">"1 input · 7 entities · 10 links": the document, item E-03, CEAT and four concepts, each chip saying how it matched: "Material ageing (from a tag)", "Materials handling (from a tag)", "Raw material storage (from a tag)", "Time-to-use limit (from a tag)"</td><td><code>GET /mesh/uploads/graphs/{id}</code>: the parts of every input of the graph joined, each entity once</td></tr>
+      <tr><td>Download</td><td>Pick a format and click <b>Download</b></td><td class="see">A file: JSON (entities and links), GraphML (opens in yEd or Gephi), CSV (one row per entity and link) or the documents as a knowledge pack. In the pack, a document of another company carries what its item releases: the summary for a summary item, the text for a full-text item, the title alone for a title-only item</td><td><code>GET /mesh/uploads/graphs/{id}?format=</code></td></tr>
+      <tr><td>Add input to this graph, Drop graph, Remove this input</td><td>Do not click Drop or Remove on the Kochi note. Try them on your own sample later</td><td class="see">Add input to this graph opens the Add input tab with this graph already chosen under Context graph. Drop graph lists every input of the graph in a confirmation, then takes all of them out in one step, and the graph row reads "0 inputs · 1 removed". Remove this input, under the chosen input, takes one input out. The rows stay, marked removed</td><td><code>DELETE /mesh/uploads/graphs/{id}</code>, <code>DELETE /mesh/uploads/{doc}</code></td></tr>
+    </tbody></table></div>
+    <h4>Tab 2 · Add input</h4>
+    <img class="shot" src="screenshots/check_guide/11_context_graph_add_input.png" alt="The Add input form with Others chosen">
+    <p>The form: Company (Others first and chosen by default: inputs that belong to no one company, read by every connected company. Or one of the seven companies, whose node keeps the file), Catalogue item (with its sharing rule under the label: "Shared with every connected company" for Others, "Never leaves CEAT" for C-03, "Summary leaves CEAT" for E-03), Context graph ("New context graph", or one of the graphs that has inputs, to add the file to it), Name of the graph (required for a new graph, locked to the name of the graph chosen otherwise), Kind (12 kinds of the pack format, a label stored with the document that does not change how it is read or shared), Title (the name of the document, empty takes the file name), Tags (comma separated) and File (.txt, .md, .csv, .json, .pdf or .docx, up to 20 MB, at least 40 characters of text). The full walkthrough with the sample file is in the tab "The sample upload".</p>
+    <h4>Tab 3 · Search the graph</h4>
+    <img class="shot" src="screenshots/check_guide/12_context_graph_search.png" alt="The graph search with the concept Lot acceptance opened">
+    <div class="tablebox"><table><thead><tr><th>Part</th><th>Do this</th><th>You should see</th><th>Comes from</th></tr></thead><tbody>
+      <tr><td>Search</td><td>Type "lot acceptance", click <b>Search</b></td><td class="see">Three results: the concept "Lot acceptance" (3 links, matched by name), the CEAT document "Incoming natural-rubber lot acceptance and trending" (Summary leaves CEAT, 8 links) and "Time-to-use limits and lot traceability" (matched by other name or tag)</td><td><code>GET /mesh/graph/search</code>: labels, other names, tags and item codes of every entity you may see, then the vocabulary vectors when no name matches</td></tr>
+      <tr><td>Entity panel</td><td>Click the concept</td><td class="see">Id <code>concept:lot-acceptance</code>, other names "incoming lot acceptance, acceptance testing", owner "Mesh knowledge curator", domain engineering, and the links by type: broader (1) Incoming quality control, mentions incoming (1), similar to (1) Lot-level quality trending</td><td><code>GET /mesh/graph/entity/{id}</code></td></tr>
+      <tr><td>Ask about this</td><td>Click it</td><td class="see">The Ask page opens with the question written for you: "How does the group handle Lot acceptance?" for a concept, "What does CEAT say in "…"?" for a CEAT document</td><td>The page passes the question in the address</td></tr>
+      <tr><td>A phrase with no name match</td><td>Search "rubber going sour"</td><td class="see">The line "No name matched the words, so these are the closest concepts by meaning." and one result, the skill "Rubber Plantation Management" marked "meaning match 0.47"</td><td>The vectors of the group vocabulary, used only when no name matches</td></tr>
+    </tbody></table></div>
+  </article>
+</section>
+
+<!-- ───────────────────────── Where the data comes from ───────────────────────── -->
+<section class="panel" id="data" role="tabpanel">
+  <h2>Mesh Nodes: how the data on the page is made</h2>
+  <p class="sub">Nothing on the Mesh Nodes page comes from the web. Every company's knowledge is a hand-written synthetic file that a script turns into the files a node serves.</p>
+  <div class="page">
+    <div class="flow"><span class="s">kb/ceat.yaml (hand-written)</span><span class="a">→</span><span class="s">kbgen.py</span><span class="a">→</span><span class="s">data_pack/ceat/ (source, index.db, policy, experts, qms.db)</span><span class="a">→</span><span class="s">python -m knowledge.packgen</span><span class="a">→</span><span class="s">packs/&lt;domain&gt;/pack.json + vectors</span><span class="a">→</span><span class="s">node process :8101</span><span class="a">→</span><span class="s">Mesh Nodes page (health, capabilities)</span><span class="a">→</span><span class="s">export_graph → central graph</span></div>
+    <ol>
+      <li><b>The knowledge base.</b> <code>app/neuralmesh_kb_pack/kb/ceat.yaml</code> is written by hand for the pilot. It holds CEAT's 9 catalogue items (code, title, sensitivity, how far it may leave: title only, approved summary, document passages or live lookup, the owner role, and for two items the grouped views of the company database), 18 documents (title, version, tags, a summary and a body), 5 expert profiles with a consent flag and a fictional private name, and one canary string planted in a restricted document. The same exists for the six other companies.</li>
+      <li><b>The node files.</b> <code>python neuralmesh_kb_pack/kbgen.py</code> writes <code>data_pack/ceat/</code>: one Markdown file per document in <code>source/</code> (18 files), the bodies that need an approval in <code>gated/</code>, the search index <code>index.db</code> (19 rows: one title row for each of the 4 title-only documents, one summary row for each of the 13 summary documents, 2 text chunks for the one document shared as passages), <code>policy.yaml</code> (the items and their rules), <code>experts.yaml</code>, <code>node.yaml</code> (display name, port 8101, level L2, the database name) and the company database <code>qms.db</code> with 60 synthetic failure reports and 80 maintenance log rows, generated with a fixed random seed, and the view <code>v_failure_by_cause</code> over them.</li>
+      <li><b>The packs.</b> <code>python -m knowledge.packgen</code> turns the node files into one pack per domain under <code>packs/</code> (for CEAT: commercial, corporate, engineering, lessons, operations and talent), each a <code>pack.json</code> with the items, the documents and the concepts they mention, and a vector store under <code>build/</code> made with the embedding model <code>all-MiniLM-L6-v2</code>. The talent pack is the one exception to the hand-written path: SkillForge sends it every hour through the import tool.</li>
+      <li><b>The node.</b> One process per company (<code>mcp_nodes/server.py</code>, port 8101 for CEAT) loads these files and serves nine tools: health, describe_capabilities, search, summarize, find_experts, lookup, aggregate, export_graph and request_access. It decides every request against <code>policy.yaml</code> and writes the decision to its own ledger. When a pack file changes, the node reads it again without a restart.</li>
+      <li><b>The page.</b> Each card is a live <code>health</code> and <code>describe_capabilities</code> call: the counts and the "View capabilities" text come from the node at that moment, not from the centre. The mesh graph below the cards is the centre's copy of metadata only: each node's <code>export_graph</code> (items, document titles, tags and concepts, consented experts' roles and skills, approved links) goes through the intake checks into the graph store (<code>.neuralmesh/mesh_graph.db</code>, 419 live entities and 876 live links on 10 November) and into the NetworkX copy the page draws. No summary and no body is in the centre, which is what the Dashboard tile "0 source records copied" states.</li>
+    </ol>
+    <p>The eighth node, <b>Others</b> (port 8108), is built by the same path from a knowledge file with no documents and no experts: one catalogue item, G-01 "Shared inputs of the group", whose full text leaves to every connected company. Everything it holds comes from the Context graph page. It is marked <code>shared: true</code> in <code>config/nodes.yaml</code>, so nobody signs up for it and a question never names it.</p>
+    <p>The public reports listed in <code>RPG_NeuralMesh_Data_Prerequisites_and_Public_Sources.md</code> are what a real deployment would load. None of them is loaded today.</p>
+  </div>
+
+  <h2 class="gap">Context graph: where CEAT's data comes from and how the added input works</h2>
+  <p class="sub">The CEAT entities you see in the graph have three origins.</p>
+  <div class="page">
+    <div class="tablebox"><table><thead><tr><th>Origin</th><th>What it adds for CEAT</th><th>Where it is</th></tr></thead><tbody>
+      <tr><td>The hand-written knowledge base</td><td>The company node, 9 items, 18 documents, 4 consented experts, the concepts those documents mention and the links the packs name. These are the 40 entities and 117 relationships the export line reports</td><td><code>kb/ceat.yaml</code> → <code>data_pack/ceat/packs/*/pack.json</code></td></tr>
+      <tr><td>The group vocabulary and the group links</td><td>The 61 concepts (Lot acceptance, Time-to-use limit, …) with their other names, and the cross-company links both owners approved</td><td><code>neuralmesh_kb_pack/group/group.vocabulary.pack.json</code> and <code>group.links.pack.json</code></td></tr>
+      <tr><td>Inputs added by hand on the Context graph page</td><td>The Kochi bales note, uploaded by the mesh admin on 9 November, and the ten inputs of the sample set when it is loaded. It is a Document entity under item E-03 with four MENTIONS links to concepts</td><td><code>data_pack/ceat/contributions/E-03-U001.json</code>, merged into <code>packs/engineering/pack.json</code></td></tr>
+    </tbody></table></div>
+    <h4 style="margin:14px 0 6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">What happens when a mesh admin adds an input</h4>
+    <div class="flow"><span class="s">file</span><span class="a">→</span><span class="s">text read out (PDF, Word, Markdown, CSV, JSON or plain text)</span><span class="a">→</span><span class="s">summary = first sentences, up to 400 characters</span><span class="a">→</span><span class="s">concepts found in the text, by phrase, by tag or by words</span><span class="a">→</span><span class="s">record in contributions/</span><span class="a">→</span><span class="s">pack of the item's domain rebuilt and checked</span><span class="a">→</span><span class="s">index rows and vectors</span><span class="a">→</span><span class="s">node reloads the pack</span><span class="a">→</span><span class="s">export → graph</span></div>
+    <ul>
+      <li>The record keeps the file name, its size and hash, the role and company of the person who added it, the time, the document as the pack holds it, and how each concept matched. The record is the proof of where the document came from.</li>
+      <li>The document takes the sharing rule of the item it was added to, nothing more and nothing less. Under E-03 (approved summary) other companies read the first sentences. Under C-03 or E-01 (never leaves CEAT) they see the title only, and the text stays in the node's index for CEAT's own questions.</li>
+      <li>The Ask page treats the added document like a built-in one: on 9 November the Kochi note was cited first in an answer about bale storage, and in the Ask screenshot of this guide it is card 1.</li>
+      <li>The rebuild is validated against every other pack before the old file is replaced. A refused upload changes nothing and the page says why (for example a live item, a file with under 40 characters of text, or a knowledge pack sent as a file).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────────────── The sample upload ───────────────────────── -->
+<section class="panel" id="sample" role="tabpanel">
+  <h2>The sample file</h2>
+  <p class="sub">A synthetic CEAT note written for this check. It names ten concepts of the group vocabulary, so the graph part it makes is worth looking at.</p>
+  <div class="page">
+    <p>File: <code>planning_docs/samples/CEAT_sample_input_bale_storage_check.md</code> (1,692 characters of text once the Markdown marks are removed). It was checked against the running graph on 10 November without being uploaded, so your upload is the first with this title.</p>
+<pre># Bale storage check at the Plant 2 raw material store
+
+The store team checked the natural rubber bales received in October. Three lots were close to the
+maximum storage time of ninety days and were issued first, two bales with torn wrapping were set
+aside under the foreign matter control rule, and the per-lot trending sheet now holds the dirt
+content and volatile matter results of every lot.
+
+## What was checked
+Every lot went through incoming inspection at the gate … Lot acceptance was recorded per lot …
+so lot traceability from the bale to the mixing batch is kept.
+
+## What was found
+… issued first, as FIFO storage requires, and each got a storage ageing check before mixing …
+
+## What changes
+- Material handling in the covered bay: bales stay on pallets …
+- The supplier scorecard of the supplier with the three old lots gets a note …
+- A lot that passes ninety days is reported to the store lead on the same day.
+
+Synthetic sample written for the demonstration of 2026-11-10. It is not a CEAT record and holds no recipe data.</pre>
+  </div>
+
+  <h2 class="gap">Step by step</h2>
+  <div class="page">
+    <div class="tablebox"><table><thead><tr><th>Step</th><th>Do this</th><th>You should see</th></tr></thead><tbody>
+      <tr><td>1</td><td>Sign in as the presenter (mesh admin), open <b>Context graph</b>, tab <b>Add input</b></td><td class="see">The form with Company (Others chosen), Catalogue item, Context graph, Name of the graph, Kind, Title, Tags and File</td></tr>
+      <tr><td>2</td><td>Company <b>CEAT</b>. Catalogue item <b>E-03 · Approved materials handling and storage learnings (non-formula)</b></td><td class="see">Under the item label: "Summary leaves CEAT"</td></tr>
+      <tr><td>3</td><td>Context graph <b>New context graph</b>. Name of the graph <b>Bale storage review</b></td><td class="see">The button "Add to the graph" stays grey until the name and the file are given</td></tr>
+      <tr><td>4</td><td>Kind <b>Note</b>. Title <b>Bale storage check at the Plant 2 raw material store</b>. Tags <b>storage, natural-rubber, lot-acceptance</b></td><td class="see">The fields filled. A title left empty would take the file name</td></tr>
+      <tr><td>5</td><td>Choose the file <code>CEAT_sample_input_bale_storage_check.md</code>, click <b>Add to the graph</b></td><td class="see">After about a second (the pack, its index and its vectors are rebuilt) the page switches to <b>Uploaded inputs</b> with the new graph "Bale storage review" selected, "1 input · CEAT". The document id is <code>ceat:E-03-U002</code> when the Kochi note is still the only earlier upload</td></tr>
+      <tr><td>6</td><td>Click the input row</td><td class="see">"Summary leaves CEAT". The first sentences: "Bale storage check at the Plant 2 raw material store The store team checked the natural rubber bales received in October. Three lots were close to the maximum storage time of ninety days …". File <code>CEAT_sample_input_bale_storage_check.md</code>, markdown, 1,692 characters</td></tr>
+      <tr><td>7</td><td>Look at "What these inputs are linked to"</td><td class="see">The document, item E-03, CEAT and ten concepts, all "named in the text": Contamination and moisture control, Incoming quality control, Lot acceptance, Lot-level quality trending, Lot traceability, Material ageing, Materials handling, Raw material storage, Supplier feedback loop, Time-to-use limit</td></tr>
+      <tr><td>8</td><td>Add a second input to the same graph: click <b>Add input to this graph</b> at the top of the graph panel. Company <b>Others</b> (the default), Catalogue item <b>G-01 · Shared inputs of the group</b>, any title, any .txt file of at least 40 characters on bale storage</td><td class="see">The Add input tab opens with Context graph set to "Bale storage review · 1 input", the name field locked to "Bale storage review" and "Adds to its 1 input of CEAT" under it. Under the item label: "Shared with every connected company". After the upload the graph reads "2 inputs · CEAT, Others", and the chips show the concepts of both inputs, each once</td></tr>
+      <tr><td>9</td><td>Pick <b>CSV</b> and click <b>Download</b></td><td class="see">A file with one row per entity (the two documents, the two items, the two companies, the concepts) and one row per link of the whole graph</td></tr>
+      <tr><td>10</td><td>Open <b>Mesh Nodes</b>, click <b>View capabilities</b> on CEAT and on Others</td><td class="see">CEAT: "Engineering: 11 documents in E-02 … E-03 …" (10 before). Others: "General: 1 documents in G-01 Shared inputs of the group (RAG)" (0 before). The Document chip of the mesh graph reads 104 (102 before)</td></tr>
+      <tr><td>11</td><td>Open <b>Ask NeuralMesh</b>, ask "How does CEAT handle natural rubber bales that are close to the maximum storage time?"</td><td class="see">CEAT is asked, and the new document is one of the cards, tagged "Approved summary" with the citation "CEAT · E-03 · E-03-U002". With the stand-in model the answer cites the first cards it is given, so the sentence citing the new card depends on its rank. With Claude the answer quotes the ninety-day rule from it</td></tr>
+      <tr><td>12</td><td>Tab <b>Search the graph</b>, search "bale storage"</td><td class="see">The new CEAT document first, matched by name, "CEAT · Summary leaves CEAT · 11 links" (its item and the ten concepts). Clicking it lists the ten concepts under "mentions"</td></tr>
+      <tr><td>13</td><td>Sign in as <code>kec.expert@neuralmesh.local</code>, open Context graph</td><td class="see">The graph "Bale storage review" is listed with its Others input only (a person sees the uploads of their own company and the shared inputs, a mesh admin sees all). The graph search still finds the CEAT document with "Summary leaves CEAT", because its title and summary may leave</td></tr>
+      <tr><td>14</td><td>Type "bale" in the search box above the list</td><td class="see">The graph row stays, with the matching input named under it</td></tr>
+      <tr><td>15</td><td>To undo: as the presenter, select the graph, click <b>Drop graph</b> at the top of the graph panel, read the confirmation (both inputs named with their companies), confirm</td><td class="see">The list moves to the next graph. The dropped row stays with "0 inputs · 2 removed", and when it is selected the panel says that every input was removed. The two documents leave the packs, the indexes and the graph. Mesh Nodes shows "Engineering: 10 documents" and "General: 0 documents" again</td></tr>
+    </tbody></table></div>
+    <div class="warn">Three refusals to try on purpose: the same file under item <b>F-04 · Expert directory (consent-based)</b> is refused with "F-04 is a live item, answered from the company's own system. A document is not kept under it.", a text file with one short line is refused for having under 40 characters of text, and a new graph named <b>Plant storage note, Kochi bales</b> is refused because a graph with that name has an input. A refused upload writes nothing.</div>
+    <p>Variations: the same file with Company <b>Others</b> goes under G-01, is indexed in full and is read by every company, and the graph search shows it with "Shared with every connected company". The same file under <b>C-03 · Channel pricing</b> ("Never leaves CEAT") is indexed by its title only, so a KEC person finds the title in the graph search but no sentence of it. A <code>.csv</code> or <code>.pdf</code> goes through the same path, with the text read out of the file. A Markdown file loses its heading marks, list markers and bold marks before the summary is taken, since 10 November.</p>
+  </div>
+</section>
+
+</div>
+<script>
+const tabs = document.querySelectorAll('.tab'), panels = document.querySelectorAll('.panel')
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.setAttribute('aria-selected', String(x === t)))
+  panels.forEach(p => p.classList.toggle('on', p.id === t.dataset.tab))
+  history.replaceState(null, '', '#' + t.dataset.tab)
+}))
+const wanted = location.hash.slice(1)
+if (wanted) { const t = document.querySelector(`.tab[data-tab="${wanted}"]`); if (t) t.click() }
+</script>
+</body>
+</html>

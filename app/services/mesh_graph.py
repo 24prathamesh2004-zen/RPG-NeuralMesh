@@ -31,7 +31,7 @@ def HOP_TYPES() -> frozenset[str]:  # noqa: N802 - read at use, so a rules reloa
 def JUDGEMENT_TYPES() -> frozenset[str]:  # noqa: N802
     return ontology().group("judgement")
 DOMAIN_OF_LETTER = {"E": "engineering", "O": "operations", "C": "commercial", "R": "research",
-                    "F": "corporate", "L": "lessons", "M": "mesh", "T": "talent"}
+                    "F": "corporate", "L": "lessons", "M": "mesh", "T": "talent", "G": "general"}
 # Tuned on paraphrased questions: the right concept scores about 0.5, an unrelated one under 0.3.
 VOCABULARY_MIN_SCORE = 0.45
 
@@ -133,6 +133,8 @@ class MeshGraph:
             kind = data.get("type")
             if kind not in ("Concept", "Skill", "Subsidiary") or data.get("retired"):
                 continue
+            if kind == "Subsidiary" and data.get("shared"):
+                continue  # the shared inputs node is called "Others": a question never names it
             for name in [data.get("label") or "", *(data.get("aliases") or [])]:
                 if _phrase_in(norm_tokens(name), tokens):
                     if kind == "Subsidiary":

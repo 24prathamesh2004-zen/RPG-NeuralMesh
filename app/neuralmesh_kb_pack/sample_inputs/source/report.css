@@ -1,0 +1,15 @@
+@page { size: A4; margin: 20mm 18mm 18mm 18mm; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1b1f3b; }
+h1 { margin: 0 0 4pt; font-size: 19pt; line-height: 1.2; }
+.issued { margin: 0 0 12pt; color: #5f6888; font-size: 10pt; }
+.lead { margin: 0 0 14pt; border-left: 3pt solid #4c5fd5; padding: 2pt 0 2pt 10pt; font-size: 11pt; }
+h2 { margin: 16pt 0 6pt; font-size: 12.5pt; }
+p { margin: 0 0 8pt; }
+ol, ul { margin: 0 0 8pt; padding-left: 16pt; }
+li { margin-bottom: 3pt; }
+table { width: 100%; margin: 0 0 10pt; border-collapse: collapse; font-size: 9.5pt; }
+th, td { border: 0.6pt solid #c9cde2; padding: 4pt 6pt; text-align: left; vertical-align: top; }
+th { background: #eceefc; font-weight: 700; }
+tr { break-inside: avoid; }
+.note { margin-top: 18pt; border-top: 0.6pt solid #c9cde2; padding-top: 6pt; color: #5f6888; font-size: 8.5pt; }

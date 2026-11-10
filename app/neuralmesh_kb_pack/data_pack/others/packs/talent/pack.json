@@ -1,0 +1,26 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "others.talent",
+    "scope": "subsidiary",
+    "subsidiary": "others",
+    "domain": "talent",
+    "title": "Others roles, required skills and expert directory",
+    "owner_role": "Node owner",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [],
+  "documents": [],
+  "experts": []
+}

@@ -1,0 +1,38 @@
+{
+  "status": "accepted",
+  "document": {
+    "id": "ceat:E-03-U001",
+    "datapoint": "ceat:E-03",
+    "title": "Plant storage note, Kochi bales",
+    "kind": "note",
+    "version": "2026-11",
+    "tags": [
+      "storage",
+      "natural-rubber",
+      "raw-material-storage"
+    ],
+    "summary": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out. A bale stored for more than ninety days is given an ageing check before it goes to mixing. Dirt content and volatile matter are trended per supplier lot, so drift shows before the material reaches the mixer. Supplier feedback with the lot data attached goes out every month.",
+    "body": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out.\n\nA bale stored for more than ninety days is given an ageing check before it goes to mixing. Dirt content and volatile matter are trended per supplier lot, so drift shows before the material reaches the mixer.\n\nSupplier feedback with the lot data attached goes out every month.",
+    "concepts": [
+      "concept:material-ageing",
+      "concept:materials-handling",
+      "concept:raw-material-storage",
+      "concept:time-to-use-limit"
+    ]
+  },
+  "concept_matches": {
+    "concept:material-ageing": "tag",
+    "concept:materials-handling": "tag",
+    "concept:raw-material-storage": "tag",
+    "concept:time-to-use-limit": "tag"
+  },
+  "upload": {
+    "file": "plant_storage_note.txt",
+    "format": "text",
+    "chars": 392,
+    "sha256": "08f465a4fef51a2fb1a8191af9c5b01b238e4b08ef9dcd9165b8ab2d409017bd",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-09T11:59:11+00:00"
+  }
+}

@@ -1,0 +1,19 @@
+Warehouse storage audit, Plant 3, April to June 2026. Draft for review.
+
+Draft findings of the audit of 6 and 7 July 2026. The counts are not final. The issue lines of June are still to be checked against the receipt dates, and the result of the storage ageing check is open for 4 lots.
+
+Findings so far
+
+All four bays of the raw material warehouse are covered and ventilated.
+Two pallet positions in bay 4 get direct sun from a roof light in the afternoon.
+First in, first out: 781 of the 812 issue lines of April and May followed it. June is not counted yet.
+Time-to-use limit: 11 of the 412 lots in store are past the limit of their grade. 7 passed the storage ageing check. The result is open for 4 lots.
+Lot cards: 3 lot cards name a location that does not match the bay.
+
+Open before the final version
+
+Count the issue lines of June.
+Enter the result of the storage ageing check for the 4 open lots.
+Agree the actions with the warehouse lead and the store supervisor.
+
+Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of CEAT.

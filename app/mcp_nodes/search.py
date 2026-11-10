@@ -198,7 +198,10 @@ def search_node(
             item["datapoint"] = f"{config.node_id}:{item['datapoint_id']}"
             item["version"] = str(by_key[item["doc_id"]]["version"]) if item["doc_id"] in by_key else None
             item["reason"] = item.get("reason")
-            if not released:
+            if released:
+                # the grouped views this datapoint offers, so the orchestrator can ask for them as aggregate evidence
+                item["views"] = list(config.datapoints.get(item["datapoint_id"], {}).get("views") or [])
+            else:
                 item.pop("text", None)
 
     return {

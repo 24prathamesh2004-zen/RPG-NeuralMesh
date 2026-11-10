@@ -1,0 +1,244 @@
+{
+  "about": "Synthetic sample inputs for the Context graph page. scripts/sample_inputs.py uploads the files of 'inputs' as the mesh admin, in the order of their dates. The files of 'spare' are not loaded: they are for adding an input by hand.",
+  "inputs": [
+    {
+      "id": "B1",
+      "file": "files/integration_review_first_100_days.pdf",
+      "node_id": "kec",
+      "datapoint": "L-02",
+      "kind": "post_mortem",
+      "title": "Integration review, first 100 days of the overseas unit",
+      "tags": [
+        "integration-review",
+        "overseas-unit"
+      ],
+      "graph": "Overseas acquisition integration",
+      "uploaded_at": "2026-07-29T06:42:18+00:00",
+      "expect_concepts": [
+        "concept:acquisition-integration",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "B2",
+      "file": "files/systems_cutover_runbook.md",
+      "node_id": "zensar",
+      "datapoint": "C-05",
+      "kind": "playbook",
+      "title": "Systems cut-over runbook for an acquired unit",
+      "tags": [
+        "runbook",
+        "cut-over"
+      ],
+      "graph": "Overseas acquisition integration",
+      "uploaded_at": "2026-08-11T09:15:47+00:00",
+      "expect_concepts": [
+        "concept:acquisition-integration",
+        "concept:integration-checklist",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "A4",
+      "file": "files/plant3_warehouse_storage_audit_draft.txt",
+      "node_id": "ceat",
+      "datapoint": "E-03",
+      "kind": "report",
+      "title": "Warehouse storage audit, Plant 3, draft",
+      "tags": [
+        "audit",
+        "draft"
+      ],
+      "graph": "Natural rubber storage and ageing",
+      "uploaded_at": "2026-08-14T10:03:29+00:00",
+      "removed_at": "2026-08-19T05:31:12+00:00",
+      "expect_concepts": [
+        "concept:material-ageing",
+        "concept:raw-material-storage",
+        "concept:time-to-use-limit"
+      ]
+    },
+    {
+      "id": "A1",
+      "file": "files/plant3_warehouse_storage_audit_apr_jun_2026.pdf",
+      "node_id": "ceat",
+      "datapoint": "E-03",
+      "kind": "report",
+      "title": "Warehouse storage audit, Plant 3, April to June 2026",
+      "tags": [
+        "audit",
+        "plant-3",
+        "warehouse"
+      ],
+      "graph": "Natural rubber storage and ageing",
+      "uploaded_at": "2026-08-19T05:27:54+00:00",
+      "expect_concepts": [
+        "concept:contamination-control",
+        "concept:lot-traceability",
+        "concept:material-ageing",
+        "concept:raw-material-storage",
+        "concept:time-to-use-limit"
+      ]
+    },
+    {
+      "id": "A2",
+      "file": "files/natural_rubber_grades_material_specification_rev4.docx",
+      "node_id": "ceat",
+      "datapoint": "E-01",
+      "kind": "standard",
+      "title": "Material specification, natural rubber grades and storage limits",
+      "tags": [
+        "natural-rubber",
+        "grades"
+      ],
+      "graph": "Natural rubber storage and ageing",
+      "uploaded_at": "2026-09-02T07:48:06+00:00",
+      "expect_concepts": [
+        "concept:compound-formulation",
+        "concept:incoming-quality-control",
+        "concept:lot-acceptance",
+        "concept:material-ageing",
+        "concept:raw-material-storage",
+        "concept:supplier-feedback-loop",
+        "concept:time-to-use-limit"
+      ]
+    },
+    {
+      "id": "B3",
+      "file": "files/integration_forum_minutes_2026_09.docx",
+      "node_id": "others",
+      "datapoint": "G-01",
+      "kind": "note",
+      "title": "Group integration forum, minutes of September 2026",
+      "tags": [
+        "minutes",
+        "forum"
+      ],
+      "graph": "Overseas acquisition integration",
+      "uploaded_at": "2026-09-17T11:05:33+00:00",
+      "expect_concepts": [
+        "concept:acquisition-integration",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "A3",
+      "file": "files/latex_spoilage_monsoon_weeks_2026.csv",
+      "node_id": "harrisons",
+      "datapoint": "O-05",
+      "kind": "aggregate",
+      "title": "Latex spoilage by collection-to-factory time, monsoon weeks of 2026",
+      "tags": [
+        "estates",
+        "monsoon-2026"
+      ],
+      "graph": "Natural rubber storage and ageing",
+      "uploaded_at": "2026-09-24T04:52:40+00:00",
+      "expect_concepts": [
+        "concept:latex-collection-and-transport",
+        "concept:latex-pre-coagulation",
+        "concept:monsoon-operations"
+      ]
+    },
+    {
+      "id": "C1",
+      "file": "files/ai_code_review_pilot_results.json",
+      "node_id": "zensar",
+      "datapoint": "R-02",
+      "kind": "report",
+      "title": "Pilot results, AI-assisted code review in four delivery teams",
+      "tags": [
+        "pilot",
+        "code-review"
+      ],
+      "graph": "AI-assisted delivery pilots",
+      "uploaded_at": "2026-10-08T08:21:15+00:00",
+      "expect_concepts": [
+        "concept:ai-assisted-delivery",
+        "concept:pilot-results",
+        "concept:responsible-ai-use"
+      ]
+    },
+    {
+      "id": "C2",
+      "file": "files/responsible_ai_use_group_guidance.txt",
+      "node_id": "others",
+      "datapoint": "G-01",
+      "kind": "policy",
+      "title": "Responsible AI use, group guidance note",
+      "tags": [
+        "guidance",
+        "ai-policy"
+      ],
+      "graph": "AI-assisted delivery pilots",
+      "uploaded_at": "2026-10-15T06:09:58+00:00",
+      "expect_concepts": [
+        "concept:ai-assisted-delivery",
+        "concept:responsible-ai-use"
+      ]
+    },
+    {
+      "id": "D1",
+      "file": "files/failed_joint_teardown_findings.pdf",
+      "node_id": "raychem",
+      "datapoint": "O-02",
+      "kind": "rca",
+      "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "tags": [
+        "33kv",
+        "teardown"
+      ],
+      "graph": "33 kV cable joint failures",
+      "uploaded_at": "2026-11-04T10:36:22+00:00",
+      "expect_concepts": [
+        "concept:cable-accessory-failure-analysis",
+        "concept:cable-joint-installation",
+        "concept:failure-pattern",
+        "concept:installation-quality-records",
+        "concept:root-cause-analysis"
+      ]
+    }
+  ],
+  "spare": [
+    {
+      "id": "D2",
+      "file": "spare/jointing_procedure_check_sheet_rev3.md",
+      "node_id": "raychem",
+      "datapoint": "E-01",
+      "kind": "sop",
+      "title": "Jointing procedure check sheet, 33 kV cable joints, revision 3",
+      "tags": [
+        "33kv",
+        "check-sheet"
+      ],
+      "graph": "33 kV cable joint failures",
+      "expect_concepts": [
+        "concept:cable-joint-installation",
+        "concept:installation-quality-records",
+        "concept:pre-energising-tests"
+      ]
+    },
+    {
+      "id": "E1",
+      "file": "spare/deviation_and_capa_review_jul_sep_2026.docx",
+      "node_id": "rpgls",
+      "datapoint": "F-01",
+      "kind": "report",
+      "title": "Deviation and CAPA review, July to September 2026",
+      "tags": [
+        "deviation-review",
+        "quality-assurance"
+      ],
+      "graph": "Deviation and CAPA reviews",
+      "expect_concepts": [
+        "concept:batch-record-practice",
+        "concept:deviation-and-capa",
+        "concept:line-clearance",
+        "concept:out-of-specification-handling"
+      ]
+    }
+  ]
+}

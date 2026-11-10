@@ -1,0 +1,19 @@
+node: others
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
+  roles_allowed:
+  - group_user
+datapoints:
+  G-01:
+    title: Shared inputs of the group
+    sensitivity: Internal
+    ceiling: RAG
+    owner_role: Mesh admin

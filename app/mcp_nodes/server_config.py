@@ -41,6 +41,8 @@ class NodeConfig:
     grants_path: Path
     audit_path: Path
     knowledge: NodeKnowledge = field(default_factory=NodeKnowledge)
+    # the company's own structured database (SQLite here), read only for the aggregate views a datapoint names
+    structured_db: Path | None = None
 
 
 def _read_mapping(path: Path) -> dict[str, Any]:
@@ -83,6 +85,9 @@ def load_node_config(node_id: str, data_root: Path | None = None) -> NodeConfig:
     port = node.get("port")
     if not isinstance(port, int) or not 1 <= port <= 65535:
         raise ValueError(f"Node {node_id} has an invalid port: {port!r}")
+    db_name = node.get("structured_db")
+    if db_name is not None and (not isinstance(db_name, str) or Path(db_name).name != db_name):
+        raise ValueError(f"Node {node_id} has an invalid structured_db filename")
 
     for datapoint_id, datapoint in datapoints.items():
         if not isinstance(datapoint, dict) or not all(
@@ -130,6 +135,7 @@ def load_node_config(node_id: str, data_root: Path | None = None) -> NodeConfig:
         grants_path=_STATE_ROOT / node_id / "grants.db",
         audit_path=_STATE_ROOT / node_id / "audit.jsonl",
         knowledge=knowledge,
+        structured_db=(node_dir / db_name) if db_name else None,
     )
 
 

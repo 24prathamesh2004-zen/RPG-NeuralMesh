@@ -142,6 +142,46 @@ def compose_classify(prompt: str) -> str:
     return json.dumps({"nodes": [n for _, n in scores[:2]], "reason": "profiles that share content words with the question"})
 
 
+def compose_kind(prompt: str) -> str:
+    """The kind step: the word rules of the mesh, so the stand-in answers in the shape of the model reply."""
+    import json
+    from services.upload_kind import by_rules
+    name = next((line[len("File name: "):] for line in prompt.splitlines() if line.startswith("File name: ")), "")
+    title = next((line[len("Title: "):] for line in prompt.splitlines() if line.startswith("Title: ")), "")
+    body = prompt.split("First lines:", 1)[-1]
+    found = by_rules(title, name, body, "csv" if name.lower().endswith(".csv") else "")
+    return json.dumps({"kind": found["kind"], "label": "", "reason": f"stand-in: {found['reason']}"})
+
+
+def compose_map(prompt: str) -> str:
+    """The map step, as the code result: the kind by word rules, the candidates found by a full or two-word name
+    confirmed, and the first graph when it holds 2 of them, else a new graph. Not a language model."""
+    import json
+    from services.upload_kind import by_rules
+    lines = prompt.splitlines()
+    name = next((line[len("File name: "):] for line in lines if line.startswith("File name: ")), "")
+    title = next((line[len("Title: "):] for line in lines if line.startswith("Title: ")), "")
+    body = prompt.split("First lines:", 1)[-1].split("Candidate concepts", 1)[0]
+    concepts, graphs, part = [], [], ""
+    for line in lines:
+        if line.startswith("Candidate concepts"):
+            part = "c"
+        elif line.startswith("Candidate graphs"):
+            part = "g"
+        elif line.startswith("- ") and " | " in line:
+            cells = [c.strip() for c in line[2:].split(" | ")]
+            if part == "c" and cells[2].startswith("full name"):
+                concepts.append((cells[0], cells[1]))
+            elif part == "g":
+                graphs.append((cells[0], {c.strip().lower() for c in cells[2].split(",")}))
+    kind = by_rules(title, name, body, "csv" if name.lower().endswith(".csv") else "")["kind"]
+    labels = {label.lower() for _, label in concepts}
+    first = graphs[0] if graphs else None
+    pick = first[0] if first and len(first[1] & labels) >= 2 else "new"
+    return json.dumps({"kind": kind, "label": "", "concepts": [cid for cid, _ in concepts], "graph": pick,
+                       "new_graph_name": title if pick == "new" else "", "reason": "stand-in: candidates found by full or two-word names"})
+
+
 @app.post("/control")
 def control(body: ControlIn) -> dict[str, Any]:
     STATE["mode"] = body.mode
@@ -167,6 +207,10 @@ def chat(body: dict[str, Any]) -> dict[str, Any]:
         text = compose_rerank(user)
     elif "knowledge nodes of the RPG group" in system:
         text = compose_classify(user)
+    elif "kind of a document uploaded" in system:
+        text = compose_kind(user)
+    elif "You map a document uploaded" in system:
+        text = compose_map(user)
     else:
         text = compose_answer(user, STATE["mode"])
     return {

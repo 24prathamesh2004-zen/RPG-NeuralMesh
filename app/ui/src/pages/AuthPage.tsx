@@ -164,7 +164,7 @@ export default function AuthPage() {
             </section>
           )}
           <p className="mt-5 text-center text-xs text-stone-600">POC accounts use synthetic data and are stored locally.</p>
-          <Link to="/" className="sr-only">Back to dashboard</Link>
+          <Link to="/" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:text-sm">Back to dashboard</Link>
         </div>
       </section>
     </main>

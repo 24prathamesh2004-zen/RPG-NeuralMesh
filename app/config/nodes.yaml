@@ -1,6 +1,8 @@
 # Node registry of RPG NeuralMesh. The API, the orchestrator, the nodes, the pack
 # builder and the screens read the list of Mesh Nodes from this file only.
 # A node URL can be overridden with NEURALMESH_<ID>_URL, a port with NEURALMESH_<ID>_PORT.
+# shared: true marks the node that keeps the inputs that belong to no one company (the "Others" choice of the
+# Context graph page). Every connected company reads them, nobody signs up for it, and no question names it.
 embedding_model: all-MiniLM-L6-v2
 nodes:
   - id: ceat
@@ -38,3 +40,9 @@ nodes:
     port: 8107
     level: L1
     tone: "#e67700"
+  - id: others
+    display: Others
+    port: 8108
+    level: L2
+    tone: "#868e96"
+    shared: true

@@ -5,7 +5,8 @@ import asyncio
 import json
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -19,6 +20,7 @@ from services.mesh_runtime import runtime
 from services.neuralmesh import NODE_IDS, MeshOrchestrator
 from shared.config import get_settings
 from shared.registry import node as registered_node, node_ids
+from services import export_formats
 
 router = APIRouter()
 _bearer = HTTPBearer(auto_error=True)
@@ -129,8 +131,6 @@ async def graph_refresh(user: dict = Depends(require_role("mesh_admin"))) -> dic
 @router.get("/domains")
 async def graph_domains(user: dict = Depends(require_user)) -> dict:
     """The layers of the graph: each domain's node types and edge types with live counts and link statuses."""
-    from services.ontology import ontology
-
     rt = await asyncio.to_thread(runtime)
     revision = rt.mesh.loaded_revision  # the revision of the graph the view reads, not of the store
     cached = _DOMAINS_CACHE.get("value")
@@ -145,6 +145,8 @@ _DOMAINS_CACHE: dict[str, tuple] = {}
 
 
 def _domains_view(rt) -> dict:
+    from services.ontology import ontology
+
     g = rt.mesh.graph
     rules = ontology()
     node_counts: dict[str, int] = {}
@@ -331,6 +333,10 @@ async def review_proposals(request: ProposalReviewRequest, user: dict = Depends(
     return {"reviewed": reviewed, "decision": request.decision}
 
 
+def _owner_words(node_id: str) -> str:
+    return "Shared inputs, read by every connected company" if registered_node(node_id).shared else "Subsidiary operated"
+
+
 @router.get("/nodes")
 async def list_mesh_nodes(
     user: dict = Depends(require_user),
@@ -362,7 +368,8 @@ async def list_mesh_nodes(
                 "datapoints": capabilities.get("datapoints", []),
                 "packs": capabilities.get("packs", []),
                 "profile": capabilities.get("profile", ""),
-                "owner": "Subsidiary operated",
+                "owner": _owner_words(node_id),
+                "shared": registered_node(node_id).shared,
             }
         except Exception as exc:
             config = load_node_config(node_id)
@@ -376,7 +383,8 @@ async def list_mesh_nodes(
                 "schema_version": config.schema_version,
                 "datapoint_count": len(config.datapoints),
                 "datapoints": [],
-                "owner": "Subsidiary operated",
+                "owner": _owner_words(node_id),
+                "shared": registered_node(node_id).shared,
                 "error": str(exc),
             }
 
@@ -645,3 +653,286 @@ async def dashboard_snapshot(user: dict = Depends(require_user), credentials: HT
         "recent_activity": audit[:8],
         "synthetic": True,
     }
+
+# ── Uploaded inputs and graph search (plan: RPG_NeuralMesh_Knowledge_Contribution_and_Graph_Search_Plan.md) ──────────
+
+
+@router.get("/uploads")
+async def list_uploads(user: dict = Depends(require_user)) -> dict:
+    """The uploaded documents the person may see, newest first, each with its item's sharing rule, its context graph and
+    whether it is in the graph now, and the context graphs they form. A mesh admin sees every company's, anyone else
+    their own company's and the shared node's."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    items = await asyncio.to_thread(uploads.list_uploads, rt, company, roles)
+    return {"uploads": items, "graphs": uploads.graphs_of(items), "kinds": uploads.KINDS, "formats": sorted(uploads.FORMATS),
+            "export_formats": export_formats.ids(), "export_format_list": export_formats.listing()}
+
+
+@router.get("/uploads/json-templates")
+async def json_template_of_graph(graph_id: str = "", user: dict = Depends(require_user)) -> dict:
+    """The output template of a context graph: its own when one was kept with it, else the suggested one. Without
+    ``graph_id`` the suggested template, for a graph that does not exist yet. ``fields`` are the values a template may use."""
+    from services import json_templates, uploads
+    if graph_id:
+        rt = await asyncio.to_thread(runtime)
+        company, roles = _person(user)
+        try:
+            await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+        except KeyError:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is shown to you") from None
+    template, own = json_templates.of_graph(graph_id)
+    return {"template": template, "own": own, "suggested": json_templates.DEFAULT, "fields": json_templates.FIELDS,
+            "can_change": json_templates.per_graph()}  # false: the standard structure for every graph, shown read-only on the form
+
+
+@router.put("/uploads/graphs/{graph_id}/template")
+async def set_json_template_of_graph(graph_id: str, body: dict, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Keep an output template with a context graph. Every later output of the graph follows it. The reason is returned
+    when the template is refused."""
+    from services import json_templates, uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+        template, own = await asyncio.to_thread(json_templates.set_for_graph, graph_id, body.get("template"), str(user.get("email") or user.get("sub") or ""))
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is shown to you") from None
+    except json_templates.TemplateRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+    return {"template": template, "own": own}
+
+
+@router.post("/uploads/json-templates/render")
+async def json_templates_render(body: dict, user: dict = Depends(require_user)) -> dict:
+    """A context graph in a structured JSON template, as the person may see it. With ``template`` for the preview of an
+    edited one, without it in the template kept with the graph."""
+    from services import json_templates
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    graph_id = str(body.get("graph_id", ""))
+    try:
+        data = await asyncio.to_thread(json_templates.data_of, rt, graph_id, company, roles)
+        template = body["template"] if body.get("template") is not None else json_templates.of_graph(graph_id)[0]
+        return {"output": json_templates.render(template, data)}
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is shown to you") from None
+    except json_templates.TemplateRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+
+
+@router.post("/uploads/suggest")
+async def suggest_upload(file: UploadFile = File(...), node_id: str = Form(""), datapoint: str = Form(""),
+                         user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Read a file without keeping it and return what the Add input form fills in: title, tags, kind, concepts and the
+    context graph it fits (append to an existing one, or a new one with a name)."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    data = await file.read()
+    try:
+        return await asyncio.to_thread(uploads.suggest, rt, file.filename or "upload.txt", data, node_id or None, datapoint or None)
+    except uploads.UploadRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+
+
+@router.post("/uploads/formats", status_code=status.HTTP_201_CREATED)
+async def add_export_format(body: dict, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Keep a download format a mesh admin wrote: a name, a file extension, the escaping, and a header, a line for each
+    entity, a line for each link and a footer with placeholders in braces. The reason is returned when it is refused."""
+    try:
+        item = await asyncio.to_thread(export_formats.save, body, str(user.get("email") or user.get("sub") or ""))
+    except export_formats.FormatRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+    return {"format": item, "export_format_list": export_formats.listing()}
+
+
+@router.post("/uploads/formats/file", status_code=status.HTTP_201_CREATED)
+async def add_export_format_file(file: UploadFile = File(...), user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Keep an output template a mesh admin uploaded as a text file, read by export_formats.from_text."""
+    data = await file.read()
+    if len(data) > 20_000:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "A template file has at most 20,000 bytes.")
+    try:
+        text = data.decode("utf-8")
+        item = await asyncio.to_thread(export_formats.from_text, file.filename or "template.txt", text, str(user.get("email") or user.get("sub") or ""))
+    except UnicodeDecodeError:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "A template is a text file in UTF-8.") from None
+    except export_formats.FormatRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+    return {"format": item, "export_format_list": export_formats.listing()}
+
+
+@router.delete("/uploads/formats/{format_id}")
+async def remove_export_format(format_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Remove a download format a mesh admin added. The built-in formats stay."""
+    try:
+        await asyncio.to_thread(export_formats.remove, format_id)
+    except export_formats.FormatRefused as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
+    return {"removed": format_id, "export_format_list": export_formats.listing()}
+
+
+@router.get("/uploads/items/{node_id}")
+async def upload_items(node_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """The catalogue items of a company an upload can go under, with each one's sharing rule."""
+    from services import uploads
+    if node_id not in NODE_IDS:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Unknown subsidiary node")
+    items = await asyncio.to_thread(uploads.datapoints_of, node_id)
+    return {"node_id": node_id, "items": [{"code": code, "title": dp["title"], "ceiling": dp["ceiling"], "never_leave": bool(dp.get("never_leave")),
+                                           "owner_role": dp.get("owner_role"), "domain": dp["domain"]} for code, dp in sorted(items.items())],
+            "new_item_areas": await asyncio.to_thread(uploads.new_item_areas, node_id)}
+
+
+@router.post("/uploads", status_code=status.HTTP_201_CREATED)
+async def add_upload(
+    file: UploadFile = File(...),
+    node_id: str = Form(...),
+    datapoint: str = Form(...),
+    kind: str = Form("auto"),
+    title: str = Form(""),
+    tags: str = Form(""),
+    version: str = Form(""),
+    graph_id: str = Form(""),
+    graph_name: str = Form(""),
+    kind_label: str = Form(""),
+    new_item_title: str = Form(""),
+    new_item_area: str = Form(""),
+    output_template: str = Form(""),
+    user: dict = Depends(require_role("mesh_admin")),
+) -> dict:
+    """Keep one uploaded file as a document of the company's catalogue item in a context graph (``graph_id`` of an
+    existing one, or ``graph_name`` of a new one), rebuild the pack of its domain, and refresh the central graph from
+    the node export. ``output_template`` (JSON text) is kept with the context graph as its output template, and is
+    checked before anything is kept. The reason is returned when nothing was kept."""
+    from services import json_templates, uploads
+    rt = await asyncio.to_thread(runtime)
+    template = None
+    if output_template.strip():
+        if not json_templates.per_graph():
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, json_templates.STANDARD_ONLY + " Nothing was kept.")
+        try:
+            template = json.loads(output_template)
+        except ValueError:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "The output template is not valid JSON. Nothing was kept.") from None
+        problems = json_templates.check(template)
+        if problems:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "The output template was refused, and nothing was kept. " + "; ".join(problems))
+    data = await file.read()
+    try:
+        record = await asyncio.to_thread(uploads.add_upload, rt, user, node_id, datapoint, kind, title, file.filename or "upload.txt", data, tags,
+                                         version or None, True, graph_id or None, graph_name or None, kind_label or None,
+                                         new_item_title or None, new_item_area or None)
+    except uploads.UploadRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+    if template is not None:
+        await asyncio.to_thread(json_templates.set_for_graph, record["context_graph"]["id"], template, str(user.get("email") or user.get("sub") or ""))
+    refreshed = await rt.refresh_from_nodes()
+    company, roles = _person(user)
+    graph = None
+    try:
+        graph = await asyncio.to_thread(uploads.graph_of, rt, record["document"]["id"], company, roles)
+    except KeyError:
+        pass
+    return {**record, "refresh": refreshed.get(node_id, ""), "graph": graph}
+
+
+@router.get("/uploads/graphs/{graph_id}")
+async def context_graph(graph_id: str, format: str | None = None, user: dict = Depends(require_user)):
+    """One context graph: every input in it the person may see, with the items, the companies and the entities one link
+    away, and the links among them. With ``format`` (json, graphml, csv or pack) the same as a file to download."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        view = await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is in the graph, or none is shown to you") from None
+    if not format:
+        return view
+    if format not in export_formats.ids():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"format is one of {', '.join(export_formats.ids())}")
+    documents = None
+    if format == "pack":
+        records = [uploads.record_of(doc_id.split(":", 1)[0], doc_id) for doc_id in view["documents"]]
+        documents = uploads.pack_documents([r for r in records if r], company, roles)
+    content, media, ext = uploads.export(view, format, documents)
+    return Response(content, media_type=media, headers={"Content-Disposition": f'attachment; filename="context_graph_{uploads.file_name(view["name"])}.{ext}"'})
+
+
+@router.delete("/uploads/graphs/{graph_id}")
+async def drop_context_graph(graph_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Take every input of a context graph out of the packs, the indexes and the graph. The records stay, marked removed.
+    ``failed`` names a pack whose rebuild failed, and a second call rebuilds it again."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    try:
+        result = await asyncio.to_thread(uploads.drop_graph, graph_id, user)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No context graph with this id") from None
+    refreshed = await rt.refresh_from_nodes()
+    return {**result, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["removed"]})}}
+
+
+@router.get("/uploads/{doc_id}/graph")
+async def upload_graph(doc_id: str, format: str | None = None, user: dict = Depends(require_user)):
+    """The part of the graph around one uploaded document. With ``format`` (json, graphml, csv or pack) the same part as
+    a file to download."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        view = await asyncio.to_thread(uploads.graph_of, rt, doc_id, company, roles)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "This document is not in the graph, or is not shown to you") from None
+    if not format:
+        return view
+    if format not in export_formats.ids():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"format is one of {', '.join(export_formats.ids())}")
+    node = doc_id.split(":", 1)[0]
+    record = uploads.record_of(node, doc_id) if format == "pack" else None
+    if format == "pack" and record is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document")
+    content, media, ext = uploads.export(view, format, uploads.pack_documents([record], company, roles) if record else None)
+    name = doc_id.replace(":", "_").replace("/", "_")
+    return Response(content, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}.{ext}"'})
+
+
+@router.delete("/uploads/{doc_id}")
+async def remove_upload(doc_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Take an uploaded document out of the pack, the index and the graph. The record stays, marked removed."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    node = doc_id.split(":", 1)[0]
+    if node not in NODE_IDS:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Unknown subsidiary node")
+    try:
+        record = await asyncio.to_thread(uploads.remove_upload, node, doc_id, user)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document") from None
+    refreshed = await rt.refresh_from_nodes()
+    return {**record, "refresh": refreshed.get(node, "")}
+
+
+@router.get("/graph/search")
+async def graph_search(q: str = "", user: dict = Depends(require_user)) -> dict:
+    """Entities of the context graph that match a word or phrase, with the owning company, the sharing rule and the
+    number of links of each. Entities of never-leave items of another company are left out."""
+    from services import graph_search
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    return await asyncio.to_thread(graph_search.search, rt, q[:300], company, roles)
+
+
+@router.get("/graph/entity/{entity_id:path}")
+async def graph_entity(entity_id: str, user: dict = Depends(require_user)) -> dict:
+    """One entity with its neighbours by link type, one hop, as the person may see them."""
+    from services import graph_search
+    from services.context_tools import NotFound
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        return await asyncio.to_thread(graph_search.entity, rt, entity_id, company, roles)
+    except NotFound:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "This entity is not in the graph, or is not shown to you") from None

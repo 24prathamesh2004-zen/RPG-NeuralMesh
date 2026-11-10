@@ -11,10 +11,11 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from shared.config import get_settings
-from shared.registry import registered_nodes
+from shared.registry import company_nodes
 
-# A person belongs to a company that has a Mesh Node: the companies are the registered nodes (config/nodes.yaml).
-COMPANIES = {node.node_id: node.display for node in registered_nodes()}
+# A person belongs to a company that has a Mesh Node: the companies are the registered nodes (config/nodes.yaml)
+# without the shared node, which keeps the inputs that belong to no one company.
+COMPANIES = {node.node_id: node.display for node in company_nodes()}
 _SCryptN = 1 << 14
 
 

@@ -53,6 +53,11 @@
       "label": "Talent and learning"
     },
     {
+      "id": "domain:general",
+      "type": "Domain",
+      "label": "Shared inputs"
+    },
+    {
       "id": "concept:incoming-quality-control",
       "type": "Concept",
       "label": "Incoming quality control",

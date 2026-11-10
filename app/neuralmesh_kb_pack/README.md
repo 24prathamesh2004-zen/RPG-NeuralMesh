@@ -15,6 +15,7 @@ Everything here is invented for prototyping. No real RPG data. Fictional names a
 | data_pack/<node>/policy.yaml, experts.yaml, node.yaml, results_calendar.yaml | Node config for node_core |
 | data_pack/<node>/{qms,projects,estate_mis}.db | Mock structured data (Harrisons exposes only v_* aggregate views) |
 | data_pack/gold/ | facts.json (computed from the data) and golden.yaml for evals |
+| sample_inputs/ | Ten synthetic files in four context graphs for the Context graph page, with their list (manifest.json). Loaded with `python -m scripts.sample_inputs load` from `app`, see sample_inputs/README.md |
 
 Validator checks: canaries never in index/policy/public expert fields; canaries planted in source or gated; at least one
 opted-out expert per node; Harrisons small cells exist (suppression test) and pre-coagulation is the largest cause in every season;

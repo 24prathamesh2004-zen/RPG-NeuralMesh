@@ -110,6 +110,24 @@
         "concept:overseas-mobilisation-terms",
         "concept:acquisition-integration"
       ]
+    },
+    {
+      "id": "kec:L-02-U001",
+      "datapoint": "kec:L-02",
+      "title": "Integration review, first 100 days of the overseas unit",
+      "kind": "post_mortem",
+      "version": "2026-07",
+      "tags": [
+        "integration-review",
+        "overseas-unit"
+      ],
+      "summary": "Integration review, first 100 days of the overseas unit Review by the project management office of KEC International, July 2026. The purchase and invoice systems of the acquired unit were cut over on day 21, before the process owners were agreed. Site teams rebuilt their old steps as 14 workarounds outside the new system. Local labour, contract and payment terms were first reviewed on day 63.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/L-02-U001.json"
     }
   ],
   "test_fixtures": {

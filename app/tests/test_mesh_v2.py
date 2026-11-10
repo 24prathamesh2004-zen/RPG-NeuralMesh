@@ -60,7 +60,7 @@ def run(orchestrator, question, nodes=None, purpose="problem_solving", company="
 
 # ── phase 0: registry ───────────────────────────────────────────────────────
 def test_registry_is_the_single_node_list():
-    assert node_ids() == ("ceat", "kec", "zensar", "harrisons", "raychem", "rpgls", "asvata")
+    assert node_ids() == ("ceat", "kec", "zensar", "harrisons", "raychem", "rpgls", "asvata", "others")
     assert NODE_IDS == node_ids()
 
 
@@ -82,7 +82,7 @@ def test_built_packs_validate_together_with_the_group_packs():
     report = validate_packs(packs, strict=True)
     assert report.errors == []
     subsidiary = [p for p in packs if p[1]["pack"]["scope"] == "subsidiary"]
-    assert len(subsidiary) == 35 and {p[1]["pack"]["subsidiary"] for p in subsidiary} == set(node_ids())
+    assert len(subsidiary) == 37 and {p[1]["pack"]["subsidiary"] for p in subsidiary} == set(node_ids())  # 35 of the seven companies, 2 of the shared node
 
 
 @needs_model
@@ -351,7 +351,7 @@ def test_checks_accept_the_marker_sentence_and_the_withheld_template():
 def test_prompts_are_versioned_files_and_every_step_is_timed(local_policy):
     from services.context import prompts
 
-    assert prompts.versions() == {"answer": "mesh_answer_v4", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1"}
+    assert prompts.versions() == {"answer": "mesh_answer_v5", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1", "kind": "mesh_kind_v1", "map": "mesh_map_v2"}
     assert all(prompts.load(step).text for step in prompts.versions())
     orchestrator, _, _ = build_mesh(backend=FakeBackend())
     result = run(orchestrator, GOLDEN[0]["question"])

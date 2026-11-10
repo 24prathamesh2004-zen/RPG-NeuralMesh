@@ -1,4 +1,4 @@
-"""Phase 1 acceptance: recall on reworded golden questions (2 per scenario, 18 without S4), keyword search alone against hybrid search.
+"""Phase 1 acceptance: recall on reworded golden questions (2 per scenario, 28 without S4), keyword search alone against hybrid search.
 
     python -m evaluations.reworded_recall
 
@@ -38,6 +38,16 @@ REWORDED = {
            "Safe use of AI tools in delivery work and results from experiments."],
     "S10": ["I need the complete root-cause write-ups on defects from storage at the tyre plant.",
             "Full failure investigations linked to how material is kept at the tyre factory."],
+    "S11": ["Which checks does the fitter run on a new power line before it goes live, and what reading makes us hold off?",
+            "What measurements come before switching on a freshly laid conductor, and when is the switch-on called off?"],
+    "S12": ["What happens when a quality measurement comes back out of specification, and how many good cycles show the wash-down of a vessel is proven?",
+            "Handling of an out-of-range analytical value, and the number of repeat passes that confirm a sanitation method."],
+    "S13": ["How do we vet the figures a customer sends on their greenhouse gas output before we work on them, and what goes on file for each conversion coefficient?",
+            "Steps to clean a client's carbon numbers ahead of the analysis, and the notes kept for every multiplier used."],
+    "S14": ["Let me see the commercial terms and rates in the joint venture contract of the cable accessories company.",
+            "What does the distributor contract of the cable business say about margins and conditions?"],
+    "S15": ["Show the replies we sent to the medicines authority after its auditors visited the pharma plant.",
+            "The correspondence with the medicines inspector from the last plant audit of the life sciences company."],
 }
 DECISION_DATAPOINTS = {"S5": ["E-01"], "S6": ["F-06"], "S10": ["E-02"], "S8": ["C-05"], "S4": []}
 
@@ -80,8 +90,7 @@ def main() -> None:
     from pathlib import Path
 
     golden = yaml.safe_load((Path(__file__).resolve().parents[1] / "neuralmesh_kb_pack" / "kb" / "golden.yaml").read_text())["scenarios"]
-    # Scenarios without reworded questions here (S11 to S15, the wave 2 nodes) are left out and named: the labelled
-    # questions of evaluations/labelled_questions.py cover the documents of those nodes.
+    # A scenario without reworded questions here is left out and named.
     left_out = [s["id"] for s in golden if s["id"] not in REWORDED]
     golden = [s for s in golden if s["id"] != "S4" and s["id"] in REWORDED]
     if left_out:

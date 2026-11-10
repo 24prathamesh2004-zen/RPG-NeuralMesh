@@ -70,6 +70,24 @@
       "concepts": [
         "concept:pilot-results"
       ]
+    },
+    {
+      "id": "zensar:R-02-U001",
+      "datapoint": "zensar:R-02",
+      "title": "Pilot results, AI-assisted code review in four delivery teams",
+      "kind": "report",
+      "version": "2026-10",
+      "tags": [
+        "pilot",
+        "code-review"
+      ],
+      "summary": "title: Pilot results, AI-assisted code review in four delivery teams summary: Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks. A person approved every change. The median time from opening a change to its approval fell from 19 hours to 11 hours. Errors found in review rose from 3.1 to 4.4 for every 1,000 changed lines.",
+      "concepts": [
+        "concept:ai-assisted-delivery",
+        "concept:pilot-results",
+        "concept:responsible-ai-use"
+      ],
+      "body_file": "contributions/R-02-U001.json"
     }
   ]
 }

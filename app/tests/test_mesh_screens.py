@@ -97,3 +97,22 @@ def test_screen_routes_require_authentication():
     response = client.get("/api/v1/mesh/nodes")
 
     assert response.status_code == 401
+
+def test_domains_endpoint_lists_every_domain_with_its_types_and_counts(monkeypatch):
+    """The Domains page read this endpoint. On 2026-11-09 a refactor left `ontology` imported in the wrong function, and
+    the endpoint answered 500 until 2026-11-10. No test had called it."""
+    monkeypatch.setattr(mesh, "_orchestrator", lambda: ScreenOrchestratorStub())
+    mesh._DOMAINS_CACHE.clear()
+    client, headers = _client()
+
+    response = client.get("/api/v1/mesh/domains", headers=headers)
+
+    assert response.status_code == 200, response.text[:200]
+    body = response.json()
+    names = [d["domain"] for d in body["domains"]]
+    assert names == ["core", "inspection"]  # the two layers of the graph rules, not the pack domains of the nodes
+    core = body["domains"][0]
+    assert {"type", "count", "description"} <= set(core["node_types"][0])
+    assert core["entities"] == sum(n["count"] for n in core["node_types"]) > 0
+    assert core["links"] == sum(sum(e["counts"].values()) for e in core["edge_types"]) > 0
+    assert "sources" in body and "revision" in body and "checks" in body

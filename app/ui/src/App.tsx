@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import AppShell from './components/layout/AppShell'
 import AskPage from './pages/AskPage'
+import ContextGraphPage from './pages/ContextGraphPage'
 import AuthPage from './pages/AuthPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
@@ -26,6 +27,7 @@ function AuthenticatedApp() {
         <Route path="/governance" element={<GovernancePage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/domains" element={<DomainsPage />} />
+        <Route path="/context-graph" element={<ContextGraphPage />} />
         <Route path="/applications" element={<ApplicationsPage />} />
         <Route path="*" element={<Navigate to="/ask" replace />} />
       </Routes>
