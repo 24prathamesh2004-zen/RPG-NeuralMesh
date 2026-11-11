@@ -11,14 +11,17 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from shared.config import get_settings
+from shared.registry import company_nodes
 
-COMPANIES = {
-    "ceat": "CEAT",
-    "kec": "KEC International",
-    "zensar": "Zensar",
-    "harrisons": "Harrisons Malayalam",
-}
+# A person belongs to a company that has a Mesh Node: the companies are the registered nodes (config/nodes.yaml)
+# without the shared node, which keeps the inputs that belong to no one company.
+COMPANIES = {node.node_id: node.display for node in company_nodes()}
 _SCryptN = 1 << 14
+
+
+def _admin_emails() -> set[str]:
+    from shared.config import get_settings
+    return {e.strip() for e in get_settings().neuralmesh_admin_emails.split(",") if e.strip()}
 
 
 class AccountStore:
@@ -174,7 +177,7 @@ class AccountStore:
         return self._public_user(row) if row else None
 
     @staticmethod
-    def _public_user(row: sqlite3.Row) -> dict[str, Any]:
+    def _public_user(row: sqlite3.Row) -> dict[str, Any]:  # noqa: C901 - one shape
         opted_in = bool(row["consent"]) if "consent" in row.keys() else False
         return {
             "user_id": row["user_id"],
@@ -182,7 +185,7 @@ class AccountStore:
             "display_name": row["display_name"],
             "company": row["company"],
             "company_name": COMPANIES[row["company"]],
-            "roles": ["group_user"],
+            "roles": ["group_user"] + (["mesh_admin"] if row["email"] in _admin_emails() else []),
             "expert_profile": (
                 {
                     "job_title": row["job_title"],

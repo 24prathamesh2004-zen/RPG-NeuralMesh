@@ -1,0 +1,45 @@
+{
+  "status": "removed",
+  "context_graph": {
+    "id": "g-2f866293",
+    "name": "Natural rubber storage and ageing"
+  },
+  "document": {
+    "id": "ceat:E-03-U002",
+    "datapoint": "ceat:E-03",
+    "title": "Warehouse storage audit, Plant 3, draft",
+    "kind": "report",
+    "version": "2026-08",
+    "tags": [
+      "audit",
+      "draft"
+    ],
+    "summary": "Warehouse storage audit, Plant 3, April to June 2026. Draft for review. Draft findings of the audit of 6 and 7 July 2026. The counts are not final. The issue lines of June are still to be checked against the receipt dates, and the result of the storage ageing check is open for 4 lots. Findings so far All four bays of the raw material warehouse are covered and ventilated.",
+    "body": "Warehouse storage audit, Plant 3, April to June 2026. Draft for review.\n\nDraft findings of the audit of 6 and 7 July 2026. The counts are not final. The issue lines of June are still to be checked against the receipt dates, and the result of the storage ageing check is open for 4 lots.\n\nFindings so far\n\nAll four bays of the raw material warehouse are covered and ventilated.\nTwo pallet positions in bay 4 get direct sun from a roof light in the afternoon.\nFirst in, first out: 781 of the 812 issue lines of April and May followed it. June is not counted yet.\nTime-to-use limit: 11 of the 412 lots in store are past the limit of their grade. 7 passed the storage ageing check. The result is open for 4 lots.\nLot cards: 3 lot cards name a location that does not match the bay.\n\nOpen before the final version\n\nCount the issue lines of June.\nEnter the result of the storage ageing check for the 4 open lots.\nAgree the actions with the warehouse lead and the store supervisor.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of CEAT.",
+    "concepts": [
+      "concept:material-ageing",
+      "concept:raw-material-storage",
+      "concept:time-to-use-limit"
+    ]
+  },
+  "concept_matches": {
+    "concept:material-ageing": "phrase",
+    "concept:raw-material-storage": "phrase",
+    "concept:time-to-use-limit": "phrase"
+  },
+  "upload": {
+    "file": "plant3_warehouse_storage_audit_draft.txt",
+    "format": "text",
+    "chars": 1065,
+    "sha256": "23004583bad775f39d17a2a0354d812be4858857f00d9449e0549249182e96a3",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-08-14T10:03:29+00:00"
+  },
+  "sample_input": "plant3_warehouse_storage_audit_draft.txt",
+  "removed": {
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-08-19T05:31:12+00:00"
+  }
+}

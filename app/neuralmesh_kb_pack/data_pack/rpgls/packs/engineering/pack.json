@@ -1,0 +1,91 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "rpgls.engineering",
+    "scope": "subsidiary",
+    "subsidiary": "rpgls",
+    "domain": "engineering",
+    "title": "RPG Life Sciences engineering knowledge",
+    "owner_role": "Head Quality Control",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "rpgls:E-01",
+      "catalogue_id": "E-01",
+      "title": "Quality control and validation procedures",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head Quality Control",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "inspection"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "rpgls:E-01-01",
+      "datapoint": "rpgls:E-01",
+      "title": "In-process and release testing programme",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "quality-control",
+        "testing",
+        "sampling",
+        "out-of-specification"
+      ],
+      "summary": "Samples are drawn by a written plan at defined stages and tested with calibrated instruments. A result outside its limit is a suspected out-of-specification result. It is checked for lab error first, then escalated to a formal investigation within 1 working day if no lab error is found.",
+      "body_file": "source/E-01-01.md",
+      "concepts": [
+        "concept:out-of-specification-handling"
+      ],
+      "skills": [
+        {
+          "skill": "skill:quality-control-and-assurance",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:E-01-02",
+      "datapoint": "rpgls:E-01",
+      "title": "Cleaning validation and stability studies",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "validation",
+        "cleaning",
+        "stability",
+        "residue",
+        "protocol"
+      ],
+      "summary": "Cleaning validation proves that residue of the previous product, and of the cleaning agent, stays below the set limit on the hardest-to-clean spot, in 3 consecutive runs. Stability studies store batches at set conditions and test them at planned intervals to support the shelf life.",
+      "body_file": "source/E-01-02.md",
+      "concepts": [
+        "concept:cleaning-validation"
+      ],
+      "skills": [
+        {
+          "skill": "skill:quality-control-and-assurance",
+          "level": "A"
+        }
+      ]
+    }
+  ]
+}

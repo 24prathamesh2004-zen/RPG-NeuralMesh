@@ -1,0 +1,430 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "zensar.talent",
+    "scope": "subsidiary",
+    "subsidiary": "zensar",
+    "domain": "talent",
+    "title": "Zensar roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-09",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "zensar:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    },
+    {
+      "id": "zensar:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
+    }
+  ],
+  "documents": [
+    {
+      "id": "zensar:T-01-1",
+      "datapoint": "zensar:T-01",
+      "title": "Software Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "software-engineer"
+      ],
+      "summary": "The Software Engineer role requires Cloud & DevOps at intermediate level, Professional Workplace at intermediate level and Software Engineering & Application Development at advanced level."
+    },
+    {
+      "id": "zensar:T-01-2",
+      "datapoint": "zensar:T-01",
+      "title": "Data Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "data-engineer"
+      ],
+      "summary": "The Data Engineer role requires Cloud & DevOps at intermediate level, Data Engineering at intermediate level, Data, AI & Analytics at advanced level and Software Engineering & Application Development at intermediate level."
+    },
+    {
+      "id": "zensar:T-01-3",
+      "datapoint": "zensar:T-01",
+      "title": "GenAI Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "genai-engineer"
+      ],
+      "summary": "The GenAI Engineer role requires Business Industry Functional at beginner level, Data, AI & Analytics at advanced level, Generative AI at intermediate level and Software Engineering & Application Development at intermediate level. It also requires Agentic AI at intermediate level from 2027-05-04."
+    }
+  ],
+  "experts": [
+    {
+      "id": "zensar:expert/ZE-1",
+      "role": "Head of delivery excellence",
+      "skills": [
+        {
+          "skill": "skill:hr",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "PMO playbooks",
+        "integration",
+        "transition"
+      ],
+      "evidence": [
+        "zensar:C-05-01",
+        "zensar:C-05-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Ishaan Kapoor (fictional)"
+      }
+    },
+    {
+      "id": "zensar:expert/ZE-2",
+      "role": "AI CoE lead",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "AI-assisted delivery",
+        "pilots"
+      ],
+      "evidence": [
+        "zensar:C-05-03",
+        "zensar:R-02-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Tanvi Shah (fictional)"
+      }
+    },
+    {
+      "id": "zensar:expert/ZE-3",
+      "role": "Solution architect",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "tooling consolidation",
+        "merger integration"
+      ],
+      "evidence": [
+        "zensar:C-05-04"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Rahul Menon (fictional)"
+      }
+    },
+    {
+      "id": "zensar:expert/ZE-4",
+      "role": "Support operations lead",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "knowledge assistants"
+      ],
+      "evidence": [
+        "zensar:R-02-02"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "zensar:role/software-engineer",
+      "type": "Role",
+      "label": "Software Engineer",
+      "subsidiary": "zensar",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/1"
+        }
+      ]
+    },
+    {
+      "id": "zensar:role/data-engineer",
+      "type": "Role",
+      "label": "Data Engineer",
+      "subsidiary": "zensar",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/2"
+        }
+      ]
+    },
+    {
+      "id": "zensar:role/genai-engineer",
+      "type": "Role",
+      "label": "GenAI Engineer",
+      "subsidiary": "zensar",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/3"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:zensar.talent/req-2",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/software-engineer",
+      "to": "skill:cloud-and-devops",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-3",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/software-engineer",
+      "to": "skill:professional-workplace",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-1",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/software-engineer",
+      "to": "skill:software-engineering-and-application-development",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-5",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/data-engineer",
+      "to": "skill:cloud-and-devops",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-51",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/data-engineer",
+      "to": "skill:data-engineering",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-4",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/data-engineer",
+      "to": "skill:data-ai-and-analytics",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-6",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/data-engineer",
+      "to": "skill:software-engineering-and-application-development",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-58",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/genai-engineer",
+      "to": "skill:agentic-ai",
+      "properties": {
+        "level": "M",
+        "importance": "required",
+        "note": "Needed from 2027-05-04"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-9",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/genai-engineer",
+      "to": "skill:business-industry-functional",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-7",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/genai-engineer",
+      "to": "skill:data-ai-and-analytics",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-52",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/genai-engineer",
+      "to": "skill:generative-ai",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:zensar.talent/req-8",
+      "type": "REQUIRES_SKILL",
+      "from": "zensar:role/genai-engineer",
+      "to": "skill:software-engineering-and-application-development",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    }
+  ]
+}

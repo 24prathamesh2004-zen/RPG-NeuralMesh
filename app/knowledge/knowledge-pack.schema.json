@@ -1,0 +1,972 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuralmesh.local/schema/knowledge-pack.schema.json",
+  "title": "RPG NeuralMesh knowledge pack",
+  "description": "One knowledge pack holds the knowledge of one subsidiary for one domain (scope 'subsidiary'), or group-wide vocabulary and approved cross-subsidiary links (scope 'group'). Entities are the nodes of the knowledge graph and relationships are its edges.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "format_version",
+    "pack"
+  ],
+  "properties": {
+    "format": {
+      "const": "neuralmesh.knowledge-pack"
+    },
+    "format_version": {
+      "type": "string",
+      "pattern": "^1\\.[0-9]+$"
+    },
+    "pack": {
+      "$ref": "#/$defs/pack"
+    },
+    "datapoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/datapoint"
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/document"
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/expert"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "test_fixtures": {
+      "$ref": "#/$defs/test_fixtures"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "pack": {
+            "properties": {
+              "scope": {
+                "const": "subsidiary"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "datapoints",
+          "documents"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "pack": {
+            "properties": {
+              "synthetic": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "test_fixtures"
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "description": "Namespaced identifier '<namespace>:<local part>'. The namespace is a subsidiary ID (ceat, kec, zensar, harrisons, raychem, rpgls, asvata, ventures, others) for subsidiary-owned items, or one of the group namespaces org, domain, skill, concept and role for shared vocabulary.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*:[A-Za-z0-9][A-Za-z0-9._/-]*$",
+      "maxLength": 160
+    },
+    "subsidiary_id": {
+      "type": "string",
+      "enum": [
+        "group",
+        "ceat",
+        "kec",
+        "zensar",
+        "harrisons",
+        "raychem",
+        "rpgls",
+        "asvata",
+        "ventures",
+        "others"
+      ]
+    },
+    "domain_id": {
+      "description": "The eight knowledge domains. The first seven follow the datapoint catalogue groups of the design plan (E, O, C, R, F, L, M) and 'talent' holds roles, skills and learning content (T).",
+      "type": "string",
+      "enum": [
+        "engineering",
+        "operations",
+        "commercial",
+        "research",
+        "corporate",
+        "lessons",
+        "mesh",
+        "talent",
+        "general"
+      ]
+    },
+    "sensitivity": {
+      "type": "string",
+      "enum": [
+        "Public",
+        "Internal",
+        "Confidential",
+        "Restricted"
+      ]
+    },
+    "exposure_mode": {
+      "description": "MD metadata only, SUM owner-approved summary, RAG cited text chunks, LIVE result of an allow-listed aggregate view or directory lookup.",
+      "type": "string",
+      "enum": [
+        "MD",
+        "SUM",
+        "RAG",
+        "LIVE"
+      ]
+    },
+    "purpose": {
+      "description": "Why the caller asks. problem_solving, compliance and bid_support exist today. learning and career_mobility are added for SkillForge.",
+      "type": "string",
+      "enum": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility",
+        "inspection"
+      ]
+    },
+    "level": {
+      "description": "Proficiency level on the SkillForge calibre scale: L beginner, M intermediate, A advanced.",
+      "type": "string",
+      "enum": [
+        "L",
+        "M",
+        "A"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}(-[0-9]{2})?$"
+    },
+    "pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pack_id",
+        "scope",
+        "subsidiary",
+        "title",
+        "owner_role",
+        "published_at",
+        "synthetic"
+      ],
+      "properties": {
+        "pack_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*\\.[a-z][a-z0-9_-]*$",
+          "description": "'<subsidiary>.<domain>' for a subsidiary pack, 'group.<name>' for a group pack."
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "subsidiary",
+            "group"
+          ]
+        },
+        "subsidiary": {
+          "$ref": "#/$defs/subsidiary_id"
+        },
+        "domain": {
+          "$ref": "#/$defs/domain_id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "owner_role": {
+          "type": "string",
+          "minLength": 2
+        },
+        "maturity_level": {
+          "type": "string",
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3"
+          ]
+        },
+        "language": {
+          "type": "string",
+          "default": "en",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+        },
+        "published_at": {
+          "$ref": "#/$defs/date"
+        },
+        "synthetic": {
+          "type": "boolean",
+          "description": "true for invented demonstration content. A pack with synthetic false must not carry test_fixtures."
+        },
+        "index": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "How the node builds its local search indexes for this pack. Defaults come from the mesh registry.",
+          "properties": {
+            "embedding_model": {
+              "type": "string"
+            },
+            "dimensions": {
+              "type": "integer",
+              "minimum": 64,
+              "maximum": 4096
+            },
+            "chunk_chars": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 4000
+            },
+            "chunk_overlap_chars": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            },
+            "vector_store": {
+              "type": "string",
+              "enum": [
+                "chroma"
+              ],
+              "description": "Embedded Chroma store in the build folder of the pack"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "subsidiary"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "domain",
+              "maturity_level"
+            ],
+            "properties": {
+              "subsidiary": {
+                "not": {
+                  "const": "group"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "group"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "subsidiary": {
+                "const": "group"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "datapoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "catalogue_id",
+        "title",
+        "sensitivity",
+        "ceiling",
+        "owner_role"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "catalogue_id": {
+          "type": "string",
+          "pattern": "^[ECRFLOMTG]-[0-9]{2}[a-z]?$",
+          "description": "Catalogue code shared across subsidiaries, for example E-03 or O-01. G codes belong to the shared inputs node."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/sensitivity"
+        },
+        "ceiling": {
+          "$ref": "#/$defs/exposure_mode"
+        },
+        "never_leave": {
+          "type": "boolean",
+          "default": false
+        },
+        "requires_approval": {
+          "type": "boolean",
+          "default": false
+        },
+        "upgrade_with_approval": {
+          "$ref": "#/$defs/exposure_mode"
+        },
+        "blackout": {
+          "type": "string",
+          "description": "Name of the blackout calendar file, for example results_calendar."
+        },
+        "consent_required": {
+          "type": "boolean",
+          "default": false
+        },
+        "owner_role": {
+          "type": "string"
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9-]*$"
+        },
+        "purposes_allowed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/purpose"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^v_[a-z0-9_]+$"
+          }
+        },
+        "min_group": {
+          "type": "integer",
+          "minimum": 3
+        },
+        "source_system": {
+          "type": "string"
+        },
+        "refresh": {
+          "type": "string",
+          "enum": [
+            "Live",
+            "Daily",
+            "Weekly",
+            "Monthly",
+            "Quarterly",
+            "Seasonal",
+            "Event",
+            "Milestone"
+          ]
+        },
+        "graph_visibility": {
+          "type": "string",
+          "enum": [
+            "listed",
+            "hidden"
+          ],
+          "default": "listed",
+          "description": "listed: titles and tags of this datapoint's documents may appear in the central mesh graph. hidden: only the datapoint itself appears."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "never_leave": {
+                "const": true
+              }
+            },
+            "required": [
+              "never_leave"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ceiling": {
+                "const": "MD"
+              }
+            },
+            "not": {
+              "required": [
+                "upgrade_with_approval"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sensitivity": {
+                "const": "Restricted"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ceiling": {
+                "const": "MD"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "views"
+            ]
+          },
+          "then": {
+            "required": [
+              "min_group"
+            ]
+          }
+        }
+      ]
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "datapoint",
+        "title",
+        "kind",
+        "version",
+        "tags"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "datapoint": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 300
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "sop",
+            "rca",
+            "playbook",
+            "post_mortem",
+            "standard",
+            "report",
+            "policy",
+            "wiki",
+            "aggregate",
+            "note",
+            "study_material",
+            "role_profile",
+            "other"
+          ]
+        },
+        "version": {
+          "$ref": "#/$defs/date"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "uniqueItems": true
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 20,
+          "description": "The owner-approved summary. This is the only text that leaves the node in SUM mode."
+        },
+        "body": {
+          "type": "string",
+          "description": "Full text written inline. Leaves the node only in RAG mode, as cited chunks."
+        },
+        "body_file": {
+          "type": "string",
+          "pattern": "^((source|gated)/[A-Za-z0-9_-]+\\.md|contributions/[A-Za-z0-9_-]+\\.json)$",
+          "description": "Full text in a file of the pack: a Markdown file under source/ or gated/, or the upload record under contributions/ that holds the text of an uploaded document. Files under gated/ are never indexed or embedded."
+        },
+        "gated": {
+          "type": "boolean",
+          "default": false,
+          "description": "true when the body is released only through an approval grant."
+        },
+        "concepts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true,
+          "description": "Short form. Each entry becomes a MENTIONS relationship."
+        },
+        "skills": {
+          "type": "array",
+          "description": "Short form. Each entry becomes an EXPLAINS_SKILL relationship: the document can serve as study material for the skill up to the given level.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "skill",
+              "level"
+            ],
+            "properties": {
+              "skill": {
+                "$ref": "#/$defs/id"
+              },
+              "level": {
+                "$ref": "#/$defs/level"
+              }
+            }
+          }
+        },
+        "supersedes": {
+          "$ref": "#/$defs/id"
+        },
+        "kind_label": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "The name of the kind when kind is other, as the person who uploaded the file typed it."
+        }
+      },
+      "not": {
+        "required": [
+          "body",
+          "body_file"
+        ]
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "gated": {
+                "const": true
+              }
+            },
+            "required": [
+              "gated"
+            ]
+          },
+          "then": {
+            "required": [
+              "body_file"
+            ],
+            "properties": {
+              "body_file": {
+                "pattern": "^gated/"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "entity": {
+      "description": "A node of the knowledge graph that is not a document or an expert: a concept, skill, role, asset, domain or subsidiary.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Subsidiary",
+            "Domain",
+            "Concept",
+            "Skill",
+            "Role",
+            "Asset"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "description": "Other names used in documents, CVs and questions. Used to resolve free text to this entity."
+        },
+        "replaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true,
+          "description": "IDs of entries that were joined into this one, for example a skill that Group HR joined to this skill. Every reference to one of these IDs in any loaded pack means this entity. No entity may define a replaced ID."
+        },
+        "description": {
+          "type": "string"
+        },
+        "domain": {
+          "$ref": "#/$defs/domain_id"
+        },
+        "subsidiary": {
+          "$ref": "#/$defs/subsidiary_id"
+        },
+        "external_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "scheme",
+              "uri"
+            ],
+            "properties": {
+              "scheme": {
+                "type": "string",
+                "enum": [
+                  "ESCO",
+                  "O*NET",
+                  "SkillForge"
+                ]
+              },
+              "uri": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "properties": {
+          "type": "object"
+        }
+      }
+    },
+    "expert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "skills",
+        "evidence",
+        "consent"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "type": "string"
+        },
+        "skills": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "skill"
+            ],
+            "properties": {
+              "skill": {
+                "$ref": "#/$defs/id"
+              },
+              "level": {
+                "$ref": "#/$defs/level"
+              }
+            }
+          }
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "description": "Free-text areas of expertise, kept for keyword search. Concepts are reached through the evidence documents."
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "description": "Documents that show the expert's work. Each entry becomes an EVIDENCED_BY relationship."
+        },
+        "consent": {
+          "type": "boolean",
+          "description": "Only experts with consent true are searchable or published to the central graph."
+        },
+        "private": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Stays at the node. Released to one requester only through an approved introduction.",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "relationship": {
+      "description": "An edge of the knowledge graph that a person or a job writes. Direction is from -> to. RELATED_TO, SAME_AS, CONFLICTS_WITH and SIMILAR_TO are symmetric and are stored once. The loader adds four structural types from fields (IN_DATAPOINT, IN_DOMAIN, OWNED_BY, ROLE_AT), so they are not written here.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "from",
+        "to",
+        "status",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "MENTIONS",
+            "EXPLAINS_SKILL",
+            "PART_OF_SKILL",
+            "BROADER",
+            "RELATED_TO",
+            "SAME_AS",
+            "CORROBORATES",
+            "CONFLICTS_WITH",
+            "SUPERSEDES",
+            "ADDRESSES_GAP",
+            "REQUIRES_SKILL",
+            "PREREQUISITE_OF",
+            "HAS_SKILL",
+            "EVIDENCED_BY",
+            "SIMILAR_TO"
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/id"
+        },
+        "to": {
+          "$ref": "#/$defs/id"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "level": {
+              "$ref": "#/$defs/level"
+            },
+            "importance": {
+              "type": "string",
+              "enum": [
+                "required",
+                "desirable"
+              ]
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "1 for a relationship written by a person. For an extracted one, the extraction score."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "approved",
+            "rejected",
+            "retired"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "by_role",
+            "created_at"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": [
+                "authored",
+                "extracted",
+                "imported"
+              ]
+            },
+            "by_role": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            },
+            "created_at": {
+              "$ref": "#/$defs/date"
+            }
+          }
+        },
+        "approvals": {
+          "type": "array",
+          "description": "A relationship between two subsidiaries needs one approval from the owner role of each side before its status becomes approved.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "subsidiary",
+              "role",
+              "date"
+            ],
+            "properties": {
+              "subsidiary": {
+                "$ref": "#/$defs/subsidiary_id"
+              },
+              "role": {
+                "type": "string"
+              },
+              "date": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "REQUIRES_SKILL"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "properties"
+            ],
+            "properties": {
+              "properties": {
+                "required": [
+                  "level",
+                  "importance"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "approved"
+              },
+              "provenance": {
+                "properties": {
+                  "method": {
+                    "const": "extracted"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "approvals"
+            ]
+          }
+        }
+      ]
+    },
+    "test_fixtures": {
+      "description": "Only in synthetic packs. Strings planted to prove that restricted text never leaves the node.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "document"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^CANARY-[A-Z0-9-]+$"
+              },
+              "document": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

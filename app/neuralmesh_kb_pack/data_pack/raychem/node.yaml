@@ -1,0 +1,8 @@
+node_id: raychem
+display: Raychem RPG
+port: 8105
+level: L1
+schema_version: 1.0.0
+structured_db: null
+backend: 'Synthetic: installation and service manuals, test reports and field service
+  records'

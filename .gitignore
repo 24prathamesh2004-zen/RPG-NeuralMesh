@@ -22,6 +22,8 @@ app/.env
 app/ui/.env
 app/ui/.env.local
 app/.neuralmesh/
+# Chroma stores of the knowledge packs, built by python -m knowledge.packgen
+app/neuralmesh_kb_pack/data_pack/*/packs/*/build/
 
 # ── Node / Vite (never commit these) ─────────────────────────────────────────
 node_modules/
@@ -36,3 +38,6 @@ dist/
 
 # ── Misc ─────────────────────────────────────────────────────────────────────
 *.log
+
+# the lock an import holds on the talent import folder
+.import.lock

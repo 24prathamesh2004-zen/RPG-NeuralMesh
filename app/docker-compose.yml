@@ -1,91 +1,68 @@
-version: "3.9"
-
+# The mesh as containers: four subsidiary nodes, the API, the MCP gateway. The embedding model folder must be
+# mounted (all-MiniLM-L6-v2 as ONNX) and the packs built once with `python -m knowledge.packgen` inside the API container.
 services:
-  # ── Application API ──────────────────────────────────────────────────────────
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "__BACKEND_PORT__:__BACKEND_PORT__"
+    build: .
+    ports: ["8000:8000"]
     env_file: .env
     environment:
-      - TEMPORAL_HOST=temporal:7233
-      - REDIS_URL=redis://redis:6379/0
-      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/__DB_NAME__
-      - PHOENIX_HOST=phoenix
-    depends_on: [postgres, redis, temporal, phoenix]
+      - NEURALMESH_CEAT_URL=http://ceat:8101/mcp
+      - NEURALMESH_KEC_URL=http://kec:8102/mcp
+      - NEURALMESH_ZENSAR_URL=http://zensar:8103/mcp
+      - NEURALMESH_HARRISONS_URL=http://harrisons:8104/mcp
+      - NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2
     volumes:
-      - .:/app
-    command: uvicorn api.main:app --host 0.0.0.0 --port __BACKEND_PORT__ --reload
+      - ./.neuralmesh:/app/.neuralmesh
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    depends_on: [ceat, kec, zensar, harrisons]
 
-  # ── Temporal worker (same image, command override) ───────────────────────────
-  worker:
-    build: { context: ., dockerfile: Dockerfile }
+  gateway:
+    build: .
+    ports: ["8100:8100"]
     env_file: .env
     environment:
-      - TEMPORAL_HOST=temporal:7233
-      - REDIS_URL=redis://redis:6379/0
-      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/__DB_NAME__
-      - PHOENIX_HOST=phoenix
-    depends_on:
-      temporal: { condition: service_healthy }
-      phoenix: { condition: service_started }
-    restart: on-failure
-    command: python -m workers.worker
-
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: __DB_NAME__
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      - NEURALMESH_MCP_HOST=0.0.0.0
+      - NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ./.neuralmesh:/app/.neuralmesh
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    command: python -m mcp_gateway.server
+    depends_on: [api]
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-
-  temporal:
-    image: temporalio/auto-setup:1.24.2
-    ports:
-      - "7233:7233"
-    environment:
-      - DB=postgres12
-      - DB_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PWD=password
-      - POSTGRES_SEEDS=postgres
-      - DEFAULT_NAMESPACE=__NAMESPACE__
-      - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/dynamic-config.yaml
+  ceat:
+    build: .
+    env_file: .env
+    environment: [NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2, NEURALMESH_MCP_HOST=0.0.0.0]
     volumes:
-      - ./config/temporal/dynamic-config.yaml:/etc/temporal/dynamic-config.yaml:ro
-    depends_on: [postgres]
-    healthcheck:
-      test: ["CMD-SHELL", "temporal operator namespace describe __NAMESPACE__ --address $(hostname -i | awk '{print $1}'):7233 >/dev/null 2>&1 && echo ok || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 15
-      start_period: 60s
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    command: python -m mcp_nodes ceat
 
-  temporal-ui:
-    image: temporalio/ui:2.26.2
-    ports:
-      - "8080:8080"
-    environment:
-      - TEMPORAL_ADDRESS=temporal:7233
-      - TEMPORAL_UI_CORS_ORIGINS=http://localhost:8080
-      - TEMPORAL_UI_DEFAULT_NAMESPACE=__NAMESPACE__
-    depends_on: [temporal]
+  kec:
+    build: .
+    env_file: .env
+    environment: [NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2, NEURALMESH_MCP_HOST=0.0.0.0]
+    volumes:
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    command: python -m mcp_nodes kec
 
-  phoenix:
-    image: arizephoenix/phoenix:latest
-    ports:
-      - "6006:6006"
+  zensar:
+    build: .
+    env_file: .env
+    environment: [NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2, NEURALMESH_MCP_HOST=0.0.0.0]
+    volumes:
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    command: python -m mcp_nodes zensar
 
-volumes:
-  pgdata:
+  harrisons:
+    build: .
+    env_file: .env
+    environment: [NEURALMESH_EMBEDDING_MODEL_DIR=/models/all-MiniLM-L6-v2, NEURALMESH_MCP_HOST=0.0.0.0]
+    volumes:
+      - ./neuralmesh_kb_pack:/app/neuralmesh_kb_pack
+      - ${NEURALMESH_EMBEDDING_MODEL_DIR:-~/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx}:/models/all-MiniLM-L6-v2:ro
+    command: python -m mcp_nodes harrisons

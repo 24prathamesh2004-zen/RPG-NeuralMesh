@@ -1,0 +1,79 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.lessons",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "lessons",
+    "title": "CEAT lessons learned",
+    "owner_role": "Integration lead",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "ceat:L-01",
+      "catalogue_id": "L-01",
+      "title": "Camso integration playbook and post-mortems",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Integration lead",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:L-01-01",
+      "datapoint": "ceat:L-01",
+      "title": "Camso integration playbook - first 100 days",
+      "kind": "playbook",
+      "version": "2026-01",
+      "tags": [
+        "integration",
+        "acquisition",
+        "playbook",
+        "100-days",
+        "systems"
+      ],
+      "summary": "Playbook for the first 100 days: one integration lead, early single view of customers and distributors, and early systems integration to avoid parallel reporting. (Illustrative; conflicts with a process-first view elsewhere.)",
+      "body_file": "source/L-01-01.md",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:integration-checklist",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "ceat:L-01-02",
+      "datapoint": "ceat:L-01",
+      "title": "Camso integration post-mortem - distribution and customer retention",
+      "kind": "post_mortem",
+      "version": "2026-01",
+      "tags": [
+        "post-mortem",
+        "distribution",
+        "retention",
+        "customers"
+      ],
+      "summary": "Retention plans for key customers and distributors began after close; earlier plans would have reduced early churn. Overseas supplier terms were reviewed late.",
+      "body_file": "source/L-01-02.md",
+      "concepts": [
+        "concept:acquisition-integration"
+      ]
+    }
+  ]
+}

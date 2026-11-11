@@ -1,93 +1,62 @@
-"""OpenTelemetry + Arize Phoenix tracing initialisation.
+"""Tracing with OpenTelemetry: one span per query step, per node call and per model call, carrying the mesh trace ID.
 
-Cloud Phoenix (ACA-hosted):
-- Collector endpoint via PHOENIX_COLLECTOR_ENDPOINT
-  (e.g. https://zaf-phoenix.bravesky-d9f9eeb7.eastus2.azurecontainerapps.io/v1/traces)
-- Auth: Bearer token from ARIZE_PHOENIX_API_KEY
-
-Local fallback: http://<phoenix_host>:<phoenix_port>/v1/traces (no auth).
-
-Uses the OTLP/HTTP exporter + openinference instrumentors so LangChain /
-LangGraph / OpenAI calls appear as proper spans in Phoenix. All imports are
-lazy so a missing observability package never blocks app startup.
+Export happens only when NEURALMESH_OTEL_ENDPOINT names an OTLP/HTTP collector. Without it the spans are created
+on a no-op provider, so the code path is the same and nothing is sent. Span names follow the OpenTelemetry
+conventions for generative AI as far as they are stable: `invoke_agent` style step spans are named
+`mesh.<step>`, node calls `execute_tool <tool>`, model calls `chat <model>`. The convention version is pinned
+here so a rename is a deliberate change. Question text and answers are never put on a span.
 """
 from __future__ import annotations
 
 import logging
+from contextlib import contextmanager
+from typing import Any, Iterator
 
 from shared.config import get_settings
 
 log = logging.getLogger("tracing")
-
+CONVENTION_VERSION = "gen-ai-semconv 1.41 (development status), names pinned 2026-11-07"
 _INITIALISED = False
+_tracer: Any = None
 
 
-def init_tracing(service_name: str = "__APP_NAME__-backend") -> None:
-    """Configure the OTel TracerProvider and instrument FastAPI + LangChain + OpenAI.
-
-    ``service_name`` identifies which process emitted a span (the FastAPI API
-    vs. the Temporal worker) — both write to the same Phoenix project, but this
-    lets you tell the two execution paths apart in a trace.
-    """
-    global _INITIALISED
+def init_tracing(service_name: str = "neuralmesh-api") -> None:
+    """Set the tracer provider. An exporter is added only when an endpoint is configured."""
+    global _INITIALISED, _tracer
     if _INITIALISED:
         return
-
     try:
         from opentelemetry import trace
-        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
         from opentelemetry.sdk.resources import Resource
         from opentelemetry.sdk.trace import TracerProvider
-        from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
         settings = get_settings()
+        provider = TracerProvider(resource=Resource.create({"service.name": service_name}))
+        if settings.neuralmesh_otel_endpoint:
+            from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+            from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-        if settings.phoenix_collector_endpoint:
-            endpoint = settings.phoenix_collector_endpoint.rstrip("/")
-            if not endpoint.endswith("/v1/traces"):
-                endpoint = f"{endpoint}/v1/traces"
-        else:
-            endpoint = f"http://{settings.phoenix_host}:{settings.phoenix_port}/v1/traces"
-
-        headers = {}
-        if settings.arize_phoenix_api_key:
-            headers["Authorization"] = f"Bearer {settings.arize_phoenix_api_key}"
-
-        provider = TracerProvider(
-            resource=Resource.create(
-                {
-                    "service.name": service_name,
-                    "openinference.project.name": settings.phoenix_project_name,
-                }
-            )
-        )
-        provider.add_span_processor(
-            BatchSpanProcessor(OTLPSpanExporter(endpoint=endpoint, headers=headers))
-        )
+            headers = dict(h.split("=", 1) for h in settings.neuralmesh_otel_headers.split(",") if "=" in h)
+            provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=settings.neuralmesh_otel_endpoint, headers=headers)))
+            log.info("traces exported to %s", settings.neuralmesh_otel_endpoint)
         trace.set_tracer_provider(provider)
-
-        # ── Instrumentors (each optional) ──────────────────────────────────────
-        try:
-            from openinference.instrumentation.langchain import LangChainInstrumentor
-
-            LangChainInstrumentor().instrument(tracer_provider=provider)
-            log.info("LangChain instrumented (openinference)")
-        except Exception as exc:  # noqa: BLE001
-            log.warning("langchain instrumentation skipped: %s", exc)
-
-        try:
-            from openinference.instrumentation.openai import OpenAIInstrumentor
-
-            OpenAIInstrumentor().instrument(tracer_provider=provider)
-            log.info("OpenAI instrumented (openinference)")
-        except Exception as exc:  # noqa: BLE001
-            log.warning("openai instrumentation skipped: %s", exc)
-
-        log.info("OTel TracerProvider initialised -> %s (project: %s)",
-                 endpoint, settings.phoenix_project_name)
+        _tracer = trace.get_tracer("neuralmesh", CONVENTION_VERSION)
         _INITIALISED = True
-    except Exception as exc:  # noqa: BLE001
-        log.warning("init_tracing failed (continuing without tracing): %s", exc)
+    except Exception as exc:  # noqa: BLE001 - tracing never blocks the service
+        log.warning("tracing not initialised: %s", exc)
+
+
+@contextmanager
+def span(name: str, attributes: dict[str, Any] | None = None) -> Iterator[None]:
+    """A span around one unit of work. A no-op when tracing is not initialised."""
+    if _tracer is None:
+        yield None
+        return
+    with _tracer.start_as_current_span(name) as s:
+        for k, v in (attributes or {}).items():
+            if v is not None:
+                s.set_attribute(k, v if isinstance(v, (str, int, float, bool)) else str(v))
+        yield s
 
 
 def instrument_fastapi(app) -> None:
@@ -96,6 +65,5 @@ def instrument_fastapi(app) -> None:
         from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
         FastAPIInstrumentor.instrument_app(app)
-        log.info("FastAPI instrumented")
     except Exception as exc:  # noqa: BLE001
         log.warning("fastapi instrumentation skipped: %s", exc)

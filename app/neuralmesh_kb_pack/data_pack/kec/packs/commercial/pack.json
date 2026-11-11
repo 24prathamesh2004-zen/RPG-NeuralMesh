@@ -1,0 +1,116 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.commercial",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "commercial",
+    "title": "KEC International commercial knowledge",
+    "owner_role": "Bid head",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:C-01",
+      "catalogue_id": "C-01",
+      "title": "Bid prices and strategy",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Bid head",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-04"
+    },
+    {
+      "id": "kec:C-02",
+      "catalogue_id": "C-02",
+      "title": "Contract clause precedents",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "General Counsel",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "kec:C-01-01",
+      "datapoint": "kec:C-01",
+      "title": "Bid price book (restricted)",
+      "kind": "report",
+      "version": "2026-08",
+      "tags": [
+        "bid",
+        "pricing",
+        "restricted"
+      ],
+      "summary": "Restricted bid pricing. Metadata only.",
+      "body_file": "source/C-01-01.md",
+      "concepts": [
+        "concept:pricing"
+      ]
+    },
+    {
+      "id": "kec:C-02-01",
+      "datapoint": "kec:C-02",
+      "title": "Liquidated damages clause precedents",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "contracts",
+        "liquidated-damages",
+        "precedents"
+      ],
+      "summary": "Precedent wording and negotiation outcomes for liquidated damages clauses. Counterparty names removed.",
+      "body_file": "source/C-02-01.md",
+      "concepts": [
+        "concept:contract-clause-precedent"
+      ]
+    },
+    {
+      "id": "kec:C-02-02",
+      "datapoint": "kec:C-02",
+      "title": "Payment-term precedents on overseas contracts",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "contracts",
+        "payment",
+        "overseas",
+        "precedents"
+      ],
+      "summary": "Payment-term clauses used on overseas contracts and the cash-cycle effect seen. Counterparty names removed.",
+      "body_file": "source/C-02-02.md",
+      "concepts": [
+        "concept:contract-clause-precedent",
+        "concept:overseas-mobilisation-terms"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-KEC-BID-8801",
+        "document": "kec:C-01-01"
+      }
+    ]
+  }
+}

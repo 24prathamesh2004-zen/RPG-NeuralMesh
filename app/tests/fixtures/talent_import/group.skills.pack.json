@@ -1,0 +1,324 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "group.skills",
+    "scope": "group",
+    "subsidiary": "group",
+    "title": "SAMPLE until SkillForge exports it: group skills with aliases",
+    "owner_role": "Group HR (SkillForge)",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true
+  },
+  "entities": [
+    {
+      "id": "skill:manufacturing",
+      "type": "Skill",
+      "label": "Manufacturing",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/manufacturing"
+        }
+      ]
+    },
+    {
+      "id": "skill:engineering",
+      "type": "Skill",
+      "label": "Engineering",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/engineering"
+        }
+      ]
+    },
+    {
+      "id": "skill:hr",
+      "type": "Skill",
+      "label": "HR",
+      "aliases": [
+        "human resources"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/hr"
+        }
+      ]
+    },
+    {
+      "id": "skill:finance",
+      "type": "Skill",
+      "label": "Finance",
+      "aliases": [],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/finance"
+        }
+      ]
+    },
+    {
+      "id": "skill:r-and-d-npd",
+      "type": "Skill",
+      "label": "R&D / NPD",
+      "aliases": [
+        "research and development",
+        "new product development"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/r&d / npd"
+        }
+      ]
+    },
+    {
+      "id": "skill:quality-management",
+      "type": "Skill",
+      "label": "Quality Management",
+      "aliases": [
+        "quality assurance",
+        "QA",
+        "QMS"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/quality management"
+        }
+      ]
+    },
+    {
+      "id": "skill:rubber-plantation-management",
+      "type": "Skill",
+      "label": "Rubber Plantation Management",
+      "aliases": [
+        "estate management",
+        "rubber estate operations"
+      ],
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/rubber plantation management"
+        }
+      ]
+    },
+    {
+      "id": "skill:business-communication",
+      "type": "Skill",
+      "label": "Business Communication",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/31"
+        }
+      ]
+    },
+    {
+      "id": "skill:business-functional-knowledge",
+      "type": "Skill",
+      "label": "Business Functional Knowledge",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/11"
+        }
+      ]
+    },
+    {
+      "id": "skill:cable-accessory-installation",
+      "type": "Skill",
+      "label": "Cable Accessory Installation",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/42"
+        }
+      ]
+    },
+    {
+      "id": "skill:carbon-accounting",
+      "type": "Skill",
+      "label": "Carbon Accounting",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/45"
+        }
+      ]
+    },
+    {
+      "id": "skill:compliance-basics",
+      "type": "Skill",
+      "label": "Compliance Basics",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/33"
+        }
+      ]
+    },
+    {
+      "id": "skill:customer-service",
+      "type": "Skill",
+      "label": "Customer Service",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/32"
+        }
+      ]
+    },
+    {
+      "id": "skill:data-analysis-basics",
+      "type": "Skill",
+      "label": "Data Analysis Basics",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/34"
+        }
+      ]
+    },
+    {
+      "id": "skill:electrical-power-cable-and-transformer",
+      "type": "Skill",
+      "label": "Electrical Power, Cable & Transformer",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/13"
+        }
+      ]
+    },
+    {
+      "id": "skill:good-manufacturing-practice",
+      "type": "Skill",
+      "label": "Good Manufacturing Practice",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/23"
+        }
+      ]
+    },
+    {
+      "id": "skill:manufacturing-engineering-quality-and-digital",
+      "type": "Skill",
+      "label": "Manufacturing, Engineering, Quality & Digital",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/14"
+        }
+      ]
+    },
+    {
+      "id": "skill:mobility-ev-and-electrical-applications",
+      "type": "Skill",
+      "label": "Mobility, EV & Electrical Applications",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/15"
+        }
+      ]
+    },
+    {
+      "id": "skill:pharma-sales",
+      "type": "Skill",
+      "label": "Pharma Sales",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/21"
+        }
+      ]
+    },
+    {
+      "id": "skill:plant-safety",
+      "type": "Skill",
+      "label": "Plant Safety",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/22"
+        }
+      ]
+    },
+    {
+      "id": "skill:professional-workplace-skills",
+      "type": "Skill",
+      "label": "Professional Workplace Skills",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/12"
+        }
+      ]
+    },
+    {
+      "id": "skill:project-management",
+      "type": "Skill",
+      "label": "Project Management",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/35"
+        }
+      ]
+    },
+    {
+      "id": "skill:quality-control-and-assurance",
+      "type": "Skill",
+      "label": "Quality Control and Assurance",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/24"
+        }
+      ]
+    },
+    {
+      "id": "skill:regulatory-affairs",
+      "type": "Skill",
+      "label": "Regulatory Affairs",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "group_skills/25"
+        }
+      ]
+    }
+  ],
+  "relationships": []
+}

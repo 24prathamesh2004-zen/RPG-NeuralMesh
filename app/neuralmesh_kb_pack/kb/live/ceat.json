@@ -1,0 +1,5 @@
+{"note": "SYNTHETIC live facts of CEAT for the inspection pilot. Looked up at request time, never copied into the mesh.",
+ "cover_status": {"asset/finished_tyre": {"value": "stock_policy active", "policy_ref": "CEAT-STK-2026-07", "valid_to": "2027-06-30"},
+                  "asset/cured_tyre": {"value": "stock_policy active", "policy_ref": "CEAT-STK-2026-07", "valid_to": "2027-06-30"},
+                  "asset/claim_tyre": {"value": "not covered individually", "policy_ref": null, "valid_to": null},
+                  "asset/fleet_tyre": {"value": "unknown, ask the fleet owner", "policy_ref": null, "valid_to": null}}}

@@ -1,0 +1,45 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-2f866293",
+    "name": "Natural rubber storage and ageing"
+  },
+  "document": {
+    "id": "ceat:E-03-U003",
+    "datapoint": "ceat:E-03",
+    "title": "Warehouse storage audit, Plant 3, April to June 2026",
+    "kind": "report",
+    "version": "2026-08",
+    "tags": [
+      "audit",
+      "plant-3",
+      "warehouse"
+    ],
+    "summary": "Warehouse storage audit, Plant 3, April to June 2026 Audit of 6 and 7 July 2026 by the raw material team of CEAT. All four bays of the raw material warehouse are covered and ventilated, and every bale of natural rubber stood on a pallet. 1,180 of the 1,229 issue lines followed first in, first out. 11 of the 412 lots in store were past the time-to-use limit of their grade.",
+    "body": "Warehouse storage audit, Plant 3, April to June 2026\nAudit of 6 and 7 July 2026 by the raw material team of CEAT.\nAll four bays of the raw material warehouse are covered and ventilated, and every bale of natural\nrubber stood on a pallet. 1,180 of the 1,229 issue lines followed first in, first out. 11 of the 412 lots\nin store were past the time-to-use limit of their grade. All 11 got the storage ageing check before\nissue. 1 of them failed it and was downgraded.\nWhat was checked and what was found\nArea What was checked Finding\nWarehouse\nstorage\nCover, ventilation, pallets,\ndistance from sun and heat\nAll four bays are covered and ventilated. Two pallet\npositions in bay 4 get direct sun from a roof light after 3\npm. Both positions are now blocked.\nFIFO storage The 1,229 issue lines of April to\nJune against the receipt dates\n1,180 issue lines followed first in, first out, which is\n96%. The other 49 were issues from the front pallet of a\ndouble-deep row while an older lot stood behind it.\nTime-to-use limit The receipt date of all 412 lots\nagainst the limit of the grade\n11 lots were past the limit. All 11 got the storage ageing\ncheck before issue. 10 passed. 1 failed and was\ndowngraded.\nLot traceability The lot card against the bay, and\n40 mixing batches against their\nlots\nEvery lot card had the receipt date. 3 lot cards named a\nlocation that did not match the bay. All 40 mixing\nbatches were traced back to their lot.\nContamination and\nmoisture control\nWrapping, foreign matter and\nmoisture at receipt\n5 bales with torn wrapping were set aside and wrapped\nagain. No wet bale was found.\nGrades kept apart Grades by bay and by row No row with two grades was found.\nActions\nAction Owner Due\nFit a shade under the roof light of bay 4 and keep the two\npallet positions blocked until it is fitted\nWarehouse lead 30 September 2026\nChange the double-deep rows of bay 2 so that the older lot\nstands in front\nWarehouse lead 31 August 2026\nCorrect the 3 lot cards and add a location check to the weekly\nstock count\nStore supervisor 15 August 2026\nReport every lot that passes its time-to-use limit to the store\nlead on the same day\nStore supervisor From 1 September\n2026\nNext audit\nThe next audit covers July to September 2026 and runs in the first week of October 2026. It counts the\nissue lines of bay 2 again after the rows are changed.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of CEAT.",
+    "concepts": [
+      "concept:contamination-control",
+      "concept:lot-traceability",
+      "concept:material-ageing",
+      "concept:raw-material-storage",
+      "concept:time-to-use-limit"
+    ]
+  },
+  "concept_matches": {
+    "concept:contamination-control": "phrase",
+    "concept:lot-traceability": "phrase",
+    "concept:material-ageing": "phrase",
+    "concept:raw-material-storage": "phrase",
+    "concept:time-to-use-limit": "phrase"
+  },
+  "upload": {
+    "file": "plant3_warehouse_storage_audit_apr_jun_2026.pdf",
+    "format": "pdf",
+    "chars": 2436,
+    "sha256": "cc32dec565023d403ed18b442704718045b911cfccabeea5d994271859995e3c",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-08-19T05:27:54+00:00"
+  },
+  "sample_input": "plant3_warehouse_storage_audit_apr_jun_2026.pdf"
+}

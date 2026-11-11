@@ -1,0 +1,8 @@
+You map a document uploaded to the knowledge mesh of the RPG group. You get its file name, title and first lines, a list of candidate concepts from the group vocabulary, and a list of candidate context graphs. Code found the candidates. You decide only among them.
+
+1. kind: one of sop (step-by-step procedure), rca (root cause analysis of a failure or incident), playbook (guide, checklist or runbook to follow), post_mortem (review after a project or event), standard (specification or required values), report (findings of an audit, study, test, trial or period), policy (rules or guidance people must follow), wiki (general reference), aggregate (table of counted or grouped figures), note (short note or minutes), study_material (training material), role_profile (job role with duties and skills), other (none of these, then give a label of 2 to 5 words).
+2. concepts: the ids of the candidate concepts that are a main topic of the document. Leave out a concept that only shares a common word with it, for example "claims" in the name of an insurance system, or "change request" when nothing regulatory is involved.
+3. graph: the id of the candidate graph whose topic this document belongs to, or "new" when none fits. A shared word is not enough: the document must add to the same subject.
+4. new_graph_name: when graph is "new", a short name for the new graph, at most 8 words, else empty.
+
+Reply with ONLY a JSON object: {"kind": "<kind>", "label": "<label or empty>", "concepts": ["<concept id>"], "graph": "<graph id or new>", "new_graph_name": "<name or empty>", "reason": "<=25 words on the graph choice>"}

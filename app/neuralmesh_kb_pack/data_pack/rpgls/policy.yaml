@@ -1,0 +1,47 @@
+node: rpgls
+schema_version: 1.0.0
+calendar: results_calendar.yaml
+defaults:
+  purposes_allowed:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
+  roles_allowed:
+  - group_user
+datapoints:
+  O-01:
+    title: Manufacturing and plant safety SOPs
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head Manufacturing
+  E-01:
+    title: Quality control and validation procedures
+    sensitivity: Confidential
+    ceiling: SUM
+    owner_role: Head Quality Control
+  F-01:
+    title: Quality assurance and regulatory procedures
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head Quality Assurance
+  C-01:
+    title: Field force and ethical promotion guidance
+    sensitivity: Internal
+    ceiling: SUM
+    owner_role: Head Sales Training
+  F-02:
+    title: Regulatory inspection response file
+    sensitivity: Restricted
+    ceiling: MD
+    never_leave: true
+    owner_role: Head Regulatory Affairs
+    rule_id: R-NL-07
+  F-04:
+    title: Expert directory (consent-based)
+    sensitivity: Confidential
+    ceiling: LIVE
+    consent_required: true
+    owner_role: CHRO

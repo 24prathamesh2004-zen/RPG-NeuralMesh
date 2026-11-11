@@ -1,0 +1,135 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.operations",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "operations",
+    "title": "KEC International operations knowledge",
+    "owner_role": "Plant maintenance",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:O-01",
+      "catalogue_id": "O-01",
+      "title": "Maintenance and breakdown RCAs",
+      "sensitivity": "Internal",
+      "ceiling": "RAG",
+      "owner_role": "Plant maintenance",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    },
+    {
+      "id": "kec:O-02",
+      "catalogue_id": "O-02",
+      "title": "HSE incidents (anonymised)",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head HSE",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ]
+    },
+    {
+      "id": "kec:O-06",
+      "catalogue_id": "O-06",
+      "title": "Site progress and delay notes",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "PMO head",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "views": [
+        "v_delay_by_category"
+      ],
+      "min_group": 3
+    }
+  ],
+  "documents": [
+    {
+      "id": "kec:O-06-01",
+      "datapoint": "kec:O-06",
+      "title": "Delay pattern summary across projects",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "delay",
+        "projects",
+        "patterns",
+        "site"
+      ],
+      "summary": "Across the mock project set, the most frequent delay category is material-supply (28% of delay notes), followed by right-of-way. Material-supply delays often follow late release of purchase orders.",
+      "body_file": "source/O-06-01.md",
+      "concepts": [
+        "concept:project-delay-pattern",
+        "concept:recurring-pattern"
+      ]
+    },
+    {
+      "id": "kec:O-01-01",
+      "datapoint": "kec:O-01",
+      "title": "Cable extrusion line RCA - die wear pattern",
+      "kind": "rca",
+      "version": "2026-02",
+      "tags": [
+        "maintenance",
+        "extrusion",
+        "cables",
+        "rca"
+      ],
+      "summary": "RCA of repeated die wear on a cable extrusion line and the inspection interval change that fixed it.",
+      "body_file": "source/O-01-01.md",
+      "concepts": [
+        "concept:breakdown-rca",
+        "concept:root-cause-analysis",
+        "concept:recurring-pattern"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "kec:O-02-01",
+      "datapoint": "kec:O-02",
+      "title": "Near-miss pattern - working at height during tower erection (anonymised)",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "hse",
+        "near-miss",
+        "working-at-height",
+        "tower"
+      ],
+      "summary": "Near-misses cluster at harness changeover points during tower erection. A second anchor point and a changeover checklist reduced repeats. Anonymised.",
+      "body_file": "source/O-02-01.md",
+      "concepts": [
+        "concept:near-miss-pattern",
+        "concept:recurring-pattern"
+      ]
+    }
+  ]
+}

@@ -3,10 +3,12 @@ import { ArrowRight, LoaderCircle, Search, UserRound, UserRoundPlus } from 'luci
 import { searchExperts, requestExpertIntroduction } from '../services/api'
 import type { ExpertMatch } from '../services/api'
 import { useMeshScope } from '../context/MeshScopeContext'
+import { useAuth } from '../auth/AuthContext'
 
 const EXAMPLE_QUERY = 'natural rubber quality, integration, or estate operations'
 
 export default function ExpertFinderPage() {
+  const { user } = useAuth()
   const { selectedNodes } = useMeshScope()
   const [query, setQuery] = useState('')
   const [purpose, setPurpose] = useState<'problem_solving' | 'compliance' | 'bid_support'>('problem_solving')
@@ -50,21 +52,20 @@ export default function ExpertFinderPage() {
         <div><div className="mesh-eyebrow">People and expertise</div><h1>Expert Finder</h1><p>Search opted-in expertise across the subsidiaries in your current scope.</p></div>
       </header>
       <section className="mesh-section-panel expert-search-panel">
-        <label htmlFor="expert-query">Describe the experience you need</label>
-        <div className="expert-search-row"><div className="expert-query-wrap"><Search size={16} /><input id="expert-query" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && void search()} placeholder={EXAMPLE_QUERY} /></div>
+                <div className="expert-search-row"><div className="expert-field"><label htmlFor="expert-query">Describe the experience you need</label><div className="expert-query-wrap"><Search size={16} /><input id="expert-query" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && void search()} placeholder={EXAMPLE_QUERY} /></div></div>
           <label className="expert-purpose">Purpose<select value={purpose} onChange={(event) => setPurpose(event.target.value as typeof purpose)}><option value="problem_solving">Problem solving</option><option value="compliance">Compliance</option><option value="bid_support">Bid support</option></select></label>
           <button type="button" className="mesh-primary-action" onClick={() => void search()} disabled={busy || !query.trim()}>{busy ? <LoaderCircle size={15} className="animate-spin" /> : <Search size={15} />}Search experts</button>
         </div>
         <p className="mesh-panel-footnote">Only opted-in role, skill and evidence fields are searchable. Names require an approved introduction.</p>
       </section>
       {error && <div className="mesh-alert error">{error}</div>}
-      {experts.length > 0 && <div className="expert-results-heading"><h2>Matched expertise</h2><span>{experts.length} opted-in profiles</span></div>}
+      {experts.length > 0 && <div className="expert-results-heading"><h2>Matched expertise</h2><span>{experts.length} opted-in {experts.length === 1 ? 'profile' : 'profiles'}</span></div>}
       <section className="expert-results">
         {experts.map((expert) => <article className="expert-result" key={`${expert.expert_id}-${expert.company}`}>
           <div className="expert-avatar"><UserRound size={19} /></div>
-          <div className="expert-result-main"><div className="expert-role">{expert.role}</div><div className="expert-company">{expert.company}</div>
+          <div className="expert-result-main"><div className="expert-role">{expert.role}</div><div className="expert-company">{expert.company}{expert.company === user?.company_name && ' · your company'}</div>
             <div className="expert-skills">{expert.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
-            <div className="expert-evidence">Evidence: {expert.evidence.join(' · ')}</div>
+            {expert.evidence.length > 0 && <div className="expert-evidence">Evidence: {(expert.evidence_titles?.length ? expert.evidence_titles : expert.evidence).join(' · ')}</div>}
           </div>
           <div className="expert-result-action">
             {expert.name && <span className="expert-revealed-name">{expert.name}</span>}

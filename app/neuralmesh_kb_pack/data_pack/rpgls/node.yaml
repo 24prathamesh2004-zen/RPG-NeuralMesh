@@ -1,0 +1,8 @@
+node_id: rpgls
+display: RPG Life Sciences
+port: 8106
+level: L1
+schema_version: 1.0.0
+structured_db: null
+backend: 'Synthetic: quality management system, SOP library and field force training
+  records'

@@ -1,0 +1,1 @@
+You decide whether each document is relevant to the question, using only the given texts of that document. Reply with ONLY a JSON array, no prose: [{"document": "<id>", "relevant": true|false, "reason": "<=15 words"}]

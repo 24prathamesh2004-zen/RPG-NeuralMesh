@@ -1,0 +1,4 @@
+{"note": "SYNTHETIC live facts of Harrisons Malayalam for the inspection pilot. Looked up at request time, never copied into the mesh.",
+ "cover_status": {"asset/smoked_sheet": {"value": "stock_policy active", "policy_ref": "HM-STK-2026-02", "valid_to": "2027-03-31"},
+                  "asset/sheet_lot": {"value": "stock_policy active", "policy_ref": "HM-STK-2026-02", "valid_to": "2027-03-31"},
+                  "asset/lump_crepe": {"value": "not covered individually", "policy_ref": null, "valid_to": null}}}

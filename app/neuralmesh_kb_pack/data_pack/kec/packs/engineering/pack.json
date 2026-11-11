@@ -1,0 +1,120 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.engineering",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "engineering",
+    "title": "KEC International engineering knowledge",
+    "owner_role": "Head Engineering",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:E-04",
+      "catalogue_id": "E-04",
+      "title": "Tower design standards and type-test summaries",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head Engineering",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "inspection"
+      ]
+    },
+    {
+      "id": "kec:E-05",
+      "catalogue_id": "E-05",
+      "title": "Cable and elastomer test summaries",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Cables CTO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "kec:E-04-01",
+      "datapoint": "kec:E-04",
+      "title": "Tower design standard revisions - summary",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "tower",
+        "design",
+        "standards",
+        "galvanising"
+      ],
+      "summary": "Summary of recent design standard revisions and the type-test findings that drove them. No customer-specific data.",
+      "body_file": "source/E-04-01.md",
+      "concepts": [
+        "concept:tower-design-standard"
+      ]
+    },
+    {
+      "id": "kec:E-05-01",
+      "datapoint": "kec:E-05",
+      "title": "Elastomer and cable material ageing tests - summary",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "elastomer",
+        "ageing",
+        "cable",
+        "heat-ageing",
+        "ozone"
+      ],
+      "summary": "Heat-ageing and ozone-resistance tests on elastomer cable materials show properties drift faster in lots stored warm or long before use. Storage and time-to-use limits were added to material handling.",
+      "body_file": "source/E-05-01.md",
+      "concepts": [
+        "concept:material-ageing",
+        "concept:time-to-use-limit"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "kec:E-04-03",
+      "datapoint": "kec:E-04",
+      "title": "Standard - Patrol priority for tower members (P1, P2, P3)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "standard",
+        "patrol",
+        "priority",
+        "tower",
+        "rust",
+        "zinc",
+        "bent"
+      ],
+      "summary": "P1 is a bent member or a crack at a joint, to be made safe within 48 hours. P2 is zinc loss with rust on more than a quarter of a member, to be scheduled within the quarter. P3 is surface rust with the zinc coat intact, recorded and re-checked at the next patrol.",
+      "body_file": "source/E-04-03.md",
+      "concepts": [
+        "concept:tower-design-standard"
+      ]
+    }
+  ]
+}

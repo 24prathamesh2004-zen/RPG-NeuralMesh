@@ -38,3 +38,20 @@ For an Ask demo, keep the CEAT and Harrisons nodes running on ports `8101` and
 
 The prepared Ask example compares CEAT materials-handling knowledge with
 Harrisons latex-spoilage trends. All content is synthetic.
+
+## Sample inputs for the Context graph page
+
+`presenter@neuralmesh.local` is the one mesh admin of these accounts, so it is the account that uploads inputs and
+sees every uploaded input. An uploaded input belongs to a company and a context graph, not to the account that
+uploaded it, so a second admin account would show the same list. To fill the page the way it looks after three months
+of use, load the ten synthetic sample inputs from `app`, with the stack running:
+
+```
+python -m scripts.sample_inputs load        # ten inputs in four context graphs, one of them a removed draft
+python -m scripts.sample_inputs status      # what is loaded, and which other uploads exist
+python -m scripts.sample_inputs remove      # takes the sample inputs out again, after a question
+```
+
+The files and their list are in `neuralmesh_kb_pack/sample_inputs`, with a README. `remove` leaves every input that a
+person added. To see what a company account sees, sign in as `kec.expert` (3 of the sample inputs), `ceat.expert` (5)
+or `harrisons.expert` (3): each sees the inputs of its own company and the two shared ones.

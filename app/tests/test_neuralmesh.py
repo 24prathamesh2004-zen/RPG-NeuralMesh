@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from api.schemas.mesh import MeshQueryRequest
 from api.auth import API_AUDIENCE, POC_ISSUER, issue_poc_token
-from jose import jwt
+import jwt
 from services.neuralmesh import MeshOrchestrator, PocNodeTokenProvider, build_mesh_graph
 from shared.config import Settings, get_settings
 

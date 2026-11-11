@@ -1,0 +1,40 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-e6f6addf",
+    "name": "Overseas acquisition integration"
+  },
+  "document": {
+    "id": "others:G-01-U001",
+    "datapoint": "others:G-01",
+    "title": "Group integration forum, minutes of September 2026",
+    "kind": "note",
+    "version": "2026-09",
+    "tags": [
+      "minutes",
+      "forum"
+    ],
+    "summary": "Group integration forum, minutes of September 2026 Meeting of 15 September 2026. Present: the integration leads of KEC International and Zensar, the head of finance processes of the group and the head of people operations of the group. Decisions From 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.",
+    "body": "Group integration forum, minutes of September 2026\n\nMeeting of 15 September 2026. Present: the integration leads of KEC International and Zensar, the head of finance processes of the group and the head of people operations of the group.\n\nDecisions\n\nFrom 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.\n\nThe review of local labour, contract and payment terms is due by day 30 of every integration.\n\nThe systems cut-over runbook of Zensar is the common runbook of the group. KEC International adds a section for project sites.\n\nEvery integration keeps one list of workarounds, each with an owner and a closing date, and gives the count to the forum every month.\n\nWhat the companies told the forum\n\nKEC International: 5 workarounds of the overseas unit are still open, against 14 on day 45. Each of the 5 has an owner and a closing date.\n\nZensar: the runbook was used for one acquired unit in August 2026. The counts of the old and the new system were equal on the first day.\n\nActions\n\nThe next meeting is on 20 October 2026.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.\n\nAction | Owner | Due\n\nAdd the section for project sites to the runbook | Integration lead of KEC International | 31 October 2026\n\nSend the form for the day 30 review of local labour, contract and payment terms to every integration lead | Head of people operations of the group | 15 October 2026\n\nGive the count of open workarounds of each integration to the forum | Integration leads | Every month from October 2026",
+    "concepts": [
+      "concept:acquisition-integration",
+      "concept:overseas-mobilisation-terms",
+      "concept:process-ownership-before-cut-over"
+    ]
+  },
+  "concept_matches": {
+    "concept:acquisition-integration": "phrase",
+    "concept:overseas-mobilisation-terms": "phrase",
+    "concept:process-ownership-before-cut-over": "phrase"
+  },
+  "upload": {
+    "file": "integration_forum_minutes_2026_09.docx",
+    "format": "word",
+    "chars": 1640,
+    "sha256": "e43537f1867fe7a0c425db000ff375af84dc4f7cb7d5df2cb3243f7ad171b49b",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-09-17T11:05:33+00:00"
+  },
+  "sample_input": "integration_forum_minutes_2026_09.docx"
+}

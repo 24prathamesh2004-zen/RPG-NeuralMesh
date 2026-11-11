@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0",
+  "node": {
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "type": {
+        "title": "Type",
+        "type": "string"
+      },
+      "label": {
+        "title": "Label",
+        "type": "string"
+      },
+      "aliases": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Aliases",
+        "type": "array"
+      },
+      "description": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Description"
+      },
+      "owner": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Owner"
+      },
+      "sensitivity": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Sensitivity"
+      },
+      "properties": {
+        "type": "object",
+        "additionalProperties": true,
+        "title": "Properties"
+      },
+      "external_refs": {
+        "items": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "title": "External Refs",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "type",
+      "label"
+    ],
+    "title": "GraphNode",
+    "type": "object"
+  },
+  "edge": {
+    "$defs": {
+      "Provenance": {
+        "properties": {
+          "method": {
+            "enum": [
+              "authored",
+              "imported",
+              "extracted",
+              "computed"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "by_role": {
+            "title": "By Role",
+            "type": "string"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Created At"
+          },
+          "evidence": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "method",
+          "by_role"
+        ],
+        "title": "Provenance",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "type": {
+        "title": "Type",
+        "type": "string"
+      },
+      "from": {
+        "title": "From",
+        "type": "string"
+      },
+      "to": {
+        "title": "To",
+        "type": "string"
+      },
+      "status": {
+        "default": "approved",
+        "enum": [
+          "proposed",
+          "approved",
+          "rejected",
+          "retired"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "provenance": {
+        "$ref": "#/$defs/Provenance"
+      },
+      "properties": {
+        "type": "object",
+        "additionalProperties": true,
+        "title": "Properties"
+      },
+      "confidence": {
+        "anyOf": [
+          {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Confidence"
+      },
+      "approvals": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Approvals",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "type",
+      "from",
+      "to",
+      "provenance"
+    ],
+    "title": "GraphEdge",
+    "type": "object"
+  }
+}

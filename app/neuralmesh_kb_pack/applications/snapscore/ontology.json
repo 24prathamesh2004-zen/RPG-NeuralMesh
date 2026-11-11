@@ -1,0 +1,115 @@
+{
+  "version": "0.1-draft",
+  "note": "High level. Assets, conditions and expected cover types are to be confirmed by each subsidiary. Actual insurance status is looked up from NeuralMesh at scan time and is never stored here.",
+  "condition_families": [
+    {"id": "crack_cut", "name": "Cracks and cuts"},
+    {"id": "deformation", "name": "Deformation"},
+    {"id": "corrosion_coating", "name": "Corrosion and coating loss"},
+    {"id": "contamination_mould", "name": "Contamination and mould"},
+    {"id": "thermal_electrical", "name": "Thermal and electrical marks"},
+    {"id": "missing_loose", "name": "Missing or loose parts"},
+    {"id": "wear", "name": "Wear"},
+    {"id": "colour_appearance", "name": "Colour and appearance"},
+    {"id": "label_id", "name": "Label and identification"}
+  ],
+  "conditions": [
+    {"id": "cut", "family": "crack_cut"}, {"id": "crack", "family": "crack_cut"}, {"id": "tear", "family": "crack_cut"},
+    {"id": "weld_crack", "family": "crack_cut"}, {"id": "strand_damage", "family": "crack_cut"}, {"id": "insulator_damage", "family": "crack_cut"},
+    {"id": "bulge", "family": "deformation"}, {"id": "bent_member", "family": "deformation"},
+    {"id": "uneven_shrink", "family": "deformation"}, {"id": "moulding_defect", "family": "deformation"},
+    {"id": "rust", "family": "corrosion_coating"}, {"id": "zinc_loss", "family": "corrosion_coating"}, {"id": "connector_corrosion", "family": "corrosion_coating"},
+    {"id": "mould", "family": "contamination_mould"}, {"id": "dirt_foreign", "family": "contamination_mould"}, {"id": "leak", "family": "contamination_mould"},
+    {"id": "burnt", "family": "thermal_electrical"}, {"id": "tracking_mark", "family": "thermal_electrical"},
+    {"id": "missing_part", "family": "missing_loose"}, {"id": "loose_part", "family": "missing_loose"}, {"id": "lug_not_seated", "family": "missing_loose"},
+    {"id": "uneven_wear", "family": "wear"}, {"id": "bead_damage", "family": "wear"}, {"id": "worn_fitting", "family": "wear"},
+    {"id": "colour_unevenness", "family": "colour_appearance"}, {"id": "bubbles", "family": "colour_appearance"},
+    {"id": "label_missing", "family": "label_id"}
+  ],
+  "grade_scales": [
+    {"id": "tyre_plant", "grades": ["A", "B", "C", "Reject"]},
+    {"id": "tyre_fleet", "grades": ["Serviceable", "Monitor", "Remove"]},
+    {"id": "sheet_visual", "grades": ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5"]},
+    {"id": "qa_basic", "grades": ["Pass", "Rework", "Reject"]},
+    {"id": "patrol_priority", "grades": ["P1", "P2", "P3"]}
+  ],
+  "review_status": ["visible_concern_requires_review", "no_obvious_defect_in_visible_area", "insufficient_visual_evidence"],
+  "cover_types": ["asset_policy", "stock_policy", "project_policy", "none_individual", "unknown"],
+  "subsidiaries": [
+    {
+      "id": "ceat", "name": "CEAT", "sector": "Tyres", "mcp_server": "tbd",
+      "families": [
+        {"id": "ceat.tyre", "name": "Tyre", "assets": [
+          {"id": "ceat.finished_tyre", "name": "Finished tyre", "scan": "serial_barcode", "views": ["sidewall", "tread", "shoulder", "bead"], "conditions": ["bulge", "cut", "crack", "uneven_wear", "bead_damage"], "scale": "tyre_plant", "cover": "stock_policy"},
+          {"id": "ceat.claim_tyre", "name": "Returned or claim tyre", "scan": "claim_id", "views": ["sidewall", "tread", "inner_liner"], "conditions": ["bulge", "cut", "crack", "uneven_wear"], "scale": "tyre_fleet", "cover": "none_individual"},
+          {"id": "ceat.fleet_tyre", "name": "Fleet tyre in service", "scan": "vehicle_position", "views": ["sidewall", "tread"], "conditions": ["bulge", "cut", "uneven_wear", "dirt_foreign"], "scale": "tyre_fleet", "cover": "unknown"},
+          {"id": "ceat.retread_casing", "name": "Retread casing", "scan": "casing_id", "views": ["sidewall", "crown", "inner_liner"], "conditions": ["crack", "cut", "bulge"], "scale": "tyre_plant", "cover": "stock_policy"},
+          {"id": "ceat.cured_tyre", "name": "Plant tyre before dispatch", "scan": "batch_serial", "views": ["sidewall", "tread"], "conditions": ["moulding_defect", "bulge"], "scale": "tyre_plant", "cover": "stock_policy"}
+        ]}
+      ]
+    },
+    {
+      "id": "harrisons", "name": "Harrisons Malayalam", "sector": "Natural rubber and estate crops", "mcp_server": "tbd",
+      "families": [
+        {"id": "harrisons.rubber", "name": "Natural rubber", "assets": [
+          {"id": "harrisons.smoked_sheet", "name": "Smoked sheet or bale", "scan": "lot_tag", "views": ["whole_sheet", "edge"], "conditions": ["colour_unevenness", "bubbles", "mould", "dirt_foreign"], "scale": "sheet_visual", "cover": "stock_policy"},
+          {"id": "harrisons.sheet_lot", "name": "Sheet lot or pallet", "scan": "lot_id", "views": ["stack", "face"], "conditions": ["mould", "colour_unevenness"], "scale": "sheet_visual", "cover": "stock_policy"},
+          {"id": "harrisons.lump_crepe", "name": "Cup lump or crepe", "scan": "lot_id", "views": ["surface"], "conditions": ["mould", "dirt_foreign"], "scale": "qa_basic", "cover": "stock_policy"}
+        ]},
+        {"id": "harrisons.other_crops", "name": "Other estate crops (confirm scope)", "assets": [
+          {"id": "harrisons.produce_lot", "name": "Produce lot", "scan": "lot_id", "views": ["sample_tray"], "conditions": ["colour_unevenness", "dirt_foreign"], "scale": "qa_basic", "cover": "stock_policy"}
+        ]}
+      ]
+    },
+    {
+      "id": "kec", "name": "KEC International", "sector": "Towers, cables, rail", "mcp_server": "tbd",
+      "families": [
+        {"id": "kec.tower_line", "name": "Tower and line hardware", "assets": [
+          {"id": "kec.tower_member", "name": "Tower member", "scan": "tower_member_id", "views": ["joint", "member_length"], "conditions": ["rust", "zinc_loss", "bent_member"], "scale": "patrol_priority", "cover": "project_policy"},
+          {"id": "kec.fastener_set", "name": "Bolt and nut set", "scan": "tower_position", "views": ["bolt_and_plate"], "conditions": ["rust", "missing_part", "loose_part"], "scale": "qa_basic", "cover": "project_policy"},
+          {"id": "kec.insulator_string", "name": "Insulator string", "scan": "tower_phase", "views": ["whole_string"], "conditions": ["insulator_damage", "dirt_foreign"], "scale": "patrol_priority", "cover": "project_policy"},
+          {"id": "kec.conductor_fitting", "name": "Clamp, spacer or damper", "scan": "span_id", "views": ["close_up"], "conditions": ["strand_damage", "rust", "worn_fitting"], "scale": "patrol_priority", "cover": "project_policy"}
+        ]},
+        {"id": "kec.cable_rail", "name": "Cable and rail", "assets": [
+          {"id": "kec.cable_reel", "name": "Cable reel", "scan": "reel_id", "views": ["surface"], "conditions": ["cut", "rust"], "scale": "qa_basic", "cover": "stock_policy"},
+          {"id": "kec.rail_mast", "name": "Rail mast", "scan": "mast_id", "views": ["base", "joint"], "conditions": ["rust", "bent_member"], "scale": "patrol_priority", "cover": "project_policy"}
+        ]}
+      ]
+    },
+    {
+      "id": "raychem", "name": "Raychem RPG", "sector": "Cable accessories", "mcp_server": "tbd",
+      "families": [
+        {"id": "raychem.cable_accessories", "name": "Cable accessories", "assets": [
+          {"id": "raychem.joint", "name": "Joint or termination", "scan": "joint_id", "views": ["whole_joint", "sleeve_end"], "conditions": ["burnt", "uneven_shrink", "leak"], "scale": "qa_basic", "cover": "unknown"},
+          {"id": "raychem.lug", "name": "Lug or connector", "scan": "joint_position", "views": ["crimp_zone"], "conditions": ["lug_not_seated", "connector_corrosion"], "scale": "qa_basic", "cover": "stock_policy"},
+          {"id": "raychem.sleeve", "name": "Heat-shrink sleeve", "scan": "batch", "views": ["sleeve"], "conditions": ["burnt", "uneven_shrink", "crack"], "scale": "qa_basic", "cover": "stock_policy"}
+        ]},
+        {"id": "raychem.insulation", "name": "Insulators and bushings", "assets": [
+          {"id": "raychem.installed_insulator", "name": "Installed insulator", "scan": "asset_tag", "views": ["surface"], "conditions": ["tracking_mark", "crack"], "scale": "patrol_priority", "cover": "unknown"}
+        ]},
+        {"id": "raychem.packaging", "name": "Packaging", "assets": [
+          {"id": "raychem.kit_label", "name": "Pack or kit label", "scan": "batch_qr", "views": ["label"], "conditions": ["label_missing"], "scale": "qa_basic", "cover": "stock_policy"}
+        ]}
+      ]
+    }
+  ],
+  "relations": [
+    ["subsidiary", "has", "asset_family"],
+    ["asset_family", "has", "asset"],
+    ["asset", "has_view", "view"],
+    ["asset", "checked_for", "condition"],
+    ["condition", "belongs_to", "condition_family"],
+    ["asset", "graded_on", "grade_scale"],
+    ["asset", "has_expected_cover", "cover_type"],
+    ["asset", "governed_by", "standard"],
+    ["inspection", "of", "asset"],
+    ["inspection", "has", "evidence"]
+  ],
+  "neuralmesh_lookups": {
+    "asset_record": "get_asset",
+    "inspection_profile": "get_inspection_profile",
+    "insurance_cover": "get_cover",
+    "standard": "search_standards",
+    "reference_images": "get_reference_images",
+    "history": "get_history"
+  }
+}

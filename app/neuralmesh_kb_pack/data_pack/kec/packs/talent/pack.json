@@ -1,0 +1,341 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.talent",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "talent",
+    "title": "KEC International roles, required skills and expert directory",
+    "owner_role": "CHRO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-09",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:F-04",
+      "catalogue_id": "F-04",
+      "title": "Expert directory (consent-based)",
+      "sensitivity": "Confidential",
+      "ceiling": "LIVE",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility"
+      ],
+      "consent_required": true
+    },
+    {
+      "id": "kec:T-01",
+      "catalogue_id": "T-01",
+      "title": "Job roles and required skills",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "CHRO",
+      "purposes_allowed": [
+        "problem_solving",
+        "learning",
+        "career_mobility"
+      ],
+      "source_system": "SkillForge",
+      "refresh": "Event"
+    }
+  ],
+  "documents": [
+    {
+      "id": "kec:T-01-9",
+      "datapoint": "kec:T-01",
+      "title": "Project Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "project-engineer"
+      ],
+      "summary": "The Project Engineer role requires Engineering & Infrastructure at advanced level, HR & Finance at intermediate level and Supply Chain & Logistics at intermediate level."
+    },
+    {
+      "id": "kec:T-01-10",
+      "datapoint": "kec:T-01",
+      "title": "Site Engineer role profile",
+      "kind": "role_profile",
+      "version": "2026-11",
+      "tags": [
+        "role",
+        "site-engineer"
+      ],
+      "summary": "The Site Engineer role requires Engineering & Infrastructure at intermediate level, Manufacturing & Quality at intermediate level, Supply Chain & Logistics at beginner level and Workplace Safety at intermediate level."
+    }
+  ],
+  "experts": [
+    {
+      "id": "kec:expert/KE-1",
+      "role": "Programme director - international integration",
+      "skills": [
+        {
+          "skill": "skill:hr",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "cross-border integration",
+        "mobilisation",
+        "labour"
+      ],
+      "evidence": [
+        "kec:L-02-01",
+        "kec:L-02-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Vikram Rao (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-2",
+      "role": "Contracts and claims counsel",
+      "skills": [
+        {
+          "skill": "skill:finance",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "claims",
+        "payment terms",
+        "LD clauses"
+      ],
+      "evidence": [
+        "kec:C-02-01",
+        "kec:C-02-02"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Sana Qureshi (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-3",
+      "role": "Cables materials engineer",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "A"
+        }
+      ],
+      "keywords": [
+        "elastomers",
+        "ageing tests"
+      ],
+      "evidence": [
+        "kec:E-05-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Pooja Bansal (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-4",
+      "role": "Project planning lead",
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "delay analysis",
+        "scheduling"
+      ],
+      "evidence": [
+        "kec:O-06-01"
+      ],
+      "consent": true,
+      "private": {
+        "name": "Deepak Joshi (fictional)"
+      }
+    },
+    {
+      "id": "kec:expert/KE-5",
+      "role": "Bid manager",
+      "skills": [
+        {
+          "skill": "skill:finance",
+          "level": "M"
+        }
+      ],
+      "keywords": [
+        "bidding"
+      ],
+      "evidence": [
+        "kec:C-01-01"
+      ],
+      "consent": false,
+      "private": {
+        "name": "Opted out (fictional)"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "kec:role/project-engineer",
+      "type": "Role",
+      "label": "Project Engineer",
+      "subsidiary": "kec",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/9"
+        }
+      ]
+    },
+    {
+      "id": "kec:role/site-engineer",
+      "type": "Role",
+      "label": "Site Engineer",
+      "subsidiary": "kec",
+      "domain": "talent",
+      "external_refs": [
+        {
+          "scheme": "SkillForge",
+          "uri": "job_roles/10"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:kec.talent/req-25",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/project-engineer",
+      "to": "skill:engineering-and-infrastructure",
+      "properties": {
+        "level": "A",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-27",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/project-engineer",
+      "to": "skill:hr-and-finance",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-26",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/project-engineer",
+      "to": "skill:supply-chain-and-logistics",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-28",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/site-engineer",
+      "to": "skill:engineering-and-infrastructure",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-29",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/site-engineer",
+      "to": "skill:manufacturing-and-quality",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-30",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/site-engineer",
+      "to": "skill:supply-chain-and-logistics",
+      "properties": {
+        "level": "L",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    },
+    {
+      "id": "rel:kec.talent/req-55",
+      "type": "REQUIRES_SKILL",
+      "from": "kec:role/site-engineer",
+      "to": "skill:workplace-safety",
+      "properties": {
+        "level": "M",
+        "importance": "required"
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "imported",
+        "by_role": "SkillForge loader",
+        "created_at": "2026-11-09"
+      }
+    }
+  ]
+}

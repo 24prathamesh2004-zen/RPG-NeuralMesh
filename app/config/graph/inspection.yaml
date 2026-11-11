@@ -1,0 +1,37 @@
+# The inspection domain for Snap and Score: what is inspected, for which conditions, graded on which scale,
+# with which expected insurance cover. Loaded from the application's ontology file as proposed entries that each
+# subsidiary approves. Actual cover status is never stored, it is a live lookup at the owning node.
+domain: inspection
+version: 1
+owner_role: Snap and Score product owner
+
+node_types:
+  AssetFamily: {required: [subsidiary], description: A broad product group of one company, such as Tyre or Natural rubber}
+  View: {description: A camera angle or part of an asset, such as sidewall or crimp zone}
+  Condition: {description: A defect or state looked for, such as cut, mould or rust. A concept of the inspection domain}
+  ConditionFamily: {description: A group of conditions, such as cracks and cuts}
+  GradeScale: {description: The grades an asset is judged on, such as A B C Reject}
+  CoverType: {description: The expected kind of insurance cover, never the live status}
+  ReviewStatus: {description: The outcome words an inspection may carry}
+  Inspection: {required: [subsidiary, asset], description: One inspection event of one asset, with its grade and conditions}
+
+edge_types:
+  HAS_ASSET: {from: [AssetFamily], to: [Asset], group: structure}
+  HAS_VIEW: {from: [Asset], to: [View], group: structure}
+  CHECKED_FOR: {from: [Asset], to: [Condition], group: structure}
+  BELONGS_TO: {from: [Condition], to: [ConditionFamily], group: hop}
+  GRADED_ON: {from: [Asset], to: [GradeScale], group: structure}
+  HAS_EXPECTED_COVER: {from: [Asset], to: [CoverType], group: structure}
+  GOVERNED_BY: {from: [Asset, Condition, GradeScale], to: [Document], group: structure}
+  INSPECTION_OF: {from: [Inspection], to: [Asset], group: structure}
+  FOUND: {from: [Inspection], to: [Condition], group: structure}
+  GRADED: {from: [Inspection], to: [GradeScale], group: structure}
+
+groups:
+  structure: [HAS_ASSET, HAS_VIEW, CHECKED_FOR, GRADED_ON, HAS_EXPECTED_COVER, GOVERNED_BY, INSPECTION_OF, FOUND, GRADED]
+  hop: [BELONGS_TO]
+
+ownership:
+  "app:snapscore": [inspection, org, ceat, harrisons, kec, raychem]
+  "app:snapscore/snapscore.standards": []
+  "app:snapscore/{company}": ["{company}"]

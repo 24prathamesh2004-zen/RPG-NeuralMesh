@@ -96,6 +96,18 @@ docs:
     version: "2026-02"
     tags: [hse, near-miss, working-at-height, tower]
     summary: Near-misses cluster at harness changeover points during tower erection. A second anchor point and a changeover checklist reduced repeats. Anonymised.
+  - id: E-04-03
+    dp: E-04
+    title: Standard - Patrol priority for tower members (P1, P2, P3)
+    version: "2026-01"
+    tags: [standard, patrol, priority, tower, rust, zinc, bent]
+    summary: >-
+      P1 is a bent member or a crack at a joint, to be made safe within 48 hours. P2 is zinc loss with rust on more than a quarter of a
+      member, to be scheduled within the quarter. P3 is surface rust with the zinc coat intact, recorded and re-checked at the next patrol.
+    body: >-
+      A patrol grades each tower member on three priorities. P1: a bent member or a crack at a joint, made safe within 48 hours. P2: zinc
+      loss with rust on more than a quarter of the member length, repair scheduled within the quarter. P3: surface rust with the zinc coat
+      intact, recorded and checked again at the next patrol. Missing or loose bolts raise the priority of the member by one step.
 facts:
   - {id: K1, dp: L-02, text: "Process ownership was agreed after systems cut-over; recommendation is to agree it first and gate cut-over."}
   - {id: K2, dp: L-02, text: "Labour, contract and payment terms surfaced after day 60; review by day 30."}

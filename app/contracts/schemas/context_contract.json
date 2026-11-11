@@ -1,0 +1,2436 @@
+{
+  "answer": {
+    "$defs": {
+      "AnswerText": {
+        "additionalProperties": false,
+        "properties": {
+          "check": {
+            "enum": [
+              "passed",
+              "failed"
+            ],
+            "title": "Check",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "check"
+        ],
+        "title": "AnswerText",
+        "type": "object"
+      },
+      "Choice": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "Choice",
+        "type": "object"
+      },
+      "EvidenceRecord": {
+        "properties": {
+          "citation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Citation"
+          },
+          "concepts": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Concepts",
+            "type": "array"
+          },
+          "datapoint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Datapoint"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Decision"
+          },
+          "delivery": {
+            "anyOf": [
+              {
+                "const": "by_reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Delivery"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Document"
+          },
+          "evidence_id": {
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "expert": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Expert"
+          },
+          "explains_level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Explains Level"
+          },
+          "kind": {
+            "enum": [
+              "summary",
+              "chunk",
+              "aggregate",
+              "metadata",
+              "relationship",
+              "expert"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Mode"
+          },
+          "node": {
+            "title": "Node",
+            "type": "string"
+          },
+          "pack_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Pack Version"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Rank"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Reason"
+          },
+          "relationship": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RelationshipRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "rule_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Rule Id"
+          },
+          "schema_version": {
+            "const": "1.0",
+            "default": "1.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Score"
+          },
+          "sensitivity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Sensitivity"
+          },
+          "stale": {
+            "default": false,
+            "title": "Stale",
+            "type": "boolean"
+          },
+          "superseded_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Superseded By"
+          },
+          "suspicious": {
+            "default": false,
+            "title": "Suspicious",
+            "type": "boolean"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Text"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Title"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Version"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "kind",
+          "node"
+        ],
+        "title": "EvidenceRecord",
+        "type": "object"
+      },
+      "Problem": {
+        "additionalProperties": false,
+        "description": "Why a call was refused and what is needed. Field names follow RFC 9457 (type, title, status, detail).",
+        "properties": {
+          "allowed": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Allowed"
+          },
+          "choices": {
+            "items": {
+              "$ref": "#/$defs/Choice"
+            },
+            "title": "Choices",
+            "type": "array"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Detail"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/$defs/ProblemField"
+            },
+            "title": "Fields",
+            "type": "array"
+          },
+          "loaded": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Loaded"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "suggestions": {
+            "items": {
+              "$ref": "#/$defs/Suggestion"
+            },
+            "title": "Suggestions",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "code",
+          "title"
+        ],
+        "title": "Problem",
+        "type": "object"
+      },
+      "ProblemField": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Allowed"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "problem": {
+            "title": "Problem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "problem"
+        ],
+        "title": "ProblemField",
+        "type": "object"
+      },
+      "RelationshipRef": {
+        "properties": {
+          "approvals": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Approvals",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Note"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "source_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source Title"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "target_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Target Title"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "source",
+          "target"
+        ],
+        "title": "RelationshipRef",
+        "type": "object"
+      },
+      "Suggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "score"
+        ],
+        "title": "Suggestion",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "The one answer of every tool. Its own fields are closed: a field outside this list is never sent.",
+    "properties": {
+      "also_found": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Also Found",
+        "type": "array"
+      },
+      "answer": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/AnswerText"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "omitted": {
+        "default": 0,
+        "minimum": 0,
+        "title": "Omitted",
+        "type": "integer"
+      },
+      "problem": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Problem"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "records": {
+        "items": {
+          "$ref": "#/$defs/EvidenceRecord"
+        },
+        "title": "Records",
+        "type": "array"
+      },
+      "schema_version": {
+        "default": "1.1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "ok",
+          "partial",
+          "no_evidence",
+          "blocked",
+          "needs_input",
+          "refused"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "tool": {
+        "title": "Tool",
+        "type": "string"
+      },
+      "trace_id": {
+        "title": "Trace Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "tool",
+      "status",
+      "trace_id"
+    ],
+    "title": "ContextAnswer",
+    "type": "object"
+  },
+  "contract": "rpg-neuralmesh.context",
+  "endpoint": "POST /api/v1/context/{tool}",
+  "problem_codes": {
+    "company_not_connected": {
+      "http": 200,
+      "status": "refused",
+      "title": "The caller's company has no Mesh Node"
+    },
+    "invalid_input": {
+      "http": 200,
+      "status": "refused",
+      "title": "An input field is missing or wrong"
+    },
+    "needs_choice": {
+      "http": 200,
+      "status": "needs_input",
+      "title": "A choice is needed"
+    },
+    "node_unavailable": {
+      "http": 200,
+      "status": "partial",
+      "title": "At least one company did not answer"
+    },
+    "not_allowed": {
+      "http": 403,
+      "status": null,
+      "title": "This application may not make this call"
+    },
+    "not_an_envelope": {
+      "http": 400,
+      "status": null,
+      "title": "The body is not a request envelope"
+    },
+    "not_found": {
+      "http": 200,
+      "status": "refused",
+      "title": "The id is not in the context graph"
+    },
+    "not_released": {
+      "http": 200,
+      "status": "blocked",
+      "title": "The owners released nothing for this purpose"
+    },
+    "pack_refused": {
+      "http": 200,
+      "status": null,
+      "title": "At least one pack was not loaded"
+    },
+    "service_unavailable": {
+      "http": 503,
+      "status": null,
+      "title": "NeuralMesh could not complete the call"
+    },
+    "tool_mismatch": {
+      "http": 400,
+      "status": null,
+      "title": "The path and the body name different tools"
+    },
+    "unauthenticated": {
+      "http": 401,
+      "status": null,
+      "title": "The service token is missing, invalid or expired"
+    },
+    "unknown_tool": {
+      "http": 404,
+      "status": null,
+      "title": "No such tool"
+    },
+    "unsupported_version": {
+      "http": 400,
+      "status": null,
+      "title": "The contract version is not served"
+    }
+  },
+  "request": {
+    "$defs": {
+      "Caller": {
+        "additionalProperties": false,
+        "description": "Who the call is for: the end user's company and roles in the application, or the group for a service call.",
+        "properties": {
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Roles",
+            "type": "array"
+          },
+          "subsidiary": {
+            "pattern": "^[a-z][a-z0-9-]{0,39}$",
+            "title": "Subsidiary",
+            "type": "string"
+          },
+          "user_ref": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "User Ref"
+          }
+        },
+        "required": [
+          "subsidiary",
+          "roles"
+        ],
+        "title": "Caller",
+        "type": "object"
+      }
+    },
+    "description": "The one request envelope. Fields a newer minor version adds are ignored, the tool's input is checked by the tool.",
+    "properties": {
+      "caller": {
+        "$ref": "#/$defs/Caller"
+      },
+      "input": {
+        "additionalProperties": true,
+        "title": "Input",
+        "type": "object"
+      },
+      "purpose": {
+        "maxLength": 40,
+        "minLength": 1,
+        "title": "Purpose",
+        "type": "string"
+      },
+      "schema_version": {
+        "pattern": "^\\d+\\.\\d+$",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "tool": {
+        "pattern": "^[a-z][a-z_]{0,59}$",
+        "title": "Tool",
+        "type": "string"
+      }
+    },
+    "required": [
+      "schema_version",
+      "tool",
+      "purpose",
+      "caller"
+    ],
+    "title": "ContextRequest",
+    "type": "object"
+  },
+  "rules": [
+    "data follows the tool's data schema when the status is ok, partial, no_evidence or blocked",
+    "a reader ignores fields it does not know and logs an unknown problem code by its title",
+    "the six statuses are fixed within a major version"
+  ],
+  "sha256": "d988ee46c9a25368a3d3fac3f4fce7e7d098a1a359b3ebc6b9552990d3acd65a",
+  "statuses": [
+    "ok",
+    "partial",
+    "no_evidence",
+    "blocked",
+    "needs_input",
+    "refused"
+  ],
+  "supported_versions": [
+    "1.0",
+    "1.1"
+  ],
+  "tools": {
+    "ask": {
+      "caller": "person",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "also_found_records": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Also Found Records",
+            "type": "array"
+          },
+          "answer_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Answer Reason"
+          },
+          "answer_status": {
+            "title": "Answer Status",
+            "type": "string"
+          },
+          "checks": {
+            "items": {},
+            "title": "Checks",
+            "type": "array"
+          },
+          "citations": {
+            "items": {},
+            "title": "Citations",
+            "type": "array"
+          },
+          "contact_details_removed": {
+            "default": 0,
+            "title": "Contact Details Removed",
+            "type": "integer"
+          },
+          "question": {
+            "title": "Question",
+            "type": "string"
+          },
+          "relationships": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Relationships",
+            "type": "array"
+          },
+          "routing": {
+            "additionalProperties": true,
+            "title": "Routing",
+            "type": "object"
+          },
+          "withheld": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Withheld",
+            "type": "array"
+          }
+        },
+        "required": [
+          "question",
+          "answer_status"
+        ],
+        "title": "AskData",
+        "type": "object"
+      },
+      "input": {
+        "$defs": {
+          "AskContextIn": {
+            "additionalProperties": false,
+            "properties": {
+              "asset": {
+                "maxLength": 200,
+                "minLength": 1,
+                "title": "Asset",
+                "type": "string"
+              },
+              "conditions": {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 50,
+                "title": "Conditions",
+                "type": "array"
+              },
+              "grade": {
+                "anyOf": [
+                  {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Grade"
+              }
+            },
+            "required": [
+              "asset"
+            ],
+            "title": "AskContextIn",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "context": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AskContextIn"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "nodes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Companies to ask. Empty: NeuralMesh routes the question",
+            "title": "Nodes"
+          },
+          "question": {
+            "maxLength": 2000,
+            "minLength": 3,
+            "title": "Question",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "title": "AskIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": "any purpose of the application",
+      "records": "the evidence of the answer",
+      "summary": "A written answer from cited documents, checked sentence by sentence, with the evidence records"
+    },
+    "entity": {
+      "caller": "either",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Aliases",
+            "type": "array"
+          },
+          "connections": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Connections",
+            "type": "object"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "layer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Layer"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner"
+          },
+          "properties": {
+            "additionalProperties": true,
+            "title": "Properties",
+            "type": "object"
+          },
+          "retired": {
+            "default": false,
+            "title": "Retired",
+            "type": "boolean"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Type"
+          }
+        },
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "EntityData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "IdIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "One entity of the context graph"
+    },
+    "find_mentors": {
+      "caller": "either",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "skill": {
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill",
+          "note"
+        ],
+        "title": "MentorsData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "skill": {
+            "description": "A skill id (skill:quality-management) or the skill's name",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill"
+        ],
+        "title": "SkillIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": "any purpose of the application",
+      "records": "expert records",
+      "summary": "Consented experts of a skill, without names"
+    },
+    "import": {
+      "caller": "service",
+      "data": {
+        "$defs": {
+          "PackResult": {
+            "additionalProperties": true,
+            "properties": {
+              "code": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Code"
+              },
+              "kept_as": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Kept As"
+              },
+              "pack_id": {
+                "title": "Pack Id",
+                "type": "string"
+              },
+              "reason": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Reason"
+              },
+              "requirements": {
+                "default": 0,
+                "title": "Requirements",
+                "type": "integer"
+              },
+              "result": {
+                "enum": [
+                  "loaded",
+                  "unchanged",
+                  "refused"
+                ],
+                "title": "Result",
+                "type": "string"
+              },
+              "roles": {
+                "default": 0,
+                "title": "Roles",
+                "type": "integer"
+              },
+              "skills": {
+                "default": 0,
+                "title": "Skills",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "pack_id",
+              "result"
+            ],
+            "title": "PackResult",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "graph": {
+            "additionalProperties": true,
+            "title": "Graph",
+            "type": "object"
+          },
+          "packs": {
+            "items": {
+              "$ref": "#/$defs/PackResult"
+            },
+            "title": "Packs",
+            "type": "array"
+          },
+          "revision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Revision"
+          }
+        },
+        "required": [
+          "packs"
+        ],
+        "title": "ImportData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "packs": {
+            "description": "Knowledge packs the registry allows this application to send",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Packs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "packs"
+        ],
+        "title": "ImportIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Send packs the registry allows. Each pack is loaded, unchanged or refused with its reason"
+    },
+    "inspection_history": {
+      "caller": "either",
+      "data": {
+        "$defs": {
+          "Ref": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Type"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "title": "Ref",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "asset": {
+            "$ref": "#/$defs/Ref"
+          },
+          "inspections": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Inspections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "asset",
+          "inspections"
+        ],
+        "title": "InspectionHistoryData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Asset",
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset"
+        ],
+        "title": "AssetIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Past inspections of an asset, newest first"
+    },
+    "inspection_profile": {
+      "caller": "either",
+      "data": {
+        "$defs": {
+          "Ref": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Type"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "title": "Ref",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "asset": {
+            "$ref": "#/$defs/Ref"
+          },
+          "conditions": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Conditions",
+            "type": "array"
+          },
+          "expected_cover": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Expected Cover",
+            "type": "array"
+          },
+          "grade_scale": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Grade Scale"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner"
+          },
+          "standards": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Standards",
+            "type": "array"
+          },
+          "views": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Views",
+            "type": "array"
+          }
+        },
+        "required": [
+          "asset"
+        ],
+        "title": "InspectionProfileData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Asset",
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset"
+        ],
+        "title": "AssetIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Conditions, views, grade scale, expected cover and governing standards of an asset"
+    },
+    "learning_sources": {
+      "caller": "person",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "dropped": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Dropped",
+            "type": "array"
+          },
+          "level": {
+            "title": "Level",
+            "type": "string"
+          },
+          "not_released": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Not Released",
+            "type": "array"
+          },
+          "skill": {
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill",
+          "level"
+        ],
+        "title": "LearningData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "level": {
+            "description": "The level the learner has to reach: L, M or A",
+            "enum": [
+              "L",
+              "M",
+              "A"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "skill": {
+            "description": "A skill id (skill:quality-management) or the skill's name",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill",
+          "level"
+        ],
+        "title": "LearningIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": [
+        "learning"
+      ],
+      "records": "released study documents",
+      "summary": "Study documents other companies allow for learning that reach the level, by reference"
+    },
+    "live": {
+      "caller": "person",
+      "data": {
+        "$defs": {
+          "Ref": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Type"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "title": "Ref",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Decision"
+          },
+          "entity": {
+            "$ref": "#/$defs/Ref"
+          },
+          "fact": {
+            "title": "Fact",
+            "type": "string"
+          },
+          "value": {
+            "default": null,
+            "title": "Value"
+          }
+        },
+        "required": [
+          "entity",
+          "fact"
+        ],
+        "title": "LiveData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "fact": {
+            "default": "cover_status",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Fact",
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "LiveIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": [
+        "inspection"
+      ],
+      "records": "none",
+      "summary": "A fact that is never stored, asked of the owning node now with the user's identity"
+    },
+    "record_inspection": {
+      "caller": "person",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "boolean"
+          },
+          "asset": {
+            "title": "Asset",
+            "type": "string"
+          },
+          "edges": {
+            "title": "Edges",
+            "type": "integer"
+          },
+          "inspection": {
+            "title": "Inspection",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accepted",
+          "inspection",
+          "asset",
+          "edges",
+          "revision"
+        ],
+        "title": "RecordInspectionData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Asset",
+            "type": "string"
+          },
+          "conditions": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Conditions",
+            "type": "array"
+          },
+          "defect_area_pct": {
+            "anyOf": [
+              {
+                "maximum": 100,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Defect Area Pct"
+          },
+          "grade": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Grade"
+          },
+          "image_ref": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Image Ref"
+          },
+          "inspected_at": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Inspected At"
+          },
+          "inspection_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+            "title": "Inspection Id",
+            "type": "string"
+          },
+          "review_status": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Review Status"
+          }
+        },
+        "required": [
+          "inspection_id",
+          "asset"
+        ],
+        "title": "RecordInspectionIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": [
+        "inspection"
+      ],
+      "records": "none",
+      "summary": "Record one inspection as an event in the graph. Images stay with the application"
+    },
+    "related": {
+      "caller": "either",
+      "data": {
+        "$defs": {
+          "Ref": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Type"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "title": "Ref",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "depth": {
+            "title": "Depth",
+            "type": "integer"
+          },
+          "entity": {
+            "$ref": "#/$defs/Ref"
+          },
+          "related": {
+            "additionalProperties": {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "title": "Related",
+            "type": "object"
+          }
+        },
+        "required": [
+          "entity",
+          "depth",
+          "related"
+        ],
+        "title": "RelatedData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "depth": {
+            "default": 1,
+            "maximum": 2,
+            "minimum": 1,
+            "title": "Depth",
+            "type": "integer"
+          },
+          "edge_types": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Edge Types"
+          },
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Group"
+          },
+          "id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "RelatedIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Neighbours of an entity grouped by link type, one or two hops"
+    },
+    "role_context": {
+      "caller": "either",
+      "data": {
+        "$defs": {
+          "RequiredSkill": {
+            "additionalProperties": true,
+            "properties": {
+              "concepts": {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "title": "Concepts",
+                "type": "array"
+              },
+              "consented_experts": {
+                "default": 0,
+                "title": "Consented Experts",
+                "type": "integer"
+              },
+              "documents": {
+                "default": 0,
+                "title": "Documents",
+                "type": "integer"
+              },
+              "importance": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Importance"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "level": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Level"
+              },
+              "skill": {
+                "title": "Skill",
+                "type": "string"
+              }
+            },
+            "required": [
+              "skill",
+              "label"
+            ],
+            "title": "RequiredSkill",
+            "type": "object"
+          },
+          "SimilarRole": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "shared_skill_share": {
+                "title": "Shared Skill Share",
+                "type": "number"
+              },
+              "subsidiary": {
+                "title": "Subsidiary",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "subsidiary",
+              "shared_skill_share"
+            ],
+            "title": "SimilarRole",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "required_skills": {
+            "items": {
+              "$ref": "#/$defs/RequiredSkill"
+            },
+            "title": "Required Skills",
+            "type": "array"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "similar_roles": {
+            "items": {
+              "$ref": "#/$defs/SimilarRole"
+            },
+            "title": "Similar Roles",
+            "type": "array"
+          },
+          "subsidiary": {
+            "title": "Subsidiary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "label",
+          "subsidiary",
+          "required_skills",
+          "similar_roles"
+        ],
+        "title": "RoleContextData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "company": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The company id of the title, for example ceat",
+            "title": "Company"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The role's id, for example ceat:role/quality-engineer",
+            "title": "Role"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "A role title, used with company when the id is not known",
+            "title": "Title"
+          }
+        },
+        "title": "RoleContextIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Required skills of a role with levels, concepts, document and expert counts, and similar roles elsewhere"
+    },
+    "similar": {
+      "caller": "either",
+      "data": {
+        "$defs": {
+          "Ref": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Type"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "title": "Ref",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "entity": {
+            "$ref": "#/$defs/Ref"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Note"
+          },
+          "similar": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Similar",
+            "type": "array"
+          }
+        },
+        "required": [
+          "entity",
+          "similar"
+        ],
+        "title": "SimilarData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Id",
+            "type": "string"
+          },
+          "k": {
+            "default": 5,
+            "maximum": 20,
+            "minimum": 1,
+            "title": "K",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "SimilarIn",
+        "type": "object"
+      },
+      "kind": "generic",
+      "purposes": "any purpose of the application",
+      "records": "none",
+      "summary": "Computed SIMILAR_TO neighbours with reason and score"
+    },
+    "skill_context": {
+      "caller": "person",
+      "data": {
+        "additionalProperties": true,
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Aliases",
+            "type": "array"
+          },
+          "broader": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Broader",
+            "type": "array"
+          },
+          "concepts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Concepts",
+            "type": "array"
+          },
+          "consented_experts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Consented Experts",
+            "type": "array"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "documents_total": {
+            "default": 0,
+            "title": "Documents Total",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "not_released": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Not Released",
+            "type": "array"
+          },
+          "related": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Related",
+            "type": "array"
+          },
+          "roles_requiring": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Roles Requiring",
+            "type": "array"
+          },
+          "skill": {
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill",
+          "label"
+        ],
+        "title": "SkillContextData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {
+          "level": {
+            "anyOf": [
+              {
+                "enum": [
+                  "L",
+                  "M",
+                  "A"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The level asked for: L, M or A",
+            "title": "Level"
+          },
+          "skill": {
+            "description": "A skill id (skill:quality-management) or the skill's name",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Skill",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill"
+        ],
+        "title": "SkillLevelIn",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": "any purpose of the application",
+      "records": "released evidence records",
+      "summary": "A skill with its description, aliases, related skills, roles that require it and released evidence"
+    },
+    "vocabulary_export": {
+      "caller": "service",
+      "data": {
+        "$defs": {
+          "VocabularyEntity": {
+            "additionalProperties": true,
+            "properties": {
+              "aliases": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Aliases",
+                "type": "array"
+              },
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "label": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Label"
+              },
+              "type": {
+                "title": "Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "title": "VocabularyEntity",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "properties": {
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Embedding Model"
+          },
+          "entities": {
+            "items": {
+              "$ref": "#/$defs/VocabularyEntity"
+            },
+            "title": "Entities",
+            "type": "array"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "pack": {
+            "additionalProperties": true,
+            "title": "Pack",
+            "type": "object"
+          },
+          "relationships": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Relationships",
+            "type": "array"
+          }
+        },
+        "required": [
+          "format",
+          "pack",
+          "entities"
+        ],
+        "title": "VocabularyData",
+        "type": "object"
+      },
+      "input": {
+        "additionalProperties": false,
+        "properties": {},
+        "title": "NoInput",
+        "type": "object"
+      },
+      "kind": "plugin",
+      "purposes": [
+        "career_mobility"
+      ],
+      "records": "none",
+      "summary": "The group vocabulary of skills and concepts with aliases, as one pack"
+    }
+  },
+  "version": "1.1"
+}

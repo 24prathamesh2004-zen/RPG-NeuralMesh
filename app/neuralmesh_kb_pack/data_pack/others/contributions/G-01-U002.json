@@ -1,0 +1,38 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-995e7d67",
+    "name": "AI-assisted delivery pilots"
+  },
+  "document": {
+    "id": "others:G-01-U002",
+    "datapoint": "others:G-01",
+    "title": "Responsible AI use, group guidance note",
+    "kind": "policy",
+    "version": "2026-10",
+    "tags": [
+      "guidance",
+      "ai-policy"
+    ],
+    "summary": "Responsible AI use, group guidance note Guidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is used in work that leaves the team.",
+    "body": "Responsible AI use, group guidance note\n\nGuidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is used in work that leaves the team.\n\nWhat is allowed\n\nDrafting code, tests and documents with an AI assistant.\nSummarising a document that the person may read under the sharing rule of its catalogue item.\nAsking an AI assistant for the first pass of a code review. A person still approves the change.\n\nWhat is not allowed\n\nPutting commercial terms, a product recipe, a salary or a contract with a customer into a prompt.\nUsing an AI tool that the company has not approved, also for a short trial.\nSending an output to a customer when no person has read it.\n\nWhat each team keeps\n\nThe name of the person who approved each output that left the team.\nA count of the errors that this person found in the outputs, month by month.\n\nWho to ask\n\nThe information security lead of the company decides whether a tool is approved. The data protection lead decides whether a kind of data may be put into a prompt.\n\nThis note is guidance. The AI policy of each company stays the binding rule.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.",
+    "concepts": [
+      "concept:ai-assisted-delivery",
+      "concept:responsible-ai-use"
+    ]
+  },
+  "concept_matches": {
+    "concept:ai-assisted-delivery": "phrase",
+    "concept:responsible-ai-use": "phrase"
+  },
+  "upload": {
+    "file": "responsible_ai_use_group_guidance.txt",
+    "format": "text",
+    "chars": 1397,
+    "sha256": "6d9b462389b0fa13788b89439e3aa08924b7449a42c356461e7f49051a8884f0",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-10-15T06:09:58+00:00"
+  },
+  "sample_input": "responsible_ai_use_group_guidance.txt"
+}

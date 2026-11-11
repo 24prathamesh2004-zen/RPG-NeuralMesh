@@ -1,0 +1,141 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "asvata.research",
+    "scope": "subsidiary",
+    "subsidiary": "asvata",
+    "domain": "research",
+    "title": "Asvata research and pilot results",
+    "owner_role": "Head of Analytics",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "asvata:R-01",
+      "catalogue_id": "R-01",
+      "title": "Carbon accounting and data analysis methods",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head of Analytics",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "asvata:R-01-01",
+      "datapoint": "asvata:R-01",
+      "title": "Method - Carbon inventory boundary and scopes",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "carbon",
+        "inventory",
+        "boundary",
+        "scopes",
+        "accounting"
+      ],
+      "summary": "Fix the boundary first by listing the sites and activities in scope. Sort each activity into direct fuel use, purchased energy or other indirect sources. Record every exclusion with a reason, so the total can be compared year to year.",
+      "body_file": "source/R-01-01.md",
+      "concepts": [
+        "concept:carbon-inventory-boundary"
+      ],
+      "skills": [
+        {
+          "skill": "skill:carbon-accounting",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "asvata:R-01-02",
+      "datapoint": "asvata:R-01",
+      "title": "Method - Choosing and applying emission factors",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "carbon",
+        "emission-factor",
+        "calculation",
+        "units"
+      ],
+      "summary": "Multiply each activity amount by one published emission factor for the same fuel or energy type and unit. Write down the factor source and year beside every line. Convert units before multiplying, for example litres to kilograms of fuel.",
+      "body_file": "source/R-01-02.md",
+      "concepts": [
+        "concept:emission-factor-selection",
+        "concept:carbon-inventory-boundary"
+      ],
+      "skills": [
+        {
+          "skill": "skill:carbon-accounting",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "asvata:R-01-03",
+      "datapoint": "asvata:R-01",
+      "title": "Method - Cleaning and checking a client data set",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "data",
+        "cleaning",
+        "validation",
+        "duplicates",
+        "analysis"
+      ],
+      "summary": "Before any analysis, count rows, remove exact duplicates, mark missing values and check each column against its expected range. Keep the raw file untouched and log every change. A data set with more than 5 percent missing values in a key column goes back to the client.",
+      "body_file": "source/R-01-03.md",
+      "concepts": [
+        "concept:data-quality-check"
+      ],
+      "skills": [
+        {
+          "skill": "skill:data-analysis-basics",
+          "level": "A"
+        }
+      ]
+    },
+    {
+      "id": "asvata:R-01-04",
+      "datapoint": "asvata:R-01",
+      "title": "Method - Summaries, outliers and trend checks",
+      "kind": "report",
+      "version": "2026-04",
+      "tags": [
+        "data",
+        "outlier",
+        "trend",
+        "summary",
+        "charts"
+      ],
+      "summary": "Report the median and the range beside the average. Flag any value more than 3 times the median of its group and ask the client about it before removing it. Compare each month with the same month last year before calling a change a trend.",
+      "body_file": "source/R-01-04.md",
+      "concepts": [
+        "concept:data-quality-check"
+      ],
+      "skills": [
+        {
+          "skill": "skill:data-analysis-basics",
+          "level": "A"
+        }
+      ]
+    }
+  ]
+}

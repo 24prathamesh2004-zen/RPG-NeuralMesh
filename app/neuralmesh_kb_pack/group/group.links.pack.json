@@ -1,0 +1,164 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "group.links",
+    "scope": "group",
+    "subsidiary": "group",
+    "title": "Approved links between subsidiaries",
+    "owner_role": "Mesh knowledge curator",
+    "language": "en",
+    "published_at": "2026-11-04",
+    "synthetic": true
+  },
+  "relationships": [
+    {
+      "id": "rel:group.links/001",
+      "type": "ADDRESSES_GAP",
+      "from": "ceat:E-03-01",
+      "to": "harrisons:O-05-04",
+      "properties": {
+        "note": "CEAT trends quality per supplier lot at receipt, which is the practice Harrisons states it lacks."
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04",
+        "evidence": [
+          "ceat:E-03-01",
+          "harrisons:O-05-04"
+        ]
+      },
+      "approvals": [
+        {
+          "subsidiary": "ceat",
+          "role": "Head R&D",
+          "date": "2026-11-04"
+        },
+        {
+          "subsidiary": "harrisons",
+          "role": "GM Estates",
+          "date": "2026-11-04"
+        }
+      ]
+    },
+    {
+      "id": "rel:group.links/002",
+      "type": "CORROBORATES",
+      "from": "kec:E-05-01",
+      "to": "ceat:E-03-05",
+      "properties": {
+        "note": "KEC tests show elastomer properties drift faster in lots stored warm or long, which supports time-to-use limits."
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04",
+        "evidence": [
+          "kec:E-05-01",
+          "ceat:E-03-05"
+        ]
+      },
+      "approvals": [
+        {
+          "subsidiary": "kec",
+          "role": "Cables CTO",
+          "date": "2026-11-04"
+        },
+        {
+          "subsidiary": "ceat",
+          "role": "Head R&D",
+          "date": "2026-11-04"
+        }
+      ]
+    },
+    {
+      "id": "rel:group.links/003",
+      "type": "CONFLICTS_WITH",
+      "from": "ceat:L-01-01",
+      "to": "zensar:C-05-01",
+      "properties": {
+        "note": "CEAT integrates systems early. Zensar stabilises processes before any system cut-over."
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04",
+        "evidence": [
+          "ceat:L-01-01",
+          "zensar:C-05-01"
+        ]
+      },
+      "approvals": [
+        {
+          "subsidiary": "ceat",
+          "role": "Integration lead",
+          "date": "2026-11-04"
+        },
+        {
+          "subsidiary": "zensar",
+          "role": "CTO office",
+          "date": "2026-11-04"
+        }
+      ]
+    },
+    {
+      "id": "rel:group.links/004",
+      "type": "CORROBORATES",
+      "from": "kec:L-02-01",
+      "to": "zensar:C-05-01",
+      "properties": {
+        "note": "KEC's post-mortem recommends agreeing process ownership before cut-over, as Zensar's checklist does."
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Mesh knowledge curator",
+        "created_at": "2026-11-04",
+        "evidence": [
+          "kec:L-02-01",
+          "zensar:C-05-01"
+        ]
+      },
+      "approvals": [
+        {
+          "subsidiary": "kec",
+          "role": "PMO head",
+          "date": "2026-11-04"
+        },
+        {
+          "subsidiary": "zensar",
+          "role": "CTO office",
+          "date": "2026-11-04"
+        }
+      ]
+    },
+    {
+      "id": "rel:group.links/005",
+      "type": "CORROBORATES",
+      "from": "ceat:E-03-03",
+      "to": "harrisons:F-01-04",
+      "properties": {
+        "note": "Both record contamination at the point where material is received or collected."
+      },
+      "confidence": 0.71,
+      "status": "proposed",
+      "provenance": {
+        "method": "extracted",
+        "by_role": "Link extraction job",
+        "created_at": "2026-11-04",
+        "evidence": [
+          "ceat:E-03-03",
+          "harrisons:F-01-04"
+        ]
+      }
+    }
+  ]
+}

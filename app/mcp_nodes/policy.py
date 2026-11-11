@@ -61,6 +61,10 @@ def evaluate_access(
 
     rule_id = str(datapoint.get("rule_id", "R-EXPOSURE-01"))
 
+    purposes = datapoint.get("purposes_allowed")
+    if purposes and caller.purpose not in purposes:
+        return PolicyDecision("BLOCKED_BY_POLICY", "R-PURPOSE-01", "Purpose is not allowed for this datapoint", "MD")
+
     if requested_mode not in _ALLOWED_BY_CEILING:
         return PolicyDecision("BLOCKED_BY_POLICY", "R-MODE-01", "Unknown exposure mode", "MD")
 

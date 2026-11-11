@@ -1,0 +1,39 @@
+{
+  "note": "DEVELOPMENT STAND-IN. Every step uses evaluations/standin_model_server.py, a deterministic evidence-bound stand-in that is not a language model. It exercises the model path (policy, budget, audit, check, cache) when no approved model is reachable. Never use outside development.",
+  "development_cloud_for_synthetic_confidential": false,
+  "models": {
+    "standin-local": {
+      "id": "standin-evidence-v1",
+      "tier": "local",
+      "base_url": "http://127.0.0.1:11435/v1",
+      "api_key_env": ""
+    }
+  },
+  "steps": {
+    "answer": {
+      "model": "standin-local",
+      "max_input_tokens": 8000,
+      "max_output_tokens": 1200
+    },
+    "rerank": {
+      "model": "standin-local",
+      "max_input_tokens": 2500,
+      "max_output_tokens": 1200
+    },
+    "classify": {
+      "model": "standin-local",
+      "max_input_tokens": 600,
+      "max_output_tokens": 100
+    },
+    "kind": {
+      "model": "standin-local",
+      "max_input_tokens": 800,
+      "max_output_tokens": 120
+    },
+    "map": {
+      "model": "standin-local",
+      "max_input_tokens": 3000,
+      "max_output_tokens": 900
+    }
+  }
+}

@@ -5,7 +5,7 @@ from datetime import date
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from jose import jwt
+import jwt
 from mcp.server.auth.provider import AccessToken
 from mcp.server.auth.settings import AuthSettings
 from starlette.testclient import TestClient
@@ -27,6 +27,7 @@ from mcp_nodes.server import (
     summarize_node,
     request_intro_node,
 )
+from shared.registry import node as registered_node
 
 
 class RejectingTokenVerifier:
@@ -73,7 +74,7 @@ def test_each_subsidiary_has_a_distinct_node_config(node_id):
     config = load_node_config(node_id)
 
     assert config.node_id == node_id
-    assert config.port == {"ceat": 8101, "kec": 8102, "zensar": 8103, "harrisons": 8104}[node_id]
+    assert config.port == registered_node(node_id).port
     assert config.datapoints
 
 
@@ -86,7 +87,7 @@ def test_each_node_registers_the_common_mcp_tools(node_id, tmp_path):
     tools = asyncio.run(server.list_tools())
 
     assert {tool.name for tool in tools} == {
-        "health", "describe_capabilities", "search", "summarize", "find_experts", "request_access"
+        "health", "describe_capabilities", "search", "summarize", "find_experts", "request_access", "export_graph", "lookup", "aggregate"
     }
 
 
@@ -493,3 +494,36 @@ def test_decision_audit_hash_chain_detects_tampering(tmp_path):
     entry["datapoint_id"] = "E-01"
     store.audit_path.write_text(json.dumps(entry) + "\n", encoding="utf-8")
     assert not verify_audit(store.audit_path)
+
+def test_find_experts_needs_a_skill_word_or_two_title_words_and_ignores_filler(tmp_path):
+    """A skill word of an expert finds the expert in a longer question. A word every job title has ("lead") or a filler
+    word ("of") finds nobody, so one shared title word does not list every profile."""
+    config = load_node_config("ceat")
+    store = AccessStore(tmp_path / "grants.db", tmp_path / "audit.jsonl", config)
+    caller = CallerContext("user-1", "kec", frozenset({"group_user"}), "problem_solving")
+    roles = lambda q: [e["role"] for e in find_experts_node(config, caller, q, caller.purpose, store)["experts"]]  # noqa: E731
+    assert roles("Who can help with traceability problems in our plant?") == ["Warehouse and logistics manager"]
+    assert roles("Who is the quality lead?") == ["Raw-material quality lead"]  # not every "... lead"
+    assert roles("the head of the group") == []
+
+
+def test_a_never_leave_document_raises_no_experts_score_for_another_company_and_title_fillers_find_nobody(tmp_path):
+    import copy
+    config = copy.deepcopy(load_node_config("ceat"))
+    # a consenting expert whose only evidence is a document of the never-leave datapoint E-01
+    expert = next(e for e in config.experts if e.get("consent") is True)
+    expert["evidence"] = ["ceat:E-01-01"]
+    concepts = list(config.knowledge.documents["ceat:E-01-01"].get("concepts", []))
+    assert concepts and config.datapoints["E-01"].get("never_leave")
+    store = AccessStore(tmp_path / "grants.db", tmp_path / "audit.jsonl", config)
+
+    def listed(company: str, roles: frozenset = frozenset({"group_user"})) -> set[str]:
+        caller = CallerContext(f"{company}-user", company, roles, "problem_solving")
+        return {e["expert_id"] for e in find_experts_node(config, caller, "zzz", caller.purpose, store, concepts=concepts)["experts"]}
+    assert expert["id"] not in listed("kec")
+    assert expert["id"] in listed("ceat") and expert["id"] in listed("zensar", frozenset({"group_user", "mesh_admin"}))
+
+    zensar = load_node_config("zensar")
+    zstore = AccessStore(tmp_path / "z.db", tmp_path / "z.jsonl", zensar)
+    caller = CallerContext("kec-user", "kec", frozenset({"group_user"}), "problem_solving")
+    assert find_experts_node(zensar, caller, "who is the head of the plant", caller.purpose, zstore)["experts"] == []

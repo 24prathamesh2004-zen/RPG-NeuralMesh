@@ -1,0 +1,3 @@
+{"note": "SYNTHETIC live facts of KEC International for the inspection pilot. Looked up at request time, never copied into the mesh.",
+ "cover_status": {"asset/tower_member": {"value": "project_policy active", "policy_ref": "KEC-PRJ-2026-11", "valid_to": "2027-12-31"},
+                  "asset/cable_reel": {"value": "stock_policy active", "policy_ref": "KEC-STK-2026-01", "valid_to": "2027-01-31"}}}

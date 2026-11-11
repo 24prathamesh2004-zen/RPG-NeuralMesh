@@ -1,0 +1,28 @@
+Responsible AI use, group guidance note
+
+Guidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is used in work that leaves the team.
+
+What is allowed
+
+Drafting code, tests and documents with an AI assistant.
+Summarising a document that the person may read under the sharing rule of its catalogue item.
+Asking an AI assistant for the first pass of a code review. A person still approves the change.
+
+What is not allowed
+
+Putting commercial terms, a product recipe, a salary or a contract with a customer into a prompt.
+Using an AI tool that the company has not approved, also for a short trial.
+Sending an output to a customer when no person has read it.
+
+What each team keeps
+
+The name of the person who approved each output that left the team.
+A count of the errors that this person found in the outputs, month by month.
+
+Who to ask
+
+The information security lead of the company decides whether a tool is approved. The data protection lead decides whether a kind of data may be put into a prompt.
+
+This note is guidance. The AI policy of each company stays the binding rule.
+
+Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.

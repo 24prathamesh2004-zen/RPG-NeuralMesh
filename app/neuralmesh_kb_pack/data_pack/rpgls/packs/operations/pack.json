@@ -1,0 +1,141 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "rpgls.operations",
+    "scope": "subsidiary",
+    "subsidiary": "rpgls",
+    "domain": "operations",
+    "title": "RPG Life Sciences operations knowledge",
+    "owner_role": "Head Manufacturing",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "rpgls:O-01",
+      "catalogue_id": "O-01",
+      "title": "Manufacturing and plant safety SOPs",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head Manufacturing",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "inspection"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "rpgls:O-01-01",
+      "datapoint": "rpgls:O-01",
+      "title": "SOP - Batch manufacturing record completion",
+      "kind": "sop",
+      "version": "2026-02",
+      "tags": [
+        "gmp",
+        "batch-record",
+        "documentation",
+        "shop-floor"
+      ],
+      "summary": "Every step of a batch is signed in the batch record at the time it is done, with date, time and the equipment used. Entries are never overwritten. A correction is a single line with initials, date and reason. The supervisor checks the record before the batch moves to the next stage.",
+      "body_file": "source/O-01-01.md",
+      "concepts": [
+        "concept:batch-record-practice"
+      ],
+      "skills": [
+        {
+          "skill": "skill:good-manufacturing-practice",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:O-01-02",
+      "datapoint": "rpgls:O-01",
+      "title": "SOP - Line clearance and equipment cleaning",
+      "kind": "sop",
+      "version": "2026-02",
+      "tags": [
+        "gmp",
+        "line-clearance",
+        "cleaning",
+        "changeover",
+        "contamination"
+      ],
+      "summary": "Before a new batch starts, the line is cleared of the previous product, labels and records, and a second person verifies it. Equipment is cleaned by the written method and tagged with its cleaned status and the hold time. Use after the hold time needs a repeat cleaning.",
+      "body_file": "source/O-01-02.md",
+      "concepts": [
+        "concept:line-clearance",
+        "concept:contamination-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:good-manufacturing-practice",
+          "level": "A"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:O-01-03",
+      "datapoint": "rpgls:O-01",
+      "title": "SOP - Solvent handling and work permits",
+      "kind": "sop",
+      "version": "2026-02",
+      "tags": [
+        "safety",
+        "solvent",
+        "work-permit",
+        "ventilation",
+        "earthing"
+      ],
+      "summary": "Solvents are drawn only in ventilated areas with earthed containers and without ignition sources. Hot work, confined space entry and maintenance in solvent areas need a signed work permit that lists the hazards, the controls and the person who closes it.",
+      "body_file": "source/O-01-03.md",
+      "concepts": [
+        "concept:work-permit-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:plant-safety",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "rpgls:O-01-04",
+      "datapoint": "rpgls:O-01",
+      "title": "SOP - Near-miss reporting and weekly review",
+      "kind": "sop",
+      "version": "2026-02",
+      "tags": [
+        "safety",
+        "near-miss",
+        "reporting",
+        "review"
+      ],
+      "summary": "Any unsafe event without injury is reported on a short form before the end of the shift. The plant safety group reviews all forms weekly, groups them by area and cause, and tracks each action to closure. Three or more reports of the same kind in a month trigger a joint review.",
+      "body_file": "source/O-01-04.md",
+      "concepts": [
+        "concept:near-miss-pattern"
+      ],
+      "skills": [
+        {
+          "skill": "skill:plant-safety",
+          "level": "M"
+        }
+      ]
+    }
+  ]
+}

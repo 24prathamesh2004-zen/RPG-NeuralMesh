@@ -1,0 +1,434 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.engineering",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "engineering",
+    "title": "CEAT engineering knowledge",
+    "owner_role": "Head R&D",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "ceat:E-01",
+      "catalogue_id": "E-01",
+      "title": "Compound formulations and material specs",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Head R&D",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "R-NL-01"
+    },
+    {
+      "id": "ceat:E-02",
+      "catalogue_id": "E-02",
+      "title": "Test and field-failure reports and RCAs",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head Quality",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "inspection"
+      ],
+      "upgrade_with_approval": "RAG",
+      "views": [
+        "v_failure_by_cause"
+      ],
+      "min_group": 3
+    },
+    {
+      "id": "ceat:E-03",
+      "catalogue_id": "E-03",
+      "title": "Approved materials handling and storage learnings (non-formula)",
+      "sensitivity": "Confidential",
+      "ceiling": "SUM",
+      "owner_role": "Head R&D",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:E-03-01",
+      "datapoint": "ceat:E-03",
+      "title": "Incoming natural-rubber lot acceptance and trending",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "natural-rubber",
+        "lot-acceptance",
+        "quality",
+        "trending",
+        "supplier"
+      ],
+      "summary": "Incoming natural-rubber lots are accepted against a small set of quality parameters (dirt content, volatile matter, plasticity retention and Mooney viscosity) with limits agreed with suppliers. Results are trended per supplier and per lot, so drift is seen before the material reaches mixing. No formulations are included.",
+      "body_file": "source/E-03-01.md",
+      "concepts": [
+        "concept:lot-acceptance",
+        "concept:lot-quality-trending"
+      ],
+      "skills": [
+        {
+          "skill": "skill:quality-management",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-03-02",
+      "datapoint": "ceat:E-03",
+      "title": "Warehouse storage practices for natural rubber",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "natural-rubber",
+        "storage",
+        "warehouse",
+        "ageing",
+        "fifo"
+      ],
+      "summary": "Rubber is stored in covered, ventilated warehouses, off the floor, away from direct sun and heat sources, with grades kept apart and first-in-first-out issue. Long-stored lots get an extra ageing check before use.",
+      "body_file": "source/E-03-02.md",
+      "concepts": [
+        "concept:raw-material-storage",
+        "concept:material-ageing"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing",
+          "level": "M"
+        }
+      ],
+      "supersedes": "ceat:E-03-06"
+    },
+    {
+      "id": "ceat:E-03-03",
+      "datapoint": "ceat:E-03",
+      "title": "Contamination and moisture control at receipt and handling",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "contamination",
+        "moisture",
+        "receipt",
+        "unloading",
+        "foreign-matter"
+      ],
+      "summary": "Unloading is done under cover, wrapping integrity is checked, and foreign matter and moisture exposure are recorded at receipt. Findings are tied to the delivery so supplier feedback has evidence.",
+      "body_file": "source/E-03-03.md",
+      "concepts": [
+        "concept:contamination-control"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-03-04",
+      "datapoint": "ceat:E-03",
+      "title": "Supplier feedback loop for raw-material quality",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "supplier",
+        "feedback",
+        "corrective-action",
+        "scorecard"
+      ],
+      "summary": "Quality complaints go to suppliers with data attached, joint root-cause visits are held for repeat issues, corrective actions are tracked, and a scorecard shows quality and consistency by supplier.",
+      "body_file": "source/E-03-04.md",
+      "concepts": [
+        "concept:supplier-feedback-loop"
+      ],
+      "skills": [
+        {
+          "skill": "skill:quality-management",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-03-05",
+      "datapoint": "ceat:E-03",
+      "title": "Time-to-use limits and lot traceability",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "traceability",
+        "time-to-use",
+        "lot",
+        "batch"
+      ],
+      "summary": "Each lot is tagged with receipt date and storage location, a maximum time before use is set per grade, and every mixing batch can be traced back to its supplier lot.",
+      "body_file": "source/E-03-05.md",
+      "concepts": [
+        "concept:lot-traceability",
+        "concept:time-to-use-limit"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-03-06",
+      "datapoint": "ceat:E-03",
+      "title": "Legacy warehouse handling note (2019, superseded)",
+      "kind": "note",
+      "version": "2019-06",
+      "tags": [
+        "warehouse",
+        "legacy",
+        "handling"
+      ],
+      "summary": "Older warehouse handling note kept for history; superseded by the 2026 storage practices. Treat as stale.",
+      "body_file": "source/E-03-06.md",
+      "concepts": [
+        "concept:raw-material-storage",
+        "concept:materials-handling"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing",
+          "level": "L"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-02-01",
+      "datapoint": "ceat:E-02",
+      "title": "Field-failure RCA pattern - material-handling-linked defects",
+      "kind": "rca",
+      "version": "2026-02",
+      "tags": [
+        "rca",
+        "failure",
+        "material-handling",
+        "defects"
+      ],
+      "summary": "A recurring share of failure reports trace to material handling rather than process settings: 18% of the mock failure reports in qms.db. The common thread is lots used after long or uneven storage.",
+      "body_file": "gated/E-02-01.md",
+      "gated": true,
+      "concepts": [
+        "concept:root-cause-analysis",
+        "concept:material-ageing",
+        "concept:materials-handling",
+        "concept:failure-pattern",
+        "concept:recurring-pattern"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-02-02",
+      "datapoint": "ceat:E-02",
+      "title": "Blister and void defects - process versus material causes",
+      "kind": "rca",
+      "version": "2026-02",
+      "tags": [
+        "blister",
+        "void",
+        "rca",
+        "process",
+        "material"
+      ],
+      "summary": "Blister and void cases are split between process drift and material condition. Material condition cases link to moisture exposure and ageing; checking lot condition early shortens root-cause time.",
+      "body_file": "gated/E-02-02.md",
+      "gated": true,
+      "concepts": [
+        "concept:root-cause-analysis",
+        "concept:contamination-control",
+        "concept:failure-pattern"
+      ],
+      "skills": [
+        {
+          "skill": "skill:engineering",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "ceat:E-01-01",
+      "datapoint": "ceat:E-01",
+      "title": "Compound formulation record A (restricted)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "formulation",
+        "restricted"
+      ],
+      "summary": "Restricted formulation record. Metadata only.",
+      "body_file": "source/E-01-01.md",
+      "concepts": [
+        "concept:compound-formulation"
+      ]
+    },
+    {
+      "id": "ceat:E-01-02",
+      "datapoint": "ceat:E-01",
+      "title": "Material specification set B (restricted)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "specification",
+        "restricted"
+      ],
+      "summary": "Restricted specification set. Metadata only.",
+      "body_file": "source/E-01-02.md",
+      "concepts": [
+        "concept:compound-formulation"
+      ]
+    },
+    {
+      "id": "ceat:E-02-05",
+      "datapoint": "ceat:E-02",
+      "title": "Standard - Visual grading of finished tyres at the plant (A, B, C, Reject)",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "standard",
+        "grading",
+        "visual",
+        "tyre",
+        "bulge",
+        "cut",
+        "sidewall"
+      ],
+      "summary": "Grade A has no visible bulge, cut or crack on sidewall, tread, shoulder or bead. Grade B allows one surface cut under 10 mm with no bulge. Grade C allows surface cuts and uneven wear marks but no bulge and no crack. Any bulge, any crack or any bead damage is Reject.",
+      "body_file": "gated/E-02-05.md",
+      "gated": true,
+      "concepts": [
+        "concept:failure-pattern"
+      ]
+    },
+    {
+      "id": "ceat:E-01-U001",
+      "datapoint": "ceat:E-01",
+      "title": "Material specification, natural rubber grades and storage limits",
+      "kind": "standard",
+      "version": "2026-09",
+      "tags": [
+        "natural-rubber",
+        "grades"
+      ],
+      "summary": "Material specification, natural rubber grades and storage limits Specification of the raw material team of CEAT, revision 4, valid from 1 September 2026. A lot of natural rubber is accepted when all four incoming tests of its grade are inside the limits of the table below. A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
+      "concepts": [
+        "concept:compound-formulation",
+        "concept:incoming-quality-control",
+        "concept:lot-acceptance",
+        "concept:material-ageing",
+        "concept:raw-material-storage",
+        "concept:supplier-feedback-loop",
+        "concept:time-to-use-limit"
+      ],
+      "body_file": "contributions/E-01-U001.json"
+    },
+    {
+      "id": "ceat:E-03-U001",
+      "datapoint": "ceat:E-03",
+      "title": "Plant storage note, Kochi bales",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [
+        "storage",
+        "natural-rubber",
+        "raw-material-storage"
+      ],
+      "summary": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out. A bale stored for more than ninety days is given an ageing check before it goes to mixing. Dirt content and volatile matter are trended per supplier lot, so drift shows before the material reaches the mixer. Supplier feedback with the lot data attached goes out every month.",
+      "concepts": [
+        "concept:material-ageing",
+        "concept:materials-handling",
+        "concept:raw-material-storage",
+        "concept:time-to-use-limit"
+      ],
+      "body_file": "contributions/E-03-U001.json"
+    },
+    {
+      "id": "ceat:E-03-U003",
+      "datapoint": "ceat:E-03",
+      "title": "Warehouse storage audit, Plant 3, April to June 2026",
+      "kind": "report",
+      "version": "2026-08",
+      "tags": [
+        "audit",
+        "plant-3",
+        "warehouse"
+      ],
+      "summary": "Warehouse storage audit, Plant 3, April to June 2026 Audit of 6 and 7 July 2026 by the raw material team of CEAT. All four bays of the raw material warehouse are covered and ventilated, and every bale of natural rubber stood on a pallet. 1,180 of the 1,229 issue lines followed first in, first out. 11 of the 412 lots in store were past the time-to-use limit of their grade.",
+      "concepts": [
+        "concept:contamination-control",
+        "concept:lot-traceability",
+        "concept:material-ageing",
+        "concept:raw-material-storage",
+        "concept:time-to-use-limit"
+      ],
+      "body_file": "contributions/E-03-U003.json"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel:ceat.engineering/001",
+      "type": "CORROBORATES",
+      "from": "ceat:E-02-01",
+      "to": "ceat:E-03-05",
+      "properties": {
+        "note": "Failures linked to long or uneven storage support the time-to-use limits."
+      },
+      "confidence": 1,
+      "status": "approved",
+      "provenance": {
+        "method": "authored",
+        "by_role": "Head Quality",
+        "created_at": "2026-11-04"
+      }
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-CEAT-RCA-2208",
+        "document": "ceat:E-02-01"
+      },
+      {
+        "value": "CANARY-CEAT-FORMULA-7731",
+        "document": "ceat:E-01-01"
+      },
+      {
+        "value": "CANARY-CEAT-SPEC-7732",
+        "document": "ceat:E-01-02"
+      }
+    ]
+  }
+}

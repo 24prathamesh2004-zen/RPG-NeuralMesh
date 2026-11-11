@@ -1,0 +1,142 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "harrisons.operations",
+    "scope": "subsidiary",
+    "subsidiary": "harrisons",
+    "domain": "operations",
+    "title": "Harrisons Malayalam operations knowledge",
+    "owner_role": "GM Estates",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "harrisons:O-05",
+      "catalogue_id": "O-05",
+      "title": "Aggregated latex-spoilage and estate trends",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "GM Estates",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ],
+      "rule_id": "R-AGG-01",
+      "views": [
+        "v_spoilage_by_month",
+        "v_spoilage_by_band"
+      ],
+      "min_group": 3
+    }
+  ],
+  "documents": [
+    {
+      "id": "harrisons:O-05-01",
+      "datapoint": "harrisons:O-05",
+      "title": "Seasonal pattern of latex spoilage (aggregate)",
+      "kind": "aggregate",
+      "version": "2026-01",
+      "tags": [
+        "latex",
+        "spoilage",
+        "seasonality",
+        "monsoon",
+        "pre-coagulation"
+      ],
+      "summary": "Pre-coagulation is the largest spoilage cause in every season. Its share of total spoilage is about 71% in June-August versus about 47% in December-February. Aggregates only; no estate or worker records.",
+      "body_file": "source/O-05-01.md",
+      "concepts": [
+        "concept:latex-pre-coagulation",
+        "concept:monsoon-operations"
+      ]
+    },
+    {
+      "id": "harrisons:O-05-02",
+      "datapoint": "harrisons:O-05",
+      "title": "Spoilage by collection-to-factory time band (aggregate)",
+      "kind": "aggregate",
+      "version": "2026-01",
+      "tags": [
+        "latex",
+        "spoilage",
+        "transport",
+        "delay",
+        "time-band"
+      ],
+      "summary": "Total spoilage averages 3.6% of latex collected where the collection-to-factory time is under 2.5 hours, against 5.3% where it exceeds 3.5 hours. Cells with fewer than three estates are suppressed.",
+      "body_file": "source/O-05-02.md",
+      "concepts": [
+        "concept:latex-collection-and-transport"
+      ]
+    },
+    {
+      "id": "harrisons:O-05-03",
+      "datapoint": "harrisons:O-05",
+      "title": "Cause mix across the year (aggregate)",
+      "kind": "aggregate",
+      "version": "2026-01",
+      "tags": [
+        "latex",
+        "spoilage",
+        "contamination",
+        "temperature"
+      ],
+      "summary": "Contamination losses stay between 0.77% and 0.85% of latex collected in every month, so they are a steady, controllable cause. Temperature-related losses peak in March-May at about 1.1% of latex collected.",
+      "body_file": "source/O-05-03.md",
+      "concepts": [
+        "concept:contamination-control",
+        "concept:latex-pre-coagulation"
+      ]
+    },
+    {
+      "id": "harrisons:O-05-04",
+      "datapoint": "harrisons:O-05",
+      "title": "Current gap - no lot-level quality trending at factory receipt",
+      "kind": "aggregate",
+      "version": "2026-01",
+      "tags": [
+        "latex",
+        "quality",
+        "traceability",
+        "gap"
+      ],
+      "summary": "Collection time is logged at the collection point, but factory receipt does not yet trend quality results per lot or per collection round, so drift is found late. (Owner-stated gap.)",
+      "body_file": "source/O-05-04.md",
+      "concepts": [
+        "concept:lot-quality-trending",
+        "concept:incoming-quality-control"
+      ]
+    },
+    {
+      "id": "harrisons:O-05-U001",
+      "datapoint": "harrisons:O-05",
+      "title": "Latex spoilage by collection-to-factory time, monsoon weeks of 2026",
+      "kind": "aggregate",
+      "version": "2026-09",
+      "tags": [
+        "estates",
+        "monsoon-2026"
+      ],
+      "summary": "week_starting,season,collection_to_factory_time,estates_reporting,latex_spoilage_percent,pre_coagulation_share_of_spoilage_percent 2026-06-01,monsoon,under 2.5 hours,5,4.6,66 2026-06-01,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppressed 2026-06-01,monsoon,over 3.5 hours,6,5.6,71 2026-06-08,monsoon,under 2.5 hours,5,4.9,67 2026-06-08,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppres…",
+      "concepts": [
+        "concept:latex-collection-and-transport",
+        "concept:latex-pre-coagulation",
+        "concept:monsoon-operations"
+      ],
+      "body_file": "contributions/O-05-U001.json"
+    }
+  ]
+}

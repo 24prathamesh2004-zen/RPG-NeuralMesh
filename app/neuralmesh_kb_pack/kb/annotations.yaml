@@ -1,0 +1,728 @@
+note: 'Synthetic annotations of the demo documents and experts: concepts (MENTIONS), skills with level (EXPLAINS_SKILL), supersedes, in-subsidiary
+  relationships, the purposes each datapoint owner allows, and the group skill of each expert. Reviewed by the datapoint owner before publication
+  in a real deployment.'
+published_at: '2026-11-05'
+datapoint_purposes:
+  others:G-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  - inspection
+  ceat:E-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:E-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  - inspection
+  ceat:E-03:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  ceat:L-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:O-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  ceat:O-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:F-06:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:C-03:
+  - problem_solving
+  - compliance
+  - bid_support
+  ceat:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  kec:E-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - inspection
+  kec:E-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:O-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:O-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:O-06:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:L-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  kec:L-02a:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:C-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:C-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:F-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  kec:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  zensar:C-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  zensar:R-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  zensar:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  zensar:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  harrisons:O-05:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  harrisons:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  harrisons:F-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  harrisons:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  raychem:E-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  raychem:O-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  raychem:C-03:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  raychem:L-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  raychem:F-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  raychem:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  rpgls:O-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  rpgls:E-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  rpgls:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - inspection
+  rpgls:C-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  rpgls:F-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  rpgls:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+  asvata:R-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  asvata:F-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  asvata:C-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  asvata:L-01:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  asvata:C-02:
+  - problem_solving
+  - compliance
+  - bid_support
+  asvata:F-04:
+  - problem_solving
+  - compliance
+  - bid_support
+  - learning
+  - career_mobility
+documents:
+  ceat:E-02-05:
+    concepts:
+    - concept:failure-pattern
+  harrisons:F-01-05:
+    concepts:
+    - concept:contamination-control
+    - concept:lot-quality-trending
+  kec:E-04-03:
+    concepts:
+    - concept:tower-design-standard
+  ceat:C-03-01:
+    concepts:
+    - concept:pricing
+  ceat:E-01-01:
+    concepts:
+    - concept:compound-formulation
+  ceat:E-01-02:
+    concepts:
+    - concept:compound-formulation
+  ceat:E-02-01:
+    concepts:
+    - concept:root-cause-analysis
+    - concept:material-ageing
+    - concept:materials-handling
+    - concept:failure-pattern
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@M
+  ceat:E-02-02:
+    concepts:
+    - concept:root-cause-analysis
+    - concept:contamination-control
+    - concept:failure-pattern
+    skills:
+    - skill:engineering@M
+  ceat:E-03-01:
+    concepts:
+    - concept:lot-acceptance
+    - concept:lot-quality-trending
+    skills:
+    - skill:quality-management@M
+  ceat:E-03-02:
+    concepts:
+    - concept:raw-material-storage
+    - concept:material-ageing
+    skills:
+    - skill:manufacturing@M
+    supersedes: ceat:E-03-06
+  ceat:E-03-03:
+    concepts:
+    - concept:contamination-control
+    skills:
+    - skill:manufacturing@L
+  ceat:E-03-04:
+    concepts:
+    - concept:supplier-feedback-loop
+    skills:
+    - skill:quality-management@M
+  ceat:E-03-05:
+    concepts:
+    - concept:lot-traceability
+    - concept:time-to-use-limit
+    skills:
+    - skill:manufacturing@M
+  ceat:E-03-06:
+    concepts:
+    - concept:raw-material-storage
+    - concept:materials-handling
+    skills:
+    - skill:manufacturing@L
+  ceat:F-06-01:
+    concepts:
+    - concept:finance-benchmark-pre-results
+  ceat:L-01-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:integration-checklist
+    - concept:process-ownership-before-cut-over
+  ceat:L-01-02:
+    concepts:
+    - concept:acquisition-integration
+  ceat:O-01-01:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@L
+  ceat:O-01-02:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    skills:
+    - skill:engineering@L
+  ceat:O-02-01:
+    concepts:
+    - concept:near-miss-pattern
+    - concept:recurring-pattern
+  harrisons:F-01-01:
+    concepts:
+    - concept:latex-collection-and-transport
+    skills:
+    - skill:rubber-plantation-management@L
+  harrisons:F-01-02:
+    concepts:
+    - concept:anticoagulant-preservation
+    skills:
+    - skill:rubber-plantation-management@M
+  harrisons:F-01-03:
+    concepts:
+    - concept:latex-collection-and-transport
+    - concept:incoming-quality-control
+    skills:
+    - skill:rubber-plantation-management@L
+    - skill:quality-management@L
+  harrisons:F-01-04:
+    concepts:
+    - concept:contamination-control
+    skills:
+    - skill:rubber-plantation-management@L
+  harrisons:F-01-05:
+    concepts:
+    - concept:monsoon-operations
+    - concept:anticoagulant-preservation
+    - concept:latex-collection-and-transport
+    skills:
+    - skill:rubber-plantation-management@M
+  harrisons:F-02-01:
+    concepts:
+    - concept:title-dispute
+  harrisons:O-05-01:
+    concepts:
+    - concept:latex-pre-coagulation
+    - concept:monsoon-operations
+  harrisons:O-05-02:
+    concepts:
+    - concept:latex-collection-and-transport
+  harrisons:O-05-03:
+    concepts:
+    - concept:contamination-control
+    - concept:latex-pre-coagulation
+  harrisons:O-05-04:
+    concepts:
+    - concept:lot-quality-trending
+    - concept:incoming-quality-control
+  kec:C-01-01:
+    concepts:
+    - concept:pricing
+  kec:C-02-01:
+    concepts:
+    - concept:contract-clause-precedent
+  kec:C-02-02:
+    concepts:
+    - concept:contract-clause-precedent
+    - concept:overseas-mobilisation-terms
+  kec:E-04-01:
+    concepts:
+    - concept:tower-design-standard
+  kec:E-05-01:
+    concepts:
+    - concept:material-ageing
+    - concept:time-to-use-limit
+    skills:
+    - skill:engineering@M
+  kec:L-02-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:process-ownership-before-cut-over
+  kec:L-02-02:
+    concepts:
+    - concept:acquisition-integration
+    - concept:overseas-mobilisation-terms
+  kec:L-02a-01:
+    concepts:
+    - concept:overseas-mobilisation-terms
+    - concept:acquisition-integration
+  kec:O-01-01:
+    concepts:
+    - concept:breakdown-rca
+    - concept:root-cause-analysis
+    - concept:recurring-pattern
+    skills:
+    - skill:engineering@L
+  kec:O-02-01:
+    concepts:
+    - concept:near-miss-pattern
+    - concept:recurring-pattern
+  kec:O-06-01:
+    concepts:
+    - concept:project-delay-pattern
+    - concept:recurring-pattern
+  zensar:C-05-01:
+    concepts:
+    - concept:acquisition-integration
+    - concept:integration-checklist
+    - concept:process-ownership-before-cut-over
+    - concept:overseas-mobilisation-terms
+  zensar:C-05-02:
+    concepts:
+    - concept:knowledge-transfer
+  zensar:C-05-03:
+    concepts:
+    - concept:ai-assisted-delivery
+    - concept:responsible-ai-use
+  zensar:C-05-04:
+    concepts:
+    - concept:acquisition-integration
+    - concept:process-ownership-before-cut-over
+  zensar:C-05-99:
+    concepts:
+    - concept:employee-onboarding
+  zensar:F-01-01:
+    concepts:
+    - concept:responsible-ai-use
+  zensar:R-02-01:
+    concepts:
+    - concept:pilot-results
+    - concept:ai-assisted-delivery
+  zensar:R-02-02:
+    concepts:
+    - concept:pilot-results
+  raychem:E-01-01:
+    concepts:
+    - concept:cable-joint-installation
+    skills:
+    - skill:cable-accessory-installation@M
+    - skill:electrical-power-cable-and-transformer@M
+  raychem:E-01-02:
+    concepts:
+    - concept:cable-termination
+    skills:
+    - skill:cable-accessory-installation@M
+    - skill:electrical-power-cable-and-transformer@A
+  raychem:E-01-03:
+    concepts:
+    - concept:pre-energising-tests
+    skills:
+    - skill:electrical-power-cable-and-transformer@A
+    - skill:cable-accessory-installation@A
+  raychem:E-01-04:
+    concepts:
+    - concept:transformer-switchgear-connection
+    - concept:cable-termination
+    skills:
+    - skill:electrical-power-cable-and-transformer@A
+    - skill:business-functional-knowledge@M
+  raychem:O-02-01:
+    concepts:
+    - concept:field-service-routine
+    skills:
+    - skill:cable-accessory-installation@M
+    - skill:professional-workplace-skills@M
+  raychem:O-02-02:
+    concepts:
+    - concept:cable-accessory-failure-analysis
+    skills:
+    - skill:electrical-power-cable-and-transformer@A
+    - skill:business-functional-knowledge@M
+  raychem:O-02-03:
+    concepts:
+    - concept:installation-quality-records
+    skills:
+    - skill:manufacturing-engineering-quality-and-digital@M
+  raychem:C-03-01:
+    concepts:
+    - concept:ev-charging-accessories
+    skills:
+    - skill:mobility-ev-and-electrical-applications@M
+    - skill:business-functional-knowledge@M
+  raychem:C-03-02:
+    concepts:
+    - concept:ev-charging-accessories
+    skills:
+    - skill:mobility-ev-and-electrical-applications@A
+    - skill:business-functional-knowledge@A
+  raychem:L-01-01:
+    concepts:
+    - concept:cable-termination
+    - concept:cable-accessory-failure-analysis
+    skills:
+    - skill:manufacturing-engineering-quality-and-digital@A
+    - skill:cable-accessory-installation@A
+  raychem:L-01-02:
+    concepts:
+    - concept:knowledge-transfer
+    skills:
+    - skill:professional-workplace-skills@A
+  raychem:F-02-01:
+    concepts:
+    - concept:cable-accessory-failure-analysis
+  rpgls:O-01-01:
+    concepts:
+    - concept:batch-record-practice
+    skills:
+    - skill:good-manufacturing-practice@M
+  rpgls:O-01-02:
+    concepts:
+    - concept:line-clearance
+    - concept:contamination-control
+    skills:
+    - skill:good-manufacturing-practice@A
+  rpgls:O-01-03:
+    concepts:
+    - concept:work-permit-control
+    skills:
+    - skill:plant-safety@M
+  rpgls:O-01-04:
+    concepts:
+    - concept:near-miss-pattern
+    skills:
+    - skill:plant-safety@M
+  rpgls:E-01-01:
+    concepts:
+    - concept:out-of-specification-handling
+    skills:
+    - skill:quality-control-and-assurance@M
+  rpgls:E-01-02:
+    concepts:
+    - concept:cleaning-validation
+    skills:
+    - skill:quality-control-and-assurance@A
+  rpgls:F-01-01:
+    concepts:
+    - concept:deviation-and-capa
+    - concept:root-cause-analysis
+    skills:
+    - skill:quality-control-and-assurance@A
+    - skill:good-manufacturing-practice@A
+  rpgls:F-01-02:
+    concepts:
+    - concept:regulatory-change-control
+    skills:
+    - skill:regulatory-affairs@M
+  rpgls:F-01-03:
+    concepts:
+    - concept:regulatory-change-control
+    skills:
+    - skill:regulatory-affairs@M
+  rpgls:C-01-01:
+    concepts:
+    - concept:ethical-promotion
+    skills:
+    - skill:pharma-sales@A
+    - skill:regulatory-affairs@L
+  rpgls:C-01-02:
+    concepts:
+    - concept:ethical-promotion
+    - concept:knowledge-transfer
+    skills:
+    - skill:pharma-sales@A
+  rpgls:F-02-01:
+    concepts:
+    - concept:regulatory-change-control
+  asvata:R-01-01:
+    concepts:
+    - concept:carbon-inventory-boundary
+    skills:
+    - skill:carbon-accounting@M
+  asvata:R-01-02:
+    concepts:
+    - concept:emission-factor-selection
+    - concept:carbon-inventory-boundary
+    skills:
+    - skill:carbon-accounting@M
+  asvata:R-01-03:
+    concepts:
+    - concept:data-quality-check
+    skills:
+    - skill:data-analysis-basics@A
+  asvata:R-01-04:
+    concepts:
+    - concept:data-quality-check
+    skills:
+    - skill:data-analysis-basics@A
+  asvata:F-01-01:
+    concepts:
+    - concept:compliance-checklist
+    skills:
+    - skill:compliance-basics@M
+  asvata:F-01-02:
+    concepts:
+    - concept:compliance-calendar
+    skills:
+    - skill:compliance-basics@M
+    - skill:project-management@L
+  asvata:C-01-01:
+    concepts:
+    - concept:client-service-desk
+    skills:
+    - skill:customer-service@M
+  asvata:C-01-02:
+    concepts:
+    - concept:client-status-update
+    skills:
+    - skill:business-communication@M
+  asvata:C-01-03:
+    concepts:
+    - concept:engagement-plan
+    - concept:client-status-update
+    skills:
+    - skill:project-management@L
+  asvata:L-01-01:
+    concepts:
+    - concept:engagement-plan
+    - concept:recurring-pattern
+  asvata:L-01-02:
+    concepts:
+    - concept:emission-factor-selection
+    - concept:compliance-checklist
+  asvata:C-02-01:
+    concepts:
+    - concept:contract-clause-precedent
+relationships:
+- id: rel:ceat.engineering/001
+  type: CORROBORATES
+  from: ceat:E-02-01
+  to: ceat:E-03-05
+  properties:
+    note: Failures linked to long or uneven storage support the time-to-use limits.
+  confidence: 1
+  status: approved
+  provenance:
+    method: authored
+    by_role: Head Quality
+    created_at: '2026-11-04'
+expert_skills:
+  CE-1:
+  - skill:quality-management@A
+  CE-2:
+  - skill:manufacturing@A
+  CE-3:
+  - skill:hr@M
+  CE-4:
+  - skill:engineering@A
+  CE-5:
+  - skill:r-and-d-npd@A
+  KE-1:
+  - skill:hr@A
+  KE-2:
+  - skill:finance@M
+  KE-3:
+  - skill:engineering@A
+  KE-4:
+  - skill:engineering@M
+  KE-5:
+  - skill:finance@M
+  ZE-1:
+  - skill:hr@M
+  ZE-2:
+  - skill:engineering@A
+  ZE-3:
+  - skill:engineering@A
+  ZE-4:
+  - skill:engineering@M
+  HE-1:
+  - skill:rubber-plantation-management@A
+  HE-2:
+  - skill:quality-management@A
+  HE-3:
+  - skill:rubber-plantation-management@A
+  HE-4:
+  - skill:quality-management@M
+  RE-1:
+  - skill:electrical-power-cable-and-transformer@A
+  - skill:mobility-ev-and-electrical-applications@A
+  RE-2:
+  - skill:cable-accessory-installation@A
+  - skill:electrical-power-cable-and-transformer@M
+  RE-3:
+  - skill:manufacturing-engineering-quality-and-digital@M
+  RE-4:
+  - skill:cable-accessory-installation@M
+  LE-1:
+  - skill:good-manufacturing-practice@A
+  LE-2:
+  - skill:quality-control-and-assurance@A
+  LE-3:
+  - skill:regulatory-affairs@M
+  LE-4:
+  - skill:plant-safety@M
+  AE-1:
+  - skill:carbon-accounting@M
+  AE-2:
+  - skill:data-analysis-basics@A
+  AE-3:
+  - skill:project-management@M
+  AE-4:
+  - skill:compliance-basics@M

@@ -1,0 +1,65 @@
+# The graph rules of the mesh: the node types and edge types the context graph may hold, which node types each
+# edge may join, the groups the routing code walks, and the edges the loader derives from node fields.
+# One file per domain. This file holds the core types and the knowledge and talent domains built so far.
+# A new domain adds its own file in this folder. Nothing about a type lives in the code.
+domain: core
+version: 1
+owner_role: Mesh knowledge curator
+
+node_types:
+  Subsidiary: {owner_field: id, description: A company of the group, with aliases, level and profile from its own node export}
+  Domain: {description: A domain such as engineering or operations}
+  Datapoint: {required: [subsidiary, code], description: A catalogue item with its sharing rule}
+  Document: {required: [subsidiary, datapoint], description: A title with version, kind and tags, never text}
+  Concept: {description: A topic with aliases}
+  Skill: {description: A skill with aliases}
+  Role: {required: [subsidiary], description: A job and its required skills}
+  Expert: {required: [subsidiary], description: A role and skills with consent, never a name}
+  Asset: {description: A thing that is owned, used or inspected}
+
+edge_types:
+  # structure, written by the loader from the fields of node exports and packs
+  IN_DATAPOINT: {from: [Document], to: [Datapoint], group: structure}
+  IN_DOMAIN: {from: [Datapoint], to: [Domain], group: structure}
+  OWNED_BY: {from: [Datapoint, Asset, AssetFamily], to: [Subsidiary], group: structure}
+  MENTIONS: {from: [Document], to: [Concept], group: structure}
+  EXPLAINS_SKILL: {from: [Document], to: [Skill], group: structure}
+  HAS_SKILL: {from: [Expert], to: [Skill], group: structure}
+  EVIDENCED_BY: {from: [Expert], to: [Document], group: structure}
+  ROLE_AT: {from: [Role], to: [Subsidiary], group: structure}
+  REQUIRES_SKILL: {from: [Role], to: [Skill], group: structure}
+  PART_OF_SKILL: {from: [Concept], to: [Skill], group: structure}
+  PREREQUISITE_OF: {from: [Skill], to: [Skill], group: structure}
+  # hops, written by people in the group vocabulary, walked one step by routing
+  RELATED_TO: {from: [Concept, Skill], to: [Concept, Skill], symmetric: true, group: hop}
+  BROADER: {from: [Concept, Skill], to: [Concept, Skill], group: hop}
+  SAME_AS: {from: [Concept, Skill, Asset], to: [Concept, Skill, Asset], symmetric: true, group: hop}
+  # judgements between documents of different companies, shown only when both owners approved
+  CORROBORATES: {from: [Document], to: [Document], group: judgement}
+  CONFLICTS_WITH: {from: [Document], to: [Document], symmetric: true, group: judgement}
+  ADDRESSES_GAP: {from: [Document], to: [Document], group: judgement}
+  SUPERSEDES: {from: [Document], to: [Document], group: judgement}
+  # computed by the similarity job, never shown as approved
+  SIMILAR_TO: {from: [Concept, Skill, Role, Document, Asset], to: [Concept, Skill, Role, Document, Asset], symmetric: true, group: similarity}
+
+groups:
+  structure: [IN_DATAPOINT, IN_DOMAIN, OWNED_BY, MENTIONS, EXPLAINS_SKILL, HAS_SKILL, EVIDENCED_BY, ROLE_AT, REQUIRES_SKILL, PART_OF_SKILL, PREREQUISITE_OF]
+  hop: [RELATED_TO, BROADER, SAME_AS]
+  judgement: [CORROBORATES, CONFLICTS_WITH, ADDRESSES_GAP, SUPERSEDES]
+  similarity: [SIMILAR_TO]
+
+derived_edges:
+  - {type: OWNED_BY, from_type: Datapoint, to: "org:{subsidiary}"}
+  - {type: ROLE_AT, from_type: Role, to: "org:{subsidiary}"}
+  - {type: IN_DOMAIN, from_type: Datapoint, to: "domain:{domain}"}
+
+# which namespaces a source may write. A source that writes outside its namespaces fails the ownership check.
+ownership:
+  "node:{node}": ["{node}", "org"]
+  "pack:group.vocabulary": [concept, skill, domain]
+  "pack:group.links": []
+  "pack:group.skills": [skill]
+  "talent:group.skills": [skill]
+  "talent:{pack}": ["{company}"]
+  "pack:{pack}": ["{company}"]
+  "job:similarity": []

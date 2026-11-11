@@ -1,0 +1,8 @@
+node_id: asvata
+display: Asvata
+port: 8107
+level: L1
+schema_version: 1.0.0
+structured_db: null
+backend: 'Synthetic profile built from the roles SkillForge holds for Asvata: engagement
+  files, methods library and service desk records'

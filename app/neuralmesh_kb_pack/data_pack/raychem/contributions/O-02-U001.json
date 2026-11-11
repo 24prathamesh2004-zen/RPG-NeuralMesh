@@ -1,0 +1,44 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-d03155d7",
+    "name": "33 kV cable joint failures"
+  },
+  "document": {
+    "id": "raychem:O-02-U001",
+    "datapoint": "raychem:O-02",
+    "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+    "kind": "rca",
+    "version": "2026-11",
+    "tags": [
+      "33kv",
+      "teardown"
+    ],
+    "summary": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026. Six failed joints were cut open and checked for the four causes in the set order. Water entry was the cause in 3 joints, a preparation error in 2 and a connector defect in 1. No joint failed from overload.",
+    "body": "Teardown findings, failed 33 kV cable joints, July to\nSeptember 2026\nFailure analysis by the field service team of Raychem RPG, November 2026.\nSix failed joints were cut open and checked for the four causes in the set order. Water entry was\nthe cause in 3 joints, a preparation error in 2 and a connector defect in 1. No joint failed from\noverload. All 3 joints with water entry were installed in rain, and the work was not stopped when\nrain reached the open cable.\nHow the teardown was done\nEach failed joint stayed in place until photos were taken. It was then cut open along its length, and the\npoint where the fault path started was found. The four causes were checked in order: preparation error,\nwater entry, connector defect and overload of the circuit. This failed joint teardown followed the failure\nanalysis procedure of the field service team.\nFindings by joint\nJoint Site Months in\nservice\nCause What was seen\n1 Substation feeder, site A 5 Water entry Water marks under the outer sleeve.\nThe sleeve end was not sealed.\n2 Substation feeder, site A 5 Water entry Same installer team and same week\nas joint 1. Moisture around the\nconnector.\n3 Industrial plant, site B 8 Preparation error Carbon track that starts at a knife cut\nin the insulation.\n4 Wind farm collector line,\nsite C\n3 Water entry Installed in rain without a tent. Water\ninside the sleeve.\n5 Industrial plant, site B 11 Connector defect Gap in the crimp. Heat marks on the\nconnector.\n6 Utility feeder, site D 14 Preparation error Insulation not degreased. Tracking\nalong the surface.\nWhat the job records showed\n5 of the 6 joints had a digital job card. 3 of these 5 had no photo of the sealed sleeve end, and these 3\nwere the joints with water entry. The second engineer had signed off all 5 records. The sign-off looked at\nthe test readings and not at the photos.\nActions\nAction Owner Due\n\nPut the rule to stop work when rain or dust reaches the open\ncable on the first page of the jointing procedure\nHead of field service 30 November 2026\nMake the photo of the sealed sleeve end a required field of the\ndigital job card, and add it to the sign-off of the second\nengineer\nQuality lead 15 December 2026\nHold a refresher session on cable preparation for the installer\nteams of joints 3 and 6\nTraining lead 31 December 2026\nCheck the crimp tool of the installer team of joint 5 against its\ncalibration record\nQuality lead 30 November 2026\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of Raychem RPG.",
+    "concepts": [
+      "concept:cable-accessory-failure-analysis",
+      "concept:cable-joint-installation",
+      "concept:failure-pattern",
+      "concept:installation-quality-records",
+      "concept:root-cause-analysis"
+    ]
+  },
+  "concept_matches": {
+    "concept:cable-accessory-failure-analysis": "phrase",
+    "concept:cable-joint-installation": "phrase",
+    "concept:failure-pattern": "phrase",
+    "concept:installation-quality-records": "phrase",
+    "concept:root-cause-analysis": "phrase"
+  },
+  "upload": {
+    "file": "failed_joint_teardown_findings.pdf",
+    "format": "pdf",
+    "chars": 2509,
+    "sha256": "e2ee953049529d42936a1f3b6d9e3c85a26817592758a38c645922b696f676f7",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-04T10:36:22+00:00"
+  },
+  "sample_input": "failed_joint_teardown_findings.pdf"
+}

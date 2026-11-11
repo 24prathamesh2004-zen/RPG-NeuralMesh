@@ -1,0 +1,37 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "snapscore.standards",
+    "scope": "group",
+    "subsidiary": "group",
+    "title": "Which published standard governs each inspected asset and grade scale (SYNTHETIC, to be confirmed by each subsidiary)",
+    "owner_role": "Snap and Score product owner",
+    "language": "en",
+    "published_at": "2026-11-07",
+    "synthetic": true
+  },
+  "entities": [],
+  "relationships": [
+    {"id": "rel:snapscore.standards/001", "type": "GOVERNED_BY", "from": "harrisons:asset/smoked_sheet", "to": "harrisons:F-01-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}, "properties": {"note": "Visual grading of smoked sheet, grades 1 to 5."}},
+    {"id": "rel:snapscore.standards/002", "type": "GOVERNED_BY", "from": "harrisons:asset/sheet_lot", "to": "harrisons:F-01-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/003", "type": "GOVERNED_BY", "from": "inspection:grade-scale/sheet_visual", "to": "harrisons:F-01-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/004", "type": "GOVERNED_BY", "from": "ceat:asset/finished_tyre", "to": "ceat:E-02-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}, "properties": {"note": "Plant visual grading A, B, C, Reject."}},
+    {"id": "rel:snapscore.standards/005", "type": "GOVERNED_BY", "from": "ceat:asset/cured_tyre", "to": "ceat:E-02-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/006", "type": "GOVERNED_BY", "from": "inspection:grade-scale/tyre_plant", "to": "ceat:E-02-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/007", "type": "GOVERNED_BY", "from": "kec:asset/tower_member", "to": "kec:E-04-03", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}, "properties": {"note": "Patrol priority P1 to P3 for tower members."}},
+    {"id": "rel:snapscore.standards/008", "type": "GOVERNED_BY", "from": "inspection:grade-scale/patrol_priority", "to": "kec:E-04-03", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/009", "type": "GOVERNED_BY", "from": "inspection:condition/mould", "to": "harrisons:F-01-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}},
+    {"id": "rel:snapscore.standards/010", "type": "GOVERNED_BY", "from": "inspection:condition/bulge", "to": "ceat:E-02-05", "status": "proposed",
+     "provenance": {"method": "authored", "by_role": "Snap and Score product owner", "created_at": "2026-11-07"}}
+  ]
+}

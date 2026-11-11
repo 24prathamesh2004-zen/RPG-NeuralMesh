@@ -1,0 +1,4 @@
+windows:
+- end: '2026-11-14'
+  reason: Q2 results window (mock)
+  start: '2026-10-15'

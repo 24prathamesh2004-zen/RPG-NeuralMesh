@@ -5,7 +5,8 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
-from jose import JWTError, jwt
+import jwt
+from jwt import PyJWTError as JWTError
 from mcp.server.auth.provider import AccessToken, TokenVerifier
 from mcp.server.auth.settings import AuthSettings
 
@@ -36,7 +37,7 @@ class JwtTokenVerifier(TokenVerifier):
                 algorithms=[self.algorithm],
                 issuer=self.issuer,
                 audience=self.audience,
-                options={"require_exp": True, "require_sub": True},
+                options={"require": ["exp", "sub"]},
             )
         except (JWTError, TypeError, ValueError):
             return None

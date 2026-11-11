@@ -1,0 +1,48 @@
+{
+  "status": "accepted",
+  "context_graph": {
+    "id": "g-2f866293",
+    "name": "Natural rubber storage and ageing"
+  },
+  "document": {
+    "id": "ceat:E-01-U001",
+    "datapoint": "ceat:E-01",
+    "title": "Material specification, natural rubber grades and storage limits",
+    "kind": "standard",
+    "version": "2026-09",
+    "tags": [
+      "natural-rubber",
+      "grades"
+    ],
+    "summary": "Material specification, natural rubber grades and storage limits Specification of the raw material team of CEAT, revision 4, valid from 1 September 2026. A lot of natural rubber is accepted when all four incoming tests of its grade are inside the limits of the table below. A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
+    "body": "Material specification, natural rubber grades and storage limits\n\nSpecification of the raw material team of CEAT, revision 4, valid from 1 September 2026.\n\nA lot of natural rubber is accepted when all four incoming tests of its grade are inside the limits of the table below. A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.\n\nLot acceptance limits by grade\n\nISNR is block rubber and RSS is ribbed smoked sheet.\n\nRules of use\n\nThe four tests are run on every lot at the receipt inspection, on test pieces cut from 3 bales of the lot.\n\nA lot outside one limit is held, and a supplier corrective action is opened within 2 working days.\n\nThe time-to-use limit counts from the receipt date on the lot card.\n\nA lot past its limit gets the storage ageing check, in which the plasticity retention index and the Mooney viscosity are tested again. The lot is issued when both are inside the limits of its grade. It is downgraded or returned when one is outside.\n\nThis specification holds no compound recipe.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of CEAT.\n\nGrade | Dirt content, at most | Volatile matter, at most | Plasticity retention index, at least | Mooney viscosity | Time-to-use limit\n\nISNR 10 | 0.10% | 0.80% | 50 | 70 to 90 | 90 days\n\nISNR 20 | 0.20% | 0.80% | 40 | 65 to 90 | 90 days\n\nRSS 3 | 0.10% | 0.80% | 60 | 70 to 95 | 120 days\n\nRSS 4 | 0.15% | 0.80% | 55 | 65 to 95 | 120 days",
+    "concepts": [
+      "concept:compound-formulation",
+      "concept:incoming-quality-control",
+      "concept:lot-acceptance",
+      "concept:material-ageing",
+      "concept:raw-material-storage",
+      "concept:supplier-feedback-loop",
+      "concept:time-to-use-limit"
+    ]
+  },
+  "concept_matches": {
+    "concept:compound-formulation": "phrase",
+    "concept:incoming-quality-control": "phrase",
+    "concept:lot-acceptance": "phrase",
+    "concept:material-ageing": "phrase",
+    "concept:raw-material-storage": "words",
+    "concept:supplier-feedback-loop": "phrase",
+    "concept:time-to-use-limit": "phrase"
+  },
+  "upload": {
+    "file": "natural_rubber_grades_material_specification_rev4.docx",
+    "format": "word",
+    "chars": 1499,
+    "sha256": "6b303d9a6051fd9acf5b7a6f37e5542c30a870764f3d19f321b9910d8ad13b76",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-09-02T07:48:06+00:00"
+  },
+  "sample_input": "natural_rubber_grades_material_specification_rev4.docx"
+}

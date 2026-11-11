@@ -1,0 +1,78 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "others.general",
+    "scope": "subsidiary",
+    "subsidiary": "others",
+    "domain": "general",
+    "title": "Others shared inputs",
+    "owner_role": "Mesh admin",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "others:G-01",
+      "catalogue_id": "G-01",
+      "title": "Shared inputs of the group",
+      "sensitivity": "Internal",
+      "ceiling": "RAG",
+      "owner_role": "Mesh admin",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "career_mobility",
+        "inspection"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "others:G-01-U001",
+      "datapoint": "others:G-01",
+      "title": "Group integration forum, minutes of September 2026",
+      "kind": "note",
+      "version": "2026-09",
+      "tags": [
+        "minutes",
+        "forum"
+      ],
+      "summary": "Group integration forum, minutes of September 2026 Meeting of 15 September 2026. Present: the integration leads of KEC International and Zensar, the head of finance processes of the group and the head of people operations of the group. Decisions From 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/G-01-U001.json"
+    },
+    {
+      "id": "others:G-01-U002",
+      "datapoint": "others:G-01",
+      "title": "Responsible AI use, group guidance note",
+      "kind": "policy",
+      "version": "2026-10",
+      "tags": [
+        "guidance",
+        "ai-policy"
+      ],
+      "summary": "Responsible AI use, group guidance note Guidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is used in work that leaves the team.",
+      "concepts": [
+        "concept:ai-assisted-delivery",
+        "concept:responsible-ai-use"
+      ],
+      "body_file": "contributions/G-01-U002.json"
+    }
+  ]
+}

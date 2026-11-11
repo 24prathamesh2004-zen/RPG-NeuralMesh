@@ -1,0 +1,142 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "raychem.operations",
+    "scope": "subsidiary",
+    "subsidiary": "raychem",
+    "domain": "operations",
+    "title": "Raychem RPG operations knowledge",
+    "owner_role": "Head of Field Service",
+    "maturity_level": "L1",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "raychem:O-02",
+      "catalogue_id": "O-02",
+      "title": "Field service and failure analysis",
+      "sensitivity": "Internal",
+      "ceiling": "SUM",
+      "owner_role": "Head of Field Service",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning",
+        "inspection"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "raychem:O-02-01",
+      "datapoint": "raychem:O-02",
+      "title": "Field service visit routine",
+      "kind": "report",
+      "version": "2026-01",
+      "tags": [
+        "field-service",
+        "visit",
+        "safety",
+        "job-card"
+      ],
+      "summary": "A service visit starts with the permit to work and a safety briefing. The engineer inspects accessories for tracking, heat marks and loose lugs, takes thermal readings and closes the job card with photos and findings.",
+      "body_file": "source/O-02-01.md",
+      "concepts": [
+        "concept:field-service-routine"
+      ],
+      "skills": [
+        {
+          "skill": "skill:cable-accessory-installation",
+          "level": "M"
+        },
+        {
+          "skill": "skill:professional-workplace-skills",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "raychem:O-02-02",
+      "datapoint": "raychem:O-02",
+      "title": "Failure analysis of a failed cable joint",
+      "kind": "report",
+      "version": "2026-02",
+      "tags": [
+        "failure-analysis",
+        "joint",
+        "breakdown",
+        "evidence"
+      ],
+      "summary": "The failed joint is kept in place until photos are taken. The team cuts it open, finds where the breakdown started, and checks four causes in order. These are preparation errors, water entry, a connector defect and overload. The finding is filed with the cause.",
+      "body_file": "source/O-02-02.md",
+      "concepts": [
+        "concept:cable-accessory-failure-analysis"
+      ],
+      "skills": [
+        {
+          "skill": "skill:electrical-power-cable-and-transformer",
+          "level": "A"
+        },
+        {
+          "skill": "skill:business-functional-knowledge",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "raychem:O-02-03",
+      "datapoint": "raychem:O-02",
+      "title": "Digital job records and quality sign-off",
+      "kind": "report",
+      "version": "2026-03",
+      "tags": [
+        "quality",
+        "digital-records",
+        "job-card",
+        "traceability"
+      ],
+      "summary": "Every installation has a digital job record with the kit batch, test readings and photos. A second engineer signs off the record before the circuit is handed over. Records with missing readings are returned within 2 working days.",
+      "body_file": "source/O-02-03.md",
+      "concepts": [
+        "concept:installation-quality-records"
+      ],
+      "skills": [
+        {
+          "skill": "skill:manufacturing-engineering-quality-and-digital",
+          "level": "M"
+        }
+      ]
+    },
+    {
+      "id": "raychem:O-02-U001",
+      "datapoint": "raychem:O-02",
+      "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "kind": "rca",
+      "version": "2026-11",
+      "tags": [
+        "33kv",
+        "teardown"
+      ],
+      "summary": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026. Six failed joints were cut open and checked for the four causes in the set order. Water entry was the cause in 3 joints, a preparation error in 2 and a connector defect in 1. No joint failed from overload.",
+      "concepts": [
+        "concept:cable-accessory-failure-analysis",
+        "concept:cable-joint-installation",
+        "concept:failure-pattern",
+        "concept:installation-quality-records",
+        "concept:root-cause-analysis"
+      ],
+      "body_file": "contributions/O-02-U001.json"
+    }
+  ]
+}

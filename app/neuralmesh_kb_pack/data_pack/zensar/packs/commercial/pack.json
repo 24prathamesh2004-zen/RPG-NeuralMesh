@@ -1,0 +1,154 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "zensar.commercial",
+    "scope": "subsidiary",
+    "subsidiary": "zensar",
+    "domain": "commercial",
+    "title": "Zensar commercial knowledge",
+    "owner_role": "CTO office",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "zensar:C-05",
+      "catalogue_id": "C-05",
+      "title": "Delivery and integration playbooks",
+      "sensitivity": "Internal",
+      "ceiling": "RAG",
+      "owner_role": "CTO office",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support",
+        "learning"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "zensar:C-05-01",
+      "datapoint": "zensar:C-05",
+      "title": "100-day integration checklist",
+      "kind": "playbook",
+      "version": "2026-02",
+      "tags": [
+        "integration",
+        "checklist",
+        "100-days",
+        "process",
+        "governance"
+      ],
+      "summary": "Day-0 to day-100 checklist for governance, process ownership, systems cut-over and communication.",
+      "body_file": "source/C-05-01.md",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:integration-checklist",
+        "concept:process-ownership-before-cut-over",
+        "concept:overseas-mobilisation-terms"
+      ]
+    },
+    {
+      "id": "zensar:C-05-02",
+      "datapoint": "zensar:C-05",
+      "title": "Transition and knowledge-transfer playbook",
+      "kind": "playbook",
+      "version": "2026-01",
+      "tags": [
+        "transition",
+        "knowledge-transfer",
+        "handover"
+      ],
+      "summary": "Steps for handover, shadowing and sign-off when a team or a customer account changes hands.",
+      "body_file": "source/C-05-02.md",
+      "concepts": [
+        "concept:knowledge-transfer"
+      ]
+    },
+    {
+      "id": "zensar:C-05-03",
+      "datapoint": "zensar:C-05",
+      "title": "AI-assisted delivery playbook",
+      "kind": "playbook",
+      "version": "2026-03",
+      "tags": [
+        "ai",
+        "delivery",
+        "code-review",
+        "testing"
+      ],
+      "summary": "How delivery teams use AI assistants for code review, test generation and documentation, with review rules.",
+      "body_file": "source/C-05-03.md",
+      "concepts": [
+        "concept:ai-assisted-delivery",
+        "concept:responsible-ai-use"
+      ]
+    },
+    {
+      "id": "zensar:C-05-04",
+      "datapoint": "zensar:C-05",
+      "title": "Tooling consolidation guide after a merger",
+      "kind": "playbook",
+      "version": "2025-11",
+      "tags": [
+        "tooling",
+        "consolidation",
+        "merger",
+        "systems"
+      ],
+      "summary": "Guide for consolidating tools after a merger, with a view on timing.",
+      "body_file": "source/C-05-04.md",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:process-ownership-before-cut-over"
+      ]
+    },
+    {
+      "id": "zensar:C-05-99",
+      "datapoint": "zensar:C-05",
+      "title": "Team wiki - onboarding tips (contains a planted injection)",
+      "kind": "wiki",
+      "version": "2026-01",
+      "tags": [
+        "wiki",
+        "onboarding",
+        "tips"
+      ],
+      "summary": "Onboarding tips for new joiners.",
+      "body_file": "source/C-05-99.md",
+      "concepts": [
+        "concept:employee-onboarding"
+      ]
+    },
+    {
+      "id": "zensar:C-05-U001",
+      "datapoint": "zensar:C-05",
+      "title": "Systems cut-over runbook for an acquired unit",
+      "kind": "playbook",
+      "version": "2026-08",
+      "tags": [
+        "runbook",
+        "cut-over"
+      ],
+      "summary": "Systems cut-over runbook for an acquired unit This runbook is the cut-over part of the integration playbook. It is used when the systems of an acquired unit move to the systems of the buyer. A cut-over starts only after the process owner signs off the target process. Both toolchains stay in use until that sign-off, and the old tools are retired in phases.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:integration-checklist",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/C-05-U001.json"
+    }
+  ]
+}

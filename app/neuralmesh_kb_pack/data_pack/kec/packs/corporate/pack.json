@@ -1,0 +1,43 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "kec.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "kec",
+    "domain": "corporate",
+    "title": "KEC International corporate functions",
+    "owner_role": "ESG head",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "kec:F-05",
+      "catalogue_id": "F-05",
+      "title": "ESG metrics (water and energy)",
+      "sensitivity": "Internal",
+      "ceiling": "LIVE",
+      "owner_role": "ESG head",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "views": [
+        "v_esg_summary"
+      ],
+      "min_group": 3
+    }
+  ],
+  "documents": []
+}

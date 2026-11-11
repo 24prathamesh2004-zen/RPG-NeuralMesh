@@ -1,0 +1,68 @@
+{
+  "format": "neuralmesh.knowledge-pack",
+  "format_version": "1.0",
+  "pack": {
+    "pack_id": "ceat.corporate",
+    "scope": "subsidiary",
+    "subsidiary": "ceat",
+    "domain": "corporate",
+    "title": "CEAT corporate functions",
+    "owner_role": "CFO",
+    "maturity_level": "L2",
+    "language": "en",
+    "published_at": "2026-11-05",
+    "synthetic": true,
+    "index": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "dimensions": 384,
+      "chunk_chars": 600,
+      "chunk_overlap_chars": 0,
+      "vector_store": "chroma"
+    }
+  },
+  "datapoints": [
+    {
+      "id": "ceat:F-06",
+      "catalogue_id": "F-06",
+      "title": "Finance and capex benchmarks (pre-results)",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "CFO",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true,
+      "rule_id": "UPSI",
+      "blackout": "results_calendar"
+    }
+  ],
+  "documents": [
+    {
+      "id": "ceat:F-06-01",
+      "datapoint": "ceat:F-06",
+      "title": "Quarterly finance and capex benchmark note (pre-results)",
+      "kind": "report",
+      "version": "2026-10",
+      "tags": [
+        "finance",
+        "benchmark",
+        "upsi"
+      ],
+      "summary": "Pre-results finance note. Metadata only during the results window.",
+      "body_file": "source/F-06-01.md",
+      "concepts": [
+        "concept:finance-benchmark-pre-results"
+      ]
+    }
+  ],
+  "test_fixtures": {
+    "canaries": [
+      {
+        "value": "CANARY-CEAT-UPSI-9902",
+        "document": "ceat:F-06-01"
+      }
+    ]
+  }
+}

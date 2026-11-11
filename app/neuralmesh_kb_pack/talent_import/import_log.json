@@ -1,0 +1,50 @@
+{
+  "asvata.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "asvata.talent",
+    "sha256": "ef9a24985704162dc13ef6c72465c09f6e6250d103054ef5c01988288976ee0c"
+  },
+  "ceat.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "ceat.talent",
+    "sha256": "ded62220143deb12028f98a0385f8a681eda74e3284631d4f6ba64a4e7c05b52"
+  },
+  "group.skills": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "group.skillforge-skills",
+    "sha256": "22479377764efd511bc94ea8f83b6533981d05d51114f1513c60cd42a8932701"
+  },
+  "harrisons.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "harrisons.talent",
+    "sha256": "3bfeef0fda6c604b8d7dc786d06719663d85ef502549d9b4b37ece917ba97636"
+  },
+  "kec.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "kec.talent",
+    "sha256": "ac359efaf579b2dd71d77ac228ae85509bca77c19cad3f8c5815e803f516bb95"
+  },
+  "raychem.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "raychem.talent",
+    "sha256": "37370bcb20346c5b54dc9562a0c2a7a43d83f084327b4e3dec0dc071b518a3c8"
+  },
+  "rpgls.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "rpgls.talent",
+    "sha256": "6db8552ddd296f57d70d28829af2ece2455a0970ba7e37752414f07433c035d3"
+  },
+  "zensar.talent": {
+    "at": "2026-11-08T19:22:54+00:00",
+    "by": "skillforge",
+    "sent_as": "zensar.talent",
+    "sha256": "af72c3919f13a473851c16166c31110bb9839d07154602c2216256c04f3435ba"
+  }
+}

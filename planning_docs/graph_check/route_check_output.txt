@@ -1,0 +1,90 @@
+MESH GRAPH BUILT FROM THE SYNTHETIC KNOWLEDGE BASE
+  entities: 148  Concept 37, Datapoint 28, Document 46, Domain 8, Expert 18, Skill 7, Subsidiary 4
+  relationships: 251  ADDRESSES_GAP 1, BROADER 7, CONFLICTS_WITH 1, CORROBORATES 4, EVIDENCED_BY 27, IN_DATAPOINT 46, IN_DOMAIN 28, MENTIONS 83, OWNED_BY 28, PART_OF_SKILL 9, RELATED_TO 15, SAME_AS 1, SUPERSEDES 1
+  build time: 16.2 ms
+
+ROUTING WITH LABELS ONLY (no aliases)
+id   resolved concepts                      routed nodes                 expected nodes             nodes     datapoints  extra nodes
+S1   -                                      ceat, harrisons              ceat, harrisons            yes       NO          -
+S2   -                                      -                            ceat, kec, zensar          NO        NO          -
+S3   -                                      -                            ceat, kec                  NO        NO          -
+S4   supplier-quality                       ceat                         ceat, harrisons, kec, zensar yes       yes         -
+S5   compound-formulation                   ceat                         ceat                       yes       yes         -
+S6   -                                      ceat                         ceat                       yes       NO          -
+S7   -                                      -                            ceat, kec, zensar          NO        NO          -
+S8   -                                      zensar                       zensar                     yes       NO          -
+S9   -                                      -                            zensar                     NO        NO          -
+S10  materials-handling                     ceat                         ceat                       yes       yes         -
+  nodes complete: 6 of 10, datapoints complete: 3 of 10, route time per question: max 0.15 ms
+
+ROUTING WITH LABELS AND ALIASES
+id   resolved concepts                      routed nodes                 expected nodes             nodes     datapoints  extra nodes
+S1   latex-pre-coagulation, compound-formul ceat, harrisons, kec         ceat, harrisons            yes       yes         kec
+S2   acquisition-integration, integration-c ceat, kec, zensar            ceat, kec, zensar          yes       yes         -
+S3   failure-pattern, project-delay-pattern ceat, kec                    ceat, kec                  yes       yes         -
+S4   acquisition-integration, supplier-qual ceat, kec, zensar            ceat, harrisons, kec, zensar yes       yes         -
+S5   compound-formulation                   ceat                         ceat                       yes       yes         -
+S6   finance-benchmark-pre-results          ceat                         ceat                       yes       yes         -
+S7   acquisition-integration, integration-c ceat, kec, zensar            ceat, kec, zensar          yes       yes         -
+S8   employee-onboarding                    zensar                       zensar                     yes       yes         -
+S9   ai-assisted-delivery, responsible-ai-u zensar                       zensar                     yes       yes         -
+S10  root-cause-analysis, materials-handlin ceat                         ceat                       yes       yes         -
+  nodes complete: 10 of 10, datapoints complete: 10 of 10, route time per question: max 0.53 ms
+
+DETAIL OF THE RESOLVE AND ROUTE STEPS (labels and aliases)
+S1: matched latex-pre-coagulation <- 'latex spoilage'; compound-formulation <- 'rubber compound' | named subsidiaries: ceat, harrisons
+     one hop adds: anticoagulant-preservation, material-ageing, monsoon-operations
+     documents direct 4, via one hop 5: ceat:E-01-01, ceat:E-01-02, ceat:E-02-01, ceat:E-03-02, harrisons:F-01-02, harrisons:F-01-05, harrisons:O-05-01, harrisons:O-05-03, kec:E-05-01
+     datapoints routed: E-01, E-02, E-03, E-05, F-01, O-05 | expected: E-01, E-03, O-05
+S2: matched acquisition-integration <- 'overseas acquisition'; integration-checklist <- 'checklist'
+     one hop adds: overseas-mobilisation-terms, process-ownership-before-cut-over
+     documents direct 7, via one hop 1: ceat:L-01-01, ceat:L-01-02, kec:C-02-02, kec:L-02-01, kec:L-02-02, kec:L-02a-01, zensar:C-05-01, zensar:C-05-04
+     datapoints routed: C-02, C-05, L-01, L-02, L-02a | expected: C-05, L-01, L-02, L-02a
+S3: matched failure-pattern <- 'failures'; project-delay-pattern <- 'delays'; recurring-pattern <- 'repeat'
+     one hop adds: breakdown-rca, materials-handling, near-miss-pattern, root-cause-analysis
+     documents direct 7, via one hop 2: ceat:E-02-01, ceat:E-02-02, ceat:E-03-06, ceat:O-01-01, ceat:O-01-02, ceat:O-02-01, kec:O-01-01, kec:O-02-01, kec:O-06-01
+     datapoints routed: E-02, E-03, O-01, O-02, O-06 | expected: E-02, O-01, O-02, O-06
+S4: matched acquisition-integration <- 'integration'; supplier-quality <- 'Supplier quality'
+     one hop adds: integration-checklist, overseas-mobilisation-terms, process-ownership-before-cut-over, supplier-feedback-loop
+     documents direct 7, via one hop 2: ceat:E-03-04, ceat:L-01-01, ceat:L-01-02, kec:C-02-02, kec:L-02-01, kec:L-02-02, kec:L-02a-01, zensar:C-05-01, zensar:C-05-04
+     datapoints routed: C-02, C-05, E-03, L-01, L-02, L-02a | expected: -
+     consented experts with evidence in the routed documents: ceat:expert/CE-1, ceat:expert/CE-3, kec:expert/KE-1, kec:expert/KE-2, zensar:expert/ZE-1, zensar:expert/ZE-3
+S5: matched compound-formulation <- 'Compound formulation' | named subsidiaries: ceat
+     one hop adds: -
+     documents direct 2, via one hop 0: ceat:E-01-01, ceat:E-01-02
+     datapoints routed: E-01 | expected: E-01
+S6: matched finance-benchmark-pre-results <- 'capex benchmarks' | named subsidiaries: ceat
+     one hop adds: -
+     documents direct 1, via one hop 0: ceat:F-06-01
+     datapoints routed: F-06 | expected: F-06
+S7: matched acquisition-integration <- 'overseas acquisition'; integration-checklist <- 'checklist'
+     one hop adds: overseas-mobilisation-terms, process-ownership-before-cut-over
+     documents direct 7, via one hop 1: ceat:L-01-01, ceat:L-01-02, kec:C-02-02, kec:L-02-01, kec:L-02-02, kec:L-02a-01, zensar:C-05-01, zensar:C-05-04
+     datapoints routed: C-02, C-05, L-01, L-02, L-02a | expected: C-05, L-01, L-02, L-02a
+S8: matched employee-onboarding <- 'onboard' | named subsidiaries: zensar
+     one hop adds: -
+     documents direct 1, via one hop 0: zensar:C-05-99
+     datapoints routed: C-05 | expected: C-05
+S9: matched ai-assisted-delivery <- 'ai assistant'; responsible-ai-use <- 'safely'; pilot-results <- 'pilot'
+     one hop adds: -
+     documents direct 4, via one hop 0: zensar:C-05-03, zensar:F-01-01, zensar:R-02-01, zensar:R-02-02
+     datapoints routed: C-05, F-01, R-02 | expected: C-05, F-01, R-02
+S10: matched root-cause-analysis <- 'RCA'; materials-handling <- 'Materials handling'; failure-pattern <- 'failures' | named subsidiaries: ceat
+     one hop adds: breakdown-rca, contamination-control, raw-material-storage, recurring-pattern
+     documents direct 5, via one hop 3: ceat:E-02-01, ceat:E-02-02, ceat:E-03-02, ceat:E-03-03, ceat:E-03-06, ceat:O-01-01, ceat:O-01-02, ceat:O-02-01
+     datapoints routed: E-02, E-03, O-01, O-02 | expected: E-02
+     narrowed out because the question names subsidiaries and no approved link joins them: harrisons, kec
+
+EXPAND STEP: approved links between documents of the routed datapoints
+S1: used 4: ceat:E-02-01 CORROBORATES ceat:E-03-05; ceat:E-03-01 ADDRESSES_GAP harrisons:O-05-04; ceat:E-03-02 SUPERSEDES ceat:E-03-06; kec:E-05-01 CORROBORATES ceat:E-03-05
+     not used, status proposed: ceat:E-03-03 CORROBORATES harrisons:F-01-04
+S2: used 2: ceat:L-01-01 CONFLICTS_WITH zensar:C-05-01; kec:L-02-01 CORROBORATES zensar:C-05-01
+S3: used 2: ceat:E-02-01 CORROBORATES ceat:E-03-05; ceat:E-03-02 SUPERSEDES ceat:E-03-06
+S9: used 0: none
+
+POLICY FILTER ON RELATIONSHIPS: a caller blocked at the Harrisons node, scenario S1
+  still used: ceat:E-02-01 CORROBORATES ceat:E-03-05; ceat:E-03-02 SUPERSEDES ceat:E-03-06; kec:E-05-01 CORROBORATES ceat:E-03-05
+  hidden because one end is at Harrisons: ceat:E-03-01 ADDRESSES_GAP harrisons:O-05-04
+
+DOCUMENTS WITHOUT ANY CONCEPT (unreachable by routing)
+  none
