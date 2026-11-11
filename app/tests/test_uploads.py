@@ -111,6 +111,44 @@ def test_downloads_in_each_format_carry_the_graph_part(mesh):
     assert client.get(base, params={"format": "xlsx"}, headers=ADMIN).status_code == 400
 
 
+@pytest.mark.parametrize("as_array", [False, True], ids=["document-object", "business-records"])
+def test_business_json_creates_a_saved_context_graph_with_searchable_content(mesh, as_array):
+    client = TestClient(app)
+    concept_id, concept_label = next((n, d["label"]) for n, d in mesh.mesh.graph.nodes(data=True) if d.get("type") == "Concept" and d.get("label"))
+    record = {"title": "JSON storage review", "content": f"Natural rubber storage is covered and ventilated. Lots are issued first in, first out. {concept_label} is checked at receipt.",
+              "checks": {"moisture": "Check each lot before mixing", "ageing": "Review lots older than ninety days"}}
+    content = json.dumps([record] if as_array else record).encode()
+    response = client.post("/api/v1/mesh/uploads", headers=ADMIN,
+                           data={"node_id": "others", "datapoint": "G-01", "graph_name": "Business JSON review"},
+                           files={"file": ("business-records.json", content, "application/json")})
+    assert response.status_code == 201, response.text
+    created = response.json()
+    doc_id = created["document"]["id"]
+    graph_id = created["context_graph"]["id"]
+    assert created["upload"]["format"] == "json" and created["status"] == "accepted"
+    assert concept_id in created["document"]["concepts"]
+    # Fetch again, independently of the creation response, to prove the saved graph and its links are available.
+    listed = client.get("/api/v1/mesh/uploads", headers=ADMIN).json()
+    assert any(g["id"] == graph_id and g["name"] == "Business JSON review" and g["inputs"] == 1 for g in listed["graphs"])
+    graph = client.get(f"/api/v1/mesh/uploads/graphs/{graph_id}", headers=ADMIN).json()
+    assert doc_id in graph["documents"]
+    assert any(e["source"] == doc_id and e["target"] == concept_id and e["type"] == "MENTIONS" for e in graph["edges"])
+    pack = client.get(f"/api/v1/mesh/uploads/graphs/{graph_id}", headers=ADMIN, params={"format": "pack"}).json()
+    assert "moisture: Check each lot" in pack["documents"][0]["body"]
+    rows = sqlite3.connect(DATA / "others" / "index.db").execute("SELECT text FROM idx WHERE doc_id = ? OR doc_id LIKE ?", (doc_id, doc_id + "#%")).fetchall()
+    assert any("Natural rubber storage" in row[0] for row in rows)
+
+
+def test_invalid_json_does_not_create_an_upload_or_context_graph(mesh):
+    client = TestClient(app)
+    response = client.post("/api/v1/mesh/uploads", headers=ADMIN,
+                           data={"node_id": "others", "datapoint": "G-01", "graph_name": "Invalid JSON graph"},
+                           files={"file": ("invalid.json", b'{"content": "A business record",}', "application/json")})
+    assert response.status_code == 422 and "JSON" in response.json()["detail"]
+    listed = client.get("/api/v1/mesh/uploads", headers=ADMIN).json()
+    assert listed["uploads"] == [] and listed["graphs"] == []
+
+
 def test_only_a_mesh_admin_uploads_and_a_bad_upload_is_refused_with_its_reason(mesh):
     client = TestClient(app)
     text = "Rubber storage is covered and ventilated, and lots are issued first in, first out, every day."

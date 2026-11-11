@@ -43,7 +43,7 @@ The development answer model is Claude (`config/model_policy.json`, entry `claud
 
 - Python 3.11+
 - Node.js 20+
-- The workspace venv at `../venv` or another environment with `app/requirements.txt` installed
+- The workspace venv at `../.venv` or another environment with `app/requirements.txt` installed
 
 ## Start locally on Windows
 
@@ -53,16 +53,16 @@ Run each service in its own PowerShell terminal.
 
 ```powershell
 Push-Location app
-..\venv\Scripts\python.exe -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+..\.venv\Scripts\python.exe -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 2. Start the subsidiary MCP servers from `app`, one process per node:
 
 ```powershell
-..\venv\Scripts\python.exe -m mcp_nodes.ceat
-..\venv\Scripts\python.exe -m mcp_nodes.kec
-..\venv\Scripts\python.exe -m mcp_nodes.zensar
-..\venv\Scripts\python.exe -m mcp_nodes.harrisons
+..\.venv\Scripts\python.exe -m mcp_nodes.ceat
+..\.venv\Scripts\python.exe -m mcp_nodes.kec
+..\.venv\Scripts\python.exe -m mcp_nodes.zensar
+..\.venv\Scripts\python.exe -m mcp_nodes.harrisons
 ```
 
 3. Start the UI:
@@ -81,7 +81,7 @@ From the repository root:
 
 ```powershell
 Push-Location app
-..\venv\Scripts\python.exe -m scripts.seed_demo_accounts
+..\.venv\Scripts\python.exe -m scripts.seed_demo_accounts
 ```
 
 The development-only seed creates five `@neuralmesh.local` accounts, four opted-in synthetic experts, one pending KEC content request, and one pending CEAT expert-introduction request. It is idempotent and only updates accounts in the reserved demo domain. The shared demo password and account list are documented in [app/scripts/DEMO_ACCOUNTS.md](app/scripts/DEMO_ACCOUNTS.md).
@@ -101,7 +101,7 @@ The flagship Ask example is the CEAT-to-Harrisons latex-spoilage question. The i
 From the repository root:
 
 ```powershell
-.\venv\Scripts\python.exe -c "import sys,pytest; sys.path.insert(0,'app'); raise SystemExit(pytest.main(['app/tests','-q']))"
+.\.venv\Scripts\python.exe -c "import sys,pytest; sys.path.insert(0,'app'); raise SystemExit(pytest.main(['app/tests','-q']))"
 ```
 
 Build the frontend from the repository root:

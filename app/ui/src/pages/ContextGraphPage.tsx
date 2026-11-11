@@ -1,14 +1,15 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Download, Eye, FilePlus2, FileUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
+import { Braces, Download, Eye, FilePlus2, FileUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
 import MeshGraphExplorer, { TYPE_COLOURS } from '../components/MeshGraphExplorer'
+import CreateJsonGraphTab from '../components/CreateJsonGraphTab'
 import { addUpload, downloadContextGraph, dropContextGraph, getContextGraph, getGraphEntity, getMeshNodes, getGraphTemplate, getUploadItems, getUploads, removeUpload, renderJsonTemplate, searchGraph, suggestUpload } from '../services/api'
 import type { CompanyId, ContextGraphSummary, ExportFormat, UploadSuggestion, ContextGraphView, GraphEntity, GraphSearchResult, MeshNodeInfo, NewItemArea, UploadItem, UploadRecord } from '../services/api'
 import { formatDateTime, linkWords, sharingWords, typeWords } from '../lib/format'
 
-type Tab = 'inputs' | 'add' | 'search'
+type Tab = 'inputs' | 'add' | 'json' | 'search'
 interface Focus { graph: string; doc: string | null }
 const KIND_WORDS: Record<string, string> = {
   sop: 'Procedure', rca: 'Root cause analysis', playbook: 'Playbook', post_mortem: 'Post-mortem', standard: 'Standard', report: 'Report',
@@ -70,12 +71,16 @@ export default function ContextGraphPage() {
       <div className="mesh-tabs" role="tablist" aria-label="Context graph views">
         <button type="button" role="tab" aria-selected={tab === 'inputs'} className={tab === 'inputs' ? 'active' : ''} onClick={() => setTab('inputs')}><Waypoints size={15} />Uploaded inputs <span>{uploads.length}</span></button>
         <button type="button" role="tab" aria-selected={tab === 'add'} className={tab === 'add' ? 'active' : ''} onClick={() => setTab('add')}><FileUp size={15} />Add input</button>
+        <button type="button" role="tab" aria-selected={tab === 'json'} className={tab === 'json' ? 'active' : ''} onClick={() => setTab('json')}><Braces size={15} />Create from JSON</button>
         <button type="button" role="tab" aria-selected={tab === 'search'} className={tab === 'search' ? 'active' : ''} onClick={() => setTab('search')}><Search size={15} />Search the graph</button>
       </div>
       {tab === 'inputs' && <UploadsTab uploads={uploads} graphs={graphs} loading={loading} isAdmin={isAdmin} focus={focus} onFocusUsed={clearFocus} onChanged={() => void load()} onAddTo={(graphId) => { setAddTarget(graphId); setTab('add') }} />}
       {tab === 'add' && (isAdmin
         ? <AddTab graphs={graphs} initialGraph={addTarget} onAdded={(record) => { setAddTarget(null); setFocus({ graph: record.context_graph.id, doc: record.document.id }); void load().then(() => setTab('inputs')) }} />
         : <div className="ask-empty-results">A mesh admin adds inputs. Your company's uploads and the shared inputs are listed under Uploaded inputs.</div>)}
+      {tab === 'json' && (isAdmin
+        ? <CreateJsonGraphTab onCreated={(record) => { setFocus({ graph: record.context_graph.id, doc: record.document.id }); void load().then(() => setTab('inputs')) }} />
+        : <div className="ask-empty-results">A mesh admin creates graphs from JSON. Your company's uploads and the shared inputs are listed under Uploaded inputs.</div>)}
       {tab === 'search' && <SearchTab />}
     </div>
   )
