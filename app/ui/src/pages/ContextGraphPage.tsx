@@ -42,7 +42,7 @@ export default function ContextGraphPage() {
   const [error, setError] = useState('')
   const [focus, setFocus] = useState<Focus | null>(null)
   const clearFocus = useCallback(() => setFocus(null), [])
-  const [addTarget, setAddTarget] = useState<string | null>(null) // the graph chosen with "Add input to this graph"
+  const [addTarget, setAddTarget] = useState<string | null>(null) // the graph chosen with "Upload input to this graph"
 
   const load = async () => {
     setLoading(true)
@@ -70,7 +70,7 @@ export default function ContextGraphPage() {
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
       <div className="mesh-tabs" role="tablist" aria-label="Context graph views">
         <button type="button" role="tab" aria-selected={tab === 'inputs'} className={tab === 'inputs' ? 'active' : ''} onClick={() => setTab('inputs')}><Waypoints size={15} />Uploaded inputs <span>{uploads.length}</span></button>
-        <button type="button" role="tab" aria-selected={tab === 'add'} className={tab === 'add' ? 'active' : ''} onClick={() => setTab('add')}><FileUp size={15} />Add input</button>
+        <button type="button" role="tab" aria-selected={tab === 'add'} className={tab === 'add' ? 'active' : ''} onClick={() => setTab('add')}><FileUp size={15} />Upload input</button>
         <button type="button" role="tab" aria-selected={tab === 'json'} className={tab === 'json' ? 'active' : ''} onClick={() => setTab('json')}><Braces size={15} />Create from JSON</button>
         <button type="button" role="tab" aria-selected={tab === 'search'} className={tab === 'search' ? 'active' : ''} onClick={() => setTab('search')}><Search size={15} />Search the graph</button>
       </div>
@@ -92,7 +92,7 @@ function UploadsTab({ uploads, graphs, loading, isAdmin, focus, onFocusUsed, onC
   const [docId, setDocId] = useState<string | null>(null)
   const [view, setView] = useState<ContextGraphView | null>(null)
   const [viewError, setViewError] = useState('')
-  const [format, setFormat] = useState('json') // the JSON file in the output template of the graph, the same file Add input gives
+  const [format, setFormat] = useState('json') // the JSON file in the output template of the graph, the same file Upload input gives
   const [busy, setBusy] = useState(false)
   const [actionError, setActionError] = useState('')
 
@@ -198,7 +198,7 @@ function UploadsTab({ uploads, graphs, loading, isAdmin, focus, onFocusUsed, onC
           <div className="mesh-section-heading"><div><div className="mesh-eyebrow">Context graph</div><h2>{graph.name}</h2>
               <small className="mesh-panel-footnote" style={{ margin: 0 }}>{graph.inputs} {graph.inputs === 1 ? 'input' : 'inputs'}{graph.removed ? ` · ${graph.removed} removed` : ''}{graph.companies.length ? ` · ${graph.companies.join(', ')}` : ''}</small></div>
             {isAdmin && <div className="context-graph-actions">
-              <button type="button" className="mesh-primary-action" onClick={() => onAddTo(graph.id)}><FilePlus2 size={15} />Add input to this graph</button>
+              <button type="button" className="mesh-primary-action" onClick={() => onAddTo(graph.id)}><FilePlus2 size={15} />Upload input to this graph</button>
               {graph.inputs > 0 && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={drop}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : <Trash2 size={14} />}Drop graph</button>}
             </div>}</div>
           <div className="context-inputs" role="list" aria-label="Inputs of the context graph">
@@ -410,7 +410,7 @@ function AddTab({ graphs, initialGraph, onAdded }: { graphs: ContextGraphSummary
 
   return (
     <section className="mesh-section-panel">
-      <form className="context-form" onSubmit={(event) => { event.preventDefault(); void submit(canAdd ? 'add' : 'append') }} aria-label="Add input">
+      <form className="context-form" onSubmit={(event) => { event.preventDefault(); void submit(canAdd ? 'add' : 'append') }} aria-label="Upload input">
         <label>File
           <input className="mesh-field" type="file" accept=".txt,.md,.csv,.json,.pdf,.docx" onChange={(event) => chooseFile(event.target.files?.[0] ?? null)} />
           <span>{reading ? 'Reading the file' : suggestion
