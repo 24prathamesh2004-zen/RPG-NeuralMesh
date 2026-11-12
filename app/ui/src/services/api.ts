@@ -136,7 +136,7 @@ export interface GraphCheck { rule: string; meaning: string; failures: number; e
 
 export interface MeshGraphView {
   nodes: { id: string; type: string; label: string; subsidiary?: string | null }[]
-  edges: { id: string; type: string; source: string; target: string; status: string }[]
+  edges: { id: string; type: string; source: string; target: string; status: string; evidence?: string; by?: 'code' | 'model'; document?: string }[] // evidence, by and document: a link taken from the text of an upload
   counts: Record<string, number>
   exports: Record<string, string>
   revision?: number
@@ -203,6 +203,7 @@ export interface DashboardSnapshot {
   activity_by_node: Record<string, number>
   recent_activity: AuditEntry[]
   synthetic: boolean
+  ingested_graphs?: number // graphs a person wrote as JSON, kept by the central service
 }
 
 export interface SessionResponse {
@@ -330,12 +331,14 @@ export interface SharingRule { ceiling: string | null; never_leave: boolean; com
 export interface ContextGraphRef { id: string; name: string }
 export interface ContextGraphSummary { id: string; name: string; inputs: number; removed: number; nodes: CompanyId[]; companies: string[]; latest: string }
 export interface UploadRecord {
+  synthetic?: boolean // true when the file was sent as invented data. A record without it is real
   node_id: CompanyId
   company?: string
   context_graph: ContextGraphRef
   status: 'accepted' | 'rejected' | 'removed'
   removed?: { by_role: string; by_company: string; at: string } | null
   document: { id: string; datapoint: string; title: string; kind: string; kind_label?: string; version: string; tags: string[]; summary?: string; concepts?: string[] }
+  extraction?: { entities: number; links: number; proposed: number; model?: string | null; failed?: string } | null // what was taken from the text
   upload: { file: string; format: string; chars: number; sha256: string; by_role: string; by_company: string; by_company_name?: string; at: string }
   concept_matches?: Record<string, 'phrase' | 'words' | 'tag'>
   sharing: SharingRule
@@ -347,7 +350,9 @@ export interface UploadRecord {
   graph?: UploadGraph | null
 }
 export interface UploadGraph extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { centre: string }
-export interface ContextGraphView extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { id: string; name: string; documents: string[] }
+export interface QualityNote { level: 'ok' | 'warn' | 'note'; text: string }
+export interface ContextGraphView extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { id: string; name: string; documents: string[]; quality?: QualityNote[] }
+export const decideLink = (docId: string, linkId: string, status: 'approved' | 'rejected') => api.post(`/mesh/uploads/${docId}/links/${linkId}`, { status })
 export interface UploadItem { code: string; title: string; ceiling: string; never_leave: boolean; owner_role?: string | null; domain: string }
 export interface NewItemArea { letter: string; domain: string; title: string }
 export interface GraphSearchResult {
@@ -371,7 +376,7 @@ export interface UploadSuggestion {
 }
 export const suggestUpload = (form: FormData) => api.post<UploadSuggestion>('/mesh/uploads/suggest', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120_000 })
 export interface GraphTemplate { template: unknown; own: boolean; suggested: unknown; fields: Record<string, Record<string, string>>; can_change: boolean }
-// the output template of a context graph: its own when one is kept with it, else the suggested one. Without an id, the suggested one
+// the JSON structure of a context graph: its own when one is kept with it, else the standard one. Without an id, the standard one
 export const getGraphTemplate = (graphId?: string) => api.get<GraphTemplate>('/mesh/uploads/json-templates', { params: graphId ? { graph_id: graphId } : {} })
 // without a template the graph is given in the template kept with it
 export const renderJsonTemplate = (graphId: string, template?: unknown) => api.post<{ output: unknown }>('/mesh/uploads/json-templates/render', template === undefined ? { graph_id: graphId } : { graph_id: graphId, template })
@@ -387,6 +392,27 @@ export const getContextGraph = (graphId: string) => api.get<ContextGraphView>(`/
 export const downloadContextGraph = (graphId: string, format: string) =>
   api.get<Blob>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`, { params: { format }, responseType: 'blob' })
 export const dropContextGraph = (graphId: string) =>
-  api.delete<{ graph: ContextGraphRef; removed: UploadRecord[]; rebuilt: string[]; failed: Record<string, string>; refresh: Record<string, string> }>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`)
+  api.delete<{ graph: ContextGraphRef; removed: UploadRecord[]; rebuilt: string[]; failed: Record<string, string>; refresh: Record<string, string>; corrections_dropped?: string[] }>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`)
 export const searchGraph = (q: string) => api.get<{ query: string; results: GraphSearchResult[]; by_vector: boolean; total: number }>('/mesh/graph/search', { params: { q } })
 export const getGraphEntity = (id: string) => api.get<GraphEntity>(`/mesh/graph/entity/${id}`)
+
+// Ingested context graphs: the JSON a person writes, kept as written (services/context_graph_ingest.py)
+export interface IngestedGraphStamp { at: string; by_role: string; by_company: string; by_company_name?: string }
+export interface IngestedGraphSummary {
+  id: string; name: string; company: CompanyId; company_name: string; description?: string | null
+  sensitivity: 'Public' | 'Internal' | 'Confidential' | 'Restricted'; sharing: 'company' | 'group'; synthetic: boolean
+  nodes: number; edges: number; node_types: Record<string, number>; edge_types: Record<string, number>
+  created: IngestedGraphStamp; updated?: IngestedGraphStamp | null; can_change: boolean
+  corrects?: string | null // the id of the uploaded graph this graph corrects, loaded from that graph's JSON
+  endpoints: { graph: string; view: string; query: string }
+}
+export interface IngestReport { filled: string[]; defaults: string[]; ignored: string[]; warnings: string[] }
+export interface IngestResult extends IngestReport { graph: IngestedGraphSummary; replaced: boolean; unchanged: boolean; checked_only?: boolean }
+export interface IngestRefusal extends IngestReport { detail: string; problems: string[] }
+export const ingestGraph = (text: string) => api.post<IngestResult>('/context-graphs', text, { headers: { 'Content-Type': 'application/json' }, timeout: 300_000 }) // the text as written
+export const checkGraph = (text: string) => api.post<IngestResult>('/context-graphs', text, { params: { check: true }, headers: { 'Content-Type': 'application/json' }, timeout: 300_000 }) // checks and keeps nothing
+export const getIngestedGraphs = () => api.get<{ graphs: IngestedGraphSummary[] }>('/context-graphs')
+export const getIngestSample = () => api.get<Record<string, unknown>>('/context-graphs/sample')
+export const getIngestedGraph = (graphId: string) => api.get<Record<string, unknown>>(`/context-graphs/${encodeURIComponent(graphId)}`)
+export const getIngestedGraphView = (graphId: string) => api.get<ContextGraphView & { graph: IngestedGraphSummary }>(`/context-graphs/${encodeURIComponent(graphId)}/view`)
+export const dropIngestedGraph = (graphId: string) => api.delete<{ dropped: { id: string; name: string; company: CompanyId; company_name: string; nodes: number; edges: number } }>(`/context-graphs/${encodeURIComponent(graphId)}`)

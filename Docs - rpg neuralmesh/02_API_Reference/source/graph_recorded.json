@@ -1,0 +1,3227 @@
+[
+ {
+  "id": "signin",
+  "title": "Sign in and get a token",
+  "method": "POST",
+  "path": "/api/v1/auth/signin",
+  "params": null,
+  "body": {
+   "email": "presenter@neuralmesh.local",
+   "password": "<password>"
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "none",
+  "response": {
+   "access_token": "<token>",
+   "token_type": "bearer",
+   "user": {
+    "user_id": "418b9454-6d07-47cc-a0b5-c842ec7d57f5",
+    "email": "presenter@neuralmesh.local",
+    "display_name": "NeuralMesh Presenter",
+    "company": "zensar",
+    "company_name": "Zensar",
+    "roles": [
+     "group_user",
+     "mesh_admin"
+    ],
+    "expert_profile": null
+   }
+  }
+ },
+ {
+  "id": "uploads",
+  "title": "Uploaded inputs and their context graphs",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "uploads": [
+    {
+     "node_id": "others",
+     "company": "Others",
+     "status": "accepted",
+     "synthetic": false,
+     "context_graph": {
+      "id": "g-c92ba8ed",
+      "name": "Tread compound formulation change request, restricted"
+     },
+     "document": {
+      "id": "others:G-01-U004",
+      "datapoint": "others:G-01",
+      "title": "Tread compound formulation change request, restricted",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+       "compound-formulation",
+       "regulatory-change-control"
+      ],
+      "summary": "Tread compound formulation change request, restricted Datapoint: CEAT E-01, compound formulations and material specifications. Never leaves CEAT. Request: change the tread compound of the truck radial range to a new filler blend from the first quarter of 2027. The formulation table of this request is held in the product lifecycle system and is not copied here.",
+      "concepts": [
+       "concept:compound-formulation",
+       "concept:regulatory-change-control"
+      ]
+     },
+     "upload": {
+      "file": "10_ceat_tread_compound_change_request_RESTRICTED.txt",
+      "format": "text",
+      "chars": 611,
+      "sha256": "745fc70c9356ce46cabf6278c9d17909511ef20d203bcfa180f0764ddb83dfd5",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-11-12T06:11:01+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:compound-formulation": "phrase",
+      "concept:regulatory-change-control": "phrase"
+     },
+     "kind_detected": {
+      "by": "model",
+      "reason": "stand-in: no rule matched, report is the default"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "RAG",
+      "never_leave": false,
+      "item_title": "Shared inputs of the group",
+      "shared": true
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "others",
+     "company": "Others",
+     "status": "accepted",
+     "synthetic": false,
+     "context_graph": {
+      "id": "g-adb0b637",
+      "name": "Knowledge transfer and handover playbook"
+     },
+     "document": {
+      "id": "others:G-01-U003",
+      "datapoint": "others:G-01",
+      "title": "Knowledge transfer and handover playbook",
+      "kind": "playbook",
+      "version": "2026-11",
+      "tags": [
+       "knowledge-transfer-and-handover",
+       "employee-onboarding",
+       "client-service-desk",
+       "process-ownership-before-system-cut-over"
+      ],
+      "summary": "Knowledge transfer and handover playbook Used when a delivery team takes over an application from another team, a client or an acquired unit. Weeks 1 and 2: shadowing The incoming team shadows the outgoing team on live tickets. Every runbook, password vault entry and deployment step is listed in one handover register.",
+      "concepts": [
+       "concept:client-service-desk",
+       "concept:employee-onboarding",
+       "concept:integration-checklist",
+       "concept:knowledge-transfer",
+       "concept:overseas-mobilisation-terms",
+       "concept:process-ownership-before-cut-over"
+      ]
+     },
+     "upload": {
+      "file": "07_zensar_knowledge_transfer_handover_playbook.md",
+      "format": "markdown",
+      "chars": 1173,
+      "sha256": "2eab9399d0370ca6d6d654386b5685af72201a25ef3339ea31b1325134c4684a",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-11-12T05:17:42+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:client-service-desk": "phrase",
+      "concept:employee-onboarding": "phrase",
+      "concept:integration-checklist": "phrase",
+      "concept:knowledge-transfer": "phrase",
+      "concept:overseas-mobilisation-terms": "phrase",
+      "concept:process-ownership-before-cut-over": "phrase"
+     },
+     "kind_detected": {
+      "by": "model",
+      "reason": "stand-in: the words \"playbook\" in the file name or title"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "RAG",
+      "never_leave": false,
+      "item_title": "Shared inputs of the group",
+      "shared": true
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "ceat",
+     "company": "CEAT",
+     "status": "accepted",
+     "synthetic": false,
+     "context_graph": {
+      "id": "ceat:E-03-U001",
+      "name": "Plant storage note, Kochi bales"
+     },
+     "document": {
+      "id": "ceat:E-03-U001",
+      "datapoint": "ceat:E-03",
+      "title": "Plant storage note, Kochi bales",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [
+       "storage",
+       "natural-rubber",
+       "raw-material-storage"
+      ],
+      "summary": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out. A bale stored for more than ninety days is given an ageing check before it goes to mixing. Dirt content and volatile matter are trended per supplier lot, so drift shows before the material reaches the mixer. Supplier feedback with the lot data attached goes out every month.",
+      "concepts": [
+       "concept:material-ageing",
+       "concept:materials-handling",
+       "concept:raw-material-storage",
+       "concept:time-to-use-limit"
+      ]
+     },
+     "upload": {
+      "file": "plant_storage_note.txt",
+      "format": "text",
+      "chars": 392,
+      "sha256": "08f465a4fef51a2fb1a8191af9c5b01b238e4b08ef9dcd9165b8ab2d409017bd",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-11-09T11:59:11+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:material-ageing": "tag",
+      "concept:materials-handling": "tag",
+      "concept:raw-material-storage": "tag",
+      "concept:time-to-use-limit": "tag"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Approved materials handling and storage learnings (non-formula)",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "raychem",
+     "company": "Raychem RPG",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-d03155d7",
+      "name": "33 kV cable joint failures"
+     },
+     "document": {
+      "id": "raychem:O-02-U001",
+      "datapoint": "raychem:O-02",
+      "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "kind": "rca",
+      "version": "2026-11",
+      "tags": [
+       "33kv",
+       "teardown"
+      ],
+      "summary": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026. Six failed joints were cut open and checked for the four causes in the set order. Water entry was the cause in 3 joints, a preparation error in 2 and a connector defect in 1. No joint failed from overload.",
+      "concepts": [
+       "concept:cable-accessory-failure-analysis",
+       "concept:cable-joint-installation",
+       "concept:failure-pattern",
+       "concept:installation-quality-records",
+       "concept:root-cause-analysis"
+      ]
+     },
+     "upload": {
+      "file": "failed_joint_teardown_findings.pdf",
+      "format": "pdf",
+      "chars": 2509,
+      "sha256": "e2ee953049529d42936a1f3b6d9e3c85a26817592758a38c645922b696f676f7",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-11-04T10:36:22+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:cable-accessory-failure-analysis": "phrase",
+      "concept:cable-joint-installation": "phrase",
+      "concept:failure-pattern": "phrase",
+      "concept:installation-quality-records": "phrase",
+      "concept:root-cause-analysis": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Field service and failure analysis",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "others",
+     "company": "Others",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-995e7d67",
+      "name": "AI-assisted delivery pilots"
+     },
+     "document": {
+      "id": "others:G-01-U002",
+      "datapoint": "others:G-01",
+      "title": "Responsible AI use, group guidance note",
+      "kind": "policy",
+      "version": "2026-10",
+      "tags": [
+       "guidance",
+       "ai-policy"
+      ],
+      "summary": "Responsible AI use, group guidance note Guidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is used in work that leaves the team.",
+      "concepts": [
+       "concept:ai-assisted-delivery",
+       "concept:responsible-ai-use"
+      ]
+     },
+     "upload": {
+      "file": "responsible_ai_use_group_guidance.txt",
+      "format": "text",
+      "chars": 1397,
+      "sha256": "6d9b462389b0fa13788b89439e3aa08924b7449a42c356461e7f49051a8884f0",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-10-15T06:09:58+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:ai-assisted-delivery": "phrase",
+      "concept:responsible-ai-use": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "RAG",
+      "never_leave": false,
+      "item_title": "Shared inputs of the group",
+      "shared": true
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "zensar",
+     "company": "Zensar",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-995e7d67",
+      "name": "AI-assisted delivery pilots"
+     },
+     "document": {
+      "id": "zensar:R-02-U001",
+      "datapoint": "zensar:R-02",
+      "title": "Pilot results, AI-assisted code review in four delivery teams",
+      "kind": "report",
+      "version": "2026-10",
+      "tags": [
+       "pilot",
+       "code-review"
+      ],
+      "summary": "title: Pilot results, AI-assisted code review in four delivery teams summary: Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks. A person approved every change. The median time from opening a change to its approval fell from 19 hours to 11 hours. Errors found in review rose from 3.1 to 4.4 for every 1,000 changed lines.",
+      "concepts": [
+       "concept:ai-assisted-delivery",
+       "concept:pilot-results",
+       "concept:responsible-ai-use"
+      ]
+     },
+     "upload": {
+      "file": "ai_code_review_pilot_results.json",
+      "format": "json",
+      "chars": 2518,
+      "sha256": "645277df943de5a034ae15ac1bd2dfc0529e2a239373cae4268ef32562d9886f",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-10-08T08:21:15+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:ai-assisted-delivery": "phrase",
+      "concept:pilot-results": "phrase",
+      "concept:responsible-ai-use": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Pilot and experiment results (client names masked)",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "harrisons",
+     "company": "Harrisons Malayalam",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-2f866293",
+      "name": "Natural rubber storage and ageing"
+     },
+     "document": {
+      "id": "harrisons:O-05-U001",
+      "datapoint": "harrisons:O-05",
+      "title": "Latex spoilage by collection-to-factory time, monsoon weeks of 2026",
+      "kind": "aggregate",
+      "version": "2026-09",
+      "tags": [
+       "estates",
+       "monsoon-2026"
+      ],
+      "summary": "week_starting,season,collection_to_factory_time,estates_reporting,latex_spoilage_percent,pre_coagulation_share_of_spoilage_percent 2026-06-01,monsoon,under 2.5 hours,5,4.6,66 2026-06-01,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppressed 2026-06-01,monsoon,over 3.5 hours,6,5.6,71 2026-06-08,monsoon,under 2.5 hours,5,4.9,67 2026-06-08,monsoon,2.5 to 3.5 hours,fewer than 3,suppressed,suppres…",
+      "concepts": [
+       "concept:latex-collection-and-transport",
+       "concept:latex-pre-coagulation",
+       "concept:monsoon-operations"
+      ]
+     },
+     "upload": {
+      "file": "latex_spoilage_monsoon_weeks_2026.csv",
+      "format": "csv",
+      "chars": 2184,
+      "sha256": "ad559570fba53e33ebe93537a02f156ef5d9fbdda6a1e8b99fcddf11d91d80ea",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-09-24T04:52:40+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:latex-collection-and-transport": "phrase",
+      "concept:latex-pre-coagulation": "phrase",
+      "concept:monsoon-operations": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Aggregated latex-spoilage and estate trends",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "others",
+     "company": "Others",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-e6f6addf",
+      "name": "Overseas acquisition integration"
+     },
+     "document": {
+      "id": "others:G-01-U001",
+      "datapoint": "others:G-01",
+      "title": "Group integration forum, minutes of September 2026",
+      "kind": "note",
+      "version": "2026-09",
+      "tags": [
+       "minutes",
+       "forum"
+      ],
+      "summary": "Group integration forum, minutes of September 2026 Meeting of 15 September 2026. Present: the integration leads of KEC International and Zensar, the head of finance processes of the group and the head of people operations of the group. Decisions From 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.",
+      "concepts": [
+       "concept:acquisition-integration",
+       "concept:overseas-mobilisation-terms",
+       "concept:process-ownership-before-cut-over"
+      ]
+     },
+     "upload": {
+      "file": "integration_forum_minutes_2026_09.docx",
+      "format": "word",
+      "chars": 1640,
+      "sha256": "e43537f1867fe7a0c425db000ff375af84dc4f7cb7d5df2cb3243f7ad171b49b",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-09-17T11:05:33+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:acquisition-integration": "phrase",
+      "concept:overseas-mobilisation-terms": "phrase",
+      "concept:process-ownership-before-cut-over": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "RAG",
+      "never_leave": false,
+      "item_title": "Shared inputs of the group",
+      "shared": true
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "ceat",
+     "company": "CEAT",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-2f866293",
+      "name": "Natural rubber storage and ageing"
+     },
+     "document": {
+      "id": "ceat:E-01-U001",
+      "datapoint": "ceat:E-01",
+      "title": "Material specification, natural rubber grades and storage limits",
+      "kind": "standard",
+      "version": "2026-09",
+      "tags": [
+       "natural-rubber",
+       "grades"
+      ],
+      "summary": "Material specification, natural rubber grades and storage limits Specification of the raw material team of CEAT, revision 4, valid from 1 September 2026. A lot of natural rubber is accepted when all four incoming tests of its grade are inside the limits of the table below. A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
+      "concepts": [
+       "concept:compound-formulation",
+       "concept:incoming-quality-control",
+       "concept:lot-acceptance",
+       "concept:material-ageing",
+       "concept:raw-material-storage",
+       "concept:supplier-feedback-loop",
+       "concept:time-to-use-limit"
+      ]
+     },
+     "upload": {
+      "file": "natural_rubber_grades_material_specification_rev4.docx",
+      "format": "word",
+      "chars": 1499,
+      "sha256": "6b303d9a6051fd9acf5b7a6f37e5542c30a870764f3d19f321b9910d8ad13b76",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-09-02T07:48:06+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:compound-formulation": "phrase",
+      "concept:incoming-quality-control": "phrase",
+      "concept:lot-acceptance": "phrase",
+      "concept:material-ageing": "phrase",
+      "concept:raw-material-storage": "words",
+      "concept:supplier-feedback-loop": "phrase",
+      "concept:time-to-use-limit": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "MD",
+      "never_leave": true,
+      "item_title": "Compound formulations and material specs",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "ceat",
+     "company": "CEAT",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-2f866293",
+      "name": "Natural rubber storage and ageing"
+     },
+     "document": {
+      "id": "ceat:E-03-U003",
+      "datapoint": "ceat:E-03",
+      "title": "Warehouse storage audit, Plant 3, April to June 2026",
+      "kind": "report",
+      "version": "2026-08",
+      "tags": [
+       "audit",
+       "plant-3",
+       "warehouse"
+      ],
+      "summary": "Warehouse storage audit, Plant 3, April to June 2026 Audit of 6 and 7 July 2026 by the raw material team of CEAT. All four bays of the raw material warehouse are covered and ventilated, and every bale of natural rubber stood on a pallet. 1,180 of the 1,229 issue lines followed first in, first out. 11 of the 412 lots in store were past the time-to-use limit of their grade.",
+      "concepts": [
+       "concept:contamination-control",
+       "concept:lot-traceability",
+       "concept:material-ageing",
+       "concept:raw-material-storage",
+       "concept:time-to-use-limit"
+      ]
+     },
+     "upload": {
+      "file": "plant3_warehouse_storage_audit_apr_jun_2026.pdf",
+      "format": "pdf",
+      "chars": 2436,
+      "sha256": "cc32dec565023d403ed18b442704718045b911cfccabeea5d994271859995e3c",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-08-19T05:27:54+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:contamination-control": "phrase",
+      "concept:lot-traceability": "phrase",
+      "concept:material-ageing": "phrase",
+      "concept:raw-material-storage": "phrase",
+      "concept:time-to-use-limit": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Approved materials handling and storage learnings (non-formula)",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "ceat",
+     "company": "CEAT",
+     "status": "removed",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-2f866293",
+      "name": "Natural rubber storage and ageing"
+     },
+     "document": {
+      "id": "ceat:E-03-U002",
+      "datapoint": "ceat:E-03",
+      "title": "Warehouse storage audit, Plant 3, draft",
+      "kind": "report",
+      "version": "2026-08",
+      "tags": [
+       "audit",
+       "draft"
+      ],
+      "summary": "Warehouse storage audit, Plant 3, April to June 2026. Draft for review. Draft findings of the audit of 6 and 7 July 2026. The counts are not final. The issue lines of June are still to be checked against the receipt dates, and the result of the storage ageing check is open for 4 lots. Findings so far All four bays of the raw material warehouse are covered and ventilated.",
+      "concepts": [
+       "concept:material-ageing",
+       "concept:raw-material-storage",
+       "concept:time-to-use-limit"
+      ]
+     },
+     "upload": {
+      "file": "plant3_warehouse_storage_audit_draft.txt",
+      "format": "text",
+      "chars": 1065,
+      "sha256": "23004583bad775f39d17a2a0354d812be4858857f00d9449e0549249182e96a3",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-08-14T10:03:29+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:material-ageing": "phrase",
+      "concept:raw-material-storage": "phrase",
+      "concept:time-to-use-limit": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Approved materials handling and storage learnings (non-formula)",
+      "shared": false
+     },
+     "removed": {
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-08-19T05:31:12+00:00"
+     },
+     "in_graph": false
+    },
+    {
+     "node_id": "zensar",
+     "company": "Zensar",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-e6f6addf",
+      "name": "Overseas acquisition integration"
+     },
+     "document": {
+      "id": "zensar:C-05-U001",
+      "datapoint": "zensar:C-05",
+      "title": "Systems cut-over runbook for an acquired unit",
+      "kind": "playbook",
+      "version": "2026-08",
+      "tags": [
+       "runbook",
+       "cut-over"
+      ],
+      "summary": "Systems cut-over runbook for an acquired unit This runbook is the cut-over part of the integration playbook. It is used when the systems of an acquired unit move to the systems of the buyer. A cut-over starts only after the process owner signs off the target process. Both toolchains stay in use until that sign-off, and the old tools are retired in phases.",
+      "concepts": [
+       "concept:acquisition-integration",
+       "concept:integration-checklist",
+       "concept:overseas-mobilisation-terms",
+       "concept:process-ownership-before-cut-over"
+      ]
+     },
+     "upload": {
+      "file": "systems_cutover_runbook.md",
+      "format": "markdown",
+      "chars": 2193,
+      "sha256": "d0979c20a4beaef4c5a12ff3ca02c203a811125646e656d63fa0b219e6b801a5",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-08-11T09:15:47+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:acquisition-integration": "phrase",
+      "concept:integration-checklist": "phrase",
+      "concept:overseas-mobilisation-terms": "phrase",
+      "concept:process-ownership-before-cut-over": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "RAG",
+      "never_leave": false,
+      "item_title": "Delivery and integration playbooks",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    },
+    {
+     "node_id": "kec",
+     "company": "KEC International",
+     "status": "accepted",
+     "synthetic": true,
+     "context_graph": {
+      "id": "g-e6f6addf",
+      "name": "Overseas acquisition integration"
+     },
+     "document": {
+      "id": "kec:L-02-U001",
+      "datapoint": "kec:L-02",
+      "title": "Integration review, first 100 days of the overseas unit",
+      "kind": "post_mortem",
+      "version": "2026-07",
+      "tags": [
+       "integration-review",
+       "overseas-unit"
+      ],
+      "summary": "Integration review, first 100 days of the overseas unit Review by the project management office of KEC International, July 2026. The purchase and invoice systems of the acquired unit were cut over on day 21, before the process owners were agreed. Site teams rebuilt their old steps as 14 workarounds outside the new system. Local labour, contract and payment terms were first reviewed on day 63.",
+      "concepts": [
+       "concept:acquisition-integration",
+       "concept:overseas-mobilisation-terms",
+       "concept:process-ownership-before-cut-over"
+      ]
+     },
+     "upload": {
+      "file": "integration_review_first_100_days.pdf",
+      "format": "pdf",
+      "chars": 2110,
+      "sha256": "c5b8e59258f99f55340f33844294da6a59057b3fe5f72f5216fa77749620aae4",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "at": "2026-07-29T06:42:18+00:00",
+      "by_company_name": "Zensar"
+     },
+     "concept_matches": {
+      "concept:acquisition-integration": "phrase",
+      "concept:overseas-mobilisation-terms": "phrase",
+      "concept:process-ownership-before-cut-over": "phrase"
+     },
+     "extraction": null,
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "item_title": "Overseas integration post-mortem",
+      "shared": false
+     },
+     "removed": null,
+     "in_graph": true
+    }
+   ],
+   "graphs": [
+    {
+     "id": "g-c92ba8ed",
+     "name": "Tread compound formulation change request, restricted",
+     "inputs": 1,
+     "removed": 0,
+     "nodes": [
+      "others"
+     ],
+     "companies": [
+      "Others"
+     ],
+     "latest": "2026-11-12T06:11:01+00:00"
+    },
+    {
+     "id": "g-adb0b637",
+     "name": "Knowledge transfer and handover playbook",
+     "inputs": 1,
+     "removed": 0,
+     "nodes": [
+      "others"
+     ],
+     "companies": [
+      "Others"
+     ],
+     "latest": "2026-11-12T05:17:42+00:00"
+    },
+    {
+     "id": "ceat:E-03-U001",
+     "name": "Plant storage note, Kochi bales",
+     "inputs": 1,
+     "removed": 0,
+     "nodes": [
+      "ceat"
+     ],
+     "companies": [
+      "CEAT"
+     ],
+     "latest": "2026-11-09T11:59:11+00:00"
+    },
+    {
+     "id": "g-d03155d7",
+     "name": "33 kV cable joint failures",
+     "inputs": 1,
+     "removed": 0,
+     "nodes": [
+      "raychem"
+     ],
+     "companies": [
+      "Raychem RPG"
+     ],
+     "latest": "2026-11-04T10:36:22+00:00"
+    },
+    {
+     "id": "g-995e7d67",
+     "name": "AI-assisted delivery pilots",
+     "inputs": 2,
+     "removed": 0,
+     "nodes": [
+      "others",
+      "zensar"
+     ],
+     "companies": [
+      "Others",
+      "Zensar"
+     ],
+     "latest": "2026-10-15T06:09:58+00:00"
+    },
+    {
+     "id": "g-2f866293",
+     "name": "Natural rubber storage and ageing",
+     "inputs": 3,
+     "removed": 1,
+     "nodes": [
+      "ceat",
+      "harrisons"
+     ],
+     "companies": [
+      "CEAT",
+      "Harrisons Malayalam"
+     ],
+     "latest": "2026-09-24T04:52:40+00:00"
+    },
+    {
+     "id": "g-e6f6addf",
+     "name": "Overseas acquisition integration",
+     "inputs": 3,
+     "removed": 0,
+     "nodes": [
+      "kec",
+      "others",
+      "zensar"
+     ],
+     "companies": [
+      "KEC International",
+      "Others",
+      "Zensar"
+     ],
+     "latest": "2026-09-17T11:05:33+00:00"
+    }
+   ],
+   "kinds": [
+    "sop",
+    "rca",
+    "playbook",
+    "post_mortem",
+    "standard",
+    "report",
+    "policy",
+    "wiki",
+    "aggregate",
+    "note",
+    "study_material",
+    "role_profile",
+    "other"
+   ],
+   "formats": [
+    ".csv",
+    ".docx",
+    ".json",
+    ".md",
+    ".pdf",
+    ".txt"
+   ],
+   "export_formats": [
+    "json",
+    "graphml",
+    "csv",
+    "pack",
+    "cypher",
+    "mermaid"
+   ],
+   "export_format_list": [
+    {
+     "id": "json",
+     "name": "JSON (entities and links)",
+     "custom": false
+    },
+    {
+     "id": "graphml",
+     "name": "GraphML (for graph tools)",
+     "custom": false
+    },
+    {
+     "id": "csv",
+     "name": "CSV (one row per entity and link)",
+     "custom": false
+    },
+    {
+     "id": "pack",
+     "name": "Knowledge pack (the documents)",
+     "custom": false
+    },
+    {
+     "id": "cypher",
+     "name": "Cypher (for Neo4j)",
+     "extension": "cypher",
+     "custom": false
+    },
+    {
+     "id": "mermaid",
+     "name": "Mermaid (diagram text)",
+     "extension": "mmd",
+     "custom": false
+    }
+   ]
+  }
+ },
+ {
+  "id": "cg_list",
+  "title": "Ingested graphs the person may see",
+  "method": "GET",
+  "path": "/api/v1/context-graphs",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graphs": [
+    {
+     "id": "cg-3a828397",
+     "name": "Example: line project risks",
+     "company": "kec",
+     "company_name": "KEC International",
+     "description": null,
+     "sensitivity": "Restricted",
+     "sharing": "company",
+     "synthetic": false,
+     "nodes": 6,
+     "edges": 5,
+     "node_types": {
+      "Risk": 2,
+      "Project": 1,
+      "Site": 1,
+      "Action": 1,
+      "Crew": 1
+     },
+     "edge_types": {
+      "AT_RISK_OF": 2,
+      "HAS_SITE": 1,
+      "REDUCED_BY": 1,
+      "ASSIGNED_TO": 1
+     },
+     "created": {
+      "at": "2026-11-11T07:21:22+00:00",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "by_company_name": "Zensar"
+     },
+     "updated": null,
+     "can_change": true,
+     "corrects": null,
+     "endpoints": {
+      "graph": "/api/v1/context-graphs/cg-3a828397",
+      "view": "/api/v1/context-graphs/cg-3a828397/view",
+      "query": "/api/v1/context-graphs/cg-3a828397/query"
+     }
+    },
+    {
+     "id": "cg-1cc11e1e",
+     "name": "Example: mixing line spare parts",
+     "company": "ceat",
+     "company_name": "CEAT",
+     "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.",
+     "sensitivity": "Internal",
+     "sharing": "company",
+     "synthetic": true,
+     "nodes": 9,
+     "edges": 10,
+     "node_types": {
+      "Machine": 2,
+      "Part": 2,
+      "Supplier": 2,
+      "Plant": 1,
+      "Line": 1,
+      "Defect": 1
+     },
+     "edge_types": {
+      "SUPPLIES": 3,
+      "HAS_MACHINE": 2,
+      "USES_PART": 2,
+      "HAS_LINE": 1,
+      "AFFECTS": 1,
+      "SEEN_ON": 1
+     },
+     "created": {
+      "at": "2026-11-11T07:18:54+00:00",
+      "by_role": "Mesh admin",
+      "by_company": "zensar",
+      "by_company_name": "Zensar"
+     },
+     "updated": null,
+     "can_change": true,
+     "corrects": null,
+     "endpoints": {
+      "graph": "/api/v1/context-graphs/cg-1cc11e1e",
+      "view": "/api/v1/context-graphs/cg-1cc11e1e/view",
+      "query": "/api/v1/context-graphs/cg-1cc11e1e/query"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "id": "search",
+  "title": "The one search: the graph part",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph/search",
+  "params": {
+   "q": "teardown"
+  },
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "query": "teardown",
+   "results": [
+    {
+     "id": "raychem:O-02-U001",
+     "type": "Document",
+     "label": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+     "subsidiary": "raychem",
+     "company": "Raychem RPG",
+     "owner": null,
+     "matched": "label",
+     "sharing": {
+      "ceiling": "SUM",
+      "never_leave": false,
+      "company": "raychem",
+      "item": "Field service and failure analysis",
+      "code": "O-02",
+      "shared": false
+     },
+     "connections": {
+      "IN_DATAPOINT": 1,
+      "MENTIONS": 5
+     }
+    },
+    {
+     "id": "concept:cable-accessory-failure-analysis",
+     "type": "Concept",
+     "label": "Cable accessory failure analysis",
+     "subsidiary": null,
+     "company": null,
+     "owner": "Mesh knowledge curator",
+     "matched": "alias or tag",
+     "sharing": null,
+     "connections": {
+      "MENTIONS": 4
+     }
+    }
+   ],
+   "by_vector": false,
+   "total": 2
+  }
+ },
+ {
+  "id": "entity",
+  "title": "One topic with its links",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph/entity/concept:lot-acceptance",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "schema_version": "1.0",
+   "id": "concept:lot-acceptance",
+   "type": "Concept",
+   "label": "Lot acceptance",
+   "layer": "core",
+   "owner": "Mesh knowledge curator",
+   "retired": false,
+   "aliases": [
+    "incoming lot acceptance",
+    "acceptance testing"
+   ],
+   "properties": {
+    "domain": "engineering"
+   },
+   "connections": {
+    "BROADER": 1,
+    "MENTIONS": 2,
+    "SIMILAR_TO": 1
+   },
+   "subsidiary": null,
+   "company": null,
+   "sharing": null,
+   "related": {
+    "BROADER": [
+     {
+      "id": "concept:incoming-quality-control",
+      "type": "Concept",
+      "label": "Incoming quality control",
+      "status": "live",
+      "edge_status": "approved",
+      "via": null,
+      "properties": {
+       "confidence": 1.0
+      }
+     }
+    ],
+    "MENTIONS (incoming)": [
+     {
+      "id": "ceat:E-01-U001",
+      "type": "Document",
+      "label": "Material specification, natural rubber grades and storage limits",
+      "status": "live",
+      "edge_status": "approved",
+      "via": null
+     },
+     {
+      "id": "ceat:E-03-01",
+      "type": "Document",
+      "label": "Incoming natural-rubber lot acceptance and trending",
+      "status": "live",
+      "edge_status": "approved",
+      "via": null
+     }
+    ],
+    "SIMILAR_TO": [
+     {
+      "id": "concept:lot-quality-trending",
+      "type": "Concept",
+      "label": "Lot-level quality trending",
+      "status": "live",
+      "edge_status": "proposed",
+      "via": null,
+      "properties": {
+       "confidence": 0.667,
+       "kind": "Concept",
+       "reason": "shares 2 of 3 connections (Incoming natural-rubber lot acceptance and trending, Incoming quality control) and text score 0.41"
+      }
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "upload_graph",
+  "title": "One uploaded context graph",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/graphs/g-d03155d7",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "id": "g-d03155d7",
+   "name": "33 kV cable joint failures",
+   "documents": [
+    "raychem:O-02-U001"
+   ],
+   "nodes": [
+    {
+     "id": "concept:cable-accessory-failure-analysis",
+     "type": "Concept",
+     "label": "Cable accessory failure analysis",
+     "subsidiary": null
+    },
+    {
+     "id": "concept:cable-joint-installation",
+     "type": "Concept",
+     "label": "Cable joint installation",
+     "subsidiary": null
+    },
+    {
+     "id": "concept:failure-pattern",
+     "type": "Concept",
+     "label": "Failure pattern",
+     "subsidiary": null
+    },
+    {
+     "id": "concept:installation-quality-records",
+     "type": "Concept",
+     "label": "Installation quality records",
+     "subsidiary": null
+    },
+    {
+     "id": "concept:root-cause-analysis",
+     "type": "Concept",
+     "label": "Root cause analysis",
+     "subsidiary": null
+    },
+    {
+     "id": "org:raychem",
+     "type": "Subsidiary",
+     "label": "Raychem RPG",
+     "subsidiary": null
+    },
+    {
+     "id": "raychem:O-02",
+     "type": "Datapoint",
+     "label": "Field service and failure analysis",
+     "subsidiary": "raychem"
+    },
+    {
+     "id": "raychem:O-02-U001",
+     "type": "Document",
+     "label": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+     "subsidiary": "raychem"
+    }
+   ],
+   "edges": [
+    {
+     "id": "rel:group.vocabulary/104",
+     "type": "RELATED_TO",
+     "source": "concept:failure-pattern",
+     "target": "concept:root-cause-analysis",
+     "status": "approved"
+    },
+    {
+     "id": "rel:similarity/concept:failure-pattern~concept:root-cause-analysis",
+     "type": "SIMILAR_TO",
+     "source": "concept:failure-pattern",
+     "target": "concept:root-cause-analysis",
+     "status": "proposed"
+    },
+    {
+     "id": "rel:raychem.export/OWNED_BY/raychem:O-02->org:raychem",
+     "type": "OWNED_BY",
+     "source": "raychem:O-02",
+     "target": "org:raychem",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/IN_DATAPOINT/raychem:O-02-U001->raychem:O-02",
+     "type": "IN_DATAPOINT",
+     "source": "raychem:O-02-U001",
+     "target": "raychem:O-02",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:cable-accessory-failure-analysis",
+     "type": "MENTIONS",
+     "source": "raychem:O-02-U001",
+     "target": "concept:cable-accessory-failure-analysis",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:cable-joint-installation",
+     "type": "MENTIONS",
+     "source": "raychem:O-02-U001",
+     "target": "concept:cable-joint-installation",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:failure-pattern",
+     "type": "MENTIONS",
+     "source": "raychem:O-02-U001",
+     "target": "concept:failure-pattern",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:installation-quality-records",
+     "type": "MENTIONS",
+     "source": "raychem:O-02-U001",
+     "target": "concept:installation-quality-records",
+     "status": "approved"
+    },
+    {
+     "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:root-cause-analysis",
+     "type": "MENTIONS",
+     "source": "raychem:O-02-U001",
+     "target": "concept:root-cause-analysis",
+     "status": "approved"
+    }
+   ],
+   "counts": {
+    "Concept": 5,
+    "Subsidiary": 1,
+    "Datapoint": 1,
+    "Document": 1
+   },
+   "quality": [
+    {
+     "level": "ok",
+     "text": "Every input links to a known concept, and no input repeats another"
+    }
+   ]
+  }
+ },
+ {
+  "id": "render",
+  "title": "That graph in the standard JSON structure",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/json-templates/render",
+  "params": null,
+  "body": {
+   "graph_id": "g-d03155d7"
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "output": {
+    "graph_id": "g-d03155d7",
+    "graph": "33 kV cable joint failures",
+    "companies": [
+     "Raychem RPG"
+    ],
+    "documents": [
+     {
+      "id": "raychem:O-02-U001",
+      "title": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "company": "Raychem RPG",
+      "kind": "Root cause analysis",
+      "catalogue_item": "Field service and failure analysis",
+      "sharing": "Summary leaves Raychem RPG",
+      "uploaded": "2026-11-04",
+      "concepts": [
+       "Cable accessory failure analysis",
+       "Cable joint installation",
+       "Failure pattern",
+       "Installation quality records",
+       "Root cause analysis"
+      ]
+     }
+    ],
+    "nodes": [
+     {
+      "id": "concept:cable-accessory-failure-analysis",
+      "type": "Concept",
+      "name": "Cable accessory failure analysis",
+      "company": null
+     },
+     {
+      "id": "concept:cable-joint-installation",
+      "type": "Concept",
+      "name": "Cable joint installation",
+      "company": null
+     },
+     {
+      "id": "concept:failure-pattern",
+      "type": "Concept",
+      "name": "Failure pattern",
+      "company": null
+     },
+     {
+      "id": "concept:installation-quality-records",
+      "type": "Concept",
+      "name": "Installation quality records",
+      "company": null
+     },
+     {
+      "id": "concept:root-cause-analysis",
+      "type": "Concept",
+      "name": "Root cause analysis",
+      "company": null
+     },
+     {
+      "id": "org:raychem",
+      "type": "Subsidiary",
+      "name": "Raychem RPG",
+      "company": null
+     },
+     {
+      "id": "raychem:O-02",
+      "type": "Datapoint",
+      "name": "Field service and failure analysis",
+      "company": "Raychem RPG"
+     },
+     {
+      "id": "raychem:O-02-U001",
+      "type": "Document",
+      "name": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "company": "Raychem RPG"
+     }
+    ],
+    "edges": [
+     {
+      "id": "rel:group.vocabulary/104",
+      "type": "RELATED_TO",
+      "source": "concept:failure-pattern",
+      "target": "concept:root-cause-analysis",
+      "from": "Failure pattern",
+      "to": "Root cause analysis",
+      "status": "approved"
+     },
+     {
+      "id": "rel:similarity/concept:failure-pattern~concept:root-cause-analysis",
+      "type": "SIMILAR_TO",
+      "source": "concept:failure-pattern",
+      "target": "concept:root-cause-analysis",
+      "from": "Failure pattern",
+      "to": "Root cause analysis",
+      "status": "proposed"
+     },
+     {
+      "id": "rel:raychem.export/OWNED_BY/raychem:O-02->org:raychem",
+      "type": "OWNED_BY",
+      "source": "raychem:O-02",
+      "target": "org:raychem",
+      "from": "Field service and failure analysis",
+      "to": "Raychem RPG",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/IN_DATAPOINT/raychem:O-02-U001->raychem:O-02",
+      "type": "IN_DATAPOINT",
+      "source": "raychem:O-02-U001",
+      "target": "raychem:O-02",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Field service and failure analysis",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:cable-accessory-failure-analysis",
+      "type": "MENTIONS",
+      "source": "raychem:O-02-U001",
+      "target": "concept:cable-accessory-failure-analysis",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Cable accessory failure analysis",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:cable-joint-installation",
+      "type": "MENTIONS",
+      "source": "raychem:O-02-U001",
+      "target": "concept:cable-joint-installation",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Cable joint installation",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:failure-pattern",
+      "type": "MENTIONS",
+      "source": "raychem:O-02-U001",
+      "target": "concept:failure-pattern",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Failure pattern",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:installation-quality-records",
+      "type": "MENTIONS",
+      "source": "raychem:O-02-U001",
+      "target": "concept:installation-quality-records",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Installation quality records",
+      "status": "approved"
+     },
+     {
+      "id": "rel:raychem.export/MENTIONS/raychem:O-02-U001->concept:root-cause-analysis",
+      "type": "MENTIONS",
+      "source": "raychem:O-02-U001",
+      "target": "concept:root-cause-analysis",
+      "from": "Teardown findings, failed 33 kV cable joints, July to September 2026",
+      "to": "Root cause analysis",
+      "status": "approved"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "id": "cg_view",
+  "title": "An ingested graph's nodes and edges",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/view",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "id": "cg-1cc11e1e",
+   "name": "Example: mixing line spare parts",
+   "documents": [],
+   "nodes": [
+    {
+     "id": "plant-a",
+     "type": "Plant",
+     "label": "Plant A",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "line-1",
+     "type": "Line",
+     "label": "Mixing line 1",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "m-01",
+     "type": "Machine",
+     "label": "Internal mixer M-01",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "m-02",
+     "type": "Machine",
+     "label": "Two-roll mill M-02",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "label": "Rotor seal RS-200",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "bb-30",
+     "type": "Part",
+     "label": "Roller bearing BB-30",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "label": "Supplier X",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "label": "Supplier Y",
+     "subsidiary": "ceat"
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "label": "Seal wear",
+     "subsidiary": "ceat"
+    }
+   ],
+   "edges": [
+    {
+     "id": "e1",
+     "type": "HAS_LINE",
+     "source": "plant-a",
+     "target": "line-1",
+     "status": "approved"
+    },
+    {
+     "id": "e2",
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-01",
+     "status": "approved"
+    },
+    {
+     "id": "e3",
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-02",
+     "status": "approved"
+    },
+    {
+     "id": "e4",
+     "type": "USES_PART",
+     "source": "m-01",
+     "target": "rs-200",
+     "status": "approved"
+    },
+    {
+     "id": "e5",
+     "type": "USES_PART",
+     "source": "m-02",
+     "target": "bb-30",
+     "status": "approved"
+    },
+    {
+     "id": "e6",
+     "type": "SUPPLIES",
+     "source": "sup-x",
+     "target": "rs-200",
+     "status": "approved"
+    },
+    {
+     "id": "e7",
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "rs-200",
+     "status": "approved"
+    },
+    {
+     "id": "e8",
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "bb-30",
+     "status": "approved"
+    },
+    {
+     "id": "e9",
+     "type": "AFFECTS",
+     "source": "wear",
+     "target": "rs-200",
+     "status": "approved"
+    },
+    {
+     "id": "e10",
+     "type": "SEEN_ON",
+     "source": "wear",
+     "target": "m-01",
+     "status": "approved"
+    }
+   ],
+   "counts": {
+    "Plant": 1,
+    "Line": 1,
+    "Machine": 2,
+    "Part": 2,
+    "Supplier": 2,
+    "Defect": 1
+   },
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT",
+    "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.",
+    "sensitivity": "Internal",
+    "sharing": "company",
+    "synthetic": true,
+    "nodes": 9,
+    "edges": 10,
+    "node_types": {
+     "Machine": 2,
+     "Part": 2,
+     "Supplier": 2,
+     "Plant": 1,
+     "Line": 1,
+     "Defect": 1
+    },
+    "edge_types": {
+     "SUPPLIES": 3,
+     "HAS_MACHINE": 2,
+     "USES_PART": 2,
+     "HAS_LINE": 1,
+     "AFFECTS": 1,
+     "SEEN_ON": 1
+    },
+    "created": {
+     "at": "2026-11-11T07:18:54+00:00",
+     "by_role": "Mesh admin",
+     "by_company": "zensar",
+     "by_company_name": "Zensar"
+    },
+    "updated": null,
+    "can_change": true,
+    "corrects": null,
+    "endpoints": {
+     "graph": "/api/v1/context-graphs/cg-1cc11e1e",
+     "view": "/api/v1/context-graphs/cg-1cc11e1e/view",
+     "query": "/api/v1/context-graphs/cg-1cc11e1e/query"
+    }
+   },
+   "quality": [
+    {
+     "level": "ok",
+     "text": "Every node has an edge, no name repeats and the graph is one connected whole"
+    }
+   ]
+  }
+ },
+ {
+  "id": "suggest",
+  "title": "Read a file and propose the fields",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/suggest",
+  "params": null,
+  "body": {
+   "file": "02_cable_joint_moisture_review.txt",
+   "node_id": "raychem"
+  },
+  "multipart": true,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "title": "Moisture entry in 33 kV cable joints, field review October 2026",
+   "tags": [
+    "cable-accessory-failure-analysis",
+    "root-cause-analysis",
+    "cable-joint-installation",
+    "pre-energising-tests",
+    "installation-quality-records"
+   ],
+   "kind": {
+    "kind": "report",
+    "label": "",
+    "by": "model",
+    "reason": "stand-in: candidates found by full or two-word names"
+   },
+   "concepts": [
+    {
+     "id": "concept:cable-accessory-failure-analysis",
+     "label": "Cable accessory failure analysis"
+    },
+    {
+     "id": "concept:root-cause-analysis",
+     "label": "Root cause analysis"
+    },
+    {
+     "id": "concept:cable-joint-installation",
+     "label": "Cable joint installation"
+    },
+    {
+     "id": "concept:pre-energising-tests",
+     "label": "Pre-energising tests"
+    },
+    {
+     "id": "concept:installation-quality-records",
+     "label": "Installation quality records"
+    }
+   ],
+   "graph": {
+    "mode": "append",
+    "id": "g-d03155d7",
+    "name": "33 kV cable joint failures",
+    "shared": [
+     "concept:cable-accessory-failure-analysis",
+     "concept:cable-joint-installation",
+     "concept:installation-quality-records",
+     "concept:root-cause-analysis"
+    ],
+    "reason": "stand-in: candidates found by full or two-word names"
+   },
+   "decided_by": "model",
+   "candidates": [
+    {
+     "id": "concept:cable-accessory-failure-analysis",
+     "label": "Cable accessory failure analysis",
+     "strong": true,
+     "found_by": "full name or a name of two or more words"
+    },
+    {
+     "id": "concept:root-cause-analysis",
+     "label": "Root cause analysis",
+     "strong": true,
+     "found_by": "full name or a name of two or more words"
+    },
+    {
+     "id": "concept:cable-joint-installation",
+     "label": "Cable joint installation",
+     "strong": true,
+     "found_by": "full name or a name of two or more words"
+    },
+    {
+     "id": "concept:pre-energising-tests",
+     "label": "Pre-energising tests",
+     "strong": true,
+     "found_by": "full name or a name of two or more words"
+    },
+    {
+     "id": "concept:installation-quality-records",
+     "label": "Installation quality records",
+     "strong": true,
+     "found_by": "full name or a name of two or more words"
+    },
+    {
+     "id": "concept:failure-pattern",
+     "label": "Failure pattern",
+     "strong": false,
+     "found_by": "meaning 0.30"
+    },
+    {
+     "id": "concept:monsoon-operations",
+     "label": "Monsoon operating procedure",
+     "strong": false,
+     "found_by": "a one-word name only"
+    },
+    {
+     "id": "concept:recurring-pattern",
+     "label": "Recurring pattern across sites",
+     "strong": false,
+     "found_by": "a one-word name only"
+    }
+   ],
+   "graph_candidates": [
+    {
+     "id": "g-d03155d7",
+     "name": "33 kV cable joint failures",
+     "closeness": 0.63
+    },
+    {
+     "id": "g-e6f6addf",
+     "name": "Overseas acquisition integration",
+     "closeness": 0.22
+    },
+    {
+     "id": "ceat:E-03-U001",
+     "name": "Plant storage note, Kochi bales",
+     "closeness": 0.17
+    },
+    {
+     "id": "g-2f866293",
+     "name": "Natural rubber storage and ageing",
+     "closeness": 0.15
+    },
+    {
+     "id": "g-995e7d67",
+     "name": "AI-assisted delivery pilots",
+     "closeness": 0.07
+    }
+   ],
+   "format": "text",
+   "chars": 671
+  }
+ },
+ {
+  "id": "items",
+  "title": "Catalogue items of a company",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/items/raychem",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "node_id": "raychem",
+   "items": [
+    {
+     "code": "C-03",
+     "title": "Application notes for customers and electric mobility",
+     "ceiling": "SUM",
+     "never_leave": false,
+     "owner_role": "Head of Applications",
+     "domain": "commercial"
+    },
+    {
+     "code": "E-01",
+     "title": "Installation and testing procedures",
+     "ceiling": "SUM",
+     "never_leave": false,
+     "owner_role": "Head of Engineering",
+     "domain": "engineering"
+    },
+    {
+     "code": "F-02",
+     "title": "Partner agreement and pricing file",
+     "ceiling": "MD",
+     "never_leave": true,
+     "owner_role": "General Counsel",
+     "domain": "corporate"
+    },
+    {
+     "code": "F-04",
+     "title": "Expert directory (consent-based)",
+     "ceiling": "LIVE",
+     "never_leave": false,
+     "owner_role": "CHRO",
+     "domain": "talent"
+    },
+    {
+     "code": "L-01",
+     "title": "Lessons from field failures",
+     "ceiling": "SUM",
+     "never_leave": false,
+     "owner_role": "Head of Quality",
+     "domain": "lessons"
+    },
+    {
+     "code": "O-02",
+     "title": "Field service and failure analysis",
+     "ceiling": "SUM",
+     "never_leave": false,
+     "owner_role": "Head of Field Service",
+     "domain": "operations"
+    },
+    {
+     "code": "T-01",
+     "title": "Job roles and required skills",
+     "ceiling": "SUM",
+     "never_leave": false,
+     "owner_role": "CHRO",
+     "domain": "talent"
+    }
+   ],
+   "new_item_areas": [
+    {
+     "letter": "E",
+     "domain": "engineering",
+     "title": "engineering knowledge"
+    },
+    {
+     "letter": "O",
+     "domain": "operations",
+     "title": "operations knowledge"
+    },
+    {
+     "letter": "C",
+     "domain": "commercial",
+     "title": "commercial knowledge"
+    },
+    {
+     "letter": "F",
+     "domain": "corporate",
+     "title": "corporate functions"
+    },
+    {
+     "letter": "L",
+     "domain": "lessons",
+     "title": "lessons learned"
+    }
+   ]
+  }
+ },
+ {
+  "id": "cg_sample",
+  "title": "The sample JSON",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/sample",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": "Example: spare parts of a mixing line",
+   "company": "Zensar",
+   "description": "Example data, invented to show the JSON structure.",
+   "sensitivity": "Internal",
+   "sharing": "company",
+   "nodes": [
+    {
+     "id": "plant-a",
+     "type": "Plant",
+     "name": "Plant A",
+     "properties": {
+      "city": "Example city"
+     }
+    },
+    {
+     "id": "line-1",
+     "type": "Line",
+     "name": "Mixing line 1"
+    },
+    {
+     "id": "m-01",
+     "type": "Machine",
+     "name": "Internal mixer M-01",
+     "aliases": [
+      "Mixer 1"
+     ]
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "properties": {
+      "lead_time_days": 35
+     }
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear"
+    }
+   ],
+   "edges": [
+    {
+     "type": "HAS_LINE",
+     "source": "plant-a",
+     "target": "line-1"
+    },
+    {
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-01"
+    },
+    {
+     "type": "USES_PART",
+     "source": "m-01",
+     "target": "rs-200",
+     "properties": {
+      "per_year": 6
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-x",
+     "target": "rs-200",
+     "properties": {
+      "preferred": true
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "rs-200"
+    },
+    {
+     "type": "AFFECTS",
+     "source": "wear",
+     "target": "rs-200"
+    },
+    {
+     "type": "SEEN_ON",
+     "source": "wear",
+     "target": "m-01",
+     "properties": {
+      "times_in_2026": 4
+     }
+    }
+   ]
+  }
+ },
+ {
+  "id": "cg_check",
+  "title": "Check a JSON and keep nothing",
+  "method": "POST",
+  "path": "/api/v1/context-graphs",
+  "params": {
+   "check": "true"
+  },
+  "body": {
+   "graph": "Example: spare parts of a mixing line",
+   "company": "Zensar",
+   "description": "Example data, invented to show the JSON structure.",
+   "sensitivity": "Internal",
+   "sharing": "company",
+   "nodes": [
+    {
+     "id": "plant-a",
+     "type": "Plant",
+     "name": "Plant A",
+     "properties": {
+      "city": "Example city"
+     }
+    },
+    {
+     "id": "line-1",
+     "type": "Line",
+     "name": "Mixing line 1"
+    },
+    {
+     "id": "m-01",
+     "type": "Machine",
+     "name": "Internal mixer M-01",
+     "aliases": [
+      "Mixer 1"
+     ]
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "properties": {
+      "lead_time_days": 35
+     }
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear"
+    }
+   ],
+   "edges": [
+    {
+     "type": "HAS_LINE",
+     "source": "plant-a",
+     "target": "line-1"
+    },
+    {
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-01"
+    },
+    {
+     "type": "USES_PART",
+     "source": "m-01",
+     "target": "rs-200",
+     "properties": {
+      "per_year": 6
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-x",
+     "target": "rs-200",
+     "properties": {
+      "preferred": true
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "rs-200"
+    },
+    {
+     "type": "AFFECTS",
+     "source": "wear",
+     "target": "rs-200"
+    },
+    {
+     "type": "SEEN_ON",
+     "source": "wear",
+     "target": "m-01",
+     "properties": {
+      "times_in_2026": 4
+     }
+    }
+   ]
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": null,
+    "name": "Example: spare parts of a mixing line",
+    "company": "zensar",
+    "company_name": "Zensar",
+    "description": "Example data, invented to show the JSON structure.",
+    "sensitivity": "Internal",
+    "sharing": "company",
+    "synthetic": false,
+    "nodes": 7,
+    "edges": 7,
+    "node_types": {
+     "Supplier": 2,
+     "Plant": 1,
+     "Line": 1,
+     "Machine": 1,
+     "Part": 1,
+     "Defect": 1
+    },
+    "edge_types": {
+     "SUPPLIES": 2,
+     "HAS_LINE": 1,
+     "HAS_MACHINE": 1,
+     "USES_PART": 1,
+     "AFFECTS": 1,
+     "SEEN_ON": 1
+    },
+    "created": {
+     "at": "2026-11-12T06:37:46+00:00",
+     "by_role": "Mesh admin",
+     "by_company": "zensar",
+     "by_company_name": "Zensar"
+    },
+    "updated": null,
+    "can_change": true,
+    "corrects": null,
+    "endpoints": null
+   },
+   "replaced": false,
+   "unchanged": false,
+   "checked_only": true,
+   "filled": [
+    "7 edge ids made from the type"
+   ],
+   "defaults": [
+    "synthetic: false, so the data is treated as real and no cloud model reads it"
+   ],
+   "ignored": [],
+   "warnings": []
+  }
+ },
+ {
+  "id": "cg_refused",
+  "title": "A JSON with mistakes is refused",
+  "method": "POST",
+  "path": "/api/v1/context-graphs",
+  "params": null,
+  "body": {
+   "graph": "Example: spare parts of a mixing line",
+   "description": "Example data, invented to show the JSON structure.",
+   "sensitivity": "Internal",
+   "sharing": "company",
+   "nodes": [
+    {
+     "id": "plant-a",
+     "type": "Plant",
+     "name": "Plant A",
+     "properties": {
+      "city": "Example city"
+     }
+    },
+    {
+     "id": "line-1",
+     "type": "Line",
+     "name": "Mixing line 1"
+    },
+    {
+     "id": "m-01",
+     "type": "Machine",
+     "name": "Internal mixer M-01",
+     "aliases": [
+      "Mixer 1"
+     ]
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "properties": {
+      "lead_time_days": 35
+     }
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear"
+    }
+   ],
+   "edges": [
+    {
+     "type": "HAS_LINE",
+     "source": "plant-a",
+     "target": "nowhere"
+    },
+    {
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-01"
+    },
+    {
+     "type": "USES_PART",
+     "source": "m-01",
+     "target": "rs-200",
+     "properties": {
+      "per_year": 6
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-x",
+     "target": "rs-200",
+     "properties": {
+      "preferred": true
+     }
+    },
+    {
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "rs-200"
+    },
+    {
+     "type": "AFFECTS",
+     "source": "wear",
+     "target": "rs-200"
+    },
+    {
+     "type": "SEEN_ON",
+     "source": "wear",
+     "target": "m-01",
+     "properties": {
+      "times_in_2026": 4
+     }
+    }
+   ]
+  },
+  "multipart": false,
+  "status": 422,
+  "token": "person",
+  "response": {
+   "detail": "The graph was not created: 2 fields need a change.",
+   "problems": [
+    "company: missing. Write \"company\" with the company that owns the data, for example \"CEAT\".",
+    "edges[0]: target \"nowhere\" is not a node of this graph."
+   ],
+   "filled": [
+    "7 edge ids made from the type"
+   ],
+   "defaults": [
+    "synthetic: false, so the data is treated as real and no cloud model reads it"
+   ],
+   "ignored": [],
+   "warnings": []
+  }
+ },
+ {
+  "id": "cg_get",
+  "title": "One ingested graph as JSON",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e",
+  "params": null,
+  "body": null,
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph_id": "cg-1cc11e1e",
+   "graph": "Example: mixing line spare parts",
+   "company": "CEAT",
+   "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.",
+   "sensitivity": "Internal",
+   "sharing": "company",
+   "synthetic": true,
+   "nodes": [
+    {
+     "id": "plant-a",
+     "type": "Plant",
+     "name": "Plant A",
+     "properties": {
+      "city": "Example city"
+     }
+    },
+    {
+     "id": "line-1",
+     "type": "Line",
+     "name": "Mixing line 1"
+    },
+    {
+     "id": "m-01",
+     "type": "Machine",
+     "name": "Internal mixer M-01",
+     "aliases": [
+      "Mixer 1"
+     ]
+    },
+    {
+     "id": "m-02",
+     "type": "Machine",
+     "name": "Two-roll mill M-02"
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "id": "bb-30",
+     "type": "Part",
+     "name": "Roller bearing BB-30",
+     "properties": {
+      "stock": 6
+     }
+    },
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "properties": {
+      "lead_time_days": 35
+     }
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear"
+    }
+   ],
+   "edges": [
+    {
+     "id": "e1",
+     "type": "HAS_LINE",
+     "source": "plant-a",
+     "target": "line-1"
+    },
+    {
+     "id": "e2",
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-01"
+    },
+    {
+     "id": "e3",
+     "type": "HAS_MACHINE",
+     "source": "line-1",
+     "target": "m-02"
+    },
+    {
+     "id": "e4",
+     "type": "USES_PART",
+     "source": "m-01",
+     "target": "rs-200",
+     "properties": {
+      "per_year": 6
+     }
+    },
+    {
+     "id": "e5",
+     "type": "USES_PART",
+     "source": "m-02",
+     "target": "bb-30",
+     "properties": {
+      "per_year": 2
+     }
+    },
+    {
+     "id": "e6",
+     "type": "SUPPLIES",
+     "source": "sup-x",
+     "target": "rs-200",
+     "properties": {
+      "preferred": true
+     }
+    },
+    {
+     "id": "e7",
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "rs-200"
+    },
+    {
+     "id": "e8",
+     "type": "SUPPLIES",
+     "source": "sup-y",
+     "target": "bb-30"
+    },
+    {
+     "id": "e9",
+     "type": "AFFECTS",
+     "source": "wear",
+     "target": "rs-200"
+    },
+    {
+     "id": "e10",
+     "type": "SEEN_ON",
+     "source": "wear",
+     "target": "m-01",
+     "properties": {
+      "times_in_2026": 4
+     }
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_overview",
+  "title": "What the graph holds",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "overview": true
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "overview",
+   "nodes": 9,
+   "edges": 10,
+   "node_types": {
+    "Machine": 2,
+    "Part": 2,
+    "Supplier": 2,
+    "Plant": 1,
+    "Line": 1,
+    "Defect": 1
+   },
+   "edge_types": [
+    {
+     "type": "SUPPLIES",
+     "count": 3,
+     "from_types": [
+      "Supplier"
+     ],
+     "to_types": [
+      "Part"
+     ]
+    },
+    {
+     "type": "HAS_MACHINE",
+     "count": 2,
+     "from_types": [
+      "Line"
+     ],
+     "to_types": [
+      "Machine"
+     ]
+    },
+    {
+     "type": "USES_PART",
+     "count": 2,
+     "from_types": [
+      "Machine"
+     ],
+     "to_types": [
+      "Part"
+     ]
+    },
+    {
+     "type": "AFFECTS",
+     "count": 1,
+     "from_types": [
+      "Defect"
+     ],
+     "to_types": [
+      "Part"
+     ]
+    },
+    {
+     "type": "HAS_LINE",
+     "count": 1,
+     "from_types": [
+      "Plant"
+     ],
+     "to_types": [
+      "Line"
+     ]
+    },
+    {
+     "type": "SEEN_ON",
+     "count": 1,
+     "from_types": [
+      "Defect"
+     ],
+     "to_types": [
+      "Machine"
+     ]
+    }
+   ],
+   "nodes_without_edges": 0
+  }
+ },
+ {
+  "id": "q_nodes",
+  "title": "Find nodes by type, name or property",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "nodes": {
+    "type": "Supplier"
+   }
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "nodes",
+   "nodes": [
+    {
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "aliases": [],
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "aliases": [],
+     "properties": {
+      "lead_time_days": 35
+     }
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "id": "q_node",
+  "title": "One node and its neighbours",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "node": "Mixer 1",
+   "hops": 1
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "node",
+   "node": {
+    "id": "m-01",
+    "type": "Machine",
+    "name": "Internal mixer M-01",
+    "aliases": [
+     "Mixer 1"
+    ],
+    "properties": {}
+   },
+   "neighbours": [
+    {
+     "id": "line-1",
+     "type": "Line",
+     "name": "Mixing line 1",
+     "aliases": [],
+     "properties": {}
+    },
+    {
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "aliases": [],
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear",
+     "aliases": [],
+     "properties": {}
+    }
+   ],
+   "neighbours_total": 3,
+   "edges": [
+    {
+     "id": "e2",
+     "type": "HAS_MACHINE",
+     "source": {
+      "id": "line-1",
+      "name": "Mixing line 1",
+      "type": "Line"
+     },
+     "target": {
+      "id": "m-01",
+      "name": "Internal mixer M-01",
+      "type": "Machine"
+     },
+     "properties": {},
+     "text": "Mixing line 1 HAS_MACHINE Internal mixer M-01"
+    },
+    {
+     "id": "e4",
+     "type": "USES_PART",
+     "source": {
+      "id": "m-01",
+      "name": "Internal mixer M-01",
+      "type": "Machine"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {
+      "per_year": 6
+     },
+     "text": "Internal mixer M-01 USES_PART Rotor seal RS-200"
+    },
+    {
+     "id": "e10",
+     "type": "SEEN_ON",
+     "source": {
+      "id": "wear",
+      "name": "Seal wear",
+      "type": "Defect"
+     },
+     "target": {
+      "id": "m-01",
+      "name": "Internal mixer M-01",
+      "type": "Machine"
+     },
+     "properties": {
+      "times_in_2026": 4
+     },
+     "text": "Seal wear SEEN_ON Internal mixer M-01"
+    }
+   ],
+   "edges_total": 3
+  }
+ },
+ {
+  "id": "q_edges",
+  "title": "Relationships by type, source or target",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "edges": {
+    "type": "SUPPLIES",
+    "target": "Rotor seal RS-200"
+   }
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "edges",
+   "edges": [
+    {
+     "id": "e6",
+     "type": "SUPPLIES",
+     "source": {
+      "id": "sup-x",
+      "name": "Supplier X",
+      "type": "Supplier"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {
+      "preferred": true
+     },
+     "text": "Supplier X SUPPLIES Rotor seal RS-200"
+    },
+    {
+     "id": "e7",
+     "type": "SUPPLIES",
+     "source": {
+      "id": "sup-y",
+      "name": "Supplier Y",
+      "type": "Supplier"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {},
+     "text": "Supplier Y SUPPLIES Rotor seal RS-200"
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "id": "q_path",
+  "title": "How two nodes are connected",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "path": {
+    "from": "Supplier X",
+    "to": "Plant A"
+   }
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "path",
+   "from": {
+    "id": "sup-x",
+    "type": "Supplier",
+    "name": "Supplier X",
+    "aliases": [],
+    "properties": {
+     "lead_time_days": 21
+    }
+   },
+   "to": {
+    "id": "plant-a",
+    "type": "Plant",
+    "name": "Plant A",
+    "aliases": [],
+    "properties": {
+     "city": "Example city"
+    }
+   },
+   "hops": 4,
+   "paths": [
+    {
+     "edges": [
+      {
+       "id": "e6",
+       "type": "SUPPLIES",
+       "source": {
+        "id": "sup-x",
+        "name": "Supplier X",
+        "type": "Supplier"
+       },
+       "target": {
+        "id": "rs-200",
+        "name": "Rotor seal RS-200",
+        "type": "Part"
+       },
+       "properties": {
+        "preferred": true
+       },
+       "text": "Supplier X SUPPLIES Rotor seal RS-200"
+      },
+      {
+       "id": "e4",
+       "type": "USES_PART",
+       "source": {
+        "id": "m-01",
+        "name": "Internal mixer M-01",
+        "type": "Machine"
+       },
+       "target": {
+        "id": "rs-200",
+        "name": "Rotor seal RS-200",
+        "type": "Part"
+       },
+       "properties": {
+        "per_year": 6
+       },
+       "text": "Internal mixer M-01 USES_PART Rotor seal RS-200"
+      },
+      {
+       "id": "e2",
+       "type": "HAS_MACHINE",
+       "source": {
+        "id": "line-1",
+        "name": "Mixing line 1",
+        "type": "Line"
+       },
+       "target": {
+        "id": "m-01",
+        "name": "Internal mixer M-01",
+        "type": "Machine"
+       },
+       "properties": {},
+       "text": "Mixing line 1 HAS_MACHINE Internal mixer M-01"
+      },
+      {
+       "id": "e1",
+       "type": "HAS_LINE",
+       "source": {
+        "id": "plant-a",
+        "name": "Plant A",
+        "type": "Plant"
+       },
+       "target": {
+        "id": "line-1",
+        "name": "Mixing line 1",
+        "type": "Line"
+       },
+       "properties": {},
+       "text": "Plant A HAS_LINE Mixing line 1"
+      }
+     ],
+     "text": "Supplier X SUPPLIES Rotor seal RS-200, then Internal mixer M-01 USES_PART Rotor seal RS-200, then Mixing line 1 HAS_MACHINE Internal mixer M-01, then Plant A HAS_LINE Mixing line 1"
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_similar",
+  "title": "Nodes similar to one",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "similar": {
+    "node": "Supplier X",
+    "top": 5
+   }
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "similar",
+   "node": {
+    "id": "sup-x",
+    "type": "Supplier",
+    "name": "Supplier X",
+    "aliases": [],
+    "properties": {
+     "lead_time_days": 21
+    }
+   },
+   "similar": [
+    {
+     "node": {
+      "id": "sup-y",
+      "type": "Supplier",
+      "name": "Supplier Y",
+      "aliases": [],
+      "properties": {
+       "lead_time_days": 35
+      }
+     },
+     "score": 0.5,
+     "shared": [
+      "Rotor seal RS-200"
+     ],
+     "reason": "shares 1 of the 2 neighbours of the two"
+    }
+   ],
+   "total": 1,
+   "rule": "nodes of the same type, ranked by shared neighbours divided by all the neighbours of the two"
+  }
+ },
+ {
+  "id": "q_question",
+  "title": "A question in plain words",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "question": "Which suppliers supply the rotor seal?"
+  },
+  "multipart": false,
+  "status": 200,
+  "token": "person",
+  "response": {
+   "graph": {
+    "id": "cg-1cc11e1e",
+    "name": "Example: mixing line spare parts",
+    "company": "ceat",
+    "company_name": "CEAT"
+   },
+   "kind": "question",
+   "question": "Which suppliers supply the rotor seal?",
+   "matched": [
+    {
+     "id": "rs-200",
+     "name": "Rotor seal RS-200",
+     "type": "Part",
+     "matched_on": "part of the name"
+    },
+    {
+     "id": "wear",
+     "name": "Seal wear",
+     "type": "Defect",
+     "matched_on": "part of the name"
+    },
+    {
+     "id": "sup-x",
+     "name": "Supplier X",
+     "type": "Supplier",
+     "matched_on": "part of the name"
+    },
+    {
+     "id": "sup-y",
+     "name": "Supplier Y",
+     "type": "Supplier",
+     "matched_on": "part of the name"
+    }
+   ],
+   "nodes": [
+    {
+     "ref": "N1",
+     "id": "rs-200",
+     "type": "Part",
+     "name": "Rotor seal RS-200",
+     "aliases": [],
+     "properties": {
+      "material": "FKM",
+      "stock": 14
+     }
+    },
+    {
+     "ref": "N2",
+     "id": "wear",
+     "type": "Defect",
+     "name": "Seal wear",
+     "aliases": [],
+     "properties": {}
+    },
+    {
+     "ref": "N3",
+     "id": "sup-x",
+     "type": "Supplier",
+     "name": "Supplier X",
+     "aliases": [],
+     "properties": {
+      "lead_time_days": 21
+     }
+    },
+    {
+     "ref": "N4",
+     "id": "sup-y",
+     "type": "Supplier",
+     "name": "Supplier Y",
+     "aliases": [],
+     "properties": {
+      "lead_time_days": 35
+     }
+    },
+    {
+     "ref": "N5",
+     "id": "bb-30",
+     "type": "Part",
+     "name": "Roller bearing BB-30",
+     "aliases": [],
+     "properties": {
+      "stock": 6
+     }
+    },
+    {
+     "ref": "N6",
+     "id": "m-01",
+     "type": "Machine",
+     "name": "Internal mixer M-01",
+     "aliases": [
+      "Mixer 1"
+     ],
+     "properties": {}
+    }
+   ],
+   "edges": [
+    {
+     "ref": "E1",
+     "id": "e6",
+     "type": "SUPPLIES",
+     "source": {
+      "id": "sup-x",
+      "name": "Supplier X",
+      "type": "Supplier"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {
+      "preferred": true
+     },
+     "text": "Supplier X SUPPLIES Rotor seal RS-200"
+    },
+    {
+     "ref": "E2",
+     "id": "e7",
+     "type": "SUPPLIES",
+     "source": {
+      "id": "sup-y",
+      "name": "Supplier Y",
+      "type": "Supplier"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {},
+     "text": "Supplier Y SUPPLIES Rotor seal RS-200"
+    },
+    {
+     "ref": "E3",
+     "id": "e9",
+     "type": "AFFECTS",
+     "source": {
+      "id": "wear",
+      "name": "Seal wear",
+      "type": "Defect"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {},
+     "text": "Seal wear AFFECTS Rotor seal RS-200"
+    },
+    {
+     "ref": "E4",
+     "id": "e8",
+     "type": "SUPPLIES",
+     "source": {
+      "id": "sup-y",
+      "name": "Supplier Y",
+      "type": "Supplier"
+     },
+     "target": {
+      "id": "bb-30",
+      "name": "Roller bearing BB-30",
+      "type": "Part"
+     },
+     "properties": {},
+     "text": "Supplier Y SUPPLIES Roller bearing BB-30"
+    },
+    {
+     "ref": "E5",
+     "id": "e4",
+     "type": "USES_PART",
+     "source": {
+      "id": "m-01",
+      "name": "Internal mixer M-01",
+      "type": "Machine"
+     },
+     "target": {
+      "id": "rs-200",
+      "name": "Rotor seal RS-200",
+      "type": "Part"
+     },
+     "properties": {
+      "per_year": 6
+     },
+     "text": "Internal mixer M-01 USES_PART Rotor seal RS-200"
+    },
+    {
+     "ref": "E6",
+     "id": "e10",
+     "type": "SEEN_ON",
+     "source": {
+      "id": "wear",
+      "name": "Seal wear",
+      "type": "Defect"
+     },
+     "target": {
+      "id": "m-01",
+      "name": "Internal mixer M-01",
+      "type": "Machine"
+     },
+     "properties": {
+      "times_in_2026": 4
+     },
+     "text": "Seal wear SEEN_ON Internal mixer M-01"
+    }
+   ],
+   "answer": "Supplier X SUPPLIES Rotor seal RS-200 [E1]. Supplier Y SUPPLIES Rotor seal RS-200 [E2].",
+   "answer_note": null
+  }
+ },
+ {
+  "id": "q_missing",
+  "title": "A name that is not in the graph",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "node": "Rotor sael RS-200"
+  },
+  "multipart": false,
+  "status": 404,
+  "token": "person",
+  "response": {
+   "detail": "No node with the id, name or other name \"Rotor sael RS-200\" in this graph. Close names: Rotor seal RS-200."
+  }
+ },
+ {
+  "id": "q_scope",
+  "title": "Another company asks a company-only graph",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/cg-1cc11e1e/query",
+  "params": null,
+  "body": {
+   "overview": true
+  },
+  "multipart": false,
+  "status": 404,
+  "token": "person (KEC)",
+  "response": {
+   "detail": "No context graph with this id is shown to you."
+  }
+ }
+]

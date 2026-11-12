@@ -1,0 +1,141 @@
+{
+  "graph": "Plant storage note, Kochi bales",
+  "companies": [
+    "CEAT"
+  ],
+  "documents": [
+    {
+      "title": "Plant storage note, Kochi bales",
+      "company": "CEAT",
+      "kind": "Note",
+      "catalogue_item": "Approved materials handling and storage learnings (non-formula)",
+      "sharing": "Summary leaves CEAT",
+      "uploaded": "2026-11-09",
+      "concepts": [
+        "Material ageing",
+        "Materials handling",
+        "Raw material storage",
+        "Time-to-use limit"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ceat:E-03",
+      "type": "Datapoint",
+      "name": "Approved materials handling and storage learnings (non-formula)"
+    },
+    {
+      "id": "ceat:E-03-U001",
+      "type": "Document",
+      "name": "Plant storage note, Kochi bales"
+    },
+    {
+      "id": "concept:material-ageing",
+      "type": "Concept",
+      "name": "Material ageing"
+    },
+    {
+      "id": "concept:materials-handling",
+      "type": "Concept",
+      "name": "Materials handling"
+    },
+    {
+      "id": "concept:raw-material-storage",
+      "type": "Concept",
+      "name": "Raw material storage"
+    },
+    {
+      "id": "concept:time-to-use-limit",
+      "type": "Concept",
+      "name": "Time-to-use limit"
+    },
+    {
+      "id": "org:ceat",
+      "type": "Subsidiary",
+      "name": "CEAT"
+    }
+  ],
+  "edges": [
+    {
+      "id": "rel:group.vocabulary/101",
+      "type": "BROADER",
+      "source": "concept:raw-material-storage",
+      "target": "concept:materials-handling",
+      "from": "Raw material storage",
+      "to": "Materials handling"
+    },
+    {
+      "id": "rel:group.vocabulary/012",
+      "type": "RELATED_TO",
+      "source": "concept:material-ageing",
+      "target": "concept:time-to-use-limit",
+      "from": "Material ageing",
+      "to": "Time-to-use limit"
+    },
+    {
+      "id": "rel:similarity/concept:material-ageing~concept:raw-material-storage",
+      "type": "SIMILAR_TO",
+      "source": "concept:material-ageing",
+      "target": "concept:raw-material-storage",
+      "from": "Material ageing",
+      "to": "Raw material storage"
+    },
+    {
+      "id": "rel:similarity/concept:materials-handling~concept:raw-material-storage",
+      "type": "SIMILAR_TO",
+      "source": "concept:materials-handling",
+      "target": "concept:raw-material-storage",
+      "from": "Materials handling",
+      "to": "Raw material storage"
+    },
+    {
+      "id": "rel:ceat.export/OWNED_BY/ceat:E-03->org:ceat",
+      "type": "OWNED_BY",
+      "source": "ceat:E-03",
+      "target": "org:ceat",
+      "from": "Approved materials handling and storage learnings (non-formula)",
+      "to": "CEAT"
+    },
+    {
+      "id": "rel:ceat.export/IN_DATAPOINT/ceat:E-03-U001->ceat:E-03",
+      "type": "IN_DATAPOINT",
+      "source": "ceat:E-03-U001",
+      "target": "ceat:E-03",
+      "from": "Plant storage note, Kochi bales",
+      "to": "Approved materials handling and storage learnings (non-formula)"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:material-ageing",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:material-ageing",
+      "from": "Plant storage note, Kochi bales",
+      "to": "Material ageing"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:materials-handling",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:materials-handling",
+      "from": "Plant storage note, Kochi bales",
+      "to": "Materials handling"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:raw-material-storage",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:raw-material-storage",
+      "from": "Plant storage note, Kochi bales",
+      "to": "Raw material storage"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:time-to-use-limit",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:time-to-use-limit",
+      "from": "Plant storage note, Kochi bales",
+      "to": "Time-to-use limit"
+    }
+  ]
+}

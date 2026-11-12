@@ -1,0 +1,47 @@
+{
+  "title": "Natural rubber supplier quality scorecard, July to September 2026",
+  "company": "CEAT",
+  "about": "Lot-level quality trending of incoming natural rubber lots by supplier. Lot acceptance follows the incoming inspection limits for dirt, volatile matter and Mooney viscosity.",
+  "period": "2026-07 to 2026-09",
+  "suppliers": [
+    {
+      "supplier": "Supplier A",
+      "lots_received": 64,
+      "lots_rejected": 1,
+      "dirt_out_of_limit": 0,
+      "moisture_findings_at_receipt": 2,
+      "corrective_action_open": false
+    },
+    {
+      "supplier": "Supplier B",
+      "lots_received": 41,
+      "lots_rejected": 5,
+      "dirt_out_of_limit": 4,
+      "moisture_findings_at_receipt": 6,
+      "corrective_action_open": true
+    },
+    {
+      "supplier": "Supplier C",
+      "lots_received": 37,
+      "lots_rejected": 0,
+      "dirt_out_of_limit": 0,
+      "moisture_findings_at_receipt": 1,
+      "corrective_action_open": false
+    },
+    {
+      "supplier": "Supplier D",
+      "lots_received": 22,
+      "lots_rejected": 3,
+      "dirt_out_of_limit": 1,
+      "moisture_findings_at_receipt": 5,
+      "corrective_action_open": true
+    }
+  ],
+  "findings": [
+    "Supplier B and Supplier D account for 8 of the 9 rejected lots.",
+    "Moisture findings at receipt rose in August, when the monsoon was at its peak, which points to contamination and moisture control during transport.",
+    "Both suppliers received a supplier corrective action request with the lot data attached, through the supplier feedback loop."
+  ],
+  "next_review": "2026-12-15",
+  "note": "Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group."
+}

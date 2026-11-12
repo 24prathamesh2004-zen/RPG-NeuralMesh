@@ -1,0 +1,9 @@
+{
+  "title": "Overseas unit integration, month 4 status",
+  "note": "Synthetic test file for NeuralMesh. KEC International integration office.",
+  "summary": "Acquisition integration is on plan in month 4. The integration checklist is 70 percent closed. Process ownership before system cut-over is agreed for finance and procurement, and still open for site operations.",
+  "open_points": [
+    "Site operations owner for the cut-over",
+    "Payroll interface test in month 5"
+  ]
+}

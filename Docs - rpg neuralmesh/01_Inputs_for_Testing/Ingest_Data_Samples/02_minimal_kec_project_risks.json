@@ -1,0 +1,19 @@
+{
+  "graph": "Example: line project risks",
+  "company": "KEC International",
+  "nodes": [
+    {"id": "p17", "type": "Project", "name": "Line project P-17"},
+    {"id": "t42", "type": "Site", "name": "Tower site T-42"},
+    {"id": "r1", "type": "Risk", "name": "Monsoon access delay"},
+    {"id": "r2", "type": "Risk", "name": "Foundation rework"},
+    {"id": "a1", "type": "Action", "name": "Move material before June"},
+    {"id": "crew-b", "type": "Crew", "name": "Crew B"}
+  ],
+  "edges": [
+    {"type": "HAS_SITE", "source": "p17", "target": "t42"},
+    {"type": "AT_RISK_OF", "source": "t42", "target": "r1"},
+    {"type": "AT_RISK_OF", "source": "t42", "target": "r2"},
+    {"type": "REDUCED_BY", "source": "r1", "target": "a1"},
+    {"type": "ASSIGNED_TO", "source": "a1", "target": "crew-b"}
+  ]
+}

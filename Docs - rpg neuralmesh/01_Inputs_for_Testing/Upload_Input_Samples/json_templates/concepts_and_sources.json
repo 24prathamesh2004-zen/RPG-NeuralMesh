@@ -1,0 +1,8 @@
+{
+  "graph": "{graph.name}",
+  "concepts": {
+    "$each": "concept",
+    "concept": "{label}",
+    "sources": "{mentioned_by}"
+  }
+}

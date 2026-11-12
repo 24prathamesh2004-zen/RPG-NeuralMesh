@@ -14,6 +14,12 @@ export const TYPE_COLOURS: Record<string, string> = {
   Asset: '#c2255c', AssetFamily: '#a61e4d', Condition: '#e8590c', ConditionFamily: '#d9480f', GradeScale: '#2b8a3e', CoverType: '#0b7285',
   View: '#868e96', ReviewStatus: '#adb5bd', Inspection: '#5f3dc4',
 }
+// A value of one of the tables below by its own key only, so a type a person wrote, such as "constructor", finds nothing
+const own = <T,>(table: Record<string, T>, key: string): T | undefined => (Object.prototype.hasOwnProperty.call(table, key) ? table[key] : undefined)
+// The types the mesh does not know, such as the ones a person wrote in an ingested graph, take these colours in turn,
+// then colours spread round the colour wheel, so no two of them in one graph share a colour
+const OTHER_COLOURS = ['#0ca678', '#4263eb', '#fab005', '#845ef7', '#ff6b6b', '#20c997', '#66a80f', '#f783ac', '#3bc9db', '#e599f7']
+const otherColour = (i: number) => (i < OTHER_COLOURS.length ? OTHER_COLOURS[i] : `hsl(${Math.round((i * 137.5) % 360)}, 60%, 45%)`)
 const COMPANY_TONES: Record<string, string> = { ceat: '#e8590c', kec: '#1c7ed6', zensar: '#7048e8', harrisons: '#5c940d', raychem: '#862e9c', rpgls: '#0c8599', asvata: '#e67700', others: '#868e96' }
 const EDGE_COLOURS: Record<string, string> = {
   CONFLICTS_WITH: '#e03131', CORROBORATES: '#2f9e44', ADDRESSES_GAP: '#f08c00', SUPERSEDES: '#9c36b5',
@@ -53,7 +59,9 @@ function short(text: string, max = 28) {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text
 }
 
-export default function MeshGraphExplorer({ graph, revealAll = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean }) {
+// startIds: the entities shown first when the graph is too large to show at once (default: the companies and items).
+// edgeLabels: every link carries its type as a label, for a graph whose link types a person wrote.
+export default function MeshGraphExplorer({ graph, revealAll = false, startIds, edgeLabels = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean; startIds?: string[]; edgeLabels?: boolean }) {
   const container = useRef<HTMLDivElement | null>(null)
   const network = useRef<Network | null>(null)
   const nodesDs = useRef<DataSet<any> | null>(null)
@@ -69,6 +77,10 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
   treeRef.current = treeRoot
 
   const byId = useMemo(() => new Map(graph.nodes.map((n) => [n.id, n])), [graph])
+  const typeColour = useMemo(() => {
+    const others = new Map([...new Set(graph.nodes.map((n) => n.type))].filter((t) => !own(TYPE_COLOURS, t)).sort().map((t, i) => [t, otherColour(i)]))
+    return (type: string) => own(TYPE_COLOURS, type) ?? others.get(type) ?? '#adb5bd'
+  }, [graph])
   const edges = useMemo(() => graph.edges.filter((e) => byId.has(e.source) && byId.has(e.target)), [graph, byId])
   const adjacency = useMemo(() => {
     const out = new Map<string, Neighbour[]>()
@@ -80,18 +92,20 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
     return out
   }, [edges, byId])
 
-  const startSet = useCallback(() => new Set(graph.nodes.filter((n) => revealAll || START_TYPES.has(n.type)).map((n) => n.id)), [graph, revealAll])
+  const startKey = (startIds ?? []).join('|')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const startSet = useCallback(() => new Set(revealAll || !startIds ? graph.nodes.filter((n) => revealAll || START_TYPES.has(n.type)).map((n) => n.id) : startIds), [graph, revealAll, startKey])
   useEffect(() => { setRevealed(startSet()); setSelected(null); setTreeRoot(null) }, [startSet])
 
   // Boot the engine once per graph. Every node is in the data set from the start, hidden until revealed.
   useEffect(() => {
     if (!container.current) return
     const nodes = new DataSet<any>(graph.nodes.map((n) => {
-      const tone = (n.subsidiary && COMPANY_TONES[n.subsidiary]) || (n.type === 'Subsidiary' && COMPANY_TONES[n.id.split(':')[1]]) || TYPE_COLOURS[n.type] || '#adb5bd'
-      const fill = n.type === 'Subsidiary' ? tone : (TYPE_COLOURS[n.type] ?? '#adb5bd')
+      const tone = (n.subsidiary && own(COMPANY_TONES, n.subsidiary)) || (n.type === 'Subsidiary' && own(COMPANY_TONES, n.id.split(':')[1])) || typeColour(n.type)
+      const fill = n.type === 'Subsidiary' ? tone : typeColour(n.type)
       return {
         id: n.id, label: n.type === 'Subsidiary' ? n.label : short(n.label), title: `${n.type}: ${n.label}\n${n.id}`,
-        shape: SHAPES[n.type] ?? 'dot', size: SIZES[n.type] ?? 9, hidden: true, ntype: n.type,
+        shape: own(SHAPES, n.type) ?? 'dot', size: own(SIZES, n.type) ?? 9, hidden: true, ntype: n.type,
         color: { background: fill, border: tone, highlight: { background: fill, border: '#212529' } }, borderWidth: n.type === 'Subsidiary' ? 1 : 2,
         font: n.type === 'Subsidiary' ? { color: '#ffffff', size: 18, bold: true } : { color: '#343a40', size: 13 },
         margin: n.type === 'Subsidiary' ? 10 : undefined, mass: n.type === 'Subsidiary' ? 3 : 1,
@@ -99,9 +113,9 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
     }))
     const edgeDs = new DataSet<any>(edges.map((e) => ({
       id: e.id, from: e.source, to: e.target, hidden: true, etype: e.type,
-      label: LINK_TYPES.has(e.type) ? e.type.toLowerCase().replace(/_/g, ' ') : undefined,
+      label: edgeLabels ? e.type : LINK_TYPES.has(e.type) ? e.type.toLowerCase().replace(/_/g, ' ') : undefined, // a type a person wrote is shown as written
       title: `${e.type}${e.status !== 'approved' ? ` (${e.status})` : ''}`,
-      color: { color: EDGE_COLOURS[e.type] ?? '#ced4da', highlight: EDGE_COLOURS[e.type] ?? '#495057' },
+      color: { color: own(EDGE_COLOURS, e.type) ?? '#ced4da', highlight: own(EDGE_COLOURS, e.type) ?? '#495057' },
       width: LINK_TYPES.has(e.type) ? 2.5 : 1, dashes: e.status !== 'approved',
     })))
     nodesDs.current = nodes
@@ -236,9 +250,9 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
     <div className="mesh-graph-explorer">
       <div className="mesh-graph-toolbar">
         <div className="mesh-graph-counts">
-          {TYPE_ORDER.filter((t) => graph.counts[t]).map((t) => (
+          {[...TYPE_ORDER.filter((t) => graph.counts[t]), ...Object.keys(graph.counts).filter((t) => !TYPE_ORDER.includes(t)).sort((a, b) => graph.counts[b] - graph.counts[a] || a.localeCompare(b))].map((t) => (
             <button type="button" key={t} className={hiddenTypes.has(t) ? 'off' : ''} onClick={() => toggleType(t)} aria-pressed={!hiddenTypes.has(t)}>
-              <i style={{ background: TYPE_COLOURS[t] }} />{t} {graph.counts[t]}
+              <i style={{ background: typeColour(t) }} />{t} {graph.counts[t]}
             </button>
           ))}
         </div>
@@ -264,7 +278,7 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
         <aside className="mesh-graph-detail">
           {node ? (
             <>
-              <span className="mesh-graph-type" style={{ background: TYPE_COLOURS[node.type] }}>{node.type}</span>
+              <span className="mesh-graph-type" style={{ background: typeColour(node.type) }}>{node.type}</span>
               <h3>{node.label}</h3>
               <code>{node.id}</code>
               {node.subsidiary && <p>Company: {node.subsidiary}</p>}
@@ -274,7 +288,7 @@ export default function MeshGraphExplorer({ graph, revealAll = false }: { graph:
               </div>
               {groups.map(([type, list]) => (
                 <div key={type} className="mesh-graph-group">
-                  <h4 style={{ color: EDGE_COLOURS[type.replace('← ', '')] }}>{type} ({list.length})</h4>
+                  <h4 style={{ color: own(EDGE_COLOURS, type.replace('← ', '')) }}>{type} ({list.length})</h4>
                   <ul>{list.map((nb) => (
                     <li key={nb.edge.id}><button type="button" onClick={() => focus(nb.other.id)}>{nb.other.label}</button>{nb.edge.status !== 'approved' && <em> {nb.edge.status}</em>}</li>
                   ))}</ul>

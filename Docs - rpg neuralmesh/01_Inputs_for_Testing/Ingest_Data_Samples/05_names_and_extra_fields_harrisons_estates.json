@@ -1,0 +1,20 @@
+{
+  "graph": "Example: estate collection rounds",
+  "company": "Harrisons Malayalam",
+  "description": "Example data, invented for testing the ingest. Edge ends are written by name, nodes carry extra fields, and one field is null.",
+  "sensitivity": "Confidential",
+  "synthetic": true,
+  "nodes": [
+    {"type": "Estate", "name": "Estate North", "hectares": 410, "office_contact": "estate.office@example.com"},
+    {"type": "Estate", "name": "Estate South", "hectares": 365, "manager": null},
+    {"type": "CollectionPoint", "name": "Collection point 3"},
+    {"type": "Factory", "name": "Processing factory F-1", "aliases": ["F-1"]},
+    {"type": "Round", "name": "Morning round", "start": "05:30"}
+  ],
+  "relationships": [
+    {"type": "SENDS_TO", "from": "Estate North", "to": "Collection point 3"},
+    {"type": "SENDS_TO", "from": "Estate South", "to": "Collection point 3"},
+    {"type": "DELIVERS_TO", "from": "Collection point 3", "to": "F-1", "distance_km": 14},
+    {"type": "RUNS", "from": "Morning round", "to": "Collection point 3"}
+  ]
+}

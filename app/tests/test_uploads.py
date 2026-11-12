@@ -622,7 +622,7 @@ def test_the_standard_output_keeps_every_key_and_is_a_whole_graph(mesh, monkeypa
                       {"id": "e2", "type": "RELATED_TO", "source": "c:gone", "target": "c:2"}]}
     monkeypatch.setattr(uploads, "context_graph_view", lambda *a, **k: view)
     out = jt.render(jt.DEFAULT, jt.data_of(None, "g-x", "ceat", []))
-    assert list(out) == ["graph", "companies", "documents", "nodes", "edges"] and out["documents"] == [] and out["companies"] == []
+    assert list(out) == ["graph_id", "graph", "companies", "documents", "nodes", "edges"] and out["graph_id"] == "g-x" and out["documents"] == [] and out["companies"] == []
     keys = set(jt.DEFAULT["nodes"][0]) - {"$each"}
     assert all(set(n) == keys for n in out["nodes"])
     assert out["nodes"] == [{"id": "c:1", "type": "Concept", "name": "Raw material storage", "company": None},
@@ -713,3 +713,81 @@ def test_a_json_template_is_checked_and_filled_from_the_graph(mesh, monkeypatch,
     # a later upload without a template leaves the template of the graph as it is
     assert _upload(client, text.replace("ninety", "thirty"), title="Third note", graph_id=graph_id).status_code == 201
     assert client.get(f"/api/v1/mesh/uploads/json-templates?graph_id={graph_id}", headers=ADMIN).json()["own"] is True
+
+
+def test_an_upload_is_real_unless_it_is_sent_as_invented(mesh):
+    """The real data plan, step 1: the record keeps whether the file is invented, and a file sent without the mark is real."""
+    client = TestClient(app)
+    real = _upload(client, "Natural rubber lots are kept off the floor and used first in, first out. " * 3)
+    assert real.status_code == 201, real.text
+    assert real.json()["synthetic"] is False
+    stored = json.loads((DATA / "ceat" / "contributions" / "E-03-U001.json").read_text())
+    assert stored["synthetic"] is False
+    invented = _upload(client, "An invented storage note for a demonstration of the upload. " * 3, title="Invented note", synthetic="true")
+    assert invented.status_code == 201, invented.text
+    assert invented.json()["synthetic"] is True
+    assert json.loads((DATA / "ceat" / "contributions" / "E-03-U002.json").read_text())["synthetic"] is True
+    listed = {u["document"]["id"]: u["synthetic"] for u in client.get("/api/v1/mesh/uploads", headers=ADMIN).json()["uploads"]}
+    assert listed == {"ceat:E-03-U001": False, "ceat:E-03-U002": True}
+
+
+@pytest.mark.parametrize("value, stored", [("true", True), ("yes", True), ("1", True), ("on", True), ("false", False), ("no", False), ("0", False), ("", False)])
+def test_the_invented_mark_is_read_from_the_usual_form_values(mesh, value, stored):
+    response = _upload(TestClient(app), "Natural rubber lots are kept off the floor and used first in, first out. " * 3, synthetic=value)
+    assert response.status_code == 201, response.text
+    assert response.json()["synthetic"] is stored
+
+
+def test_a_malformed_invented_mark_is_refused_and_nothing_is_kept(mesh):
+    response = _upload(TestClient(app), "Natural rubber lots are kept off the floor and used first in, first out. " * 3, synthetic="tru")
+    assert response.status_code == 422
+    assert not list((DATA / "ceat" / "contributions").glob("*.json"))
+
+
+def test_the_mark_stays_when_an_input_is_removed_and_a_record_without_it_is_real(mesh):
+    client = TestClient(app)
+    doc_id = _upload(client, "An invented storage note for a demonstration of the upload. " * 3, synthetic="true").json()["document"]["id"]
+    assert client.delete(f"/api/v1/mesh/uploads/{doc_id}", headers=ADMIN).status_code == 200
+    path = DATA / "ceat" / "contributions" / "E-03-U001.json"
+    removed = json.loads(path.read_text())
+    assert removed["status"] == "removed" and removed["synthetic"] is True
+    removed.pop("synthetic")  # a record written before the mark existed
+    path.write_text(json.dumps(removed))
+    listed = {u["document"]["id"]: u["synthetic"] for u in client.get("/api/v1/mesh/uploads", headers=ADMIN).json()["uploads"]}
+    assert listed[doc_id] is False
+
+
+def test_a_new_catalogue_item_takes_the_mark_of_the_upload_that_named_it(mesh):
+    response = _upload(TestClient(app), "Fire drills in the bale store are held every month and logged by the shift lead. " * 3,
+                       datapoint="new", new_item_title="Bale store fire drills", new_item_area="lessons", synthetic="true")
+    assert response.status_code == 201, response.text
+    item = json.loads((DATA / "ceat" / "added_items" / f"{response.json()['new_item']['code']}.json").read_text())
+    assert item["synthetic"] is True
+
+
+def test_the_json_of_an_uploaded_graph_loaded_back_corrects_that_graph_and_goes_with_it(mesh):
+    from services import context_graph_ingest as ingested
+    client = TestClient(app)
+    made_up = _upload(client, "Rubber bales are stored covered and ventilated, and lots are issued first in, first out, every day.",
+                      graph_name="Bale storage corrections", synthetic="true").json()
+    ref = made_up["context_graph"]
+    made = client.post("/api/v1/mesh/uploads/json-templates/render", json={"graph_id": ref["id"]}, headers=ADMIN).json()["output"]
+    assert made["graph_id"] == ref["id"] and made["companies"] == ["CEAT"]
+    # a company user may not correct a graph made by Upload input
+    refused = client.post("/api/v1/context-graphs", json=made, headers=_headers("ceat"))
+    assert refused.status_code == 422 and "only a mesh admin corrects it" in refused.json()["problems"][0]
+    other = client.post("/api/v1/context-graphs", json={**made, "companies": ["KEC International"]}, headers=_headers("kec"))
+    assert other.status_code == 422 and other.json()["problems"][0].startswith("graph_id: there is no context graph")  # as an id that does not exist
+    first = client.post("/api/v1/context-graphs", json=made, headers=ADMIN)
+    assert first.status_code == 201, first.text
+    graph = first.json()["graph"]
+    assert graph["corrects"] == ref["id"] and graph["name"] == "Bale storage corrections" and graph["synthetic"] is True
+    # the changed file replaces the correction: the same graph, never a second one
+    made["nodes"].append({"id": "extra", "type": "Concept", "name": "Ageing check", "company": None})
+    second = client.post("/api/v1/context-graphs", json=made, headers=ADMIN).json()
+    assert second["replaced"] and second["graph"]["id"] == graph["id"] and second["graph"]["nodes"] == graph["nodes"] + 1
+    listed = client.get("/api/v1/context-graphs", headers=ADMIN).json()["graphs"]
+    assert [g["corrects"] for g in listed if g["id"] == graph["id"]] == [ref["id"]]
+    # dropping the uploaded graph drops its correction too
+    dropped = client.delete(f"/api/v1/mesh/uploads/graphs/{ref['id']}", headers=ADMIN).json()
+    assert dropped["corrections_dropped"] == [graph["id"]] and ingested.get(graph["id"]) is None

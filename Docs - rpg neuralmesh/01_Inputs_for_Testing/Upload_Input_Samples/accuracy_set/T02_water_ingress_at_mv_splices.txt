@@ -1,0 +1,5 @@
+Water ingress at medium-voltage splices after heavy rain
+
+Synthetic test file for NeuralMesh. Raychem RPG field team.
+
+Three splices on an 11 kV feeder failed within a month of the rains. When they were cut open, the sealing tape had lifted and water had tracked along the conductor. The crews had made the splices in open trenches during showers. Each new splice now needs a tent, a dry trench and a photo of the seal before backfilling.

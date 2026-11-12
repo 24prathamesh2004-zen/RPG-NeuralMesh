@@ -1,0 +1,118 @@
+{
+  "nodes": [
+    {
+      "id": "ceat:E-03",
+      "type": "Datapoint",
+      "label": "Approved materials handling and storage learnings (non-formula)",
+      "subsidiary": "ceat"
+    },
+    {
+      "id": "ceat:E-03-U001",
+      "type": "Document",
+      "label": "Plant storage note, Kochi bales",
+      "subsidiary": "ceat"
+    },
+    {
+      "id": "concept:material-ageing",
+      "type": "Concept",
+      "label": "Material ageing",
+      "subsidiary": null
+    },
+    {
+      "id": "concept:materials-handling",
+      "type": "Concept",
+      "label": "Materials handling",
+      "subsidiary": null
+    },
+    {
+      "id": "concept:raw-material-storage",
+      "type": "Concept",
+      "label": "Raw material storage",
+      "subsidiary": null
+    },
+    {
+      "id": "concept:time-to-use-limit",
+      "type": "Concept",
+      "label": "Time-to-use limit",
+      "subsidiary": null
+    },
+    {
+      "id": "org:ceat",
+      "type": "Subsidiary",
+      "label": "CEAT",
+      "subsidiary": null
+    }
+  ],
+  "edges": [
+    {
+      "id": "rel:group.vocabulary/101",
+      "type": "BROADER",
+      "source": "concept:raw-material-storage",
+      "target": "concept:materials-handling",
+      "status": "approved"
+    },
+    {
+      "id": "rel:group.vocabulary/012",
+      "type": "RELATED_TO",
+      "source": "concept:material-ageing",
+      "target": "concept:time-to-use-limit",
+      "status": "approved"
+    },
+    {
+      "id": "rel:similarity/concept:material-ageing~concept:raw-material-storage",
+      "type": "SIMILAR_TO",
+      "source": "concept:material-ageing",
+      "target": "concept:raw-material-storage",
+      "status": "proposed"
+    },
+    {
+      "id": "rel:similarity/concept:materials-handling~concept:raw-material-storage",
+      "type": "SIMILAR_TO",
+      "source": "concept:materials-handling",
+      "target": "concept:raw-material-storage",
+      "status": "proposed"
+    },
+    {
+      "id": "rel:ceat.export/OWNED_BY/ceat:E-03->org:ceat",
+      "type": "OWNED_BY",
+      "source": "ceat:E-03",
+      "target": "org:ceat",
+      "status": "approved"
+    },
+    {
+      "id": "rel:ceat.export/IN_DATAPOINT/ceat:E-03-U001->ceat:E-03",
+      "type": "IN_DATAPOINT",
+      "source": "ceat:E-03-U001",
+      "target": "ceat:E-03",
+      "status": "approved"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:material-ageing",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:material-ageing",
+      "status": "approved"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:materials-handling",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:materials-handling",
+      "status": "approved"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:raw-material-storage",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:raw-material-storage",
+      "status": "approved"
+    },
+    {
+      "id": "rel:ceat.export/MENTIONS/ceat:E-03-U001->concept:time-to-use-limit",
+      "type": "MENTIONS",
+      "source": "ceat:E-03-U001",
+      "target": "concept:time-to-use-limit",
+      "status": "approved"
+    }
+  ]
+}

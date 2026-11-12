@@ -1,0 +1,667 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Context Graph API</title>
+<meta name="description" content="The APIs behind the three tabs of the RPG NeuralMesh Context graph page and the query of a graph by its id, with the request and answer of each.">
+<style>
+:root{color-scheme:light;--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#6f6d67;--border:rgba(11,11,11,.12);--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--wash:#eaf2fc;--code:#f0efea;--axis:#c3c2b7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#a09e96;--border:rgba(255,255,255,.12);--s1:#3987e5;--s2:#ef7a4a;--s3:#27c08a;--wash:#15243a;--code:#232321;--axis:#383835}}
+:root[data-theme="dark"]{color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#a09e96;--border:rgba(255,255,255,.12);--s1:#3987e5;--s2:#ef7a4a;--s3:#27c08a;--wash:#15243a;--code:#232321;--axis:#383835}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:28px 16px 64px}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px}h2{font-size:21px;margin:30px 0 8px;padding-top:6px;border-top:1px solid var(--border)}h3{font-size:16px;margin:22px 0 6px}
+p{margin:8px 0;color:var(--ink2)}ul,ol{margin:8px 0 8px 20px;color:var(--ink2)}li{margin:4px 0}b,strong{color:var(--ink)}
+.sub{color:var(--ink2);font-size:16px;margin:0 0 16px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 18px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.tab{background:var(--surface);color:var(--ink2);border:1px solid var(--border);border-radius:999px;padding:7px 14px;font:600 13.5px system-ui,sans-serif;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--s1);color:#fff;border-color:var(--s1)}.tab:hover{border-color:var(--s1)}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin:10px 0}
+details.card summary{cursor:pointer;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0;background:var(--surface)}th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--border)}
+th{background:var(--page);color:var(--ink);font-weight:600}td{color:var(--ink2)}
+table.routes td:first-child{min-width:230px}
+code{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--code);padding:1px 5px;border-radius:4px;color:var(--ink);word-break:break-word}
+pre{margin:6px 0;white-space:pre-wrap;word-break:break-word;font:12px/1.45 ui-monospace,Menlo,monospace;color:var(--ink);background:var(--code);padding:10px;border-radius:8px;max-height:460px;overflow:auto}
+.hl{background:var(--wash);border:1px solid var(--s1);border-radius:12px;padding:12px 16px;margin:14px 0}.hl h3{margin:0 0 6px;color:var(--s1)}.hl ul{margin:0;padding-left:20px}
+.note{font-size:13px;color:var(--muted)}
+svg.diagram{width:100%;height:auto;display:block}svg.diagram .bx{fill:var(--surface);stroke:var(--axis);stroke-width:1.5}svg.diagram .hot{fill:var(--wash);stroke:var(--s1);stroke-width:2}
+svg.diagram .t{fill:var(--ink);font:600 14px system-ui,sans-serif}svg.diagram .s{fill:var(--ink2);font:12.5px system-ui,sans-serif}svg.diagram .ln{fill:none;stroke:var(--ink2);stroke-width:1.6}svg.diagram .ah{fill:var(--ink2)}
+.try{display:grid;grid-template-columns:330px 1fr;gap:16px}@media(max-width:900px){.try{grid-template-columns:1fr}table{display:block;overflow-x:auto}}
+.calls h4{margin:14px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.calls button{display:block;width:100%;text-align:left;margin:4px 0;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font:13px system-ui,sans-serif;cursor:pointer}
+.calls button:hover,.calls button[aria-pressed="true"]{border-color:var(--s1);background:var(--wash)}
+.calls button small{display:block;color:var(--muted);font:11.5px ui-monospace,Menlo,monospace;margin-top:2px;word-break:break-all}
+.show{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;position:sticky;top:12px;max-height:92vh;overflow:auto}
+.status{display:inline-block;margin-left:8px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid currentColor}.status.ok{color:var(--s3)}.status.bad{color:var(--s2)}
+.copy{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font:600 12px system-ui,sans-serif;cursor:pointer;float:right}
+dl.gl{display:grid;grid-template-columns:220px 1fr;gap:6px 18px;margin:10px 0}dl.gl dt{font-weight:600;color:var(--ink)}dl.gl dd{margin:0;color:var(--ink2)}@media(max-width:700px){dl.gl{grid-template-columns:1fr}}
+</style></head><body><main>
+<h1>RPG NeuralMesh Context Graph API</h1>
+<p class="sub">The APIs behind the three tabs of the Context graph page (Uploaded inputs, Upload input and Ingest data) and the query of a graph by its id. Each comes with what to send and what comes back. The examples were sent on 11 November 2026 to the running development API, on invented data.</p>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" data-tab="access" aria-selected="true">How to access</button>
+<button class="tab" role="tab" data-tab="apis" aria-selected="false">Graph APIs</button>
+<button class="tab" role="tab" data-tab="query" aria-selected="false">Queries by graph id</button>
+<button class="tab" role="tab" data-tab="ingest" aria-selected="false">Ingest JSON fields</button>
+<button class="tab" role="tab" data-tab="try" aria-selected="false">Try the API</button>
+</div>
+
+<section class="panel on" id="access">
+<h2>How to call the context graph APIs</h2>
+<div class="hl"><h3>In short</h3><ul>
+<li>18 APIs: Sign in 1, Uploaded inputs 10, Upload input 3, Ingest data 3, Queries by graph id 1. Graph APIs lists what to send and what comes back for each.</li>
+<li>Every call goes to the NeuralMesh API, <code>http://127.0.0.1:8000</code> on the development stack, with the token in the header <code>Authorization: Bearer</code>. Only the sign-in needs no token.</li>
+<li>A person signs in with email and password and gets a token valid for 12 hours. An application uses its service token, which sees only the graphs shared with the group and cannot ingest.</li>
+<li>An uploaded graph is made from files on Upload input, and its id starts with <code>g-</code>. An ingested graph is written as JSON on Ingest data, and its id starts with <code>cg-</code>. The seven queries by graph id ask an ingested graph.</li>
+<li>14 of the 18 APIs were sent for the examples. The other 4 change data, an upload and three drops, so they show their request only.</li>
+</ul></div>
+<h3>Sign in</h3>
+<p>The answer holds <code>access_token</code>. Write it into TOKEN, and every curl command on this page sends it.</p>
+<pre>curl -s -X POST &#x27;http://127.0.0.1:8000/api/v1/auth/signin&#x27; \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;email&quot;: &quot;presenter@neuralmesh.local&quot;, &quot;password&quot;: &quot;&lt;password&gt;&quot;}&#x27;</pre>
+<h3>The tabs of the page and their APIs</h3>
+<table class="routes"><thead><tr><th>Page tab</th><th>What a person does there</th><th>APIs</th></tr></thead><tbody><tr><td>Uploaded inputs</td><td>Sees the uploaded and the ingested graphs, searches them and the mesh graph in one box, opens a graph, an input or a topic, downloads a graph, and a mesh admin drops a graph or removes an input.</td><td><code>GET /api/v1/mesh/uploads</code><br><code>GET /api/v1/context-graphs</code><br><code>GET /api/v1/mesh/graph/search</code><br><code>GET /api/v1/mesh/graph/entity/{entity_id}</code><br><code>GET /api/v1/mesh/uploads/graphs/{graph_id}</code><br><code>POST /api/v1/mesh/uploads/json-templates/render</code><br><code>GET /api/v1/context-graphs/{graph_id}/view</code><br><code>DELETE /api/v1/mesh/uploads/graphs/{graph_id}</code><br><code>DELETE /api/v1/mesh/uploads/{doc_id}</code><br><code>DELETE /api/v1/context-graphs/{graph_id}</code></td></tr>
+<tr><td>Upload input</td><td>A mesh admin chooses a file, checks the fields read from it, picks the company&#x27;s catalogue item and adds the file to a graph.</td><td><code>POST /api/v1/mesh/uploads/suggest</code><br><code>GET /api/v1/mesh/uploads/items/{node_id}</code><br><code>POST /api/v1/mesh/uploads</code></td></tr>
+<tr><td>Ingest data</td><td>Downloads the sample, writes or pastes the JSON of a graph, checks it, ingests it and gets the graph id.</td><td><code>GET /api/v1/context-graphs/sample</code><br><code>POST /api/v1/context-graphs</code><br><code>GET /api/v1/context-graphs/{graph_id}</code></td></tr>
+<tr><td>Queries by graph id</td><td>An application or a script asks an ingested graph by its id, with one of seven query bodies.</td><td><code>POST /api/v1/context-graphs/{graph_id}/query</code></td></tr></tbody></table>
+<h3>When something is wrong</h3>
+<table><thead><tr><th>HTTP code</th><th>Meaning</th></tr></thead><tbody><tr><td><b>200</b></td><td>The call worked. A check with check=true answers 200 and keeps nothing.</td></tr>
+<tr><td><b>201</b></td><td>The call made something new: an uploaded document or an ingested graph.</td></tr>
+<tr><td><b>401</b></td><td>The token is missing, invalid or expired. Sign in again.</td></tr>
+<tr><td><b>403</b></td><td>The token is fine, but the route needs a role the person does not have, for example an upload by someone who is not a mesh admin.</td></tr>
+<tr><td><b>404</b></td><td>The id is not there, or it is not shown to the caller. The two read the same, so a hidden graph is never revealed. A node name that is not in the graph gives 404 with the closest names.</td></tr>
+<tr><td><b>409</b></td><td>A name fits several nodes of a graph. The answer lists the candidates, so the caller can send the id of one.</td></tr>
+<tr><td><b>413</b></td><td>The JSON sent to ingest or query is larger than 8,000,000 bytes.</td></tr>
+<tr><td><b>422</b></td><td>A field needs a change. The answer says which field and what is wrong, and nothing is kept.</td></tr></tbody></table>
+</section>
+
+<section class="panel" id="apis">
+<h2>Graph APIs</h2>
+<table class="routes"><thead><tr><th>No.</th><th>Page tab</th><th>Method and path</th><th>Who can call it</th><th>What it does</th><th>What to send</th><th>What comes back</th><th>Changes data</th><th>Example</th></tr></thead><tbody>
+<tr><td>1</td><td>Sign in</td><td><code>POST /api/v1/auth/signin</code></td><td>Anyone, no token needed</td><td>Signs a person in with email and password and gives the token every later call sends in the header Authorization: Bearer. The token is valid for 12 hours.</td><td>email and password.</td><td>access_token, token_type (bearer) and user: id, email, name, company, company name, roles and expert profile.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>2</td><td>Uploaded inputs</td><td><code>GET /api/v1/mesh/uploads</code></td><td>A signed-in person</td><td>Lists the uploaded documents the person may see, newest first, and the context graphs they form. A mesh admin sees every company&#x27;s, anyone else their own company&#x27;s and the shared inputs.</td><td>Nothing.</td><td>uploads, graphs, kinds, formats and export formats. Each upload says synthetic: true when it was sent as invented data, and false when it is real.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>3</td><td>Uploaded inputs</td><td><code>GET /api/v1/context-graphs</code></td><td>A signed-in person. An application&#x27;s service token sees only the graphs shared with the group</td><td>Lists the ingested graphs the person may see, the latest first.</td><td>Nothing.</td><td>graphs: a summary of each.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>4</td><td>Uploaded inputs</td><td><code>GET /api/v1/mesh/graph/search</code></td><td>A signed-in person</td><td>Finds entities of the mesh graph whose name, other name, tag or catalogue code holds the words. When no name matches, the concepts closest in meaning are given instead. The one search box of Uploaded inputs calls it after a short pause, and shows an uploaded input it finds under its graph, once.</td><td>q: a word or phrase of up to 300 characters, in the address.</td><td>results: id, type, label, company, owner, how it matched, sharing rule and number of links of each. Also by_vector and total.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>5</td><td>Uploaded inputs</td><td><code>GET /api/v1/mesh/graph/entity/{entity_id}</code></td><td>A signed-in person</td><td>Gives one entity of the mesh graph with its fields, its sharing rule and its neighbours one link away, grouped by link type.</td><td>The entity id in the path, for example concept:latex-collection-and-transport.</td><td>id, type, label, owner, company, aliases, properties, sharing, connections and related.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>6</td><td>Uploaded inputs</td><td><code>GET /api/v1/mesh/uploads/graphs/{graph_id}</code></td><td>A signed-in person</td><td>Gives one uploaded context graph: the documents the person may see, their items and companies, the entities one link away and the links among them. With format it gives a file instead.</td><td>If wanted: format (json, graphml, csv or pack), in the address.</td><td>id, name, documents, nodes, edges and counts, or the file.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>7</td><td>Uploaded inputs</td><td><code>POST /api/v1/mesh/uploads/json-templates/render</code></td><td>A signed-in person</td><td>Writes a context graph in the JSON structure, as the person may see it. This is the file Upload input downloads, and Ingest data accepts it.</td><td>graph_id.</td><td>output: the graph in the JSON structure.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>8</td><td>Uploaded inputs</td><td><code>GET /api/v1/context-graphs/{graph_id}/view</code></td><td>A signed-in person who may see the graph</td><td>Gives the nodes and edges of a graph in the shape a drawing takes, with the graph&#x27;s summary.</td><td>Nothing.</td><td>id, name, nodes, edges, counts and graph.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>9</td><td>Uploaded inputs</td><td><code>DELETE /api/v1/mesh/uploads/graphs/{graph_id}</code></td><td>A mesh admin</td><td>Takes every document of a context graph out of the packs, the indexes and the mesh graph. The upload records stay, marked removed.</td><td>Nothing.</td><td>graph, removed, rebuilt, failed and refresh.</td><td>Yes</td><td>Not sent, it changes data: <code>DELETE /api/v1/mesh/uploads/graphs/&lt;graph id&gt;</code></td></tr>
+<tr><td>10</td><td>Uploaded inputs</td><td><code>DELETE /api/v1/mesh/uploads/{doc_id}</code></td><td>A mesh admin</td><td>Takes one uploaded document out of its pack, its index and the mesh graph. The record stays, marked removed.</td><td>Nothing.</td><td>The record and the result of the refresh.</td><td>Yes</td><td>Not sent, it changes data: <code>DELETE /api/v1/mesh/uploads/&lt;document id&gt;</code></td></tr>
+<tr><td>11</td><td>Uploaded inputs</td><td><code>DELETE /api/v1/context-graphs/{graph_id}</code></td><td>A signed-in person of the owning company, or a mesh admin</td><td>Deletes an ingested graph. The ingest log keeps its id, name, company and counts, never its content.</td><td>Nothing.</td><td>dropped: id, name, company and counts.</td><td>Yes</td><td>Not sent, it changes data: <code>DELETE /api/v1/context-graphs/&lt;graph id&gt;</code></td></tr>
+<tr><td>12</td><td>Upload input</td><td><code>POST /api/v1/mesh/uploads/suggest</code></td><td>A mesh admin</td><td>Reads a file without keeping it and proposes what the Upload input form fills in: the title, tags, kind, concepts and the context graph it fits.</td><td>A form with file. If wanted: node_id and datapoint.</td><td>title, tags, kind, concepts, graph and who decided. Nothing is kept.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>13</td><td>Upload input</td><td><code>GET /api/v1/mesh/uploads/items/{node_id}</code></td><td>A mesh admin</td><td>Lists the catalogue items of a company that an upload can go under, each with its sharing rule, and the areas a new item can be made in.</td><td>The company id in the path.</td><td>node_id, items and new_item_areas.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>14</td><td>Upload input</td><td><code>POST /api/v1/mesh/uploads</code></td><td>A mesh admin</td><td>Keeps one uploaded file as a document of a company&#x27;s catalogue item, in a new or an existing context graph. The company&#x27;s pack, keyword index and vectors are rebuilt and the mesh graph is refreshed.</td><td>A form with file (.txt, .md, .csv, .json, .pdf or .docx, up to 20 MB), node_id, datapoint, and graph_id of an existing graph or graph_name of a new one. If wanted: kind, title, tags, version, kind_label, new_item_title, new_item_area, and synthetic, true for invented data. A file sent without synthetic is real.</td><td>The upload record, the result of the refresh and the part of the graph around the new document.</td><td>Yes</td><td>Not sent, it changes data: <code>POST /api/v1/mesh/uploads (a form)</code></td></tr>
+<tr><td>15</td><td>Ingest data</td><td><code>GET /api/v1/context-graphs/sample</code></td><td>A signed-in person</td><td>Gives a small invented graph in the JSON structure, for the person&#x27;s company, to show how a graph is written.</td><td>Nothing.</td><td>The sample JSON.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>16</td><td>Ingest data</td><td><code>POST /api/v1/context-graphs</code></td><td>A signed-in person for their own company, a mesh admin for any company</td><td>Keeps the JSON a person wrote as a context graph, or replaces the graph its graph_id names. Code makes the missing ids, uses the safe value for a missing sensitivity, sharing or synthetic flag, and refuses a missing node type, edge end or company with the place to fix. With check=true it only checks and keeps nothing.</td><td>The JSON: graph, company, nodes and edges, and if wanted sensitivity, sharing, synthetic, description and graph_id (see the tab Ingest JSON fields). Add ?check=true to the address to check without keeping.</td><td>201 when created, 200 when replaced, unchanged or only checked: graph (id, name, company, counts, sensitivity, sharing and the routes), filled, defaults, ignored and warnings. 422 with problems when a field needs a change, and then nothing is kept.</td><td>Yes, unless check=true</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>17</td><td>Ingest data</td><td><code>GET /api/v1/context-graphs/{graph_id}</code></td><td>A signed-in person who may see the graph</td><td>Gives one graph in the format it was ingested in, with its graph_id, so it can be changed and sent back to replace it.</td><td>Nothing.</td><td>graph_id, graph, company, description, sensitivity, sharing, synthetic, nodes and edges.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+<tr><td>18</td><td>Queries by graph id</td><td><code>POST /api/v1/context-graphs/{graph_id}/query</code></td><td>A signed-in person who may see the graph. An application&#x27;s service token sees only the graphs shared with the group</td><td>Asks one graph by its id: what it holds, nodes by type, name or property, one node and its neighbours, relationships, how two nodes are connected, what is similar to a node, or a question in plain words. See the tab Queries by graph id.</td><td>One of the seven query bodies, for example {&quot;overview&quot;: true}.</td><td>graph and kind, then the answer of that kind of query.</td><td>No</td><td>Sent, 200, see Try the API</td></tr>
+</tbody></table>
+</section>
+
+<section class="panel" id="query">
+<h2>Queries by graph id</h2>
+<p>Every query is <code>POST /api/v1/context-graphs/{graph_id}/query</code> with one of the seven bodies below. The answer starts with <code>graph</code> and <code>kind</code>. The examples ask the ingested graph <code>cg-1cc11e1e</code>, invented data. A node is named by its id, its name or another name, in any case.</p>
+<table class="routes"><thead><tr><th>What is asked</th><th>Body</th><th>What comes back</th><th>Rules</th></tr></thead><tbody><tr><td>What does the graph hold</td><td><code>{&quot;overview&quot;: true}</code></td><td>The number of nodes and edges, the node types with their counts, the edge types with their counts and the node types each one joins, and the number of nodes without edges.</td><td>Nothing else is needed.</td></tr>
+<tr><td>Find things by type, name or property</td><td><code>{&quot;nodes&quot;: {&quot;type&quot;: &quot;Supplier&quot;, &quot;name&quot;: &quot;part of a name&quot;, &quot;properties&quot;: {&quot;material&quot;: &quot;FKM&quot;}}}</code></td><td>nodes (up to 200) and total.</td><td>Give one or more of type, name and properties. type and properties must be equal (in any case), name may be a part of the name or of another name.</td></tr>
+<tr><td>One thing and what is around it</td><td><code>{&quot;node&quot;: &quot;Mixer 1&quot;, &quot;hops&quot;: 1}</code></td><td>node, its neighbours and the edges walked to reach them, with totals.</td><td>The node is named by its id, its name or another name, in any case. hops is 1 or 2, 1 when missing.</td></tr>
+<tr><td>Relationships</td><td><code>{&quot;edges&quot;: {&quot;type&quot;: &quot;SUPPLIES&quot;, &quot;source&quot;: &quot;Supplier X&quot;, &quot;target&quot;: &quot;Rotor seal RS-200&quot;}}</code></td><td>edges (up to 500), each with its type, its source and target nodes and a line of text, and total.</td><td>Give one or more of type, source and target. relationships is read as another name for edges.</td></tr>
+<tr><td>How two things are connected</td><td><code>{&quot;path&quot;: {&quot;from&quot;: &quot;Supplier X&quot;, &quot;to&quot;: &quot;Plant A&quot;, &quot;max_hops&quot;: 4}}</code></td><td>hops and paths: up to 3 shortest ways, each a list of edges and a line of text.</td><td>An edge is walked in either direction and given back as it is stored. max_hops is 1 to 6, 4 when missing. When no way is short enough, paths is empty with a note.</td></tr>
+<tr><td>What is similar to one thing</td><td><code>{&quot;similar&quot;: {&quot;node&quot;: &quot;Supplier X&quot;, &quot;top&quot;: 5}}</code></td><td>similar: nodes of the same type, each with a score, the shared neighbours and the reason, and total.</td><td>The score is the shared neighbours divided by all the neighbours of the two (the Jaccard index), from 0 to 1. top is 1 to 20, 5 when missing.</td></tr>
+<tr><td>A question in plain words</td><td><code>{&quot;question&quot;: &quot;Which suppliers supply the rotor seal?&quot;}</code></td><td>matched nodes, numbered nodes (N1 onwards) and edges (E1 onwards), and an answer that cites them, or answer_note saying why there is no written answer.</td><td>Code finds the nodes the question names and the edges around them. The answer model writes only when the model rules allow it for the graph, and a sentence that cites no given node or edge is left out. A graph with synthetic false never reaches a cloud model.</td></tr></tbody></table>
+<details class='card'><summary><b>What does the graph hold</b>: <code>overview</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;overview&quot;: true
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;overview&quot;,
+ &quot;nodes&quot;: 9,
+ &quot;edges&quot;: 10,
+ &quot;node_types&quot;: {
+  &quot;Machine&quot;: 2,
+  &quot;Part&quot;: 2,
+  &quot;Supplier&quot;: 2,
+  &quot;Plant&quot;: 1,
+  &quot;Line&quot;: 1,
+  &quot;Defect&quot;: 1
+ },
+ &quot;edge_types&quot;: [
+  {
+   &quot;type&quot;: &quot;SUPPLIES&quot;,
+   &quot;count&quot;: 3,
+   &quot;from_types&quot;: [
+    &quot;Supplier&quot;
+   ],
+   &quot;to_types&quot;: [
+    &quot;Part&quot;
+   ]
+  },
+  {
+   &quot;type&quot;: &quot;HAS_MACHINE&quot;,
+   &quot;count&quot;: 2,
+   &quot;from_types&quot;: [
+    &quot;Line&quot;
+   ],
+   &quot;to_types&quot;: [
+    &quot;Machine&quot;
+   ]
+  },
+  {
+   &quot;type&quot;: &quot;USES_PART&quot;,
+   &quot;count&quot;: 2,
+   &quot;from_types&quot;: [
+    &quot;Machine&quot;
+   ],
+   &quot;to_types&quot;: [
+    &quot;Part&quot;
+   ]
+  },
+  &quot;... 3 more not shown&quot;
+ ],
+ &quot;nodes_without_edges&quot;: 0
+}</pre></details>
+<details class='card'><summary><b>Find things by type, name or property</b>: <code>nodes</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;nodes&quot;: {
+  &quot;type&quot;: &quot;Supplier&quot;
+ }
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;nodes&quot;,
+ &quot;nodes&quot;: [
+  {
+   &quot;id&quot;: &quot;sup-x&quot;,
+   &quot;type&quot;: &quot;Supplier&quot;,
+   &quot;name&quot;: &quot;Supplier X&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {
+    &quot;lead_time_days&quot;: 21
+   }
+  },
+  {
+   &quot;id&quot;: &quot;sup-y&quot;,
+   &quot;type&quot;: &quot;Supplier&quot;,
+   &quot;name&quot;: &quot;Supplier Y&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {
+    &quot;lead_time_days&quot;: 35
+   }
+  }
+ ],
+ &quot;total&quot;: 2
+}</pre></details>
+<details class='card'><summary><b>One thing and what is around it</b>: <code>node</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;node&quot;: &quot;Mixer 1&quot;,
+ &quot;hops&quot;: 1
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;node&quot;,
+ &quot;node&quot;: {
+  &quot;id&quot;: &quot;m-01&quot;,
+  &quot;type&quot;: &quot;Machine&quot;,
+  &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+  &quot;aliases&quot;: [
+   &quot;Mixer 1&quot;
+  ],
+  &quot;properties&quot;: {}
+ },
+ &quot;neighbours&quot;: [
+  {
+   &quot;id&quot;: &quot;line-1&quot;,
+   &quot;type&quot;: &quot;Line&quot;,
+   &quot;name&quot;: &quot;Mixing line 1&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {}
+  },
+  {
+   &quot;id&quot;: &quot;rs-200&quot;,
+   &quot;type&quot;: &quot;Part&quot;,
+   &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {
+    &quot;material&quot;: &quot;FKM&quot;,
+    &quot;stock&quot;: 14
+   }
+  },
+  {
+   &quot;id&quot;: &quot;wear&quot;,
+   &quot;type&quot;: &quot;Defect&quot;,
+   &quot;name&quot;: &quot;Seal wear&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {}
+  }
+ ],
+ &quot;neighbours_total&quot;: 3,
+ &quot;edges&quot;: [
+  {
+   &quot;id&quot;: &quot;e2&quot;,
+   &quot;type&quot;: &quot;HAS_MACHINE&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;line-1&quot;,
+    &quot;name&quot;: &quot;Mixing line 1&quot;,
+    &quot;type&quot;: &quot;Line&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;m-01&quot;,
+    &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+    &quot;type&quot;: &quot;Machine&quot;
+   },
+   &quot;properties&quot;: {},
+   &quot;text&quot;: &quot;Mixing line 1 HAS_MACHINE Internal mixer M-01&quot;
+  },
+  {
+   &quot;id&quot;: &quot;e4&quot;,
+   &quot;type&quot;: &quot;USES_PART&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;m-01&quot;,
+    &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+    &quot;type&quot;: &quot;Machine&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {
+    &quot;per_year&quot;: 6
+   },
+   &quot;text&quot;: &quot;Internal mixer M-01 USES_PART Rotor seal RS-200&quot;
+  },
+  {
+   &quot;id&quot;: &quot;e10&quot;,
+   &quot;type&quot;: &quot;SEEN_ON&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;wear&quot;,
+    &quot;name&quot;: &quot;Seal wear&quot;,
+    &quot;type&quot;: &quot;Defect&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;m-01&quot;,
+    &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+    &quot;type&quot;: &quot;Machine&quot;
+   },
+   &quot;properties&quot;: {
+    &quot;times_in_2026&quot;: 4
+   },
+   &quot;text&quot;: &quot;Seal wear SEEN_ON Internal mixer M-01&quot;
+  }
+ ],
+ &quot;edges_total&quot;: 3
+}</pre></details>
+<details class='card'><summary><b>Relationships</b>: <code>edges</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;edges&quot;: {
+  &quot;type&quot;: &quot;SUPPLIES&quot;,
+  &quot;target&quot;: &quot;Rotor seal RS-200&quot;
+ }
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;edges&quot;,
+ &quot;edges&quot;: [
+  {
+   &quot;id&quot;: &quot;e6&quot;,
+   &quot;type&quot;: &quot;SUPPLIES&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;sup-x&quot;,
+    &quot;name&quot;: &quot;Supplier X&quot;,
+    &quot;type&quot;: &quot;Supplier&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {
+    &quot;preferred&quot;: true
+   },
+   &quot;text&quot;: &quot;Supplier X SUPPLIES Rotor seal RS-200&quot;
+  },
+  {
+   &quot;id&quot;: &quot;e7&quot;,
+   &quot;type&quot;: &quot;SUPPLIES&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;sup-y&quot;,
+    &quot;name&quot;: &quot;Supplier Y&quot;,
+    &quot;type&quot;: &quot;Supplier&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {},
+   &quot;text&quot;: &quot;Supplier Y SUPPLIES Rotor seal RS-200&quot;
+  }
+ ],
+ &quot;total&quot;: 2
+}</pre></details>
+<details class='card'><summary><b>How two things are connected</b>: <code>path</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;path&quot;: {
+  &quot;from&quot;: &quot;Supplier X&quot;,
+  &quot;to&quot;: &quot;Plant A&quot;
+ }
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;path&quot;,
+ &quot;from&quot;: {
+  &quot;id&quot;: &quot;sup-x&quot;,
+  &quot;type&quot;: &quot;Supplier&quot;,
+  &quot;name&quot;: &quot;Supplier X&quot;,
+  &quot;aliases&quot;: [],
+  &quot;properties&quot;: {
+   &quot;lead_time_days&quot;: 21
+  }
+ },
+ &quot;to&quot;: {
+  &quot;id&quot;: &quot;plant-a&quot;,
+  &quot;type&quot;: &quot;Plant&quot;,
+  &quot;name&quot;: &quot;Plant A&quot;,
+  &quot;aliases&quot;: [],
+  &quot;properties&quot;: {
+   &quot;city&quot;: &quot;Example city&quot;
+  }
+ },
+ &quot;hops&quot;: 4,
+ &quot;paths&quot;: [
+  {
+   &quot;edges&quot;: [
+    {
+     &quot;id&quot;: &quot;e6&quot;,
+     &quot;type&quot;: &quot;SUPPLIES&quot;,
+     &quot;source&quot;: {
+      &quot;id&quot;: &quot;sup-x&quot;,
+      &quot;name&quot;: &quot;Supplier X&quot;,
+      &quot;type&quot;: &quot;Supplier&quot;
+     },
+     &quot;target&quot;: {
+      &quot;id&quot;: &quot;rs-200&quot;,
+      &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+      &quot;type&quot;: &quot;Part&quot;
+     },
+     &quot;properties&quot;: {
+      &quot;preferred&quot;: true
+     },
+     &quot;text&quot;: &quot;Supplier X SUPPLIES Rotor seal RS-200&quot;
+    },
+    {
+     &quot;id&quot;: &quot;e4&quot;,
+     &quot;type&quot;: &quot;USES_PART&quot;,
+     &quot;source&quot;: {
+      &quot;id&quot;: &quot;m-01&quot;,
+      &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+      &quot;type&quot;: &quot;Machine&quot;
+     },
+     &quot;target&quot;: {
+      &quot;id&quot;: &quot;rs-200&quot;,
+      &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+      &quot;type&quot;: &quot;Part&quot;
+     },
+     &quot;properties&quot;: {
+      &quot;per_year&quot;: 6
+     },
+     &quot;text&quot;: &quot;Internal mixer M-01 USES_PART Rotor seal RS-200&quot;
+    },
+    {
+     &quot;id&quot;: &quot;e2&quot;,
+     &quot;type&quot;: &quot;HAS_MACHINE&quot;,
+     &quot;source&quot;: {
+      &quot;id&quot;: &quot;line-1&quot;,
+      &quot;name&quot;: &quot;Mixing line 1&quot;,
+      &quot;type&quot;: &quot;Line&quot;
+     },
+     &quot;target&quot;: {
+      &quot;id&quot;: &quot;m-01&quot;,
+      &quot;name&quot;: &quot;Internal mixer M-01&quot;,
+      &quot;type&quot;: &quot;Machine&quot;
+     },
+     &quot;properties&quot;: {},
+     &quot;text&quot;: &quot;Mixing line 1 HAS_MACHINE Internal mixer M-01&quot;
+    },
+    &quot;... 1 more not shown&quot;
+   ],
+   &quot;text&quot;: &quot;Supplier X SUPPLIES Rotor seal RS-200, then Internal mixer M-01 USES_PART Rotor seal RS-200, then Mixing line 1 HAS_MACHINE Internal mixer M-01, then Plant A HAS_LINE Mixing line 1&quot;
+  }
+ ]
+}</pre></details>
+<details class='card'><summary><b>What is similar to one thing</b>: <code>similar</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;similar&quot;: {
+  &quot;node&quot;: &quot;Supplier X&quot;,
+  &quot;top&quot;: 5
+ }
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;similar&quot;,
+ &quot;node&quot;: {
+  &quot;id&quot;: &quot;sup-x&quot;,
+  &quot;type&quot;: &quot;Supplier&quot;,
+  &quot;name&quot;: &quot;Supplier X&quot;,
+  &quot;aliases&quot;: [],
+  &quot;properties&quot;: {
+   &quot;lead_time_days&quot;: 21
+  }
+ },
+ &quot;similar&quot;: [
+  {
+   &quot;node&quot;: {
+    &quot;id&quot;: &quot;sup-y&quot;,
+    &quot;type&quot;: &quot;Supplier&quot;,
+    &quot;name&quot;: &quot;Supplier Y&quot;,
+    &quot;aliases&quot;: [],
+    &quot;properties&quot;: {
+     &quot;lead_time_days&quot;: 35
+    }
+   },
+   &quot;score&quot;: 0.5,
+   &quot;shared&quot;: [
+    &quot;Rotor seal RS-200&quot;
+   ],
+   &quot;reason&quot;: &quot;shares 1 of the 2 neighbours of the two&quot;
+  }
+ ],
+ &quot;total&quot;: 1,
+ &quot;rule&quot;: &quot;nodes of the same type, ranked by shared neighbours divided by all the neighbours of the two&quot;
+}</pre></details>
+<details class='card'><summary><b>A question in plain words</b>: <code>question</code>, the answer recorded on 11 November 2026</summary><p class='note'>Request</p><pre>{
+ &quot;question&quot;: &quot;Which suppliers supply the rotor seal?&quot;
+}</pre><p class='note'>Answer, 200</p><pre>{
+ &quot;graph&quot;: {
+  &quot;id&quot;: &quot;cg-1cc11e1e&quot;,
+  &quot;name&quot;: &quot;Example: mixing line spare parts&quot;,
+  &quot;company&quot;: &quot;ceat&quot;,
+  &quot;company_name&quot;: &quot;CEAT&quot;
+ },
+ &quot;kind&quot;: &quot;question&quot;,
+ &quot;question&quot;: &quot;Which suppliers supply the rotor seal?&quot;,
+ &quot;matched&quot;: [
+  {
+   &quot;id&quot;: &quot;rs-200&quot;,
+   &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+   &quot;type&quot;: &quot;Part&quot;,
+   &quot;matched_on&quot;: &quot;part of the name&quot;
+  },
+  {
+   &quot;id&quot;: &quot;wear&quot;,
+   &quot;name&quot;: &quot;Seal wear&quot;,
+   &quot;type&quot;: &quot;Defect&quot;,
+   &quot;matched_on&quot;: &quot;part of the name&quot;
+  },
+  {
+   &quot;id&quot;: &quot;sup-x&quot;,
+   &quot;name&quot;: &quot;Supplier X&quot;,
+   &quot;type&quot;: &quot;Supplier&quot;,
+   &quot;matched_on&quot;: &quot;part of the name&quot;
+  },
+  &quot;... 1 more not shown&quot;
+ ],
+ &quot;nodes&quot;: [
+  {
+   &quot;ref&quot;: &quot;N1&quot;,
+   &quot;id&quot;: &quot;rs-200&quot;,
+   &quot;type&quot;: &quot;Part&quot;,
+   &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {
+    &quot;material&quot;: &quot;FKM&quot;,
+    &quot;stock&quot;: 14
+   }
+  },
+  {
+   &quot;ref&quot;: &quot;N2&quot;,
+   &quot;id&quot;: &quot;wear&quot;,
+   &quot;type&quot;: &quot;Defect&quot;,
+   &quot;name&quot;: &quot;Seal wear&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {}
+  },
+  {
+   &quot;ref&quot;: &quot;N3&quot;,
+   &quot;id&quot;: &quot;sup-x&quot;,
+   &quot;type&quot;: &quot;Supplier&quot;,
+   &quot;name&quot;: &quot;Supplier X&quot;,
+   &quot;aliases&quot;: [],
+   &quot;properties&quot;: {
+    &quot;lead_time_days&quot;: 21
+   }
+  },
+  &quot;... 3 more not shown&quot;
+ ],
+ &quot;edges&quot;: [
+  {
+   &quot;ref&quot;: &quot;E1&quot;,
+   &quot;id&quot;: &quot;e6&quot;,
+   &quot;type&quot;: &quot;SUPPLIES&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;sup-x&quot;,
+    &quot;name&quot;: &quot;Supplier X&quot;,
+    &quot;type&quot;: &quot;Supplier&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {
+    &quot;preferred&quot;: true
+   },
+   &quot;text&quot;: &quot;Supplier X SUPPLIES Rotor seal RS-200&quot;
+  },
+  {
+   &quot;ref&quot;: &quot;E2&quot;,
+   &quot;id&quot;: &quot;e7&quot;,
+   &quot;type&quot;: &quot;SUPPLIES&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;sup-y&quot;,
+    &quot;name&quot;: &quot;Supplier Y&quot;,
+    &quot;type&quot;: &quot;Supplier&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {},
+   &quot;text&quot;: &quot;Supplier Y SUPPLIES Rotor seal RS-200&quot;
+  },
+  {
+   &quot;ref&quot;: &quot;E3&quot;,
+   &quot;id&quot;: &quot;e9&quot;,
+   &quot;type&quot;: &quot;AFFECTS&quot;,
+   &quot;source&quot;: {
+    &quot;id&quot;: &quot;wear&quot;,
+    &quot;name&quot;: &quot;Seal wear&quot;,
+    &quot;type&quot;: &quot;Defect&quot;
+   },
+   &quot;target&quot;: {
+    &quot;id&quot;: &quot;rs-200&quot;,
+    &quot;name&quot;: &quot;Rotor seal RS-200&quot;,
+    &quot;type&quot;: &quot;Part&quot;
+   },
+   &quot;properties&quot;: {},
+   &quot;text&quot;: &quot;Seal wear AFFECTS Rotor seal RS-200&quot;
+  },
+  &quot;... 3 more not shown&quot;
+ ],
+ &quot;answer&quot;: &quot;Supplier X SUPPLIES Rotor seal RS-200 [E1]. Supplier Y SUPPLIES Rotor seal RS-200 [E2].&quot;,
+ &quot;answer_note&quot;: null
+}</pre></details>
+</section>
+
+<section class="panel" id="ingest">
+<h2>Ingest JSON fields</h2>
+<p>The JSON sent to <code>POST /api/v1/context-graphs</code>. Add <code>?check=true</code> to the address to check it and keep nothing. When a needed field is missing or wrong, the answer is 422 with each place to fix, and nothing is kept.</p>
+<table><thead><tr><th>Field</th><th>Where</th><th>Needed</th><th>What it means</th><th>When it is missing</th><th>Example</th></tr></thead><tbody><tr><td><code>graph</code></td><td>Top of the JSON</td><td>Yes</td><td>The name of the graph, 3 to 80 characters. A company has one graph of each name.</td><td>Refused: graph is missing.</td><td><code>&quot;graph&quot;: &quot;Example: mixing line spare parts&quot;</code></td></tr>
+<tr><td><code>company</code></td><td>Top of the JSON</td><td>Yes</td><td>The company that owns the data, by id or by name. A person writes their own company, a mesh admin may write any company.</td><td>Refused: company is missing.</td><td><code>&quot;company&quot;: &quot;CEAT&quot;</code></td></tr>
+<tr><td><code>nodes</code></td><td>Top of the JSON</td><td>Yes</td><td>The list of the things in the graph.</td><td>Refused: nodes is missing or empty.</td><td><code>&quot;nodes&quot;: [ ... ]</code></td></tr>
+<tr><td><code>nodes: type</code></td><td>Each node</td><td>Yes</td><td>What the node is, in the words of the person, for example Supplier.</td><td>Refused with the place, for example nodes[1].</td><td><code>&quot;type&quot;: &quot;Supplier&quot;</code></td></tr>
+<tr><td><code>nodes: name</code></td><td>Each node</td><td>Yes</td><td>The name of the node.</td><td>Taken from the id and listed under Filled in. Refused when the id is missing too.</td><td><code>&quot;name&quot;: &quot;Supplier X&quot;</code></td></tr>
+<tr><td><code>nodes: id</code></td><td>Each node</td><td>No</td><td>A short id the edges use.</td><td>Made from the type and the name and listed under Filled in, for example supplier-supplier-x.</td><td><code>&quot;id&quot;: &quot;sup-x&quot;</code></td></tr>
+<tr><td><code>nodes: aliases</code></td><td>Each node</td><td>No</td><td>Other names of the node, up to 50, each up to 200 characters. A query finds the node by any of them.</td><td>No other names.</td><td><code>&quot;aliases&quot;: [&quot;Mixer 1&quot;]</code></td></tr>
+<tr><td><code>nodes: properties</code></td><td>Each node</td><td>No</td><td>Values of the node: text, numbers, true or false, or lists of them. A field written beside type and name is kept as a property too.</td><td>No properties.</td><td><code>&quot;properties&quot;: {&quot;stock&quot;: 14}</code></td></tr>
+<tr><td><code>edges</code></td><td>Top of the JSON</td><td>Yes, can be empty</td><td>The list of relationships. relationships is read as another name for edges.</td><td>A graph of nodes only, with a warning.</td><td><code>&quot;edges&quot;: [ ... ]</code></td></tr>
+<tr><td><code>edges: type</code></td><td>Each edge</td><td>Yes</td><td>The kind of relationship, in the words of the person, for example SUPPLIES.</td><td>Refused with the place, for example edges[2].</td><td><code>&quot;type&quot;: &quot;SUPPLIES&quot;</code></td></tr>
+<tr><td><code>edges: source and target</code></td><td>Each edge</td><td>Yes</td><td>The node the edge starts at and the node it ends at, by id, or by name when the name fits one node.</td><td>Refused with the place. A name that fits no node or several nodes is refused too.</td><td><code>&quot;source&quot;: &quot;sup-x&quot;, &quot;target&quot;: &quot;rs-200&quot;</code></td></tr>
+<tr><td><code>edges: id</code></td><td>Each edge</td><td>No</td><td>A short id of the edge.</td><td>Made from the type and listed under Filled in, for example supplies-1.</td><td><code>&quot;id&quot;: &quot;e6&quot;</code></td></tr>
+<tr><td><code>edges: properties</code></td><td>Each edge</td><td>No</td><td>Values of the edge, the same kinds as on a node.</td><td>No properties.</td><td><code>&quot;properties&quot;: {&quot;preferred&quot;: true}</code></td></tr>
+<tr><td><code>sensitivity</code></td><td>Top of the JSON</td><td>No</td><td>Public, Internal, Confidential or Restricted.</td><td>Restricted, listed under Defaults used.</td><td><code>&quot;sensitivity&quot;: &quot;Internal&quot;</code></td></tr>
+<tr><td><code>sharing</code></td><td>Top of the JSON</td><td>No</td><td>company: only the owning company and mesh admins see the graph. group: every company sees it, which needs Internal or Public. A graph of Others needs group.</td><td>company, listed under Defaults used.</td><td><code>&quot;sharing&quot;: &quot;company&quot;</code></td></tr>
+<tr><td><code>synthetic</code></td><td>Top of the JSON</td><td>No</td><td>true when the data is invented for testing. Only a mesh admin writes true.</td><td>false: the data is treated as real and no cloud model reads it. Listed under Defaults used.</td><td><code>&quot;synthetic&quot;: false</code></td></tr>
+<tr><td><code>description</code></td><td>Top of the JSON</td><td>No</td><td>A text of up to 1,000 characters.</td><td>No description.</td><td><code>&quot;description&quot;: &quot;Spare parts of mixing line 1&quot;</code></td></tr>
+<tr><td><code>graph_id</code></td><td>Top of the JSON</td><td>No</td><td>The id of a graph to replace. The graph keeps its id and its company.</td><td>A new graph is made.</td><td><code>&quot;graph_id&quot;: &quot;cg-1cc11e1e&quot;</code></td></tr></tbody></table>
+</section>
+
+<section class="panel" id="try">
+<h2>Try the API: real requests and answers</h2>
+<p>Each entry is a call sent on 11 November 2026, with its curl command and the answer the running API gave. Set TOKEN with the sign-in, and KEC_TOKEN with the sign-in of a KEC user.</p>
+<div class="try"><div class="calls" id="calls" aria-label="Calls"></div><div class="show" id="show" aria-live="polite"></div></div>
+</section>
+</main>
+<script type="application/json" id="trydata">[{"id": "signin", "group": "Sign in", "title": "Sign in and get a token", "why": "The token for every later call. Write it into TOKEN for the curl commands.", "line": "POST /api/v1/auth/signin", "auth": "None", "body": {"email": "presenter@neuralmesh.local", "password": "<password>"}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/auth/signin' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"email\": \"presenter@neuralmesh.local\", \"password\": \"<password>\"}'", "status": 200, "answer": {"access_token": "<token>", "token_type": "bearer", "user": {"user_id": "418b9454-6d07-47cc-a0b5-c842ec7d57f5", "email": "presenter@neuralmesh.local", "display_name": "NeuralMesh Presenter", "company": "zensar", "company_name": "Zensar", "roles": ["group_user", "mesh_admin"], "expert_profile": null}}}, {"id": "uploads", "group": "Uploaded inputs", "title": "Uploaded inputs and their context graphs", "why": "Every uploaded document the person may see, and the context graphs they form. Each upload says whether it was sent as invented data.", "line": "GET /api/v1/mesh/uploads", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/mesh/uploads' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"uploads": [{"node_id": "ceat", "company": "CEAT", "status": "accepted", "synthetic": false, "context_graph": {"id": "ceat:E-03-U001", "name": "Plant storage note, Kochi bales"}, "document": {"id": "ceat:E-03-U001", "datapoint": "ceat:E-03", "title": "Plant storage note, Kochi bales", "kind": "note", "version": "2026-11", "tags": ["storage", "natural-rubber", "raw-material-storage"], "summary": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out. A bale stored for more than ninety days is given an ageing check before it goes to mixing. Dirt content and volatile matter are trended per supplier lot, so drift shows before the material reaches the mix ... (cut here)", "concepts": ["concept:material-ageing", "concept:materials-handling", "concept:raw-material-storage", "... 1 more not shown"]}, "upload": {"file": "plant_storage_note.txt", "format": "text", "chars": 392, "sha256": "08f465a4fef51a2fb1a8191af9c5b01b238e4b08ef9dcd9165b8ab2d409017bd", "by_role": "Mesh admin", "by_company": "zensar", "at": "2026-11-09T11:59:11+00:00", "by_company_name": "Zensar"}, "concept_matches": {"concept:material-ageing": "tag", "concept:materials-handling": "tag", "concept:raw-material-storage": "tag", "concept:time-to-use-limit": "tag"}, "sharing": {"ceiling": "SUM", "never_leave": false, "item_title": "Approved materials handling and storage learnings (non-formula)", "shared": false}, "removed": null, "in_graph": true}, {"node_id": "raychem", "company": "Raychem RPG", "status": "accepted", "synthetic": true, "context_graph": {"id": "g-d03155d7", "name": "33 kV cable joint failures"}, "document": {"id": "raychem:O-02-U001", "datapoint": "raychem:O-02", "title": "Teardown findings, failed 33 kV cable joints, July to September 2026", "kind": "rca", "version": "2026-11", "tags": ["33kv", "teardown"], "summary": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026. Six failed joints were cut open and checked for the four causes in the set order. Water entry was the cause in 3 joints, a preparation error in 2 and a connector defect in 1. No ... (cut here)", "concepts": ["concept:cable-accessory-failure-analysis", "concept:cable-joint-installation", "concept:failure-pattern", "... 2 more not shown"]}, "upload": {"file": "failed_joint_teardown_findings.pdf", "format": "pdf", "chars": 2509, "sha256": "e2ee953049529d42936a1f3b6d9e3c85a26817592758a38c645922b696f676f7", "by_role": "Mesh admin", "by_company": "zensar", "at": "2026-11-04T10:36:22+00:00", "by_company_name": "Zensar"}, "concept_matches": {"concept:cable-accessory-failure-analysis": "phrase", "concept:cable-joint-installation": "phrase", "concept:failure-pattern": "phrase", "concept:installation-quality-records": "phrase", "concept:root-cause-analysis": "phrase"}, "sharing": {"ceiling": "SUM", "never_leave": false, "item_title": "Field service and failure analysis", "shared": false}, "removed": null, "in_graph": true}, {"node_id": "others", "company": "Others", "status": "accepted", "synthetic": true, "context_graph": {"id": "g-995e7d67", "name": "AI-assisted delivery pilots"}, "document": {"id": "others:G-01-U002", "datapoint": "others:G-01", "title": "Responsible AI use, group guidance note", "kind": "policy", "version": "2026-10", "tags": ["guidance", "ai-policy"], "summary": "Responsible AI use, group guidance note Guidance for every company of the group, issued in October 2026. An AI assistant is used only through the approved gateways of the company. No confidential data of a customer, a supplier or an employee is put into a prompt. A person reads and approves every output before it is us ... (cut here)", "concepts": ["concept:ai-assisted-delivery", "concept:responsible-ai-use"]}, "upload": {"file": "responsible_ai_use_group_guidance.txt", "format": "text", "chars": 1397, "sha256": "6d9b462389b0fa13788b89439e3aa08924b7449a42c356461e7f49051a8884f0", "by_role": "Mesh admin", "by_company": "zensar", "at": "2026-10-15T06:09:58+00:00", "by_company_name": "Zensar"}, "concept_matches": {"concept:ai-assisted-delivery": "phrase", "concept:responsible-ai-use": "phrase"}, "sharing": {"ceiling": "RAG", "never_leave": false, "item_title": "Shared inputs of the group", "shared": true}, "removed": null, "in_graph": true}, "... 8 more not shown"], "graphs": [{"id": "ceat:E-03-U001", "name": "Plant storage note, Kochi bales", "inputs": 1, "removed": 0, "nodes": ["ceat"], "companies": ["CEAT"], "latest": "2026-11-09T11:59:11+00:00"}, {"id": "g-d03155d7", "name": "33 kV cable joint failures", "inputs": 1, "removed": 0, "nodes": ["raychem"], "companies": ["Raychem RPG"], "latest": "2026-11-04T10:36:22+00:00"}, {"id": "g-995e7d67", "name": "AI-assisted delivery pilots", "inputs": 2, "removed": 0, "nodes": ["others", "zensar"], "companies": ["Others", "Zensar"], "latest": "2026-10-15T06:09:58+00:00"}, "... 2 more not shown"], "kinds": ["sop", "rca", "playbook", "... 10 more not shown"], "formats": [".csv", ".docx", ".json", "... 3 more not shown"], "export_formats": ["json", "graphml", "csv", "... 3 more not shown"], "export_format_list": [{"id": "json", "name": "JSON (entities and links)", "custom": false}, {"id": "graphml", "name": "GraphML (for graph tools)", "custom": false}, {"id": "csv", "name": "CSV (one row per entity and link)", "custom": false}, "... 3 more not shown"]}}, {"id": "cg_list", "group": "Uploaded inputs", "title": "Ingested graphs the person may see", "why": "The ingested graphs the person may see.", "line": "GET /api/v1/context-graphs", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/context-graphs' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"graphs": [{"id": "cg-3a828397", "name": "Example: line project risks", "company": "kec", "company_name": "KEC International", "description": null, "sensitivity": "Restricted", "sharing": "company", "synthetic": false, "nodes": 6, "edges": 5, "node_types": {"Risk": 2, "Project": 1, "Site": 1, "Action": 1, "Crew": 1}, "edge_types": {"AT_RISK_OF": 2, "HAS_SITE": 1, "REDUCED_BY": 1, "ASSIGNED_TO": 1}, "created": {"at": "2026-11-11T07:21:22+00:00", "by_role": "Mesh admin", "by_company": "zensar", "by_company_name": "Zensar"}, "updated": null, "can_change": true, "endpoints": {"graph": "/api/v1/context-graphs/cg-3a828397", "view": "/api/v1/context-graphs/cg-3a828397/view", "query": "/api/v1/context-graphs/cg-3a828397/query"}}, {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT", "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.", "sensitivity": "Internal", "sharing": "company", "synthetic": true, "nodes": 9, "edges": 10, "node_types": {"Machine": 2, "Part": 2, "Supplier": 2, "Plant": 1, "Line": 1, "Defect": 1}, "edge_types": {"SUPPLIES": 3, "HAS_MACHINE": 2, "USES_PART": 2, "HAS_LINE": 1, "AFFECTS": 1, "SEEN_ON": 1}, "created": {"at": "2026-11-11T07:18:54+00:00", "by_role": "Mesh admin", "by_company": "zensar", "by_company_name": "Zensar"}, "updated": null, "can_change": true, "endpoints": {"graph": "/api/v1/context-graphs/cg-1cc11e1e", "view": "/api/v1/context-graphs/cg-1cc11e1e/view", "query": "/api/v1/context-graphs/cg-1cc11e1e/query"}}]}}, {"id": "search", "group": "Uploaded inputs", "title": "The one search: the graph part", "why": "The graph part of the one search on Uploaded inputs, for the word teardown: the 33 kV teardown document by its name and a concept by another name.", "line": "GET /api/v1/mesh/graph/search?q=teardown", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/mesh/graph/search?q=teardown' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"query": "teardown", "results": [{"id": "raychem:O-02-U001", "type": "Document", "label": "Teardown findings, failed 33 kV cable joints, July to September 2026", "subsidiary": "raychem", "company": "Raychem RPG", "owner": null, "matched": "label", "sharing": {"ceiling": "SUM", "never_leave": false, "company": "raychem", "item": "Field service and failure analysis", "code": "O-02", "shared": false}, "connections": {"IN_DATAPOINT": 1, "MENTIONS": 5}}, {"id": "concept:cable-accessory-failure-analysis", "type": "Concept", "label": "Cable accessory failure analysis", "subsidiary": null, "company": null, "owner": "Mesh knowledge curator", "matched": "alias or tag", "sharing": null, "connections": {"MENTIONS": 4}}], "by_vector": false, "total": 2}}, {"id": "entity", "group": "Uploaded inputs", "title": "One topic with its links", "why": "One topic, Lot acceptance, with its links by type.", "line": "GET /api/v1/mesh/graph/entity/concept:lot-acceptance", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/mesh/graph/entity/concept:lot-acceptance' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"schema_version": "1.0", "id": "concept:lot-acceptance", "type": "Concept", "label": "Lot acceptance", "layer": "core", "owner": "Mesh knowledge curator", "retired": false, "aliases": ["incoming lot acceptance", "acceptance testing"], "properties": {"domain": "engineering"}, "connections": {"BROADER": 1, "MENTIONS": 2, "SIMILAR_TO": 1}, "subsidiary": null, "company": null, "sharing": null, "related": {"BROADER": [{"id": "concept:incoming-quality-control", "type": "Concept", "label": "Incoming quality control", "status": "live", "edge_status": "approved", "via": null, "properties": {"confidence": 1.0}}], "MENTIONS (incoming)": [{"id": "ceat:E-01-U001", "type": "Document", "label": "Material specification, natural rubber grades and storage limits", "status": "live", "edge_status": "approved", "via": null}, {"id": "ceat:E-03-01", "type": "Document", "label": "Incoming natural-rubber lot acceptance and trending", "status": "live", "edge_status": "approved", "via": null}], "SIMILAR_TO": [{"id": "concept:lot-quality-trending", "type": "Concept", "label": "Lot-level quality trending", "status": "live", "edge_status": "proposed", "via": null, "properties": {"confidence": 0.667, "kind": "Concept", "reason": "shares 2 of 3 connections (Incoming natural-rubber lot acceptance and trending, Incoming quality control) and text score 0.41"}}]}}}, {"id": "upload_graph", "group": "Uploaded inputs", "title": "One uploaded context graph", "why": "The uploaded graph 33 kV cable joint failures: its document, the entities around it and the links among them.", "line": "GET /api/v1/mesh/uploads/graphs/g-d03155d7", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/mesh/uploads/graphs/g-d03155d7' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"id": "g-d03155d7", "name": "33 kV cable joint failures", "documents": ["raychem:O-02-U001"], "nodes": [{"id": "concept:cable-accessory-failure-analysis", "type": "Concept", "label": "Cable accessory failure analysis", "subsidiary": null}, {"id": "concept:cable-joint-installation", "type": "Concept", "label": "Cable joint installation", "subsidiary": null}, {"id": "concept:failure-pattern", "type": "Concept", "label": "Failure pattern", "subsidiary": null}, "... 5 more not shown"], "edges": [{"id": "rel:group.vocabulary/104", "type": "RELATED_TO", "source": "concept:failure-pattern", "target": "concept:root-cause-analysis", "status": "approved"}, {"id": "rel:similarity/concept:failure-pattern~concept:root-cause-analysis", "type": "SIMILAR_TO", "source": "concept:failure-pattern", "target": "concept:root-cause-analysis", "status": "proposed"}, {"id": "rel:raychem.export/OWNED_BY/raychem:O-02->org:raychem", "type": "OWNED_BY", "source": "raychem:O-02", "target": "org:raychem", "status": "approved"}, "... 6 more not shown"], "counts": {"Concept": 5, "Subsidiary": 1, "Datapoint": 1, "Document": 1}}}, {"id": "render", "group": "Uploaded inputs", "title": "That graph in the standard JSON structure", "why": "That graph in the JSON structure, the file Upload input gives.", "line": "POST /api/v1/mesh/uploads/json-templates/render", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"graph_id": "g-d03155d7"}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/mesh/uploads/json-templates/render' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"graph_id\": \"g-d03155d7\"}'", "status": 200, "answer": {"output": {"graph": "33 kV cable joint failures", "companies": ["Raychem RPG"], "documents": [{"id": "raychem:O-02-U001", "title": "Teardown findings, failed 33 kV cable joints, July to September 2026", "company": "Raychem RPG", "kind": "Root cause analysis", "catalogue_item": "Field service and failure analysis", "sharing": "Summary leaves Raychem RPG", "uploaded": "2026-11-04", "concepts": ["Cable accessory failure analysis", "Cable joint installation", "Failure pattern", "... 2 more not shown"]}], "nodes": [{"id": "concept:cable-accessory-failure-analysis", "type": "Concept", "name": "Cable accessory failure analysis", "company": null}, {"id": "concept:cable-joint-installation", "type": "Concept", "name": "Cable joint installation", "company": null}, {"id": "concept:failure-pattern", "type": "Concept", "name": "Failure pattern", "company": null}, "... 5 more not shown"], "edges": [{"id": "rel:group.vocabulary/104", "type": "RELATED_TO", "source": "concept:failure-pattern", "target": "concept:root-cause-analysis", "from": "Failure pattern", "to": "Root cause analysis", "status": "approved"}, {"id": "rel:similarity/concept:failure-pattern~concept:root-cause-analysis", "type": "SIMILAR_TO", "source": "concept:failure-pattern", "target": "concept:root-cause-analysis", "from": "Failure pattern", "to": "Root cause analysis", "status": "proposed"}, {"id": "rel:raychem.export/OWNED_BY/raychem:O-02->org:raychem", "type": "OWNED_BY", "source": "raychem:O-02", "target": "org:raychem", "from": "Field service and failure analysis", "to": "Raychem RPG", "status": "approved"}, "... 6 more not shown"]}}}, {"id": "cg_view", "group": "Uploaded inputs", "title": "An ingested graph's nodes and edges", "why": "Nodes and edges in the shape a drawing takes.", "line": "GET /api/v1/context-graphs/cg-1cc11e1e/view", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/view' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "documents": [], "nodes": [{"id": "plant-a", "type": "Plant", "label": "Plant A", "subsidiary": "ceat"}, {"id": "line-1", "type": "Line", "label": "Mixing line 1", "subsidiary": "ceat"}, {"id": "m-01", "type": "Machine", "label": "Internal mixer M-01", "subsidiary": "ceat"}, "... 6 more not shown"], "edges": [{"id": "e1", "type": "HAS_LINE", "source": "plant-a", "target": "line-1", "status": "approved"}, {"id": "e2", "type": "HAS_MACHINE", "source": "line-1", "target": "m-01", "status": "approved"}, {"id": "e3", "type": "HAS_MACHINE", "source": "line-1", "target": "m-02", "status": "approved"}, "... 7 more not shown"], "counts": {"Plant": 1, "Line": 1, "Machine": 2, "Part": 2, "Supplier": 2, "Defect": 1}, "graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT", "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.", "sensitivity": "Internal", "sharing": "company", "synthetic": true, "nodes": 9, "edges": 10, "node_types": {"Machine": 2, "Part": 2, "Supplier": 2, "Plant": 1, "Line": 1, "Defect": 1}, "edge_types": {"SUPPLIES": 3, "HAS_MACHINE": 2, "USES_PART": 2, "HAS_LINE": 1, "AFFECTS": 1, "SEEN_ON": 1}, "created": {"at": "2026-11-11T07:18:54+00:00", "by_role": "Mesh admin", "by_company": "zensar", "by_company_name": "Zensar"}, "updated": null, "can_change": true, "endpoints": {"graph": "/api/v1/context-graphs/cg-1cc11e1e", "view": "/api/v1/context-graphs/cg-1cc11e1e/view", "query": "/api/v1/context-graphs/cg-1cc11e1e/query"}}}}, {"id": "suggest", "group": "Upload input", "title": "Read a file and propose the fields", "why": "Read a file and propose the title, tags, kind and graph. Here the moisture review fits the graph 33 kV cable joint failures. Nothing is kept. Run the curl command in the folder that holds the file.", "line": "POST /api/v1/mesh/uploads/suggest", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"file": "02_cable_joint_moisture_review.txt", "node_id": "raychem"}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/mesh/uploads/suggest' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -F 'file=@02_cable_joint_moisture_review.txt' -F 'node_id=raychem'", "status": 200, "answer": {"title": "Moisture entry in 33 kV cable joints, field review October 2026", "tags": ["cable-accessory-failure-analysis", "root-cause-analysis", "cable-joint-installation", "... 2 more not shown"], "kind": {"kind": "report", "label": "", "by": "model", "reason": "stand-in: candidates found by full or two-word names"}, "concepts": [{"id": "concept:cable-accessory-failure-analysis", "label": "Cable accessory failure analysis"}, {"id": "concept:root-cause-analysis", "label": "Root cause analysis"}, {"id": "concept:cable-joint-installation", "label": "Cable joint installation"}, "... 2 more not shown"], "graph": {"mode": "append", "id": "g-d03155d7", "name": "33 kV cable joint failures", "shared": ["concept:cable-accessory-failure-analysis", "concept:cable-joint-installation", "concept:installation-quality-records", "... 1 more not shown"], "reason": "stand-in: candidates found by full or two-word names"}, "decided_by": "model", "candidates": [{"id": "concept:cable-accessory-failure-analysis", "label": "Cable accessory failure analysis", "strong": true, "found_by": "full name or a name of two or more words"}, {"id": "concept:root-cause-analysis", "label": "Root cause analysis", "strong": true, "found_by": "full name or a name of two or more words"}, {"id": "concept:cable-joint-installation", "label": "Cable joint installation", "strong": true, "found_by": "full name or a name of two or more words"}, "... 5 more not shown"], "graph_candidates": [{"id": "g-d03155d7", "name": "33 kV cable joint failures", "closeness": 0.63}, {"id": "g-e6f6addf", "name": "Overseas acquisition integration", "closeness": 0.22}, {"id": "ceat:E-03-U001", "name": "Plant storage note, Kochi bales", "closeness": 0.17}, "... 2 more not shown"], "format": "text", "chars": 671}}, {"id": "items", "group": "Upload input", "title": "Catalogue items of a company", "why": "The catalogue items of Raychem RPG, each with its sharing rule. The upload's datapoint is one of these codes.", "line": "GET /api/v1/mesh/uploads/items/raychem", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/mesh/uploads/items/raychem' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"node_id": "raychem", "items": [{"code": "C-03", "title": "Application notes for customers and electric mobility", "ceiling": "SUM", "never_leave": false, "owner_role": "Head of Applications", "domain": "commercial"}, {"code": "E-01", "title": "Installation and testing procedures", "ceiling": "SUM", "never_leave": false, "owner_role": "Head of Engineering", "domain": "engineering"}, {"code": "F-02", "title": "Partner agreement and pricing file", "ceiling": "MD", "never_leave": true, "owner_role": "General Counsel", "domain": "corporate"}, "... 4 more not shown"], "new_item_areas": [{"letter": "E", "domain": "engineering", "title": "engineering knowledge"}, {"letter": "O", "domain": "operations", "title": "operations knowledge"}, {"letter": "C", "domain": "commercial", "title": "commercial knowledge"}, "... 2 more not shown"]}}, {"id": "cg_sample", "group": "Ingest data", "title": "The sample JSON", "why": "The sample JSON for the person's company.", "line": "GET /api/v1/context-graphs/sample", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/context-graphs/sample' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"graph": "Example: spare parts of a mixing line", "company": "Zensar", "description": "Example data, invented to show the JSON structure.", "sensitivity": "Internal", "sharing": "company", "nodes": [{"id": "plant-a", "type": "Plant", "name": "Plant A", "properties": {"city": "Example city"}}, {"id": "line-1", "type": "Line", "name": "Mixing line 1"}, {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"]}, "... 4 more not shown"], "edges": [{"type": "HAS_LINE", "source": "plant-a", "target": "line-1"}, {"type": "HAS_MACHINE", "source": "line-1", "target": "m-01"}, {"type": "USES_PART", "source": "m-01", "target": "rs-200", "properties": {"per_year": 6}}, "... 4 more not shown"]}}, {"id": "cg_check", "group": "Ingest data", "title": "Check a JSON and keep nothing", "why": "The sample checked with check=true: what would be kept, and nothing is kept.", "line": "POST /api/v1/context-graphs?check=true", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"graph": "Example: spare parts of a mixing line", "company": "Zensar", "description": "Example data, invented to show the JSON structure.", "sensitivity": "Internal", "sharing": "company", "nodes": [{"id": "plant-a", "type": "Plant", "name": "Plant A", "properties": {"city": "Example city"}}, {"id": "line-1", "type": "Line", "name": "Mixing line 1"}, {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"]}, {"id": "rs-200", "type": "Part", "name": "Rotor seal RS-200", "properties": {"material": "FKM", "stock": 14}}, {"id": "sup-x", "type": "Supplier", "name": "Supplier X", "properties": {"lead_time_days": 21}}, {"id": "sup-y", "type": "Supplier", "name": "Supplier Y", "properties": {"lead_time_days": 35}}, {"id": "wear", "type": "Defect", "name": "Seal wear"}], "edges": [{"type": "HAS_LINE", "source": "plant-a", "target": "line-1"}, {"type": "HAS_MACHINE", "source": "line-1", "target": "m-01"}, {"type": "USES_PART", "source": "m-01", "target": "rs-200", "properties": {"per_year": 6}}, {"type": "SUPPLIES", "source": "sup-x", "target": "rs-200", "properties": {"preferred": true}}, {"type": "SUPPLIES", "source": "sup-y", "target": "rs-200"}, {"type": "AFFECTS", "source": "wear", "target": "rs-200"}, {"type": "SEEN_ON", "source": "wear", "target": "m-01", "properties": {"times_in_2026": 4}}]}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs?check=true' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"graph\": \"Example: spare parts of a mixing line\", \"company\": \"Zensar\", \"description\": \"Example data, invented to show the JSON structure.\", \"sensitivity\": \"Internal\", \"sharing\": \"company\", \"nodes\": [{\"id\": \"plant-a\", \"type\": \"Plant\", \"name\": \"Plant A\", \"properties\": {\"city\": \"Example city\"}}, {\"id\": \"line-1\", \"type\": \"Line\", \"name\": \"Mixing line 1\"}, {\"id\": \"m-01\", \"type\": \"Machine\", \"name\": \"Internal mixer M-01\", \"aliases\": [\"Mixer 1\"]}, {\"id\": \"rs-200\", \"type\": \"Part\", \"name\": \"Rotor seal RS-200\", \"properties\": {\"material\": \"FKM\", \"stock\": 14}}, {\"id\": \"sup-x\", \"type\": \"Supplier\", \"name\": \"Supplier X\", \"properties\": {\"lead_time_days\": 21}}, {\"id\": \"sup-y\", \"type\": \"Supplier\", \"name\": \"Supplier Y\", \"properties\": {\"lead_time_days\": 35}}, {\"id\": \"wear\", \"type\": \"Defect\", \"name\": \"Seal wear\"}], \"edges\": [{\"type\": \"HAS_LINE\", \"source\": \"plant-a\", \"target\": \"line-1\"}, {\"type\": \"HAS_MACHINE\", \"source\": \"line-1\", \"target\": \"m-01\"}, {\"type\": \"USES_PART\", \"source\": \"m-01\", \"target\": \"rs-200\", \"properties\": {\"per_year\": 6}}, {\"type\": \"SUPPLIES\", \"source\": \"sup-x\", \"target\": \"rs-200\", \"properties\": {\"preferred\": true}}, {\"type\": \"SUPPLIES\", \"source\": \"sup-y\", \"target\": \"rs-200\"}, {\"type\": \"AFFECTS\", \"source\": \"wear\", \"target\": \"rs-200\"}, {\"type\": \"SEEN_ON\", \"source\": \"wear\", \"target\": \"m-01\", \"properties\": {\"times_in_2026\": 4}}]}'", "status": 200, "answer": {"graph": {"id": null, "name": "Example: spare parts of a mixing line", "company": "zensar", "company_name": "Zensar", "description": "Example data, invented to show the JSON structure.", "sensitivity": "Internal", "sharing": "company", "synthetic": false, "nodes": 7, "edges": 7, "node_types": {"Supplier": 2, "Plant": 1, "Line": 1, "Machine": 1, "Part": 1, "Defect": 1}, "edge_types": {"SUPPLIES": 2, "HAS_LINE": 1, "HAS_MACHINE": 1, "USES_PART": 1, "AFFECTS": 1, "SEEN_ON": 1}, "created": {"at": "2026-11-11T17:58:32+00:00", "by_role": "Mesh admin", "by_company": "zensar", "by_company_name": "Zensar"}, "updated": null, "can_change": true, "endpoints": null}, "replaced": false, "unchanged": false, "checked_only": true, "filled": ["7 edge ids made from the type"], "defaults": ["synthetic: false, so the data is treated as real and no cloud model reads it"], "ignored": [], "warnings": []}}, {"id": "cg_refused", "group": "Ingest data", "title": "A JSON with mistakes is refused", "why": "A JSON with mistakes: each place to fix, and nothing is kept.", "line": "POST /api/v1/context-graphs", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"graph": "Example: spare parts of a mixing line", "description": "Example data, invented to show the JSON structure.", "sensitivity": "Internal", "sharing": "company", "nodes": [{"id": "plant-a", "type": "Plant", "name": "Plant A", "properties": {"city": "Example city"}}, {"id": "line-1", "type": "Line", "name": "Mixing line 1"}, {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"]}, {"id": "rs-200", "type": "Part", "name": "Rotor seal RS-200", "properties": {"material": "FKM", "stock": 14}}, {"id": "sup-x", "type": "Supplier", "name": "Supplier X", "properties": {"lead_time_days": 21}}, {"id": "sup-y", "type": "Supplier", "name": "Supplier Y", "properties": {"lead_time_days": 35}}, {"id": "wear", "type": "Defect", "name": "Seal wear"}], "edges": [{"type": "HAS_LINE", "source": "plant-a", "target": "nowhere"}, {"type": "HAS_MACHINE", "source": "line-1", "target": "m-01"}, {"type": "USES_PART", "source": "m-01", "target": "rs-200", "properties": {"per_year": 6}}, {"type": "SUPPLIES", "source": "sup-x", "target": "rs-200", "properties": {"preferred": true}}, {"type": "SUPPLIES", "source": "sup-y", "target": "rs-200"}, {"type": "AFFECTS", "source": "wear", "target": "rs-200"}, {"type": "SEEN_ON", "source": "wear", "target": "m-01", "properties": {"times_in_2026": 4}}]}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"graph\": \"Example: spare parts of a mixing line\", \"description\": \"Example data, invented to show the JSON structure.\", \"sensitivity\": \"Internal\", \"sharing\": \"company\", \"nodes\": [{\"id\": \"plant-a\", \"type\": \"Plant\", \"name\": \"Plant A\", \"properties\": {\"city\": \"Example city\"}}, {\"id\": \"line-1\", \"type\": \"Line\", \"name\": \"Mixing line 1\"}, {\"id\": \"m-01\", \"type\": \"Machine\", \"name\": \"Internal mixer M-01\", \"aliases\": [\"Mixer 1\"]}, {\"id\": \"rs-200\", \"type\": \"Part\", \"name\": \"Rotor seal RS-200\", \"properties\": {\"material\": \"FKM\", \"stock\": 14}}, {\"id\": \"sup-x\", \"type\": \"Supplier\", \"name\": \"Supplier X\", \"properties\": {\"lead_time_days\": 21}}, {\"id\": \"sup-y\", \"type\": \"Supplier\", \"name\": \"Supplier Y\", \"properties\": {\"lead_time_days\": 35}}, {\"id\": \"wear\", \"type\": \"Defect\", \"name\": \"Seal wear\"}], \"edges\": [{\"type\": \"HAS_LINE\", \"source\": \"plant-a\", \"target\": \"nowhere\"}, {\"type\": \"HAS_MACHINE\", \"source\": \"line-1\", \"target\": \"m-01\"}, {\"type\": \"USES_PART\", \"source\": \"m-01\", \"target\": \"rs-200\", \"properties\": {\"per_year\": 6}}, {\"type\": \"SUPPLIES\", \"source\": \"sup-x\", \"target\": \"rs-200\", \"properties\": {\"preferred\": true}}, {\"type\": \"SUPPLIES\", \"source\": \"sup-y\", \"target\": \"rs-200\"}, {\"type\": \"AFFECTS\", \"source\": \"wear\", \"target\": \"rs-200\"}, {\"type\": \"SEEN_ON\", \"source\": \"wear\", \"target\": \"m-01\", \"properties\": {\"times_in_2026\": 4}}]}'", "status": 422, "answer": {"detail": "The graph was not created: 2 fields need a change.", "problems": ["company: missing. Write \"company\" with the company that owns the data, for example \"CEAT\".", "edges[0]: target \"nowhere\" is not a node of this graph."], "filled": ["7 edge ids made from the type"], "defaults": ["synthetic: false, so the data is treated as real and no cloud model reads it"], "ignored": [], "warnings": []}}, {"id": "cg_get", "group": "Ingest data", "title": "One ingested graph as JSON", "why": "One graph in the format it was ingested in, with its graph_id.", "line": "GET /api/v1/context-graphs/cg-1cc11e1e", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": null, "curl": "curl -s -X GET 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e' \\\n  -H \"Authorization: Bearer $TOKEN\"", "status": 200, "answer": {"graph_id": "cg-1cc11e1e", "graph": "Example: mixing line spare parts", "company": "CEAT", "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.", "sensitivity": "Internal", "sharing": "company", "synthetic": true, "nodes": [{"id": "plant-a", "type": "Plant", "name": "Plant A", "properties": {"city": "Example city"}}, {"id": "line-1", "type": "Line", "name": "Mixing line 1"}, {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"]}, "... 6 more not shown"], "edges": [{"id": "e1", "type": "HAS_LINE", "source": "plant-a", "target": "line-1"}, {"id": "e2", "type": "HAS_MACHINE", "source": "line-1", "target": "m-01"}, {"id": "e3", "type": "HAS_MACHINE", "source": "line-1", "target": "m-02"}, "... 7 more not shown"]}}, {"id": "q_overview", "group": "Queries by graph id", "title": "What the graph holds", "why": "What the graph holds: its node types and edge types with counts.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"overview": true}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"overview\": true}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "overview", "nodes": 9, "edges": 10, "node_types": {"Machine": 2, "Part": 2, "Supplier": 2, "Plant": 1, "Line": 1, "Defect": 1}, "edge_types": [{"type": "SUPPLIES", "count": 3, "from_types": ["Supplier"], "to_types": ["Part"]}, {"type": "HAS_MACHINE", "count": 2, "from_types": ["Line"], "to_types": ["Machine"]}, {"type": "USES_PART", "count": 2, "from_types": ["Machine"], "to_types": ["Part"]}, "... 3 more not shown"], "nodes_without_edges": 0}}, {"id": "q_nodes", "group": "Queries by graph id", "title": "Find nodes by type, name or property", "why": "Nodes by type. name finds a part of a name, properties finds equal values.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"nodes": {"type": "Supplier"}}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"nodes\": {\"type\": \"Supplier\"}}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "nodes", "nodes": [{"id": "sup-x", "type": "Supplier", "name": "Supplier X", "aliases": [], "properties": {"lead_time_days": 21}}, {"id": "sup-y", "type": "Supplier", "name": "Supplier Y", "aliases": [], "properties": {"lead_time_days": 35}}], "total": 2}}, {"id": "q_node", "group": "Queries by graph id", "title": "One node and its neighbours", "why": "One node, found by its other name here, with its neighbours and the edges walked.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"node": "Mixer 1", "hops": 1}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"node\": \"Mixer 1\", \"hops\": 1}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "node", "node": {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"], "properties": {}}, "neighbours": [{"id": "line-1", "type": "Line", "name": "Mixing line 1", "aliases": [], "properties": {}}, {"id": "rs-200", "type": "Part", "name": "Rotor seal RS-200", "aliases": [], "properties": {"material": "FKM", "stock": 14}}, {"id": "wear", "type": "Defect", "name": "Seal wear", "aliases": [], "properties": {}}], "neighbours_total": 3, "edges": [{"id": "e2", "type": "HAS_MACHINE", "source": {"id": "line-1", "name": "Mixing line 1", "type": "Line"}, "target": {"id": "m-01", "name": "Internal mixer M-01", "type": "Machine"}, "properties": {}, "text": "Mixing line 1 HAS_MACHINE Internal mixer M-01"}, {"id": "e4", "type": "USES_PART", "source": {"id": "m-01", "name": "Internal mixer M-01", "type": "Machine"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {"per_year": 6}, "text": "Internal mixer M-01 USES_PART Rotor seal RS-200"}, {"id": "e10", "type": "SEEN_ON", "source": {"id": "wear", "name": "Seal wear", "type": "Defect"}, "target": {"id": "m-01", "name": "Internal mixer M-01", "type": "Machine"}, "properties": {"times_in_2026": 4}, "text": "Seal wear SEEN_ON Internal mixer M-01"}], "edges_total": 3}}, {"id": "q_edges", "group": "Queries by graph id", "title": "Relationships by type, source or target", "why": "Relationships of one type that end at one node.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"edges": {"type": "SUPPLIES", "target": "Rotor seal RS-200"}}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"edges\": {\"type\": \"SUPPLIES\", \"target\": \"Rotor seal RS-200\"}}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "edges", "edges": [{"id": "e6", "type": "SUPPLIES", "source": {"id": "sup-x", "name": "Supplier X", "type": "Supplier"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {"preferred": true}, "text": "Supplier X SUPPLIES Rotor seal RS-200"}, {"id": "e7", "type": "SUPPLIES", "source": {"id": "sup-y", "name": "Supplier Y", "type": "Supplier"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {}, "text": "Supplier Y SUPPLIES Rotor seal RS-200"}], "total": 2}}, {"id": "q_path", "group": "Queries by graph id", "title": "How two nodes are connected", "why": "How two nodes are connected: the shortest way, edge by edge.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"path": {"from": "Supplier X", "to": "Plant A"}}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"path\": {\"from\": \"Supplier X\", \"to\": \"Plant A\"}}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "path", "from": {"id": "sup-x", "type": "Supplier", "name": "Supplier X", "aliases": [], "properties": {"lead_time_days": 21}}, "to": {"id": "plant-a", "type": "Plant", "name": "Plant A", "aliases": [], "properties": {"city": "Example city"}}, "hops": 4, "paths": [{"edges": [{"id": "e6", "type": "SUPPLIES", "source": {"id": "sup-x", "name": "Supplier X", "type": "Supplier"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {"preferred": true}, "text": "Supplier X SUPPLIES Rotor seal RS-200"}, {"id": "e4", "type": "USES_PART", "source": {"id": "m-01", "name": "Internal mixer M-01", "type": "Machine"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {"per_year": 6}, "text": "Internal mixer M-01 USES_PART Rotor seal RS-200"}, {"id": "e2", "type": "HAS_MACHINE", "source": {"id": "line-1", "name": "Mixing line 1", "type": "Line"}, "target": {"id": "m-01", "name": "Internal mixer M-01", "type": "Machine"}, "properties": {}, "text": "Mixing line 1 HAS_MACHINE Internal mixer M-01"}, "... 1 more not shown"], "text": "Supplier X SUPPLIES Rotor seal RS-200, then Internal mixer M-01 USES_PART Rotor seal RS-200, then Mixing line 1 HAS_MACHINE Internal mixer M-01, then Plant A HAS_LINE Mixing line 1"}]}}, {"id": "q_similar", "group": "Queries by graph id", "title": "Nodes similar to one", "why": "Nodes of the same type ranked by the neighbours they share.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"similar": {"node": "Supplier X", "top": 5}}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"similar\": {\"node\": \"Supplier X\", \"top\": 5}}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "similar", "node": {"id": "sup-x", "type": "Supplier", "name": "Supplier X", "aliases": [], "properties": {"lead_time_days": 21}}, "similar": [{"node": {"id": "sup-y", "type": "Supplier", "name": "Supplier Y", "aliases": [], "properties": {"lead_time_days": 35}}, "score": 0.5, "shared": ["Rotor seal RS-200"], "reason": "shares 1 of the 2 neighbours of the two"}], "total": 1, "rule": "nodes of the same type, ranked by shared neighbours divided by all the neighbours of the two"}}, {"id": "q_question", "group": "Queries by graph id", "title": "A question in plain words", "why": "A question in plain words: the nodes it names, the edges around them, and a written answer that cites them.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"question": "Which suppliers supply the rotor seal?"}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"question\": \"Which suppliers supply the rotor seal?\"}'", "status": 200, "answer": {"graph": {"id": "cg-1cc11e1e", "name": "Example: mixing line spare parts", "company": "ceat", "company_name": "CEAT"}, "kind": "question", "question": "Which suppliers supply the rotor seal?", "matched": [{"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part", "matched_on": "part of the name"}, {"id": "wear", "name": "Seal wear", "type": "Defect", "matched_on": "part of the name"}, {"id": "sup-x", "name": "Supplier X", "type": "Supplier", "matched_on": "part of the name"}, "... 1 more not shown"], "nodes": [{"ref": "N1", "id": "rs-200", "type": "Part", "name": "Rotor seal RS-200", "aliases": [], "properties": {"material": "FKM", "stock": 14}}, {"ref": "N2", "id": "wear", "type": "Defect", "name": "Seal wear", "aliases": [], "properties": {}}, {"ref": "N3", "id": "sup-x", "type": "Supplier", "name": "Supplier X", "aliases": [], "properties": {"lead_time_days": 21}}, "... 3 more not shown"], "edges": [{"ref": "E1", "id": "e6", "type": "SUPPLIES", "source": {"id": "sup-x", "name": "Supplier X", "type": "Supplier"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {"preferred": true}, "text": "Supplier X SUPPLIES Rotor seal RS-200"}, {"ref": "E2", "id": "e7", "type": "SUPPLIES", "source": {"id": "sup-y", "name": "Supplier Y", "type": "Supplier"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {}, "text": "Supplier Y SUPPLIES Rotor seal RS-200"}, {"ref": "E3", "id": "e9", "type": "AFFECTS", "source": {"id": "wear", "name": "Seal wear", "type": "Defect"}, "target": {"id": "rs-200", "name": "Rotor seal RS-200", "type": "Part"}, "properties": {}, "text": "Seal wear AFFECTS Rotor seal RS-200"}, "... 3 more not shown"], "answer": "Supplier X SUPPLIES Rotor seal RS-200 [E1]. Supplier Y SUPPLIES Rotor seal RS-200 [E2].", "answer_note": null}}, {"id": "q_missing", "group": "Queries by graph id", "title": "A name that is not in the graph", "why": "A name that is not in the graph gives 404 with the closest names.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of the presenter (a mesh admin of Zensar)", "body": {"node": "Rotor sael RS-200"}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"node\": \"Rotor sael RS-200\"}'", "status": 404, "answer": {"detail": "No node with the id, name or other name \"Rotor sael RS-200\" in this graph. Close names: Rotor seal RS-200."}}, {"id": "q_scope", "group": "Queries by graph id", "title": "Another company asks a company-only graph", "why": "The same graph asked by a person of KEC: a CEAT graph with sharing company is not shown to them.", "line": "POST /api/v1/context-graphs/cg-1cc11e1e/query", "auth": "Bearer token of a KEC demo user", "body": {"overview": true}, "curl": "curl -s -X POST 'http://127.0.0.1:8000/api/v1/context-graphs/cg-1cc11e1e/query' \\\n  -H \"Authorization: Bearer $KEC_TOKEN\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"overview\": true}'", "status": 404, "answer": {"detail": "No context graph with this id is shown to you."}}]</script>
+<script>
+const tabs=document.querySelectorAll('.tab'),panels=document.querySelectorAll('.panel')
+tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.setAttribute('aria-selected',x===t?'true':'false'));panels.forEach(p=>p.classList.toggle('on',p.id===t.dataset.tab));try{history.replaceState(null,'','#'+t.dataset.tab)}catch(_){}}))
+const want=location.hash.slice(1);if(want){const t=[...tabs].find(x=>x.dataset.tab===want);if(t)t.click()}
+const calls=JSON.parse(document.getElementById('trydata').textContent)
+const list=document.getElementById('calls'),show=document.getElementById('show')
+let group=null
+calls.forEach((c,i)=>{if(c.group!==group){group=c.group;const h=document.createElement('h4');h.textContent=group;list.appendChild(h)}
+ const b=document.createElement('button');b.type='button';b.dataset.i=i;b.setAttribute('aria-pressed','false')
+ const strong=document.createElement('span');strong.textContent=c.title;const small=document.createElement('small');small.textContent=c.line
+ b.append(strong,small);b.addEventListener('click',()=>pick(i));list.appendChild(b)})
+function el(tag,cls,text){const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x}
+function pick(i){const c=calls[i];document.querySelectorAll('#calls button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.i==String(i)?'true':'false'))
+ show.replaceChildren()
+ const h=el('h3',null,c.title);const st=el('span','status '+(c.status<300?'ok':'bad'),String(c.status));h.appendChild(st);show.appendChild(h)
+ show.appendChild(el('p',null,c.why))
+ show.appendChild(el('p','note','Request'));show.appendChild(el('pre',null,c.line+'\nAuthorization: '+c.auth+(c.body!==null&&c.body!==undefined?'\n\n'+JSON.stringify(c.body,null,1):'')))
+ const cp=el('button','copy','Copy');cp.type='button';cp.addEventListener('click',()=>{try{navigator.clipboard.writeText(c.curl);cp.textContent='Copied'}catch(_){cp.textContent='Select and copy'}})
+ const lab=el('p','note','curl, for a terminal');lab.appendChild(cp);show.appendChild(lab);show.appendChild(el('pre',null,c.curl))
+ show.appendChild(el('p','note','Answer of the running API, '+c.status+'. Long lists show their first 3 items'));show.appendChild(el('pre',null,JSON.stringify(c.answer,null,1)))}
+pick(0)
+</script>
+</body></html>

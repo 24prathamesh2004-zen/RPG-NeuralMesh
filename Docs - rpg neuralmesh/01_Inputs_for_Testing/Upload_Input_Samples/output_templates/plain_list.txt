@@ -1,0 +1,7 @@
+[extension] txt
+[header]
+Entities and links of the context graph
+[entity]
+- {label} ({type}, {company})
+[link]
+- {source} {type} {target}

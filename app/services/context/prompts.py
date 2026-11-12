@@ -17,6 +17,7 @@ FILES = {
     "classify": "mesh_classify_v1.txt",
     "kind": "mesh_kind_v1.txt",
     "map": "mesh_map_v2.txt",
+    "extract": "mesh_extract_v1.txt",
 }
 
 

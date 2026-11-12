@@ -1,0 +1,8 @@
+[extension] mmd
+[escape] mermaid
+[header]
+graph LR
+[entity]
+  {key}["{label}"]
+[link]
+  {source_key} -->|{type}| {target_key}

@@ -530,9 +530,14 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .context-upload-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--mesh-muted); pointer-events: none; }
 .context-upload-search input { width: 100%; padding-left: 32px; }
 .context-upload-row .context-match { padding-left: 8px; border-left: 2px solid var(--mesh-accent); }
+/* a graph row whose inputs match: the row opens the graph, and each matching input line opens that input */
+.context-upload-row.with-inputs { padding: 0 0 6px; gap: 0; cursor: default; }
+.context-upload-row.with-inputs > .context-row-open { display: grid; gap: 4px; padding: 10px 12px 4px; border: 0; border-radius: 8px; background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.context-upload-row.with-inputs > button.context-match { margin: 0 12px; padding: 2px 0 2px 8px; border: 0; border-left: 2px solid var(--mesh-accent); background: none; text-align: left; font: inherit; font-size: var(--mesh-text-small); color: var(--mesh-muted); cursor: pointer; }
+.context-upload-row.with-inputs > button.context-match:hover, .context-upload-row.with-inputs > button.context-match.active { color: var(--mesh-accent-dark); }
 .context-inputs { display: grid; gap: 6px; }
 .context-graph-actions { display: flex; flex: none; flex-wrap: wrap; gap: 8px; }
-.context-upload-row:hover, .context-result:hover { border-color: color-mix(in srgb, var(--mesh-accent) 45%, var(--mesh-line)); }
+.context-upload-row:hover { border-color: color-mix(in srgb, var(--mesh-accent) 45%, var(--mesh-line)); }
 .context-upload-row { display: grid; gap: 4px; border: 1px solid var(--mesh-line); border-radius: 8px; background: white; padding: 10px 12px; text-align: left; cursor: pointer; }
 .context-upload-row.active { border-color: var(--mesh-accent); box-shadow: 0 0 0 1px var(--mesh-accent); }
 .context-upload-row strong { font-size: 13px; color: var(--mesh-ink); }
@@ -561,13 +566,6 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .context-template-preview { max-height: 280px; overflow: auto; margin: 0; border: 1px solid var(--mesh-line); border-radius: var(--mesh-control-radius); background: var(--mesh-paper); padding: 10px; font-family: var(--mesh-mono); font-size: 12px; }
 .context-download select { flex: 1 1 150px; min-width: 0; max-width: 240px; height: var(--mesh-control); border: 1px solid var(--mesh-line); border-radius: var(--mesh-control-radius); background: white; padding: 0 10px; color: var(--mesh-ink); font-size: var(--mesh-text-small); font-weight: 500; }
 .context-download select:hover { border-color: color-mix(in srgb, var(--mesh-accent) 45%, var(--mesh-line)); }
-.context-search-form { display: flex; gap: 8px; }
-.context-search-form input { flex: 1; }
-.context-results { display: grid; gap: 6px; }
-.context-result { display: grid; grid-template-columns: minmax(0,1fr) 110px; gap: 2px 10px; border: 1px solid var(--mesh-line); border-radius: 8px; background: white; padding: 9px 12px; text-align: left; cursor: pointer; }
-.context-result.active { border-color: var(--mesh-accent); box-shadow: 0 0 0 1px var(--mesh-accent); }
-.context-result strong { font-size: 13px; color: var(--mesh-ink); }
-.context-result small { color: var(--mesh-muted); font-size: var(--mesh-text-small); }
 .context-type { display: inline-flex; align-items: center; gap: 6px; font-size: var(--mesh-text-label); font-weight: 700; text-transform: uppercase; color: var(--mesh-muted); }
 .context-type i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 .context-related { display: grid; gap: 8px; }
@@ -578,4 +576,25 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .context-concepts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .mesh-data-page .dashboard-stack { gap: 16px; }
 .context-concepts span { border-radius: 999px; background: var(--mesh-accent-soft); padding: 3px 9px; font-size: var(--mesh-text-small); color: var(--mesh-accent-dark); }
+/* Upload input, the graph JSON form: the JSON box, and the lists of what was filled in, set by default, not read or refused */
+.context-form textarea.context-ingest-text { height: 320px; padding: 10px; font-family: var(--mesh-mono); font-size: 12px; font-weight: 400; line-height: 1.5; resize: vertical; }
+.context-ingest-outcome { display: grid; gap: 6px; }
+.context-ingest-list { margin: 2px 0 0; padding-left: 18px; display: grid; gap: 2px; font-size: var(--mesh-text-small); font-weight: 400; }
+.context-ingest-outcome code, .context-detail code { font-family: var(--mesh-mono); font-size: 12px; overflow-wrap: anywhere; }
+.context-ingest-outcome { min-width: 0; }
+.context-ingest-list li, .context-ingest-outcome strong, .context-detail dd { overflow-wrap: anywhere; }
+.context-form label span.context-parse-note { color: var(--mesh-bad); }
 @media (max-width: 900px) { .context-graph-grid, .context-form-row { grid-template-columns: 1fr; } }
+
+/* Context graph: the quality notes of a graph, and the links found in the text of an input */
+.context-quality { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 4px; font-size: 13px; }
+.context-quality li { padding: 6px 10px; border-radius: 8px; background: var(--mesh-surface-muted, #f5f6fa); color: var(--mesh-text-muted, #5c6378); }
+.context-quality li.warn { background: #fff4e5; color: #8a4b00; }
+.context-quality li.ok { background: #ebfbee; color: #2b6a35; }
+.context-found ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 8px; }
+.context-found li { display: grid; gap: 2px; font-size: 13px; }
+.context-found small { color: var(--mesh-text-muted, #5c6378); }
+.context-found em { font-style: normal; font-size: 12px; padding: 1px 6px; border-radius: 6px; background: #fff4e5; color: #8a4b00; }
+.context-found em.approved { background: #ebfbee; color: #2b6a35; }
+.context-found-actions { display: flex; gap: 6px; margin-top: 2px; }
+.context-found-actions .mesh-outline-action { padding: 2px 10px; font-size: 12px; }

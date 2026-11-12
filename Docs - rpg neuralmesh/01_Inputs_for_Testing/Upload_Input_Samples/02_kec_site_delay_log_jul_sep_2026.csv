@@ -1,0 +1,11 @@
+note_id,site,month,delay_category,days_lost,note
+DL-301,"Line package 7, tower 112",2026-07,material-supply,6,Site progress delay: tower steel arrived late after the purchase order was released late
+DL-302,"Line package 7, tower 118",2026-07,right-of-way,9,"Landowner objection, site work stopped until the district office decided"
+DL-303,Substation package 3,2026-07,weather,4,"Monsoon rain, foundation pit flooded"
+DL-304,"Line package 7, tower 131",2026-08,material-supply,5,Insulator strings short by 40 sets
+DL-305,"Line package 9, tower 22",2026-08,payment-cycle,7,Schedule delay after the subcontractor crew left over a late payment cycle
+DL-306,Substation package 3,2026-08,material-supply,8,Transformer bushings held at customs
+DL-307,"Line package 9, tower 40",2026-08,labour,3,Crew shortage during a local festival
+DL-308,"Line package 7, tower 140",2026-09,right-of-way,6,Crop compensation not yet paid
+DL-309,"Line package 9, tower 51",2026-09,material-supply,4,Earthing material delivered to the wrong site
+DL-310,Substation package 3,2026-09,design-change,5,Change of the gantry design after the customer review

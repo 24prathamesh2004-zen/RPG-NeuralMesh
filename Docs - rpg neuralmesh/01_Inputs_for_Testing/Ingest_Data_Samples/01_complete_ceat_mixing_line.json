@@ -1,0 +1,31 @@
+{
+  "graph": "Example: mixing line spare parts",
+  "company": "CEAT",
+  "description": "Example data, invented for testing the ingest. Every field is given, so nothing is filled in.",
+  "sensitivity": "Internal",
+  "sharing": "company",
+  "synthetic": true,
+  "nodes": [
+    {"id": "plant-a", "type": "Plant", "name": "Plant A", "properties": {"city": "Example city"}},
+    {"id": "line-1", "type": "Line", "name": "Mixing line 1"},
+    {"id": "m-01", "type": "Machine", "name": "Internal mixer M-01", "aliases": ["Mixer 1"]},
+    {"id": "m-02", "type": "Machine", "name": "Two-roll mill M-02"},
+    {"id": "rs-200", "type": "Part", "name": "Rotor seal RS-200", "properties": {"material": "FKM", "stock": 14}},
+    {"id": "bb-30", "type": "Part", "name": "Roller bearing BB-30", "properties": {"stock": 6}},
+    {"id": "sup-x", "type": "Supplier", "name": "Supplier X", "properties": {"lead_time_days": 21}},
+    {"id": "sup-y", "type": "Supplier", "name": "Supplier Y", "properties": {"lead_time_days": 35}},
+    {"id": "wear", "type": "Defect", "name": "Seal wear"}
+  ],
+  "edges": [
+    {"id": "e1", "type": "HAS_LINE", "source": "plant-a", "target": "line-1"},
+    {"id": "e2", "type": "HAS_MACHINE", "source": "line-1", "target": "m-01"},
+    {"id": "e3", "type": "HAS_MACHINE", "source": "line-1", "target": "m-02"},
+    {"id": "e4", "type": "USES_PART", "source": "m-01", "target": "rs-200", "properties": {"per_year": 6}},
+    {"id": "e5", "type": "USES_PART", "source": "m-02", "target": "bb-30", "properties": {"per_year": 2}},
+    {"id": "e6", "type": "SUPPLIES", "source": "sup-x", "target": "rs-200", "properties": {"preferred": true}},
+    {"id": "e7", "type": "SUPPLIES", "source": "sup-y", "target": "rs-200"},
+    {"id": "e8", "type": "SUPPLIES", "source": "sup-y", "target": "bb-30"},
+    {"id": "e9", "type": "AFFECTS", "source": "wear", "target": "rs-200"},
+    {"id": "e10", "type": "SEEN_ON", "source": "wear", "target": "m-01", "properties": {"times_in_2026": 4}}
+  ]
+}

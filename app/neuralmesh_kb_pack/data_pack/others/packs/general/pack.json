@@ -73,6 +73,46 @@
         "concept:responsible-ai-use"
       ],
       "body_file": "contributions/G-01-U002.json"
+    },
+    {
+      "id": "others:G-01-U003",
+      "datapoint": "others:G-01",
+      "title": "Knowledge transfer and handover playbook",
+      "kind": "playbook",
+      "version": "2026-11",
+      "tags": [
+        "knowledge-transfer-and-handover",
+        "employee-onboarding",
+        "client-service-desk",
+        "process-ownership-before-system-cut-over"
+      ],
+      "summary": "Knowledge transfer and handover playbook Used when a delivery team takes over an application from another team, a client or an acquired unit. Weeks 1 and 2: shadowing The incoming team shadows the outgoing team on live tickets. Every runbook, password vault entry and deployment step is listed in one handover register.",
+      "concepts": [
+        "concept:client-service-desk",
+        "concept:employee-onboarding",
+        "concept:integration-checklist",
+        "concept:knowledge-transfer",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/G-01-U003.json"
+    },
+    {
+      "id": "others:G-01-U004",
+      "datapoint": "others:G-01",
+      "title": "Tread compound formulation change request, restricted",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+        "compound-formulation",
+        "regulatory-change-control"
+      ],
+      "summary": "Tread compound formulation change request, restricted Datapoint: CEAT E-01, compound formulations and material specifications. Never leaves CEAT. Request: change the tread compound of the truck radial range to a new filler blend from the first quarter of 2027. The formulation table of this request is held in the product lifecycle system and is not copied here.",
+      "concepts": [
+        "concept:compound-formulation",
+        "concept:regulatory-change-control"
+      ],
+      "body_file": "contributions/G-01-U004.json"
     }
   ]
 }

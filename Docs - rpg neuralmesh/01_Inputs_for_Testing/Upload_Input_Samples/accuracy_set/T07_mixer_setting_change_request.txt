@@ -1,0 +1,5 @@
+Mixer setting change request, line 2
+
+Synthetic test file for NeuralMesh. CEAT plant 2 production.
+
+The change request raises the mixer rotor speed on line 2 from 40 to 44 rpm to shorten the cycle by 20 seconds. The process engineer and the shift lead approve it after a trial of 30 batches with the usual viscosity checks.

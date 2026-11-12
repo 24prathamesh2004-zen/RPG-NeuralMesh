@@ -1,5 +1,6 @@
 {
   "status": "accepted",
+  "synthetic": true,
   "context_graph": {
     "id": "g-995e7d67",
     "name": "AI-assisted delivery pilots"

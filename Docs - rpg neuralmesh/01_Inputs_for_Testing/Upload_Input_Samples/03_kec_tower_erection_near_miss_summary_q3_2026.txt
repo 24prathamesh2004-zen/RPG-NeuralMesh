@@ -1,0 +1,18 @@
+Near-miss summary, tower erection sites, July to September 2026 (anonymised)
+
+Count of near misses reported: 23, against 15 in April to June 2026.
+
+Recurring pattern across sites
+1. Dropped objects from height: 9 near misses. Most happened while bolts were passed up by hand instead of in a closed bag.
+2. Gin pole and winch set-up: 6 near misses. The anchor was not checked after rain softened the ground during the monsoon.
+3. Vehicles at the stringing yard: 5 near misses. The yard had no marked walkway.
+4. Other: 3 near misses.
+
+Root cause analysis of the gin pole near misses found that the monsoon operating procedure of the sites did not require a new anchor check after heavy rain.
+
+Actions
+- Bolts and small tools go up only in closed bags from 1 October 2026.
+- An anchor check is required before every lift after a rain day.
+- Every stringing yard marks a walkway before work starts.
+
+Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.

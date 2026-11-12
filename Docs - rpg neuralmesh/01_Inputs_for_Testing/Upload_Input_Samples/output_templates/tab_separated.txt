@@ -1,0 +1,7 @@
+[extension] tsv
+[header]
+id	type	label	company
+[entity]
+{id}	{type}	{label}	{company}
+[link]
+{source}	{type}	{target}	

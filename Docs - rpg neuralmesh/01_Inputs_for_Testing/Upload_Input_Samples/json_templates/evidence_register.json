@@ -1,0 +1,13 @@
+{
+  "graph": "{graph.name}",
+  "documents": {
+    "$each": "document",
+    "title": "{title}",
+    "company": "{company}",
+    "catalogue_item": "{item} {item_title}",
+    "kind": "{kind}",
+    "sharing": "{sharing}",
+    "uploaded": "{uploaded}",
+    "file": "{file}"
+  }
+}

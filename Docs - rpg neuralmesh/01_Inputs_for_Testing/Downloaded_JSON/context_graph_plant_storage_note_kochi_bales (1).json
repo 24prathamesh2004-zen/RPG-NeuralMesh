@@ -1,0 +1,100 @@
+{
+  "graph": "Plant storage note, Kochi bales",
+  "companies": [
+    "CEAT"
+  ],
+  "documents": [
+    {
+      "title": "Plant storage note, Kochi bales",
+      "company": "CEAT",
+      "kind": "Note",
+      "catalogue_item": "Approved materials handling and storage learnings (non-formula)",
+      "sharing": "Summary leaves CEAT",
+      "uploaded": "2026-11-09",
+      "concepts": [
+        "Material ageing",
+        "Materials handling",
+        "Raw material storage",
+        "Time-to-use limit"
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "name": "Material ageing",
+      "mentioned_by": [
+        "Plant storage note, Kochi bales"
+      ]
+    },
+    {
+      "name": "Materials handling",
+      "mentioned_by": [
+        "Plant storage note, Kochi bales"
+      ]
+    },
+    {
+      "name": "Raw material storage",
+      "mentioned_by": [
+        "Plant storage note, Kochi bales"
+      ]
+    },
+    {
+      "name": "Time-to-use limit",
+      "mentioned_by": [
+        "Plant storage note, Kochi bales"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": "Raw material storage",
+      "type": "BROADER",
+      "to": "Materials handling"
+    },
+    {
+      "from": "Material ageing",
+      "type": "RELATED_TO",
+      "to": "Time-to-use limit"
+    },
+    {
+      "from": "Material ageing",
+      "type": "SIMILAR_TO",
+      "to": "Raw material storage"
+    },
+    {
+      "from": "Materials handling",
+      "type": "SIMILAR_TO",
+      "to": "Raw material storage"
+    },
+    {
+      "from": "Approved materials handling and storage learnings (non-formula)",
+      "type": "OWNED_BY",
+      "to": "CEAT"
+    },
+    {
+      "from": "Plant storage note, Kochi bales",
+      "type": "IN_DATAPOINT",
+      "to": "Approved materials handling and storage learnings (non-formula)"
+    },
+    {
+      "from": "Plant storage note, Kochi bales",
+      "type": "MENTIONS",
+      "to": "Material ageing"
+    },
+    {
+      "from": "Plant storage note, Kochi bales",
+      "type": "MENTIONS",
+      "to": "Materials handling"
+    },
+    {
+      "from": "Plant storage note, Kochi bales",
+      "type": "MENTIONS",
+      "to": "Raw material storage"
+    },
+    {
+      "from": "Plant storage note, Kochi bales",
+      "type": "MENTIONS",
+      "to": "Time-to-use limit"
+    }
+  ]
+}

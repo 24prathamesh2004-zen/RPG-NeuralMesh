@@ -1,0 +1,38 @@
+{
+  "graph": "{graph.name}",
+  "companies": "{graph.companies}",
+  "documents": [
+    {
+      "$each": "document",
+      "id": "{id}",
+      "title": "{title}",
+      "company": "{company}",
+      "kind": "{kind}",
+      "catalogue_item": "{item_title}",
+      "sharing": "{sharing}",
+      "uploaded": "{uploaded}",
+      "concepts": "{concepts}"
+    }
+  ],
+  "nodes": [
+    {
+      "$each": "node",
+      "id": "{id}",
+      "type": "{type}",
+      "name": "{label}",
+      "company": "{company}"
+    }
+  ],
+  "edges": [
+    {
+      "$each": "edge",
+      "id": "{id}",
+      "type": "{type}",
+      "source": "{source}",
+      "target": "{target}",
+      "from": "{source_label}",
+      "to": "{target_label}",
+      "status": "{status}"
+    }
+  ]
+}

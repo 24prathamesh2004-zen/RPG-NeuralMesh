@@ -1,5 +1,6 @@
 {
   "status": "accepted",
+  "synthetic": true,
   "context_graph": {
     "id": "g-e6f6addf",
     "name": "Overseas acquisition integration"

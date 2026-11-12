@@ -1,0 +1,21 @@
+{
+  "graph": "Example: shared rubber terms",
+  "company": "Others",
+  "description": "Example data, invented for testing the ingest. A graph of Others is read by every company.",
+  "sensitivity": "Public",
+  "sharing": "group",
+  "synthetic": true,
+  "nodes": [
+    {"id": "latex", "type": "Term", "name": "Field latex", "aliases": ["Latex"]},
+    {"id": "drc", "type": "Term", "name": "Dry rubber content", "aliases": ["DRC"]},
+    {"id": "coag", "type": "Term", "name": "Coagulation"},
+    {"id": "preserve", "type": "Practice", "name": "Preservation at collection"},
+    {"id": "spoil", "type": "Problem", "name": "Spoilage before receipt"}
+  ],
+  "edges": [
+    {"type": "MEASURED_BY", "source": "latex", "target": "drc"},
+    {"type": "RELATED_TO", "source": "spoil", "target": "coag"},
+    {"type": "PREVENTS", "source": "preserve", "target": "spoil"},
+    {"type": "APPLIES_TO", "source": "preserve", "target": "latex"}
+  ]
+}

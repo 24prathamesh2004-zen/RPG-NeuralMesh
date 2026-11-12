@@ -13,7 +13,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routers import auth, context, health, help, mesh
+from api.routers import auth, context, context_graphs, health, help, mesh
 from observability.tracing import init_tracing, instrument_fastapi
 from shared.config import get_settings
 from shared.logger import get_logger, setup_logging
@@ -76,4 +76,5 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(mesh.router, prefix="/api/v1/mesh", tags=["Mesh"])
 app.include_router(context.router, prefix="/api/v1/context", tags=["Context for applications"])
 app.include_router(help.router, prefix="/api/v1/help", tags=["Help chat"])
+app.include_router(context_graphs.router, prefix="/api/v1/context-graphs", tags=["Ingested context graphs"])
 app.add_exception_handler(context.ProblemError, lambda request, exc: context.problem_response(exc))

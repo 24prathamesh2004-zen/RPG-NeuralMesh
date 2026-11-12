@@ -54,6 +54,9 @@ never-leave item, so no other company sees it, and only its title is searched.
 - The first input of a graph opens it by name. Each later input joins it by its id, the way "Add input to this graph" does.
 - Two values are written into the upload record after the upload, because no route sets them: the upload date, and
   the mark `sample_input` with the file name. The mark is how the loader knows its own records.
+- Every file is sent with `synthetic=true`, so its record says the data is invented. A file sent without it counts as
+  real. The ten records loaded before 2026-11-11 were marked the same way once. `kbgen.py` refuses to delete the data
+  folder while any upload record lacks the mark.
 - The draft A4 is uploaded and then removed through `DELETE /api/v1/mesh/uploads/{id}`, so the list shows one removed input.
 - `remove` first lists the inputs that go and the uploads that stay, and waits for the word "yes". It touches only
   records with the mark. An input a person added stays. `--yes` skips the question.

@@ -1,0 +1,529 @@
+[
+ {
+  "group": "health",
+  "method": "GET",
+  "path": "/health",
+  "access": "none",
+  "params": [],
+  "doc": "",
+  "fn": "health"
+ },
+ {
+  "group": "auth",
+  "method": "POST",
+  "path": "/api/v1/auth/signup",
+  "access": "none",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "signup"
+ },
+ {
+  "group": "auth",
+  "method": "POST",
+  "path": "/api/v1/auth/signin",
+  "access": "none",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "signin"
+ },
+ {
+  "group": "auth",
+  "method": "GET",
+  "path": "/api/v1/auth/companies",
+  "access": "none",
+  "params": [],
+  "doc": "The companies a person can sign up for: the registered Mesh Nodes, by id and name. Read before sign-in.",
+  "fn": "companies"
+ },
+ {
+  "group": "auth",
+  "method": "GET",
+  "path": "/api/v1/auth/me",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "me"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/query",
+  "access": "signed-in",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "query_mesh"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/routing",
+  "access": "signed-in",
+  "params": [
+   "q (query, str)"
+  ],
+  "doc": "Resolve and route a question on the graph only, without calling any node.",
+  "fn": "preview_routing"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "graph_view"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/graph/refresh",
+  "access": "role mesh_admin",
+  "params": [],
+  "doc": "",
+  "fn": "graph_refresh"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/domains",
+  "access": "signed-in",
+  "params": [],
+  "doc": "The layers of the graph: each domain's node types and edge types with live counts and link statuses.",
+  "fn": "graph_domains"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/applications",
+  "access": "signed-in",
+  "params": [],
+  "doc": "The applications connected to the mesh, read from their registry files (config/applications): what each may call, what it loaded into the graph and the numbers its file asks for.",
+  "fn": "applications"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph/links",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "graph_links"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/graph/links/{rel_id:path}/review",
+  "access": "signed-in",
+  "params": [
+   "rel_id (path, str)",
+   "raw JSON body"
+  ],
+  "doc": "Owner-side review of a link between subsidiaries. POC: simulated for local demo accounts only.",
+  "fn": "review_link"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/proposals",
+  "access": "signed-in",
+  "params": [],
+  "doc": "The entries applications proposed for the graph, grouped by application and link type. Each entry names the sides that approve it: a company for its own entities, the group for the application's own vocabulary (a mesh admin approves as curator). An entry is approved when every side approved it, and rejected when one side rejected it.",
+  "fn": "application_proposals"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/proposals/review",
+  "access": "signed-in",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "Approve or reject application entries for the reviewer's own sides only: their company, and the group when they are a mesh admin. POC: simulated for local demo accounts only, like the review of a link between companies.",
+  "fn": "review_proposals"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/nodes",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "list_mesh_nodes"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/experts/search",
+  "access": "signed-in",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "search_experts"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/experts/{node_id}/intro",
+  "access": "signed-in",
+  "params": [
+   "node_id (path, str)",
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "request_expert_intro"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/governance",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "governance_snapshot"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/governance/audit/verify",
+  "access": "signed-in",
+  "params": [],
+  "doc": "Recompute the hash chain of every node's decision ledger. Each entry holds the hash of the one before it, so an entry that was changed, added in between or removed breaks the chain from that point on.",
+  "fn": "verify_audit_chains"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/governance/{node_id}/requests/{request_id}/review",
+  "access": "signed-in",
+  "params": [
+   "node_id (path, str)",
+   "request_id (path, str)",
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "review_access_request"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/admin",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "admin_snapshot"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/dashboard",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "dashboard_snapshot"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads",
+  "access": "signed-in",
+  "params": [],
+  "doc": "The uploaded documents the person may see, newest first, each with its item's sharing rule, its context graph and whether it is in the graph now, and the context graphs they form. A mesh admin sees every company's, anyone else their own company's and the shared node's.",
+  "fn": "list_uploads"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/json-templates",
+  "access": "signed-in",
+  "params": [
+   "graph_id (query, str, default '')"
+  ],
+  "doc": "The output template of a context graph: its own when one was kept with it, else the suggested one. Without ``graph_id`` the suggested template, for a graph that does not exist yet. ``fields`` are the values a template may use.",
+  "fn": "json_template_of_graph"
+ },
+ {
+  "group": "mesh",
+  "method": "PUT",
+  "path": "/api/v1/mesh/uploads/graphs/{graph_id}/template",
+  "access": "role mesh_admin",
+  "params": [
+   "graph_id (path, str)",
+   "body (body, dict)"
+  ],
+  "doc": "Keep an output template with a context graph. Every later output of the graph follows it. The reason is returned when the template is refused.",
+  "fn": "set_json_template_of_graph"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/json-templates/render",
+  "access": "signed-in",
+  "params": [
+   "body (body, dict)"
+  ],
+  "doc": "A context graph in a structured JSON template, as the person may see it. With ``template`` for the preview of an edited one, without it in the template kept with the graph.",
+  "fn": "json_templates_render"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/suggest",
+  "access": "role mesh_admin",
+  "params": [
+   "file (file, UploadFile)",
+   "node_id (form, str)",
+   "datapoint (form, str)"
+  ],
+  "doc": "Read a file without keeping it and return what the Add input form fills in: title, tags, kind, concepts and the context graph it fits (append to an existing one, or a new one with a name).",
+  "fn": "suggest_upload"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/formats",
+  "access": "role mesh_admin",
+  "params": [
+   "body (body, dict)"
+  ],
+  "doc": "Keep a download format a mesh admin wrote: a name, a file extension, the escaping, and a header, a line for each entity, a line for each link and a footer with placeholders in braces. The reason is returned when it is refused.",
+  "fn": "add_export_format"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads/formats/file",
+  "access": "role mesh_admin",
+  "params": [
+   "file (file, UploadFile)"
+  ],
+  "doc": "Keep an output template a mesh admin uploaded as a text file, read by export_formats.from_text.",
+  "fn": "add_export_format_file"
+ },
+ {
+  "group": "mesh",
+  "method": "DELETE",
+  "path": "/api/v1/mesh/uploads/formats/{format_id}",
+  "access": "role mesh_admin",
+  "params": [
+   "format_id (path, str)"
+  ],
+  "doc": "Remove a download format a mesh admin added. The built-in formats stay.",
+  "fn": "remove_export_format"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/items/{node_id}",
+  "access": "role mesh_admin",
+  "params": [
+   "node_id (path, str)"
+  ],
+  "doc": "The catalogue items of a company an upload can go under, with each one's sharing rule.",
+  "fn": "upload_items"
+ },
+ {
+  "group": "mesh",
+  "method": "POST",
+  "path": "/api/v1/mesh/uploads",
+  "access": "role mesh_admin",
+  "params": [
+   "file (file, UploadFile)",
+   "node_id (form, str)",
+   "datapoint (form, str)",
+   "kind (form, str)",
+   "title (form, str)",
+   "tags (form, str)",
+   "version (form, str)",
+   "graph_id (form, str)",
+   "graph_name (form, str)",
+   "kind_label (form, str)",
+   "new_item_title (form, str)",
+   "new_item_area (form, str)",
+   "output_template (form, str)"
+  ],
+  "doc": "Keep one uploaded file as a document of the company's catalogue item in a context graph (``graph_id`` of an existing one, or ``graph_name`` of a new one), rebuild the pack of its domain, and refresh the central graph from the node export. ``output_template`` (JSON text) is kept with the context graph as its output template, and is checked before anything is kept. The reason is returned when nothing was kept.",
+  "fn": "add_upload"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/graphs/{graph_id}",
+  "access": "signed-in",
+  "params": [
+   "graph_id (path, str)",
+   "format (query, str | None, default None)"
+  ],
+  "doc": "One context graph: every input in it the person may see, with the items, the companies and the entities one link away, and the links among them. With ``format`` (json, graphml, csv or pack) the same as a file to download.",
+  "fn": "context_graph"
+ },
+ {
+  "group": "mesh",
+  "method": "DELETE",
+  "path": "/api/v1/mesh/uploads/graphs/{graph_id}",
+  "access": "role mesh_admin",
+  "params": [
+   "graph_id (path, str)"
+  ],
+  "doc": "Take every input of a context graph out of the packs, the indexes and the graph. The records stay, marked removed. ``failed`` names a pack whose rebuild failed, and a second call rebuilds it again.",
+  "fn": "drop_context_graph"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/uploads/{doc_id}/graph",
+  "access": "signed-in",
+  "params": [
+   "doc_id (path, str)",
+   "format (query, str | None, default None)"
+  ],
+  "doc": "The part of the graph around one uploaded document. With ``format`` (json, graphml, csv or pack) the same part as a file to download.",
+  "fn": "upload_graph"
+ },
+ {
+  "group": "mesh",
+  "method": "DELETE",
+  "path": "/api/v1/mesh/uploads/{doc_id}",
+  "access": "role mesh_admin",
+  "params": [
+   "doc_id (path, str)"
+  ],
+  "doc": "Take an uploaded document out of the pack, the index and the graph. The record stays, marked removed.",
+  "fn": "remove_upload"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph/search",
+  "access": "signed-in",
+  "params": [
+   "q (query, str, default '')"
+  ],
+  "doc": "Entities of the context graph that match a word or phrase, with the owning company, the sharing rule and the number of links of each. Entities of never-leave items of another company are left out.",
+  "fn": "graph_search"
+ },
+ {
+  "group": "mesh",
+  "method": "GET",
+  "path": "/api/v1/mesh/graph/entity/{entity_id:path}",
+  "access": "signed-in",
+  "params": [
+   "entity_id (path, str)"
+  ],
+  "doc": "One entity with its neighbours by link type, one hop, as the person may see them.",
+  "fn": "graph_entity"
+ },
+ {
+  "group": "context",
+  "method": "GET",
+  "path": "/api/v1/context/contract",
+  "access": "service token (context_client)",
+  "params": [],
+  "doc": "The published contract. An application compares its sha256 with the one of its pinned copy.",
+  "fn": "contract"
+ },
+ {
+  "group": "context",
+  "method": "POST",
+  "path": "/api/v1/context/{tool}",
+  "access": "service token (context_client)",
+  "params": [
+   "tool (path, str)",
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "call_tool"
+ },
+ {
+  "group": "help",
+  "method": "POST",
+  "path": "/api/v1/help/chat",
+  "access": "signed-in",
+  "params": [
+   "raw JSON body"
+  ],
+  "doc": "",
+  "fn": "help_chat_endpoint"
+ },
+ {
+  "group": "context_graphs",
+  "method": "POST",
+  "path": "/api/v1/context-graphs",
+  "access": "signed-in",
+  "params": [
+   "raw JSON body",
+   "check (query, bool, default False)"
+  ],
+  "doc": "Keep the JSON as a context graph, or replace the graph its graph_id names. Answers the graph's id, name and counts with what was filled in, the defaults used, the fields not read and the warnings. When anything has to be fixed nothing is kept, and the answer is 422 with \"problems\". check=true checks and keeps nothing.",
+  "fn": "ingest"
+ },
+ {
+  "group": "context_graphs",
+  "method": "GET",
+  "path": "/api/v1/context-graphs",
+  "access": "signed-in",
+  "params": [],
+  "doc": "",
+  "fn": "graphs"
+ },
+ {
+  "group": "context_graphs",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/sample",
+  "access": "signed-in",
+  "params": [],
+  "doc": "A small invented graph in the format, for the caller's company.",
+  "fn": "sample"
+ },
+ {
+  "group": "context_graphs",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/{graph_id}",
+  "access": "signed-in",
+  "params": [
+   "graph_id (path, str)"
+  ],
+  "doc": "",
+  "fn": "graph"
+ },
+ {
+  "group": "context_graphs",
+  "method": "GET",
+  "path": "/api/v1/context-graphs/{graph_id}/view",
+  "access": "signed-in",
+  "params": [
+   "graph_id (path, str)"
+  ],
+  "doc": "",
+  "fn": "graph_view"
+ },
+ {
+  "group": "context_graphs",
+  "method": "POST",
+  "path": "/api/v1/context-graphs/{graph_id}/query",
+  "access": "signed-in",
+  "params": [
+   "graph_id (path, str)",
+   "raw JSON body"
+  ],
+  "doc": "One query of a graph by its id: a question (the nodes it names, the edges around them and a written answer when the model policy allows one), a node with its neighbours, nodes by type, name or properties, edges by type, source or target, the shortest paths between two nodes, the nodes most similar to one, or an overview of the node types and edge types.",
+  "fn": "query"
+ },
+ {
+  "group": "context_graphs",
+  "method": "DELETE",
+  "path": "/api/v1/context-graphs/{graph_id}",
+  "access": "signed-in",
+  "params": [
+   "graph_id (path, str)"
+  ],
+  "doc": "Delete the graph. The ingest log keeps its id, name, company and counts, never its content.",
+  "fn": "drop"
+ }
+]

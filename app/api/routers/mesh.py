@@ -652,7 +652,13 @@ async def dashboard_snapshot(user: dict = Depends(require_user), credentials: HT
         "activity_by_node": activity_by_node,
         "recent_activity": audit[:8],
         "synthetic": True,
+        "ingested_graphs": len(await asyncio.to_thread(_ingested_records)),  # graphs a person wrote as JSON, kept by the central service
     }
+
+
+def _ingested_records() -> list:
+    from services import context_graph_ingest
+    return context_graph_ingest.records()
 
 # ── Uploaded inputs and graph search (plan: RPG_NeuralMesh_Knowledge_Contribution_and_Graph_Search_Plan.md) ──────────
 
@@ -800,12 +806,14 @@ async def add_upload(
     new_item_title: str = Form(""),
     new_item_area: str = Form(""),
     output_template: str = Form(""),
+    synthetic: bool = Form(False),
     user: dict = Depends(require_role("mesh_admin")),
 ) -> dict:
     """Keep one uploaded file as a document of the company's catalogue item in a context graph (``graph_id`` of an
     existing one, or ``graph_name`` of a new one), rebuild the pack of its domain, and refresh the central graph from
     the node export. ``output_template`` (JSON text) is kept with the context graph as its output template, and is
-    checked before anything is kept. The reason is returned when nothing was kept."""
+    checked before anything is kept. ``synthetic=true`` marks the file as invented data. Without it the record says
+    the file is real. The reason is returned when nothing was kept."""
     from services import json_templates, uploads
     rt = await asyncio.to_thread(runtime)
     template = None
@@ -823,7 +831,7 @@ async def add_upload(
     try:
         record = await asyncio.to_thread(uploads.add_upload, rt, user, node_id, datapoint, kind, title, file.filename or "upload.txt", data, tags,
                                          version or None, True, graph_id or None, graph_name or None, kind_label or None,
-                                         new_item_title or None, new_item_area or None)
+                                         new_item_title or None, new_item_area or None, synthetic=synthetic)
     except uploads.UploadRefused as exc:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
     if template is not None:
@@ -864,15 +872,19 @@ async def context_graph(graph_id: str, format: str | None = None, user: dict = D
 @router.delete("/uploads/graphs/{graph_id}")
 async def drop_context_graph(graph_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
     """Take every input of a context graph out of the packs, the indexes and the graph. The records stay, marked removed.
-    ``failed`` names a pack whose rebuild failed, and a second call rebuilds it again."""
-    from services import uploads
+    ``failed`` names a pack whose rebuild failed, and a second call rebuilds it again. A correction loaded from the
+    graph's JSON is dropped with it and named in ``corrections_dropped``."""
+    from services import context_graph_ingest as ingested, uploads
     rt = await asyncio.to_thread(runtime)
     try:
         result = await asyncio.to_thread(uploads.drop_graph, graph_id, user)
     except KeyError:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No context graph with this id") from None
+    corrections = [r["id"] for r in ingested.records() if r.get("corrects") == graph_id]
+    for correction in corrections:
+        await asyncio.to_thread(ingested.drop, correction, user)
     refreshed = await rt.refresh_from_nodes()
-    return {**result, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["removed"]})}}
+    return {**result, "corrections_dropped": corrections, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["removed"]})}}
 
 
 @router.get("/uploads/{doc_id}/graph")
@@ -913,6 +925,45 @@ async def remove_upload(doc_id: str, user: dict = Depends(require_role("mesh_adm
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document") from None
     refreshed = await rt.refresh_from_nodes()
     return {**record, "refresh": refreshed.get(node, "")}
+
+
+@router.post("/uploads/{doc_id}/links/{link_id}")
+async def decide_link(doc_id: str, link_id: str, body: dict, user: dict = Depends(require_user)) -> dict:
+    """Approve or reject a link taken from the text of an upload (services.graph_extract), with {"status": "approved"}
+    or {"status": "rejected"}. A mesh admin or a person of the company that keeps the upload decides."""
+    from services import graph_extract, uploads
+    node = doc_id.split(":", 1)[0]
+    company, roles = _person(user)
+    if node not in NODE_IDS or uploads.record_of(node, doc_id) is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document")
+    if "mesh_admin" not in roles and company != node:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "A mesh admin or the company that keeps the upload decides on its links")
+    try:
+        return await asyncio.to_thread(graph_extract.decide, doc_id, link_id, str(body.get("status", "")), user)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No link with this id was taken from the text of this document") from None
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from None
+
+
+@router.post("/uploads/extractions")
+async def extract_uploads(write: bool = False, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Take entities and links from the text of every accepted upload that has none yet. Without ``write`` nothing is
+    kept and the answer gives what the code part would find for each input (the model part runs only with ``write``)."""
+    from services import graph_extract, uploads
+    rt = await asyncio.to_thread(runtime)
+    out = []
+    for node, record in uploads._all_records():
+        doc = record["document"]
+        if graph_extract.read(doc["id"]) is not None:
+            continue
+        if write:
+            made = await asyncio.to_thread(uploads.extract_record, rt, node, record)
+        else:
+            links = graph_extract.code_links(rt, doc.get("body") or "", list(doc.get("concepts") or []))
+            made = {"links": len(links), "entities": 0, "model": "not run without write"}
+        out.append({"document": doc["id"], "title": doc["title"], **(made or {})})
+    return {"written": write, "documents": out}
 
 
 @router.get("/graph/search")

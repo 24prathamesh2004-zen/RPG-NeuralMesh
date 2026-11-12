@@ -1,0 +1,6 @@
+supplier,lots received,lots rejected,main reason,quality score
+Supplier A,42,1,moisture at incoming inspection,96
+Supplier B,38,4,contamination found at lot acceptance,88
+Supplier C,51,2,ageing beyond time-to-use limit,93
+Supplier D,27,0,none,99
+Supplier E,33,3,moisture at incoming inspection,90

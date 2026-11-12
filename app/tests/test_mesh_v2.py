@@ -351,7 +351,7 @@ def test_checks_accept_the_marker_sentence_and_the_withheld_template():
 def test_prompts_are_versioned_files_and_every_step_is_timed(local_policy):
     from services.context import prompts
 
-    assert prompts.versions() == {"answer": "mesh_answer_v5", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1", "kind": "mesh_kind_v1", "map": "mesh_map_v2"}
+    assert prompts.versions() == {"answer": "mesh_answer_v5", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1", "kind": "mesh_kind_v1", "map": "mesh_map_v2", "extract": "mesh_extract_v1"}
     assert all(prompts.load(step).text for step in prompts.versions())
     orchestrator, _, _ = build_mesh(backend=FakeBackend())
     result = run(orchestrator, GOLDEN[0]["question"])

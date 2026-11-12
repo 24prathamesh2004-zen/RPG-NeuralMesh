@@ -1,5 +1,6 @@
 {
   "status": "accepted",
+  "synthetic": true,
   "context_graph": {
     "id": "g-d03155d7",
     "name": "33 kV cable joint failures"

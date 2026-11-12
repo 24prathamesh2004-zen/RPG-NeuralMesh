@@ -1,0 +1,42 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-c92ba8ed",
+    "name": "Tread compound formulation change request, restricted"
+  },
+  "document": {
+    "id": "others:G-01-U004",
+    "datapoint": "others:G-01",
+    "title": "Tread compound formulation change request, restricted",
+    "kind": "report",
+    "version": "2026-11",
+    "tags": [
+      "compound-formulation",
+      "regulatory-change-control"
+    ],
+    "summary": "Tread compound formulation change request, restricted Datapoint: CEAT E-01, compound formulations and material specifications. Never leaves CEAT. Request: change the tread compound of the truck radial range to a new filler blend from the first quarter of 2027. The formulation table of this request is held in the product lifecycle system and is not copied here.",
+    "body": "Tread compound formulation change request, restricted\n\nDatapoint: CEAT E-01, compound formulations and material specifications. Never leaves CEAT.\n\nRequest: change the tread compound of the truck radial range to a new filler blend from the first quarter of 2027.\nThe formulation table of this request is held in the product lifecycle system and is not copied here.\n\nLeak test marker: CANARY-UPLOAD-TEST-4417\nThis marker must never appear in a search result, an answer, an export or a log outside the CEAT node.\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.",
+    "concepts": [
+      "concept:compound-formulation",
+      "concept:regulatory-change-control"
+    ]
+  },
+  "concept_matches": {
+    "concept:compound-formulation": "phrase",
+    "concept:regulatory-change-control": "phrase"
+  },
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: no rule matched, report is the default"
+  },
+  "upload": {
+    "file": "10_ceat_tread_compound_change_request_RESTRICTED.txt",
+    "format": "text",
+    "chars": 611,
+    "sha256": "745fc70c9356ce46cabf6278c9d17909511ef20d203bcfa180f0764ddb83dfd5",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-12T06:11:01+00:00"
+  }
+}

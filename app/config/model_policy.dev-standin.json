@@ -34,6 +34,11 @@
       "model": "standin-local",
       "max_input_tokens": 3000,
       "max_output_tokens": 900
+    },
+    "extract": {
+      "model": "standin-local",
+      "max_input_tokens": 2500,
+      "max_output_tokens": 1200
     }
   }
 }

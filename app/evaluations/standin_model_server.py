@@ -117,6 +117,19 @@ def compose_answer(prompt: str, mode: str) -> str:
     return " ".join(sentences[:10] if mode != "too-long" else sentences)
 
 
+GRAPH_EDGE = re.compile(r"^(E\d+) (.+?)(?:\. .*)?$")
+
+
+def compose_graph_answer(prompt: str) -> str:
+    """An answer to a question about an ingested context graph (config/prompts/graph_answer_v1.txt): the first two
+    edges it was given, each cited by its number, or the reply the prompt names when no edge was given."""
+    edges = prompt.split("\nEdges:\n", 1)[1].splitlines() if "\nEdges:\n" in prompt else []
+    found = [m.groups() for line in edges if (m := GRAPH_EDGE.match(line.strip()))][:2]
+    if not found:
+        return "The graph does not answer this question."
+    return " ".join(f"{text} [{ref}]." for ref, text in found)
+
+
 def compose_rerank(prompt: str) -> str:
     question = words(prompt.split("Documents:", 1)[0])
     out = []
@@ -151,6 +164,23 @@ def compose_kind(prompt: str) -> str:
     body = prompt.split("First lines:", 1)[-1]
     found = by_rules(title, name, body, "csv" if name.lower().endswith(".csv") else "")
     return json.dumps({"kind": found["kind"], "label": "", "reason": f"stand-in: {found['reason']}"})
+
+
+def compose_extract(prompt: str) -> str:
+    """The extract step, deterministic: each part code such as RS-200 or M-01 the text writes becomes an entity of type
+    Part, linked to a known concept named in the same sentence, with that sentence as evidence."""
+    import json
+    import re
+    known = [line[2:] for line in prompt.split("\n\nText:\n", 1)[0].splitlines() if line.startswith("- ")]
+    text = prompt.split("\n\nText:\n", 1)[-1]
+    entities, links = {}, []
+    for sentence in re.split(r"(?<=[.!?])\s+", " ".join(text.split())):
+        for code in re.findall(r"\b[A-Z]{1,4}-\d{1,5}[A-Z]?\b", sentence):
+            entities.setdefault(code, {"name": code, "type": "Part"})
+            for label in known:
+                if label.lower() in sentence.lower():
+                    links.append({"source": code, "relation": "NAMED_WITH", "target": label, "evidence": sentence})
+    return json.dumps({"entities": list(entities.values()), "links": links})
 
 
 def compose_map(prompt: str) -> str:
@@ -211,6 +241,10 @@ def chat(body: dict[str, Any]) -> dict[str, Any]:
         text = compose_kind(user)
     elif "You map a document uploaded" in system:
         text = compose_map(user)
+    elif "list what it says between things" in system:
+        text = compose_extract(user)
+    elif "from one context graph that a company wrote" in system:
+        text = compose_graph_answer(user)
     else:
         text = compose_answer(user, STATE["mode"])
     return {

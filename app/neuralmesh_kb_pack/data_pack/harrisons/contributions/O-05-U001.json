@@ -1,5 +1,6 @@
 {
   "status": "accepted",
+  "synthetic": true,
   "context_graph": {
     "id": "g-2f866293",
     "name": "Natural rubber storage and ageing"

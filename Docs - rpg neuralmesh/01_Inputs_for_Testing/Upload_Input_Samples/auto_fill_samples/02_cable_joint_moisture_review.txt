@@ -1,0 +1,7 @@
+Moisture entry in 33 kV cable joints, field review October 2026
+
+Synthetic test file for NeuralMesh. Raychem RPG field service team.
+
+Four joints installed in the monsoon were opened after early tripping. The cable accessory failure analysis found water behind the outer seal in three of them. Cable joint installation records showed the seal was fitted in rain without a shelter. Pre-energising tests were passed in all four, so the tests did not catch the defect.
+
+Actions: a shelter is required for every joint made in rain, and the installation quality records now hold a photo of the seal before closing. Root cause analysis to be repeated after the next ten joints.

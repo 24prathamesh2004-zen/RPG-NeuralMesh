@@ -53,6 +53,11 @@
       "model": "claude-dev",
       "max_input_tokens": 3000,
       "max_output_tokens": 900
+    },
+    "extract": {
+      "model": "claude-dev",
+      "max_input_tokens": 2500,
+      "max_output_tokens": 1200
     }
   }
 }

@@ -1,0 +1,11 @@
+Tread compound formulation change request, restricted
+
+Datapoint: CEAT E-01, compound formulations and material specifications. Never leaves CEAT.
+
+Request: change the tread compound of the truck radial range to a new filler blend from the first quarter of 2027.
+The formulation table of this request is held in the product lifecycle system and is not copied here.
+
+Leak test marker: CANARY-UPLOAD-TEST-4417
+This marker must never appear in a search result, an answer, an export or a log outside the CEAT node.
+
+Synthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.

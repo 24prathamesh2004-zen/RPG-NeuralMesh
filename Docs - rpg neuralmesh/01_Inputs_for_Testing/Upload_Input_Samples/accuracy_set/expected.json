@@ -1,0 +1,119 @@
+{
+  "T01_why_stored_bales_go_stale.md": {
+    "graph": "Natural rubber storage and ageing",
+    "kinds": [
+      "note",
+      "report"
+    ],
+    "must": [
+      "concept:material-ageing"
+    ],
+    "must_not": []
+  },
+  "T02_water_ingress_at_mv_splices.txt": {
+    "graph": "33 kV cable joint failures",
+    "kinds": [
+      "report",
+      "rca"
+    ],
+    "must_any": [
+      "concept:cable-joint-installation",
+      "concept:cable-accessory-failure-analysis"
+    ],
+    "must_not": []
+  },
+  "T03_insurance_claims_desk_improvement.md": {
+    "graph": "new",
+    "kinds": [
+      "report"
+    ],
+    "must": [
+      "concept:client-service-desk"
+    ],
+    "must_not": [
+      "concept:overseas-mobilisation-terms"
+    ]
+  },
+  "T04_new_joiner_laptop_checklist.md": {
+    "graph": "new",
+    "kinds": [
+      "playbook",
+      "sop"
+    ],
+    "must": [
+      "concept:employee-onboarding"
+    ],
+    "must_not": [
+      "concept:integration-checklist"
+    ]
+  },
+  "T05_coding_assistant_usage_guidance.md": {
+    "graph": "AI-assisted delivery pilots",
+    "kinds": [
+      "policy"
+    ],
+    "must": [
+      "concept:responsible-ai-use"
+    ],
+    "must_not": []
+  },
+  "T06_site_labour_payment_delays.md": {
+    "graph": "new",
+    "kinds": [
+      "report",
+      "note"
+    ],
+    "must": [
+      "concept:overseas-mobilisation-terms"
+    ],
+    "must_not": []
+  },
+  "T07_mixer_setting_change_request.txt": {
+    "graph": "new",
+    "kinds": [
+      "report",
+      "note",
+      "other",
+      "standard"
+    ],
+    "must": [],
+    "must_not": [
+      "concept:regulatory-change-control"
+    ]
+  },
+  "T08_latex_spoilage_monsoon_follow_up.md": {
+    "graph": "Natural rubber storage and ageing",
+    "kinds": [
+      "report",
+      "note",
+      "sop"
+    ],
+    "must": [
+      "concept:latex-pre-coagulation"
+    ],
+    "must_not": []
+  },
+  "T09_acquired_unit_day_one_playbook.md": {
+    "graph": "Overseas acquisition integration",
+    "kinds": [
+      "playbook"
+    ],
+    "must": [
+      "concept:acquisition-integration"
+    ],
+    "must_not": []
+  },
+  "T10_handover_register_template.md": {
+    "graph": "new",
+    "kinds": [
+      "playbook",
+      "other",
+      "note",
+      "standard"
+    ],
+    "must": [
+      "concept:knowledge-transfer"
+    ],
+    "must_not": []
+  }
+}

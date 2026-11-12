@@ -143,7 +143,7 @@ def load() -> None:
         graphs = {g["name"].casefold(): g["id"] for g in http.get("/mesh/uploads").json()["graphs"]}
         graph = {"graph_id": graphs[e["graph"].casefold()]} if e["graph"].casefold() in graphs else {"graph_name": e["graph"]}
         fields = {"node_id": e["node_id"], "datapoint": e["datapoint"], "kind": e["kind"], "title": e["title"],
-                  "tags": ", ".join(e["tags"]), "version": e["uploaded_at"][:7], **graph}
+                  "tags": ", ".join(e["tags"]), "version": e["uploaded_at"][:7], "synthetic": "true", **graph}  # invented files, marked so
         answer = http.post("/mesh/uploads", data=fields, files={"file": (path.name, path.read_bytes(), MEDIA[path.suffix])})
         if answer.status_code != 201:
             raise SystemExit(f"{e['id']} {path.name} was refused ({answer.status_code}): {answer.json().get('detail', answer.text)}")

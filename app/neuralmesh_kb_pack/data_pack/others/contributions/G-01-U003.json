@@ -1,0 +1,52 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-adb0b637",
+    "name": "Knowledge transfer and handover playbook"
+  },
+  "document": {
+    "id": "others:G-01-U003",
+    "datapoint": "others:G-01",
+    "title": "Knowledge transfer and handover playbook",
+    "kind": "playbook",
+    "version": "2026-11",
+    "tags": [
+      "knowledge-transfer-and-handover",
+      "employee-onboarding",
+      "client-service-desk",
+      "process-ownership-before-system-cut-over"
+    ],
+    "summary": "Knowledge transfer and handover playbook Used when a delivery team takes over an application from another team, a client or an acquired unit. Weeks 1 and 2: shadowing The incoming team shadows the outgoing team on live tickets. Every runbook, password vault entry and deployment step is listed in one handover register.",
+    "body": "Knowledge transfer and handover playbook\n\nUsed when a delivery team takes over an application from another team, a client or an acquired unit.\nWeeks 1 and 2: shadowing\nThe incoming team shadows the outgoing team on live tickets.\nEvery runbook, password vault entry and deployment step is listed in one handover register.\nWeeks 3 and 4: reverse shadowing\nThe incoming team handles tickets and the outgoing team watches.\nOpen questions go to the handover register with an owner and a date.\nWeek 5: sign-off\nThe handover is signed off only when the register has no open item older than 5 working days.\nNew joiners of the incoming team follow the onboarding checklist of the delivery unit before they get production access.\nLessons from 2026 transitions\n| Transition | Weeks planned | Weeks taken | Main lesson |\n|---|---|---|---|\n| Insurance claims portal | 5 | 7 | Start the access requests in week 1 |\n| Retail order platform | 5 | 5 | The handover register kept the scope clear |\n| Acquired unit service desk | 6 | 9 | Agree process ownership before the systems cut-over |\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.",
+    "concepts": [
+      "concept:client-service-desk",
+      "concept:employee-onboarding",
+      "concept:integration-checklist",
+      "concept:knowledge-transfer",
+      "concept:overseas-mobilisation-terms",
+      "concept:process-ownership-before-cut-over"
+    ]
+  },
+  "concept_matches": {
+    "concept:client-service-desk": "phrase",
+    "concept:employee-onboarding": "phrase",
+    "concept:integration-checklist": "phrase",
+    "concept:knowledge-transfer": "phrase",
+    "concept:overseas-mobilisation-terms": "phrase",
+    "concept:process-ownership-before-cut-over": "phrase"
+  },
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"playbook\" in the file name or title"
+  },
+  "upload": {
+    "file": "07_zensar_knowledge_transfer_handover_playbook.md",
+    "format": "markdown",
+    "chars": 1173,
+    "sha256": "2eab9399d0370ca6d6d654386b5685af72201a25ef3339ea31b1325134c4684a",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-12T05:17:42+00:00"
+  }
+}

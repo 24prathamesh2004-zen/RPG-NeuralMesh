@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import Any
 
 from knowledge import packgen
-from services import export_formats
+from services import export_formats, graph_extract
 from knowledge.validator import PackCheckFailed
 from services.mesh_graph import _phrase_in, norm_tokens
 from shared.registry import is_shared, node as registered_node, node_ids
@@ -170,7 +170,7 @@ def new_item_areas(node: str) -> list[dict[str, str]]:
     return [{"letter": letter, "domain": domain, "title": packgen.DOMAIN_TITLES[domain]} for letter, domain in NEW_ITEM_AREAS.items() if domain in have]
 
 
-def _new_item(node: str, title: str, domain: str, user: dict) -> tuple[str, dict, Path]:
+def _new_item(node: str, title: str, domain: str, user: dict, synthetic: bool = False) -> tuple[str, dict, Path]:
     """Name a new catalogue item of the node in the area ``domain`` and keep it under added_items. The item takes the
     next free code of the area's letter and the rule NEW_ITEM_RULE. Returns the code, the item with its domain, and the
     file written, so that a failed upload can take it back."""
@@ -192,7 +192,7 @@ def _new_item(node: str, title: str, domain: str, user: dict) -> tuple[str, dict
     letter = areas[domain]
     number = next(n for n in range(1, 100) if f"{letter}-{n:02d}" not in taken)
     code = f"{letter}-{number:02d}"
-    item = {"code": code, "title": title, **NEW_ITEM_RULE,
+    item = {"code": code, "title": title, **NEW_ITEM_RULE, "synthetic": bool(synthetic),  # the mark of the upload that named it
             "added": {"by_role": "Mesh admin", "by_company": str(user.get("company", "")), "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}}
     path = packgen.DATA / node / packgen.ADDED_ITEMS / f"{code}.json"
     _write_atomic(path, item)
@@ -277,6 +277,17 @@ def _graph_for(graph_id: str | None, graph_name: str | None, title: str) -> dict
     return by_name.get(name.casefold()) or {"id": f"g-{uuid.uuid4().hex[:8]}", "name": name}
 
 
+def upload_graph_info(graph_id: str) -> dict[str, Any] | None:
+    """An uploaded context graph that a JSON may correct (services.context_graph_ingest): its id, its name and whether
+    every input kept in it is marked invented, and the nodes that keep its inputs. None when no kept input carries the id."""
+    found = [(node, r) for node, r in _all_records() if graph_ref(r)["id"] == graph_id]
+    if not found:
+        return None
+    records = [r for _, r in found]
+    return {"id": graph_id, "name": graph_ref(records[0])["name"], "synthetic": all(r.get("synthetic") is True for r in records),
+            "nodes": sorted({node for node, _ in found})}
+
+
 def graphs_of(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """The context graphs of the listed uploads, newest first: id, name, how many inputs are in it and how many were
     removed, the nodes and companies that keep its inputs, and the time of the latest upload."""
@@ -300,6 +311,29 @@ def graphs_of(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 AUTO_KIND = "auto"  # the kind choice that leaves the kind to services.upload_kind
 
 
+def _extract_caller(rt: Any, sensitivity: str | None, synthetic: bool):
+    """The model caller for the extract step, bound to the item's sensitivity and the upload's real or invented mark, so
+    the model policy keeps a cloud model away from real data. None when no model is configured."""
+    orchestrator = getattr(rt, "orchestrator", None)
+    backend = getattr(orchestrator, "backend", None)
+    if backend is None:
+        return None
+    from services.context.llm import make_caller
+    return make_caller(backend, app_env=getattr(orchestrator, "app_env", "development"), trace_id=f"extract-{uuid.uuid4().hex[:8]}",
+                       sensitivities={sensitivity} if sensitivity else set(), all_synthetic=bool(synthetic), calls=[])
+
+
+def extract_record(rt: Any, node: str, record: dict) -> dict[str, Any] | None:
+    """Make the extraction of an accepted upload (services.graph_extract) and return its counts. A failure is returned,
+    never raised: the upload is kept either way, and the extraction can be made again."""
+    try:
+        dp = datapoints_of(node).get(record["document"]["datapoint"].split(":", 1)[1], {})
+        made = graph_extract.extract(rt, node, record, _extract_caller(rt, dp.get("sensitivity"), record.get("synthetic") is True))
+        return graph_extract.summary(made)
+    except Exception as exc:  # noqa: BLE001 - reported with the upload
+        return {"failed": type(exc).__name__}
+
+
 def _kind_caller(rt: Any, sensitivity: str | None):
     """The model caller for the kind step, bound to the item's sensitivity, or None when no model is configured."""
     orchestrator = getattr(rt, "orchestrator", None)
@@ -315,10 +349,11 @@ def _kind_caller(rt: Any, sensitivity: str | None):
 def add_upload(rt: Any, user: dict, node: str, code: str, kind: str, title: str, filename: str, data: bytes,
                tags: str | list[str] | None = None, version: str | None = None, build_vectors: bool = True,
                graph_id: str | None = None, graph_name: str | None = None, kind_label: str | None = None,
-               new_item_title: str | None = None, new_item_area: str | None = None) -> dict[str, Any]:
+               new_item_title: str | None = None, new_item_area: str | None = None, synthetic: bool = False) -> dict[str, Any]:
     """Keep one uploaded file as a document of ``node``'s item ``code`` in a context graph, and rebuild the pack of its
     domain. Returns the record without the body, with the rebuild counts. Raises UploadRefused with the reason when
-    nothing was kept."""
+    nothing was kept. ``synthetic`` says the file is invented data. The record keeps it, and a file sent without it is
+    real (the real data plan, step 1). The model gate does not read the mark yet."""
     if node not in node_ids():
         raise UploadRefused(f"{node} is not a registered company.")
     if kind not in KINDS and kind != AUTO_KIND:
@@ -342,7 +377,7 @@ def add_upload(rt: Any, user: dict, node: str, code: str, kind: str, title: str,
     graph = _graph_for(graph_id, graph_name, title[:200])
     item_file: Path | None = None
     if new_item:  # named last, so that a refusal above leaves no item behind
-        code, dp, item_file = _new_item(node, str(new_item_title), str(new_item_area or ""), user)
+        code, dp, item_file = _new_item(node, str(new_item_title), str(new_item_area or ""), user, synthetic)
     else:
         dp = items[code]
     detected = None
@@ -360,7 +395,7 @@ def add_upload(rt: Any, user: dict, node: str, code: str, kind: str, title: str,
         document["tags"] = upload_suggest.tags_of(upload_suggest.ordered_concepts(rt, text, matches))
     if matches:
         document["concepts"] = list(matches)
-    record = {"status": "accepted", "context_graph": graph, "document": document, "concept_matches": matches,
+    record = {"status": "accepted", "synthetic": bool(synthetic), "context_graph": graph, "document": document, "concept_matches": matches,
               **({"kind_detected": {"by": detected["by"], "reason": detected["reason"]}} if detected else {}),
               "upload": {"file": Path(filename).name, "format": fmt, "chars": len(text), "sha256": hashlib.sha256(data).hexdigest(),
                          "by_role": "Mesh admin", "by_company": str(user.get("company", "")), "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}}
@@ -380,7 +415,7 @@ def add_upload(rt: Any, user: dict, node: str, code: str, kind: str, title: str,
             item_file.unlink(missing_ok=True)
         _rebuild_without(node, dp["domain"], doc_id)
         raise
-    return {**public(record, node), "rebuild": built, **({"new_item": {"code": code, "title": dp["title"], "domain": dp["domain"]}} if item_file else {})}
+    return {**public(record, node), "rebuild": built, "extraction": extract_record(rt, node, record), **({"new_item": {"code": code, "title": dp["title"], "domain": dp["domain"]}} if item_file else {})}
 
 
 def _rebuild_without(node: str, domain: str, doc_id: str) -> None:
@@ -457,9 +492,11 @@ def company_label(node: str | None) -> str:
 def public(record: dict, node: str) -> dict[str, Any]:
     """The record as the screens show it: everything but the body text, plus the company name and the context graph."""
     doc = {k: v for k, v in record["document"].items() if k != "body"}
-    return {"node_id": node, "company": registered_node(node).display, "status": record["status"], "context_graph": graph_ref(record),
+    return {"node_id": node, "company": registered_node(node).display, "status": record["status"], "synthetic": record.get("synthetic") is True,
+            "context_graph": graph_ref(record),
             "document": doc, "upload": {**record["upload"], "by_company_name": company_label(record["upload"].get("by_company"))}, "concept_matches": record.get("concept_matches", {}),
             **({"kind_detected": record["kind_detected"]} if record.get("kind_detected") else {}),
+            "extraction": graph_extract.summary(graph_extract.read(record["document"]["id"])),
             "sharing": {"ceiling": None, "never_leave": False, "shared": is_shared(node)}}
 
 
@@ -537,7 +574,72 @@ def context_graph_view(rt: Any, graph_id: str, company: str, roles: list[str]) -
     keep: set[str] = set()
     for doc_id in documents:
         keep |= _around(rt, doc_id, company, roles)
-    return {"id": graph_id, "name": graph_ref(records[0][1])["name"], "documents": documents, **_view(rt, keep)}
+    shown = [(node, r) for node, r in records if r["document"]["id"] in documents]
+    view = _with_extractions(_view(rt, keep), shown, company, roles)
+    return {"id": graph_id, "name": graph_ref(records[0][1])["name"], "documents": documents, **view, "quality": graph_quality(shown, view)}
+
+
+def _may_read_text(node: str, record: dict, company: str, roles: list[str]) -> bool:
+    """Whether the person may read what the text of the record says: the rule of pack_documents for the whole text."""
+    if "mesh_admin" in roles or node == company or is_shared(node):
+        return True
+    dp = datapoints_of(node).get(record["document"]["datapoint"].split(":", 1)[1], {})
+    return not dp.get("never_leave") and dp.get("ceiling") == "RAG"
+
+
+def _with_extractions(view: dict[str, Any], records: list[tuple[str, dict]], company: str, roles: list[str]) -> dict[str, Any]:
+    """The view with the entities and the links taken from the text of each input the person may read, proposed and
+    approved. A rejected link is left out, and so is a link whose end the view does not show."""
+    ids = {n["id"] for n in view["nodes"]}
+    for node, record in records:
+        data = graph_extract.read(record["document"]["id"])
+        if not data or not _may_read_text(node, record, company, roles):
+            continue
+        entities = {e["id"]: e for e in data.get("entities", [])}
+        for link in data.get("links", []):
+            ends = (link["source"], link["target"])
+            if link["status"] == "rejected" or not all(x in ids or x in entities for x in ends):
+                continue
+            for end in ends:
+                if end not in ids:
+                    e = entities[end]
+                    view["nodes"].append({"id": end, "type": e["type"], "label": e["name"], "subsidiary": node})
+                    view["counts"][e["type"]] = view["counts"].get(e["type"], 0) + 1
+                    ids.add(end)
+            view["edges"].append({"id": link["id"], "type": link["type"], "source": link["source"], "target": link["target"], "status": link["status"],
+                                  "evidence": link["evidence"], "by": link["by"], "document": record["document"]["id"]})
+    return view
+
+
+NEAR_COPY = 0.85  # the share of words two inputs have in common above which one is taken as a copy of the other
+
+
+def graph_quality(records: list[tuple[str, dict]], view: dict[str, Any]) -> list[dict[str, str]]:
+    """Points to look at in a context graph made by Upload input, from the inputs the person sees: an input linked to no
+    known concept, two inputs with the same file or nearly the same text, an input that shares no concept with the
+    others, and the links taken from the text that wait for review. One "ok" line when there is none."""
+    docs = [r for _, r in records]
+    title = lambda r: f'"{r["document"]["title"]}"'  # noqa: E731
+    notes: list[dict[str, str]] = []
+    bare = [title(r) for r in docs if not r["document"].get("concepts")]
+    if bare:
+        notes.append({"level": "warn", "text": f"{len(bare)} {'input links' if len(bare) == 1 else 'inputs link'} to no known concept, so nothing joins {'it' if len(bare) == 1 else 'them'} to the rest of the mesh: {', '.join(bare)}"})
+    words = [(r, set(norm_tokens(r["document"].get("body") or ""))) for r in docs]
+    for i, (a, wa) in enumerate(words):
+        for b, wb in words[i + 1:]:
+            if a["upload"].get("sha256") and a["upload"].get("sha256") == b["upload"].get("sha256"):
+                notes.append({"level": "warn", "text": f"{title(a)} and {title(b)} are the same file"})
+            elif len(wa) >= 20 and len(wb) >= 20 and len(wa & wb) / len(wa | wb) >= NEAR_COPY:
+                notes.append({"level": "warn", "text": f"{title(a)} and {title(b)} have nearly the same text"})
+    if len(docs) >= 2:
+        alone = [title(r) for r in docs if r["document"].get("concepts")
+                 and not set(r["document"]["concepts"]) & {c for o in docs if o is not r for c in o["document"].get("concepts") or []}]
+        if alone:
+            notes.append({"level": "note", "text": f"Shares no concept with the other inputs of the graph: {', '.join(alone)}"})
+    waiting = sum(1 for e in view["edges"] if e.get("status") == "proposed" and e.get("by"))
+    if waiting:
+        notes.append({"level": "note", "text": f"{waiting} {'link' if waiting == 1 else 'links'} found in the text {'waits' if waiting == 1 else 'wait'} for review"})
+    return notes or [{"level": "ok", "text": "Every input links to a known concept, and no input repeats another"}]
 
 
 def pack_documents(records: list[dict], company: str, roles: list[str]) -> list[dict[str, Any]]:

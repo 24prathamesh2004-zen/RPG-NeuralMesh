@@ -12,7 +12,7 @@ class FakeBackend:
 
     def complete(self, choice, system, user):
         self.calls.append((system, user))
-        return "Open **Context graph** and choose **Add input**.", 120, 12
+        return "Open **Context graph** and choose **Upload input**.", 120, 12
 
 
 def test_index_reads_the_guide_and_the_node_registry():
@@ -33,7 +33,7 @@ def test_answer_uses_the_model_with_the_guide_sections():
     backend = FakeBackend()
     result = help_chat.answer("How do I add an input to a context graph?", [], "/context-graph", backend=backend)
     assert result["mode"] == "model"
-    assert "Add input" in result["answer"]
+    assert "Upload input" in result["answer"]
     system, user = backend.calls[0]
     assert "Ask NeuralMesh" in system
     assert "Add to the graph" in user  # the guide section went into the prompt

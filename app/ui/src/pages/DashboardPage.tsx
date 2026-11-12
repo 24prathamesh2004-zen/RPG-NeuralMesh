@@ -51,7 +51,7 @@ export default function DashboardPage() {
 
       <section className="mesh-kpi-grid" aria-label="Pilot facts">
         <article className="mesh-kpi"><span className="mesh-kpi-icon green"><Network size={18} /></span><div><strong>{loading ? '…' : `${snapshot?.connected_nodes ?? 0}/${snapshot?.total_nodes ?? 4}`}</strong><span>Independent nodes online</span></div></article>
-        <article className="mesh-kpi"><span className="mesh-kpi-icon coral"><ShieldCheck size={18} /></span><div><strong>0</strong><span>Source records copied to the centre</span></div></article>
+        <article className="mesh-kpi"><span className="mesh-kpi-icon coral"><ShieldCheck size={18} /></span><div><strong>0</strong><span>Source records copied to the centre</span>{(snapshot?.ingested_graphs ?? 0) > 0 && <span>{snapshot?.ingested_graphs} {snapshot?.ingested_graphs === 1 ? 'graph' : 'graphs'} ingested as JSON kept at the centre</span>}</div></article>
         <article className="mesh-kpi"><span className="mesh-kpi-icon gold"><CheckCircle2 size={18} /></span><div><strong>{selectedNodes.filter((id) => !snapshot?.nodes.find((node) => node.node_id === id)?.shared).length}</strong><span>Companies in your scope</span></div></article>
         <article className="mesh-kpi"><span className="mesh-kpi-icon teal"><CircleHelp size={18} /></span><div><strong>{loading ? '…' : snapshot?.pending_approvals ?? 0}</strong><span>Pending approvals</span></div></article>
       </section>

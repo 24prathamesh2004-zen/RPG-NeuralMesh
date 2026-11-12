@@ -1,0 +1,19 @@
+{
+  "graph": "Example: delivery playbook with mistakes",
+  "company": "Zensar",
+  "description": "Example data, invented for testing the ingest. It holds five mistakes on purpose, so nothing is kept.",
+  "sensitivity": "Restricted",
+  "sharing": "group",
+  "synthetic": "yes",
+  "nodes": [
+    {"id": "pb-1", "type": "Playbook", "name": "AI delivery playbook"},
+    {"id": "st-1", "name": "Discovery stage"},
+    {"id": "st-2", "type": "Stage", "name": "Pilot stage"},
+    {"id": "risk-1", "type": "Risk", "name": "Data not ready"}
+  ],
+  "edges": [
+    {"type": "HAS_STAGE", "source": "pb-1", "target": "st-1"},
+    {"type": "HAS_STAGE", "source": "pb-1", "target": "st-9"},
+    {"source": "st-2", "target": "risk-1"}
+  ]
+}

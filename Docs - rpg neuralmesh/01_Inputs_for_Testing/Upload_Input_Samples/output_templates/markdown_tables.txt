@@ -1,0 +1,11 @@
+[extension] md
+[header]
+| Entity | Type | Company |
+|---|---|---|
+[entity]
+| {label} | {type} | {company} |
+[link]
+| {source} | {type} | {target} |
+[footer]
+
+The last rows are the links: from, type, to.

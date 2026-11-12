@@ -40,6 +40,7 @@ FIELDS: dict[str, dict[str, str]] = {
 FIELDS["edge"] = FIELDS["link"]  # "edge" is the graph word for a link: the same items and the same fields
 EACH = ("document", "node", "edge", "concept", "link")
 DEFAULT: dict[str, Any] = {
+    "graph_id": "{graph.id}",  # loaded back in Upload input, the changed file replaces the graph it came from
     "graph": "{graph.name}",
     "companies": "{graph.companies}",
     "documents": [{"$each": "document", "id": "{id}", "title": "{title}", "company": "{company}", "kind": "{kind}", "catalogue_item": "{item_title}",

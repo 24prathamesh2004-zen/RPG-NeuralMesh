@@ -267,8 +267,38 @@ def validate(results):
     return errs, rows
 
 
+def real_records(out: Path) -> list[Path]:
+    """The files under the data folder that main() must not delete (the real data plan, step 1). Every file under a
+    node's contributions or added_items, the upload records and the catalogue items a person added, counts as real
+    unless it is a .json record that says "synthetic": true. A missing mark, a file that cannot be read and a leftover
+    .json.tmp of an interrupted write all count as real. A pack whose header does not say synthetic true counts as real
+    too. The packs this application builds always say synthetic true, so for uploads the records are the protection,
+    and the pack check stops a pack placed in the folder from elsewhere."""
+    found: list[Path] = []
+    for path in sorted(p for folder in ("contributions", "added_items") for p in out.glob(f"*/{folder}/**/*") if p.is_file()):
+        try:
+            if path.suffix != ".json" or json.loads(path.read_text(encoding="utf-8")).get("synthetic") is not True:
+                found.append(path)
+        except (OSError, ValueError, AttributeError):
+            found.append(path)
+    for path in sorted(out.glob("*/packs/*/pack.json")):
+        try:
+            if json.loads(path.read_text(encoding="utf-8")).get("pack", {}).get("synthetic") is not True:
+                found.append(path)
+        except (OSError, ValueError, AttributeError):
+            found.append(path)
+    return found
+
+
 def main():
-    if OUT.exists(): shutil.rmtree(OUT)
+    if OUT.exists():
+        real = real_records(OUT)
+        if real:  # main() deletes the whole data folder, so it stops before a real file is lost
+            names = ", ".join(str(p.relative_to(OUT)) for p in real[:8]) + (f" and {len(real) - 8} more" if len(real) > 8 else "")
+            sys.exit(f"kbgen.py stopped before deleting {OUT}: {len(real)} {'file holds' if len(real) == 1 else 'files hold'} real data or "
+                     f"no synthetic mark ({names}). With the stack stopped, move them out of the folder, or mark an invented upload record or added "
+                     f"item with \"synthetic\": true.")
+        shutil.rmtree(OUT)
     OUT.mkdir()
     results = {n: build_node(n) for n in NODES}
     (OUT / "gold").mkdir()

@@ -1,0 +1,107 @@
+{
+  "graph": "Example: spare parts of a mixing line",
+  "company": "Zensar",
+  "description": "Example data, invented to show the format.",
+  "sensitivity": "Internal",
+  "sharing": "company",
+  "synthetic": true,
+  "nodes": [
+    {
+      "id": "plant-a",
+      "type": "Plant",
+      "name": "Plant A",
+      "properties": {
+        "city": "Example city"
+      }
+    },
+    {
+      "id": "line-1",
+      "type": "Line",
+      "name": "Mixing line 1"
+    },
+    {
+      "id": "m-01",
+      "type": "Machine",
+      "name": "Internal mixer M-01",
+      "aliases": [
+        "Mixer 1"
+      ]
+    },
+    {
+      "id": "rs-200",
+      "type": "Part",
+      "name": "Rotor seal RS-200",
+      "properties": {
+        "material": "FKM",
+        "stock": 14
+      }
+    },
+    {
+      "id": "sup-x",
+      "type": "Supplier",
+      "name": "Supplier X",
+      "properties": {
+        "lead_time_days": 21
+      }
+    },
+    {
+      "id": "sup-y",
+      "type": "Supplier",
+      "name": "Supplier Y",
+      "properties": {
+        "lead_time_days": 35
+      }
+    },
+    {
+      "id": "wear",
+      "type": "Defect",
+      "name": "Seal wear"
+    }
+  ],
+  "edges": [
+    {
+      "type": "HAS_LINE",
+      "source": "plant-a",
+      "target": "line-1"
+    },
+    {
+      "type": "HAS_MACHINE",
+      "source": "line-1",
+      "target": "m-01"
+    },
+    {
+      "type": "USES_PART",
+      "source": "m-01",
+      "target": "rs-200",
+      "properties": {
+        "per_year": 6
+      }
+    },
+    {
+      "type": "SUPPLIES",
+      "source": "sup-x",
+      "target": "rs-200",
+      "properties": {
+        "preferred": true
+      }
+    },
+    {
+      "type": "SUPPLIES",
+      "source": "sup-y",
+      "target": "rs-200"
+    },
+    {
+      "type": "AFFECTS",
+      "source": "wear",
+      "target": "rs-200"
+    },
+    {
+      "type": "SEEN_ON",
+      "source": "wear",
+      "target": "m-01",
+      "properties": {
+        "times_in_2026": 4
+      }
+    }
+  ]
+}
