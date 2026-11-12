@@ -1,0 +1,18 @@
+{
+ "document": "zensar:F-03-U007",
+ "made": "2026-11-12T10:50:17+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-eff01e1c04",
+   "source": "concept:failure-pattern",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Leila Haddad: Leila Haddad: Before we call this ready, how are we handling clients may continue retrying permanent validation failures and create noisy traffic, especially while how long idempotency keys should remain valid for delayed retries?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

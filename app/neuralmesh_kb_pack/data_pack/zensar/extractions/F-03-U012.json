@@ -1,0 +1,28 @@
+{
+ "document": "zensar:F-03-U012",
+ "made": "2026-11-12T10:50:18+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-9c552ca3dd",
+   "source": "concept:integration-checklist",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Maya Chen: Maya Chen: Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-6db2ccd146",
+   "source": "concept:integration-checklist",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Priya Shah: Priya Shah: Before we call this ready, how are we handling assigning unresolved checklist items now could imply commitments that the group has not agreed, especially while which escalation contacts should be listed for after-hours support?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

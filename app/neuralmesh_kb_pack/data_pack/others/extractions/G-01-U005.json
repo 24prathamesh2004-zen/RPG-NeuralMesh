@@ -1,0 +1,88 @@
+{
+ "document": "others:G-01-U005",
+ "made": "2026-11-12T10:22:19+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-bffe119464",
+   "source": "concept:employee-onboarding",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "The employment lifecycle at Zensar is structured into five progressive phases: Onboarding & Induction, Probation & Confirmation, Continuous Performance & Growth, Career Mobility & Leadership, and Separation & Transition.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-3c144da167",
+   "source": "concept:failure-pattern",
+   "target": "concept:finance-benchmark-pre-results",
+   "type": "RELATED_TO",
+   "evidence": "When an associate consistently fails to meet agreed delivery benchmarks, exhibits chronic quality defects, or receives a 'Needs Development' / 'Unsatisfactory' PRIDE rating, the organization initiates a structured Performance Improvement Plan (PIP).",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-475eb8d599",
+   "source": "concept:client-service-desk",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "If an associate encounters hardware faults (battery degradation, keyboard failure, screen issues, or unexpected crashes), a maintenance ticket must be lodged on the IS Service Desk under `TIMS - Hardware Repair / Maintenance`.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-a2afb8aa2e",
+   "source": "concept:acquisition-integration",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Referral Eligibility & Policy Governance: (1) All active full-time employees are eligible to refer candidates and claim referral bonuses, with the exception of Talent Acquisition recruiters, hiring managers evaluating the open requisition, and leadership team members (Vice Presidents and above) for ",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-24937f4f0f",
+   "source": "concept:client-service-desk",
+   "target": "concept:employee-onboarding",
+   "type": "RELATED_TO",
+   "evidence": "Onboarding | Asset issuance, M365 setup, Day 1 orientation, BGV | ZenFusion, IS Service Desk, Welcome Kit | Full technical and administrative readiness.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-6c00185226",
+   "source": "concept:acquisition-integration",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Timely Acceptance: Failure to complete digital acceptance within the stipulated offer validity period may result in automated offer expiration in the talent acquisition system.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-06e4fbe524",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Project Delivery & Quality | 40% to 50% | Sprint velocity, defect leakage, code review score, client SLA | Core engineering delivery benchmark.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-5d3d9dcfb7",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:finance-benchmark-pre-results",
+   "type": "RELATED_TO",
+   "evidence": "Project Delivery & Quality | 40% to 50% | Sprint velocity, defect leakage, code review score, client SLA | Core engineering delivery benchmark.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
+}

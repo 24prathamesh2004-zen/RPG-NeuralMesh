@@ -1,10 +1,10 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Braces, Download, FilePlus2, FileUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
+import { Braces, Download, FilePlus2, FileUp, FolderUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
 import MeshGraphExplorer, { TYPE_COLOURS } from '../components/MeshGraphExplorer'
-import { addUpload, checkGraph, decideLink, downloadContextGraph, dropContextGraph, dropIngestedGraph, getContextGraph, getGraphEntity, getIngestedGraph, getIngestedGraphs, getIngestedGraphView, getIngestSample, getMeshNodes, getGraphTemplate, getUploadItems, getUploads, ingestGraph, removeUpload, renderJsonTemplate, searchGraph, suggestUpload } from '../services/api'
-import type { CompanyId, ContextGraphSummary, QualityNote, ExportFormat, UploadSuggestion, ContextGraphView, GraphEntity, GraphSearchResult, IngestedGraphSummary, IngestRefusal, IngestResult, MeshNodeInfo, NewItemArea, UploadItem, UploadRecord } from '../services/api'
+import { addUpload, addUploads, checkGraph, checkUploads, clearContextGraph, decideLink, downloadContextGraph, dropContextGraph, dropIngestedGraph, getContextGraph, getGraphEntity, getIngestedGraph, getIngestedGraphs, getIngestedGraphView, getIngestSample, getMeshNodes, getGraphTemplate, getUploadItems, getUploads, ingestGraph, removeUpload, renderJsonTemplate, searchGraph, suggestUpload } from '../services/api'
+import type { BatchPlan, BatchResult, CompanyId, ContextGraphSummary, QualityNote, ExportFormat, UploadSuggestion, ContextGraphView, GraphEntity, GraphSearchResult, IngestedGraphSummary, IngestRefusal, IngestResult, MeshNodeInfo, NewItemArea, UploadItem, UploadRecord } from '../services/api'
 import { formatDateTime, linkWords, sharingWords, typeWords } from '../lib/format'
 
 type Tab = 'inputs' | 'upload'
@@ -264,6 +264,14 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
       onChanged()
     }).catch((reason) => setActionError(detail(reason, 'The context graph was not dropped.'))).finally(() => setBusy(false))
   }
+  const clear = () => { // a graph with no input left: off the list, its removed records kept on disk
+    if (!graph) return
+    if (!window.confirm(`Remove "${graph.name}" from the list?\n\nIt has no input left. Its ${graph.removed} removed ${graph.removed === 1 ? 'record is' : 'records are'} no longer listed. The ${graph.removed === 1 ? 'record stays' : 'records stay'} on disk as the upload history.`)) return
+    setBusy(true)
+    setActionError('')
+    clearContextGraph(graph.id).then(() => { setDocId(null); setGraphId(nextAfter(graph.id)); onChanged() })
+      .catch((reason) => setActionError(detail(reason, 'The graph was not removed from the list.'))).finally(() => setBusy(false))
+  }
   const remove = () => {
     if (!current) return
     if (!window.confirm(`Remove "${current.document.title}" from the pack, the index and the graph? The upload record stays, marked removed.`)) return
@@ -319,19 +327,20 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
           <div className="mesh-section-heading"><div><div className="mesh-eyebrow">Context graph</div><h2>{graph.name}</h2>
               <small className="mesh-panel-footnote" style={{ margin: 0 }}>{graph.inputs} {graph.inputs === 1 ? 'input' : 'inputs'}{graph.removed ? ` · ${graph.removed} removed` : ''}{graph.companies.length ? ` · ${graph.companies.join(', ')}` : ''}</small></div>
             {isAdmin && <div className="context-graph-actions">
-              <button type="button" className="mesh-primary-action" onClick={() => onAddTo(graph.id)}><FilePlus2 size={15} />Upload input to this graph</button>
+              {graph.inputs > 0 && <button type="button" className="mesh-primary-action" onClick={() => onAddTo(graph.id)}><FilePlus2 size={15} />Upload input to this graph</button>}
+              {graph.inputs === 0 && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={clear} aria-label="Remove from the list">{busy ? <LoaderCircle size={14} className="animate-spin" /> : <Trash2 size={14} />}Remove from the list</button>}
               {graph.inputs > 0 && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={drop}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : <Trash2 size={14} />}Drop graph</button>}
             </div>}</div>
           <div className="context-inputs" role="list" aria-label="Inputs of the context graph">
             {inputs.map((u) => (
-              <button type="button" role="listitem" key={u.document.id} className={`context-upload-row ${u.document.id === docId ? 'active' : ''}`} onClick={() => setDocId(u.document.id === docId ? null : u.document.id)}>
-                <strong>{u.document.title}</strong>
-                <small>{companyOf(u)} · {itemOf(u)} · {kindOf(u)}</small>
-                <small>{u.upload.file} · {formatDateTime(u.upload.at)} · {statusOf(u)}</small>
-              </button>
-            ))}
-          </div>
-          {current && <>
+              <Fragment key={u.document.id}>
+                <button type="button" role="listitem" className={`context-upload-row ${u.document.id === docId ? 'active' : ''}`} aria-expanded={u.document.id === docId} onClick={() => setDocId(u.document.id === docId ? null : u.document.id)}>
+                  <strong>{u.document.title}</strong>
+                  <small>{companyOf(u)} · {itemOf(u)} · {kindOf(u)}</small>
+                  <small>{u.upload.file} · {formatDateTime(u.upload.at)} · {statusOf(u)}</small>
+                </button>
+                {current && u.document.id === docId && <div className="context-input-detail">{/* the details open under the input chosen, not below the whole list */}
+
             <div className="mesh-section-heading" style={{ marginBottom: 0 }}><div><div className="mesh-eyebrow">{companyOf(current)}</div><h2>{current.document.title}</h2></div><span className={`mesh-result-state ${current.in_graph ? 'success' : 'warning'}`}>{sharingWords(current.sharing, companyOf(current))}</span></div>
             <dl>
               <dt>Document</dt><dd>{current.document.id}</dd>
@@ -343,7 +352,11 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
             </dl>
             {view && <FoundLinks view={view} docId={current.document.id} canDecide={isAdmin || current.node_id === company} onDecided={onChanged} />}
             {current.document.summary && <p className="mesh-panel-footnote">{current.sharing.shared ? 'What every company may read, the first sentences of the file: ' : 'What the group may read under a summary item, the first sentences of the file: '}{current.document.summary}</p>}
-          </>}
+          
+                </div>}
+              </Fragment>
+            ))}
+          </div>
           <div className="context-download">
             {!correction && <>
             <label htmlFor="context-format" className="mesh-panel-footnote" style={{ margin: 0 }}>Download this context graph as</label>
@@ -361,7 +374,7 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
           {view?.quality && <QualityNotes notes={view.quality} />}
           {emptied && <div className="ask-empty-results">Every input of this context graph was removed. The records stay in the list.</div>}
           {!view && !viewError && !emptied && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Loading the context graph</div>}
-          {view && <MeshGraphExplorer graph={view} revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(kept)} />}
+          {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(kept)} />}
           {view && !kept && <div className="context-concepts" aria-label="Linked entities">{view.nodes.filter((n) => !view.documents.includes(n.id)).map((n) => <span key={n.id} title={n.type}>{typeWords(n.type)}: {n.label}{current?.concept_matches?.[n.id] ? ` (${MATCH_WORDS[current.concept_matches[n.id]]})` : ''}</span>)}</div>}
         </section>}
         </>}
@@ -380,7 +393,7 @@ const fitWords = (s: UploadSuggestion) => {
 
 // One form for both ways in. A file is read and its fields filled (mesh admins). A graph JSON is pasted or chosen, checked
 // and held. Add to the graph or Append to the graph then keeps what the form holds: the file, the JSON, or both
-type Checked = { kind: 'upload'; record: UploadRecord } | { kind: 'ingested'; result: IngestResult }
+type Checked = { kind: 'upload'; record: UploadRecord } | { kind: 'ingested'; result: IngestResult } | { kind: 'batch'; result: BatchResult }
 interface Held { text: string; name: string; result: IngestResult } // a graph JSON that passed the check and is not kept yet
 
 function UploadInputTab({ isAdmin, companyName, graphs, ingested, initialGraph, onSaved, onOpen }: { isAdmin: boolean; companyName: string; graphs: ContextGraphSummary[]; ingested: IngestedGraphSummary[]; initialGraph: string | null; onSaved: () => void; onOpen: (graphId: string) => void }) {
@@ -397,12 +410,70 @@ function UploadInputTab({ isAdmin, companyName, graphs, ingested, initialGraph, 
         onPasteJson={(text, name) => { setHandoff(null); setPasting({ text, name }) }} onRemoveJson={() => setHeld(null)}
         onSaved={(what, keepJson) => { setChecked(what); if (!keepJson) setHeld(null); onSaved() }} />
     </div>
-    {checked && <QuickCheck checked={checked} onOpen={onOpen} />}
+    {checked && (checked.kind === 'batch' ? <BatchOutcome result={checked.result} onOpen={onOpen} /> : <QuickCheck checked={checked} onOpen={onOpen} />)}
   </>
 }
 
 // The graph just added or ingested, drawn with what was kept, so it can be checked without leaving Upload input
-function QuickCheck({ checked, onOpen }: { checked: Checked; onOpen: (graphId: string) => void }) {
+// The graphs a folder or a zip made, with the files kept in each. The graph chosen is drawn with its notes, as after one file
+function BatchOutcome({ result, onOpen }: { result: BatchResult; onOpen: (graphId: string) => void }) {
+  const [graphId, setGraphId] = useState(result.graphs[0]?.id ?? '')
+  const [view, setView] = useState<ContextGraphView | null>(null)
+  const [error, setError] = useState('')
+  const graph = result.graphs.find((g) => g.id === graphId) ?? null
+  const files = result.saved.filter((r) => r.context_graph.id === graphId)
+  useEffect(() => {
+    if (!graphId) return
+    let stale = false // the drawing of a graph left before its answer came is not shown
+    setView(null)
+    setError('')
+    getContextGraph(graphId).then(({ data }) => { if (!stale) setView(data) }).catch((reason) => { if (!stale) setError(detail(reason, 'The graph could not be drawn.')) })
+    return () => { stale = true }
+  }, [graphId, result])
+  const download = () => {
+    if (!graph) return
+    setError('')
+    renderJsonTemplate(graph.id).then(({ data }) => saveJson(data.output, `context_graph_${fileNameOf(graph.name)}.json`)).catch(() => setError('The JSON could not be downloaded.'))
+  }
+  return (
+    <section className="mesh-section-panel context-detail" aria-label="Quick check">
+      <div className="mesh-section-heading"><div><div className="mesh-eyebrow">Added to the graph</div><h2>{plural(result.saved.length, 'file')} in {plural(result.graphs.length, 'context graph')}</h2>
+          {result.refused.length > 0 && <small className="mesh-panel-footnote" style={{ margin: 0 }}>{plural(result.refused.length, 'file')} not kept</small>}</div>
+        {graph && <div className="context-graph-actions">
+          <button type="button" className="mesh-outline-action" onClick={download}><Download size={14} />Download JSON</button>
+          <button type="button" className="mesh-primary-action" onClick={() => onOpen(graph.id)}><Waypoints size={15} />Open in Uploaded graphs</button>
+        </div>}</div>
+      {result.graphs.length > 1 && <div className="context-inputs" role="list" aria-label="Context graphs made">
+        {result.graphs.map((g) => (
+          <button type="button" role="listitem" key={g.id} className={`context-upload-row ${g.id === graphId ? 'active' : ''}`} onClick={() => setGraphId(g.id)}>
+            <strong>{g.name}</strong>
+            <small>{plural(g.files, 'file')} added</small>
+          </button>
+        ))}
+      </div>}
+      {graph && <>
+        <div className="mesh-section-heading" style={{ marginBottom: 0 }}><div><div className="mesh-eyebrow">Context graph</div><h2>{graph.name}</h2></div></div>
+        <div className="context-inputs" role="list" aria-label="Files added">
+          {files.map((r) => (
+            <div role="listitem" key={r.document.id} className="context-upload-row">
+              <strong>{r.document.title}</strong>
+              <small>{r.path} · {kindOf(r)} · {plural(r.document.concepts?.length ?? 0, 'concept')} linked · {plural(r.rebuild?.index_rows ?? 0, 'passage')} can be searched{r.extraction?.links ? ` · ${plural(r.extraction.links, 'link')} found in the text` : ''}</small>
+            </div>
+          ))}
+        </div>
+      </>}
+      {result.refused.length > 0 && <div className="context-ingest-outcome">Not kept<ul className="context-ingest-list">{result.refused.map((x) => <li key={x.path}>{x.path}: {x.reason}</li>)}</ul></div>}
+      {result.new_item && <small className="mesh-panel-footnote">New catalogue item {result.new_item.code} · {result.new_item.title}</small>}
+      {result.notes.map((n) => <small key={n} className="mesh-panel-footnote">{n}</small>)}
+      {view?.quality && <QualityNotes notes={view.quality} />}
+      {error && <div role="alert" className="mesh-alert error">{error}</div>}
+      {graph && !view && !error && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Drawing the graph</div>}
+      {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} />}
+    </section>
+  )
+}
+
+function QuickCheck({ checked, onOpen }: { checked: Exclude<Checked, { kind: 'batch' }>; onOpen: (graphId: string) => void }) {
   const [view, setView] = useState<ContextGraphView | null>(null)
   const [error, setError] = useState('')
   const ingestedGraph = checked.kind === 'ingested' ? checked.result.graph : null
@@ -450,7 +521,7 @@ function QuickCheck({ checked, onOpen }: { checked: Checked; onOpen: (graphId: s
       {ingestedGraph && <small className="mesh-panel-footnote">Applications query it with <code>POST {ingestedGraph.endpoints.query}</code></small>}
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
       {!view && !error && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Drawing the graph</div>}
-      {view && <MeshGraphExplorer graph={view} revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(ingestedGraph)} />}
+      {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(ingestedGraph)} />}
     </section>
   )
 }
@@ -504,6 +575,58 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
   const reads = useRef(0) // counts the files chosen: the answer for a file that was replaced before it came is passed over
   const offered = useRef<UploadSuggestion | null>(null) // the last suggestion put into the fields. It stays when a file is taken away or cannot be read
   const fileInput = useRef<HTMLInputElement>(null)
+  const folderInput = useRef<HTMLInputElement | null>(null)
+  // many files, a folder or one zip: checked by the server before anything is kept
+  const [batch, setBatch] = useState<{ files: File[]; paths: string[]; label: string } | null>(null)
+  const [plan, setPlan] = useState<BatchPlan | null>(null)
+  const [planning, setPlanning] = useState(false)
+  const [batchItem, setBatchItem] = useState('') // the name of the new catalogue item the check was run with
+  const [batchGraph, setBatchGraph] = useState('') // the graph name typed for a set that makes one graph. Empty: the name of the folder
+  const [batchGraphText, setBatchGraphText] = useState<string | null>(null) // what is typed in Name of the graph. null: not touched, the name of the folder shows
+  const batchForm = (set: { files: File[]; paths: string[] }, check: boolean) => {
+    const form = new FormData()
+    set.files.forEach((f, i) => { form.append('files', f); form.append('paths', set.paths[i]) })
+    form.append('node_id', nodeId)
+    form.append('datapoint', code)
+    form.append('check', String(check))
+    if (code === NEW_ITEM) { form.append('new_item_title', batchItem); form.append('new_item_area', newItemArea) }
+    if (batchGraph) form.append('graph_name', batchGraph)
+    return form
+  }
+  const chooseFiles = (list: FileList | null, fromFolder = false) => {
+    const picked = [...(list ?? [])]
+    if (!fromFolder && picked.length <= 1 && !/\.zip$/i.test(picked[0]?.name ?? '')) { setBatch(null); setPlan(null); chooseFile(picked[0] ?? null); return }
+    if (!picked.length) return
+    reads.current += 1 // a single file being read is passed over
+    setFile(null)
+    setSuggestion(null)
+    setReading(false)
+    setError('')
+    const paths = picked.map((f) => (f as File & { webkitRelativePath?: string }).webkitRelativePath || f.name)
+    const label = picked.length === 1 ? picked[0].name : fromFolder ? `the folder ${paths[0].split('/')[0]}` : `${picked.length} files`
+    setPlan(null)
+    setBatchGraph('')
+    setBatchGraphText(null)
+    setBatch({ files: picked, paths, label })
+  }
+  // the name of the set, from the zip or the folder: "Final_Knowledge_Documents 1.zip" gives "Final Knowledge Documents 1"
+  const setName = batch ? (batch.files.length === 1 ? batch.files[0].name.replace(/\.zip$/i, '') : batch.paths[0].includes('/') ? batch.paths[0].split('/')[0] : '').replace(/[_-]+/g, ' ').trim() : ''
+  useEffect(() => { // a new item for a set of files takes the name of the set, until the person types one
+    if (batch && code === NEW_ITEM && !newItemTitle && setName) { setNewItemTitle(setName.slice(0, 120)); setBatchItem(setName.slice(0, 120)) }
+  }, [batch, code])
+  const batchKey = batch ? `${batch.label}:${batch.files.length}:${batch.files.reduce((n, f) => n + f.size, 0)}:${nodeId}:${code}:${code === NEW_ITEM ? `${batchItem}:${newItemArea}` : ''}:${batchGraph}` : ''
+  useEffect(() => { // the check runs again when the company, the catalogue item or a name changes, since they apply to every file
+    if (!batch || !nodeId || !code) return
+    if (code === NEW_ITEM && (batchItem.trim().length < 3 || !newItemArea)) { setPlan(null); return }
+    let stale = false
+    setPlanning(true)
+    setError('')
+    checkUploads(batchForm(batch, true)).then(({ data }) => { if (!stale) setPlan(data) })
+      .catch((reason) => { if (!stale) { setPlan(null); setError(detail(reason, 'The files could not be read.')) } })
+      .finally(() => { if (!stale) setPlanning(false) })
+    return () => { stale = true }
+  }, [batchKey])
+  const clearBatch = () => { setBatch(null); setPlan(null); if (fileInput.current) fileInput.current.value = ''; if (folderInput.current) folderInput.current.value = '' }
   const chooseFile = (picked: File | null) => {
     if (picked && !isAdmin) { // only a mesh admin uploads documents: anyone else gives a graph JSON
       if (!JSON_FILE.test(picked.name)) { setError('A mesh admin uploads documents. Choose a graph JSON (.json).'); return }
@@ -605,8 +728,10 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
   const ready = Boolean(file && !reading && nodeId && code && (!isNewItem || (newItemTitle.trim().length >= 3 && newItemArea))
     && (!(edited && canChange) || templateOk)) // the template is sent only when it was changed here, so only then it has to be a JSON object
   const isNewGraph = graphChoice === NEW_GRAPH
-  const canAdd = isNewGraph && Boolean(graphName.trim()) && (ready || jsonOnly)
-  const canAppend = (ready && Boolean(chosen)) || (jsonOnly && Boolean(chosen || chosenKept))
+  const oneGraph = batch && plan && plan.graphs.length === 1 ? plan.graphs[0] : null // a set that makes one graph may carry a JSON and a typed name
+  const graphNamePending = batchGraphText !== null && (!batchGraphText.trim() || (batchGraphText.trim() !== batchGraph && batchGraphText.trim() !== oneGraph?.name)) // typed and not checked yet, or emptied
+  const canAdd = batch ? Boolean(plan && plan.ok > 0 && !planning && (code !== NEW_ITEM || batchItem === newItemTitle.trim()) && !graphNamePending) : isNewGraph && Boolean(graphName.trim()) && (ready || jsonOnly)
+  const canAppend = !batch && ((ready && Boolean(chosen)) || (jsonOnly && Boolean(chosen || chosenKept)))
   // the checked JSON as it is kept: the form's company and graph name win, and graph_id names the graph it replaces or corrects
   const jsonText = (graphId: string | null, name: string | null) => {
     const data = { ...(JSON.parse(held?.text ?? '{}') as Record<string, unknown>) }
@@ -625,6 +750,29 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
     if (!(mode === 'add' ? canAdd : canAppend)) return
     setBusy(true)
     setError('')
+    if (batch) { // every file the check passed is kept, each in the graph of its folder
+      try {
+        const { data } = await addUploads(batchForm(batch, false))
+        clearBatch()
+        if (data.new_item) { setCode(data.new_item.code); setNewItemTitle(''); setBatchItem(''); setItemsLoaded((n) => n + 1) }
+        if (held && data.graphs.length === 1 && data.saved.length > 0) { // the files are kept: the checked JSON is kept as the drawing of their graph
+          try {
+            await ingestGraph(jsonText(data.graphs[0].id, data.graphs[0].name))
+            onSaved({ kind: 'batch', result: { ...data, notes: [...data.notes, 'Your JSON is kept as the drawing of this graph.'] } })
+          } catch (reason) {
+            onSaved({ kind: 'batch', result: data }, true)
+            setError(`The files were kept in "${data.graphs[0].name}", but your JSON was not. ${refusalWords(reason)} Change the JSON, then press Append to the graph with this graph chosen.`)
+          }
+          return
+        }
+        onSaved({ kind: 'batch', result: data }, true)
+      } catch (reason) {
+        setError(detail(reason, 'The files were not kept.'))
+      } finally {
+        setBusy(false)
+      }
+      return
+    }
     if (!file) { // the checked JSON alone: a new graph, or the graph chosen replaced or corrected
       try {
         const { data } = await ingestGraph(jsonText(mode === 'append' ? graphChoice : null, mode === 'add' ? graphName.trim() : null))
@@ -678,13 +826,28 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
   return (
     <section className="mesh-section-panel">
       <form className="context-form" onSubmit={(event) => { event.preventDefault(); void submit(canAdd ? 'add' : 'append') }} aria-label="Upload input">
-        <label>File
-          <input ref={fileInput} className="mesh-field" type="file" accept={isAdmin ? '.txt,.md,.csv,.json,.pdf,.docx' : '.json,application/json'} onChange={(event) => chooseFile(event.target.files?.[0] ?? null)} />
-          <span>{reading ? 'Reading the file' : suggestion
+        <div className="context-file-field">
+          <label htmlFor="context-file">File</label>
+          <div className="context-file-row">
+            <input ref={fileInput} id="context-file" className="mesh-field" type="file" accept={isAdmin ? '.txt,.md,.csv,.json,.pdf,.docx,.zip' : '.json,application/json'} multiple={isAdmin} onChange={(event) => (isAdmin ? chooseFiles(event.target.files) : chooseFile(event.target.files?.[0] ?? null))} />
+            {isAdmin && <>
+              <label className="mesh-outline-action" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}><FolderUp size={15} aria-hidden />Choose a folder<input ref={(el) => { folderInput.current = el; if (el) { el.setAttribute('webkitdirectory', ''); el.setAttribute('directory', '') } }} type="file" multiple hidden onChange={(event) => chooseFiles(event.target.files, true)} /></label>
+              {batch && <button type="button" className="mesh-outline-action" onClick={clearBatch}><X size={15} aria-hidden />Clear the files</button>}
+            </>}
+          </div>
+          <span>{batch ? (planning ? `Reading ${batch.label}` : plan ? `Read ${batch.label}: ${plural(plan.ok, 'file')} for ${plural(plan.graphs.length, 'context graph')}${plan.refused ? `, ${plural(plan.refused, 'file')} cannot be kept` : ''}. Each subfolder is one graph` : `Chosen: ${batch.label}`)
+            : reading ? 'Reading the file' : suggestion
             ? `Read from the file${suggestion.decided_by === 'model' ? ' and confirmed by the model' : ''}: kind ${KIND_WORDS[suggestion.kind.kind] ?? suggestion.kind.label ?? suggestion.kind.kind}, ${suggestion.concepts.length || 'no known'} ${suggestion.concepts.length === 1 ? 'concept' : 'concepts'}. ${suggestion.graph.mode === 'append' ? `It fits the context graph "${suggestion.graph.name}"${fitWords(suggestion)}` : 'No existing context graph fits, so it starts a new one'}. Every field below can be changed`
             : !isAdmin ? 'A graph JSON (.json) with nodes and edges. A mesh admin uploads documents'
-            : 'A document (.txt, .md, .csv, .json, .pdf or .docx, up to 20 MB), whose title, tags and context graph are filled in from the file, or a graph JSON with nodes and edges'}</span>
-        </label>
+            : 'A document (.txt, .md, .csv, .json, .pdf or .docx, up to 20 MB), several documents, a .zip of a folder, or a graph JSON with nodes and edges'}</span>
+        </div>
+        {batch && plan && <div className="context-batch" aria-label="Files to add">
+          <table><thead><tr><th>File</th><th>Context graph</th><th>Title</th><th>Kind</th><th></th></tr></thead>
+            <tbody>{plan.entries.map((x) => x.status === 'ok'
+              ? <tr key={x.path}><td>{x.path}</td><td>{x.graph}{x.graph_id ? '' : ' (new)'}</td><td>{x.title}</td><td>{KIND_WORDS[x.kind ?? ''] ?? x.kind}</td><td><em className="approved">will be added</em></td></tr>
+              : <tr key={x.path} className="refused"><td>{x.path}</td><td colSpan={3}>{x.reason}</td><td><em>not kept</em></td></tr>)}</tbody></table>
+          {plan.notes.map((n) => <small key={n}>{n}</small>)}
+        </div>}
         {isAdmin && <div className="context-form-row">
           <label>Company
             <select className="mesh-field" value={nodeId} onChange={(event) => setNodeId(event.target.value)}>{nodes.map((n) => <option key={n.node_id} value={n.node_id}>{n.company}</option>)}</select>
@@ -700,7 +863,7 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
         </div>}
         {isAdmin && !jsonOnly && isNewItem && <div className="context-form-row">
           <label>Name of the new item
-            <input className="mesh-field" value={newItemTitle} maxLength={120} onChange={(event) => setNewItemTitle(event.target.value)} />
+            <input className="mesh-field" value={newItemTitle} maxLength={120} onChange={(event) => setNewItemTitle(event.target.value)} onBlur={() => setBatchItem(newItemTitle.trim())} />
             <span>At least 3 letters</span>
           </label>
           <label>Area
@@ -708,7 +871,7 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
             <span>The knowledge area the new item belongs to</span>
           </label>
         </div>}
-        <div className="context-form-row">
+        {!batch && <div className="context-form-row">
           <label>Context graph
             <select className="mesh-field" value={graphChoice} onChange={(event) => setGraphChoice(event.target.value)}>
               <option value="">Choose a graph</option>
@@ -726,8 +889,8 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
             <input className="mesh-field" value={graphName} maxLength={80} onChange={(event) => setGraphName(event.target.value)} />
             <span>{suggestion && graphName === suggestion.graph.name ? 'Taken from the title of the file' : 'Needed before Add to the graph'}</span>
           </label>}
-        </div>
-        {isAdmin && !jsonOnly && <div className="context-form-row">
+        </div>}
+        {isAdmin && !jsonOnly && !batch && <div className="context-form-row">
           <label>Title
             <input className="mesh-field" value={title} maxLength={200} onChange={(event) => setTitle(event.target.value)} />
             <span>{suggestion && title === suggestion.title ? 'Taken from the file' : 'Leave empty to take it from the file'}</span>
@@ -737,7 +900,14 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
             <span>{suggestion && tags === suggestion.tags.join(', ') ? 'The concepts found in the file' : 'Separated by commas. Leave empty to take them from the file'}</span>
           </label>
         </div>}
-        <div className="context-form-row">
+        {oneGraph && oneGraph.new && <div className="context-form-row">
+          <label>Name of the graph
+            <input className="mesh-field" value={batchGraphText ?? oneGraph.name} maxLength={80} onChange={(event) => setBatchGraphText(event.target.value)}
+              onBlur={() => { const t = (batchGraphText ?? '').trim(); if (!t) { setBatchGraph(''); setBatchGraphText(null) } else if (t !== oneGraph.name) setBatchGraph(t) }} />
+            <span>{batchGraphText !== null && !batchGraphText.trim() ? 'Type a name. An empty field takes the name of the folder again' : 'Taken from the name of the folder. Every file listed goes into this graph'}</span>
+          </label>
+        </div>}
+        <div className="context-form-row" style={batch && !oneGraph ? { display: 'none' } : undefined}>
           <div className="context-template-actions">
             <span className="context-template-label">{canChange ? 'JSON structure' : 'Graph JSON'}</span>
             <div className="context-template-buttons">
@@ -766,7 +936,7 @@ function UploadTab({ isAdmin, graphs, ingested, initialGraph, initialFile, held,
         </div>}
         {error && <div role="alert" className="mesh-alert error">{error}</div>}
         <div className="context-form-actions">
-          <button type="button" className="mesh-primary-action" disabled={busy || !canAdd} onClick={() => void submit('add')}>{busy ? <LoaderCircle size={15} className="animate-spin" /> : <FileUp size={15} />}{busy ? (file ? 'Reading and linking' : 'Keeping the graph') : 'Add to the graph'}</button>
+          <button type="button" className="mesh-primary-action" disabled={busy || !canAdd} onClick={() => void submit('add')}>{busy ? <LoaderCircle size={15} className="animate-spin" /> : <FileUp size={15} />}{busy ? (file || batch ? 'Reading and linking' : 'Keeping the graph') : batch && plan ? `Add ${plural(plan.ok, 'file')} to the graph` : 'Add to the graph'}</button>
           <button type="button" className="mesh-outline-action" disabled={busy || !canAppend} onClick={() => void submit('append')}><FileUp size={15} />Append to the graph</button>
         </div>
       </form>
@@ -904,7 +1074,9 @@ function IngestTab({ companyName, isAdmin, initialText, initialName, onChecked, 
 
 // The points to look at in a graph: an input with no concept, a copy, a node with no edge, links waiting for review
 function QualityNotes({ notes }: { notes: QualityNote[] }) {
-  return <ul className="context-quality" aria-label="Graph quality">{notes.map((q, i) => <li key={i} className={q.level}>{q.text}</li>)}</ul>
+  const shown = notes.filter((q) => q.level !== 'ok') // a graph with nothing to look at shows no note
+  if (!shown.length) return null
+  return <ul className="context-quality" aria-label="Graph quality">{shown.map((q, i) => <li key={i} className={q.level}>{q.text}</li>)}</ul>
 }
 
 // The links taken from the text of one input: each with its sentence, proposed until a mesh admin or the owning company decides

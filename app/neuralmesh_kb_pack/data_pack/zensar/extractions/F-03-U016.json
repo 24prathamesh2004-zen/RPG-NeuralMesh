@@ -1,0 +1,18 @@
+{
+ "document": "zensar:F-03-U016",
+ "made": "2026-11-12T10:50:18+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-c4c0d50668",
+   "source": "concept:integration-checklist",
+   "target": "concept:pilot-results",
+   "type": "RELATED_TO",
+   "evidence": "Maya Chen: Maya Chen: For the readiness checklist, who can take the first draft and the notes on how we will monitor the pilot?",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
+}

@@ -49,12 +49,15 @@ const aggregateTable = (text: string) => {
 const shownSentence = (sentence: string, documents: string[]) =>
   citationsAsNumbers(plainWithheld(sentence), documents).replace(/^\[NOT IN EVIDENCE\]\s*/, 'Not in the evidence: ')
 
+const SOURCES_FIRST = 5 // source cards shown before View more
+
 export default function AskPage() {
   const [params] = useSearchParams()
   const [question, setQuestion] = useState(params.get('q') || EXAMPLE_QUESTION)
   const { selectedNodes, setSelectedNodes } = useMeshScope()
   const [purpose, setPurpose] = useState<MeshPurpose>('problem_solving')
   const [chooseNodes, setChooseNodes] = useState(false)
+  const [allSources, setAllSources] = useState(false) // every source card is shown. The first 5 show until View more is pressed
   const [nodeList, setNodeList] = useState(NODES)
   useEffect(() => {
     getMeshNodes()
@@ -88,6 +91,7 @@ export default function AskPage() {
     setBusy(true)
     setError('')
     setResponse(null)
+    setAllSources(false)
     try {
       const { data } = await queryMesh({ question: question.trim(), nodes: chooseNodes ? selectedNodes : undefined, purpose })
       setResponse(data)
@@ -176,8 +180,27 @@ export default function AskPage() {
             {response.omitted > 0 && <div className="mesh-alert note">Partial set: {response.omitted} {response.omitted === 1 ? 'item was' : 'items were'} left out for size or replaced by a newer version.</div>}
             {response.relationships.length > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title">Approved links</div>
               {response.relationships.map((link) => <p key={link.id} title={`${link.source} and ${link.target}`}><b>{link.source_title ?? link.source}</b> {LINK_LABELS[link.type] ?? link.type} <b>{link.target_title ?? link.target}</b>{link.note ? ` · ${link.note}` : ''}</p>)}</div>}
+          </section>
+
+          <aside className="ask-side-column">
+            {response.also_found.length > 0 && <section className="mesh-side-panel">
+              <div className="mesh-side-heading"><h2>Found, not used in the answer</h2><span>{response.also_found.length}</span></div>
+              <ul className="mesh-node-responses">{response.also_found.map((item) => <li key={item.evidence_id}><span className="mesh-response-copy"><strong title={item.title ?? item.evidence_id}>{item.title ?? item.evidence_id}</strong><small>{item.citation}</small></span></li>)}</ul>
+            </section>}
+            <section className="mesh-side-panel">
+              <div className="mesh-side-heading"><h2>Node responses</h2><span>{response.node_results.length}</span></div>
+              <ul className="mesh-node-responses">
+                {response.node_results.map((node) => <li key={node.node_id}><span className={`mesh-response-icon ${node.status === 'ok' ? 'good' : 'bad'}`}>{node.status === 'ok' ? <CircleCheck size={15} /> : node.status.includes('UNAVAILABLE') ? <ServerOff size={15} /> : <AlertTriangle size={15} />}</span><span className="mesh-response-copy"><strong>{displayNode(node.node_id)}</strong><small>{node.status === 'ok' ? `${node.results.length} allowed · ${node.withheld.length} withheld` : node.status}</small></span></li>)}
+              </ul>
+            </section>
+            {response.withheld.length > 0 && <section className="mesh-side-panel withheld-panel">
+              <div className="mesh-side-heading"><h2><LockKeyhole size={15} />Withheld by policy</h2><span>{response.withheld.length}</span></div>
+              <ul>{response.withheld.map((item, index) => <li key={`${String(item.evidence_id ?? index)}-${index}`}><strong>{String(item.title ?? item.datapoint ?? 'Restricted item')}</strong><small>{plainReason(String(item.reason ?? '')) || ruleMeaning(String(item.rule_id ?? '')) || 'Not available'}</small></li>)}</ul>
+            </section>}
+          </aside>
+          <div className="ask-sources-wide">{/* the sources use the whole width of the page, below the answer and the side panels */}
             {cards.length ? <div className="ask-source-list">
-              {cards.map((source, index) => {
+              {cards.slice(0, allSources ? cards.length : SOURCES_FIRST).map((source, index) => {
                 const nodeId = String(source.node_id ?? String(source.doc_id ?? '').split(':')[0])
                 const table = source.aggregate ? aggregateTable(String(source.text ?? '')) : null
                 return (
@@ -200,25 +223,9 @@ export default function AskPage() {
                   </article>
                 )
               })}
+              {cards.length > SOURCES_FIRST && <button type="button" className="mesh-outline-action ask-source-more" aria-expanded={allSources} onClick={() => setAllSources((v) => !v)}>{allSources ? 'View fewer' : `View more (${cards.length - SOURCES_FIRST})`}</button>}
             </div> : <div className="ask-empty-results">No approved evidence was returned for this question.</div>}
-          </section>
-
-          <aside className="ask-side-column">
-            {response.also_found.length > 0 && <section className="mesh-side-panel">
-              <div className="mesh-side-heading"><h2>Found, not used in the answer</h2><span>{response.also_found.length}</span></div>
-              <ul className="mesh-node-responses">{response.also_found.map((item) => <li key={item.evidence_id}><span className="mesh-response-copy"><strong title={item.title ?? item.evidence_id}>{item.title ?? item.evidence_id}</strong><small>{item.citation}</small></span></li>)}</ul>
-            </section>}
-            <section className="mesh-side-panel">
-              <div className="mesh-side-heading"><h2>Node responses</h2><span>{response.node_results.length}</span></div>
-              <ul className="mesh-node-responses">
-                {response.node_results.map((node) => <li key={node.node_id}><span className={`mesh-response-icon ${node.status === 'ok' ? 'good' : 'bad'}`}>{node.status === 'ok' ? <CircleCheck size={15} /> : node.status.includes('UNAVAILABLE') ? <ServerOff size={15} /> : <AlertTriangle size={15} />}</span><span className="mesh-response-copy"><strong>{displayNode(node.node_id)}</strong><small>{node.status === 'ok' ? `${node.results.length} allowed · ${node.withheld.length} withheld` : node.status}</small></span></li>)}
-              </ul>
-            </section>
-            {response.withheld.length > 0 && <section className="mesh-side-panel withheld-panel">
-              <div className="mesh-side-heading"><h2><LockKeyhole size={15} />Withheld by policy</h2><span>{response.withheld.length}</span></div>
-              <ul>{response.withheld.map((item, index) => <li key={`${String(item.evidence_id ?? index)}-${index}`}><strong>{String(item.title ?? item.datapoint ?? 'Restricted item')}</strong><small>{plainReason(String(item.reason ?? '')) || ruleMeaning(String(item.rule_id ?? '')) || 'Not available'}</small></li>)}</ul>
-            </section>}
-          </aside>
+          </div>
         </div>
       )}
     </div>

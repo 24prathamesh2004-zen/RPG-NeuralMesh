@@ -846,6 +846,49 @@ async def add_upload(
     return {**record, "refresh": refreshed.get(node_id, ""), "graph": graph}
 
 
+@router.post("/uploads/batch")
+async def add_uploads(
+    files: list[UploadFile] = File(...),
+    paths: list[str] = Form([]),
+    node_id: str = Form(...),
+    datapoint: str = Form(...),
+    check: bool = Form(False),
+    new_item_title: str = Form(""),
+    new_item_area: str = Form(""),
+    graph_name: str = Form(""),
+    user: dict = Depends(require_role("mesh_admin")),
+) -> dict:
+    """Many inputs at once: several files, the files of a folder with their paths in ``paths``, or one .zip of a folder
+    (services.upload_batch). Each subfolder becomes one context graph. ``check=true`` reads every file and keeps
+    nothing: the answer says for each file its graph, title and kind, or why it is refused. Without it the files that
+    can be kept are kept one after the other, and the central graph is refreshed once at the end. ``new_item_title`` and
+    ``new_item_area`` put the files under a new catalogue item, and ``graph_name`` names the graph of the files that are
+    in no subfolder."""
+    from services import upload_batch, uploads
+    rt = await asyncio.to_thread(runtime)
+    if node_id not in NODE_IDS:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Unknown subsidiary node")
+    if len(files) > upload_batch.MAX_FILES:
+        raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"At most {upload_batch.MAX_FILES} files are taken at once.")
+    given, total = [], 0
+    for i, file in enumerate(files):
+        data = await file.read(upload_batch.MAX_TOTAL_BYTES + 1 - total)
+        total += len(data)
+        if total > upload_batch.MAX_TOTAL_BYTES:
+            raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"The files have more than {upload_batch.MAX_TOTAL_BYTES // 1_000_000} MB together.")
+        given.append((paths[i] if i < len(paths) and paths[i] else file.filename or f"file_{i + 1}", data))
+    try:
+        planned = await asyncio.to_thread(upload_batch.plan, rt, given, node_id, datapoint, new_item_title=new_item_title,
+                                          new_item_area=new_item_area, graph_name=graph_name)
+    except upload_batch.BatchRefused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
+    if check:
+        return {**planned, "entries": [upload_batch.public(x) for x in planned["entries"]], "checked_only": True}
+    result = await asyncio.to_thread(upload_batch.save, rt, user, planned)
+    refreshed = await rt.refresh_from_nodes() if result["saved"] else {}
+    return {**result, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["saved"]})}}
+
+
 @router.get("/uploads/graphs/{graph_id}")
 async def context_graph(graph_id: str, format: str | None = None, user: dict = Depends(require_user)):
     """One context graph: every input in it the person may see, with the items, the companies and the entities one link
@@ -885,6 +928,19 @@ async def drop_context_graph(graph_id: str, user: dict = Depends(require_role("m
         await asyncio.to_thread(ingested.drop, correction, user)
     refreshed = await rt.refresh_from_nodes()
     return {**result, "corrections_dropped": corrections, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["removed"]})}}
+
+
+@router.post("/uploads/graphs/{graph_id}/clear")
+async def clear_context_graph(graph_id: str, user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Take a context graph whose inputs were all removed off the list. The removed records stay on disk, marked
+    cleared, and are no longer listed. 409 while the graph still has an input."""
+    from services import uploads
+    try:
+        return await asyncio.to_thread(uploads.clear_graph, graph_id, user)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No context graph with this id has removed inputs") from None
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from None
 
 
 @router.get("/uploads/{doc_id}/graph")

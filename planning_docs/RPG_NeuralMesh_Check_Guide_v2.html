@@ -70,12 +70,14 @@ pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;
 <div class="tabs" role="tablist" aria-label="Sections">
   <button class="tab" role="tab" data-tab="start" aria-selected="true">Before you start</button>
   <button class="tab" role="tab" data-tab="pages" aria-selected="false">Check each page</button>
+  <button class="tab" role="tab" data-tab="business" aria-selected="false">Business view</button>
   <button class="tab" role="tab" data-tab="data" aria-selected="false">Where the data comes from</button>
   <button class="tab" role="tab" data-tab="sample" aria-selected="false">The sample upload</button>
   <button class="tab" role="tab" data-tab="pipeline" aria-selected="false">Data and pipeline</button>
   <button class="tab" role="tab" data-tab="agents" aria-selected="false">How a question is answered</button>
   <button class="tab" role="tab" data-tab="mcp" aria-selected="false">MCP tools and access</button>
   <button class="tab" role="tab" data-tab="flow" aria-selected="false">Complete flow</button>
+  <button class="tab" role="tab" data-tab="graph" aria-selected="false">The graph, step by step</button>
 </div>
 
 <!-- ───────────────────────── Before you start ───────────────────────── -->
@@ -589,6 +591,198 @@ Lots are trended per supplier at receipt, and a lot outside its band is held [ce
       <tr><td>Look at the graph</td><td>The graph of all nodes with type filters and search, the layers and counts of the graph, and the search over every entity with its sharing rule</td><td>Mesh Nodes, Domains, Context graph</td></tr>
       <tr><td>Connect an application</td><td>An application registered in <code>config/applications/</code> calls the context tools and sends packs through the import tool, then its entries wait on Governance, Application entries, then approved entries join the graph</td><td>Applications, Governance</td></tr>
       <tr><td>Watch the mesh</td><td>Node health, decisions by node, recent activity, the decision log with a check that each node's ledger chain is intact, the answer model and the guardrails</td><td>Dashboard, Governance, Admin</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="panel" id="graph" role="tabpanel">
+  <h2>The graph, step by step</h2>
+  <p class="sub">For a colleague who has not worked with a graph before. The example is the sample graph "33 kV cable joint failures" on the Context graph page, which is loaded with <code>make samples-load</code>.</p>
+  <div class="page">
+    <h3>In short</h3>
+    <ul>
+      <li>A graph is a set of things and the links between them. A thing is drawn as a mark and is called a node or an entity. A link is drawn as a line with an arrow and is called an edge or a link.</li>
+      <li>NeuralMesh makes a small graph from each uploaded file: the file, the catalogue item it is filed under, the company that owns it and the topics its text names.</li>
+      <li>A topic is called a concept. The concepts come from one vocabulary shared by all companies of the group, so two files that name the same concept meet at that concept.</li>
+      <li>The text of a file is not in the graph. The graph holds titles, topics and links. The text stays at the company that owns the file.</li>
+    </ul>
+  </div>
+  <div class="page">
+    <h3>Key concepts: the marks on the drawing</h3>
+    <p>The example graph has 8 nodes.</p>
+    <div class="tablebox"><table><thead><tr><th>Word</th><th>On the drawing</th><th>Plain meaning</th><th>In the example</th></tr></thead><tbody><tr><td>Subsidiary</td><td>A box in the colour of the company</td><td>The company that owns the file</td><td>Raychem RPG</td></tr><tr><td>Datapoint</td><td>A dark blue dot</td><td>The catalogue item the file is filed under. It carries the sharing rule: what other companies may read</td><td>Field service and failure analysis</td></tr><tr><td>Document</td><td>A light blue dot</td><td>One uploaded file</td><td>Teardown findings, failed 33 kV cable joints, July to September 2026</td></tr><tr><td>Concept</td><td>An orange triangle</td><td>One topic of the group vocabulary</td><td>5 concepts: Cable accessory failure analysis, Cable joint installation, Failure pattern, Installation quality records, Root cause analysis</td></tr><tr><td>Context graph</td><td>The whole drawing</td><td>A named set of files that belong together</td><td>33 kV cable joint failures, with 1 file</td></tr></tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Key concepts: the lines on the drawing</h3>
+    <p>A line is read from its start to its arrow, as a short sentence. The example graph has 9 links.</p>
+    <div class="tablebox"><table><thead><tr><th>Link</th><th>Line</th><th>Read it as</th><th>Who makes it</th><th>In the example</th></tr></thead><tbody><tr><td>mentions</td><td>Thin grey, document to concept</td><td>The text of this file names this topic</td><td>Code, when the file is uploaded</td><td>5, one to each concept</td></tr><tr><td>in datapoint</td><td>Thin grey, document to item</td><td>This file is filed under this catalogue item</td><td>The person who uploads chooses the item</td><td>1</td></tr><tr><td>owned by</td><td>Thin grey, item to company</td><td>This item belongs to this company</td><td>The catalogue of the company</td><td>1</td></tr><tr><td>related to, broader</td><td>Solid blue, concept to concept</td><td>These two topics belong together, or one is the wider topic of the other</td><td>The group vocabulary, approved</td><td>1: Failure pattern is related to Root cause analysis</td></tr><tr><td>A proposed link</td><td>Dashed, concept to concept</td><td>A suggested link. It counts only after a person approves it</td><td>Code, from a sentence of an upload or from the vocabulary</td><td>1: Failure pattern is similar to Root cause analysis</td></tr></tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Step by step: how a file becomes a graph</h3>
+    <div class="dgbox"><svg class="dg" viewBox="0 0 1140 130" role="img" aria-label="The five steps from an uploaded file to its graph"><defs><marker id="ah-map" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect class="bx" x="10" y="20" width="200" height="64" rx="10"/><text x="110.0" y="49.0" text-anchor="middle">1 Read the file</text><text class="sm" x="110.0" y="66.0" text-anchor="middle">text taken out of the file</text><line class="ar" x1="210" y1="52" x2="236" y2="52" marker-end="url(#ah-map)"/><rect class="bx" x="238" y="20" width="200" height="64" rx="10"/><text x="338.0" y="49.0" text-anchor="middle">2 Name its place</text><text class="sm" x="338.0" y="66.0" text-anchor="middle">company, item, graph</text><line class="ar" x1="438" y1="52" x2="464" y2="52" marker-end="url(#ah-map)"/><rect class="bx hi" x="466" y="20" width="200" height="64" rx="10"/><text x="566.0" y="49.0" text-anchor="middle">3 Match the topics</text><text class="sm" x="566.0" y="66.0" text-anchor="middle">text against the vocabulary</text><line class="ar" x1="666" y1="52" x2="692" y2="52" marker-end="url(#ah-map)"/><rect class="bx" x="694" y="20" width="200" height="64" rx="10"/><text x="794.0" y="49.0" text-anchor="middle">4 Keep at the node</text><text class="sm" x="794.0" y="66.0" text-anchor="middle">record, pack, search index</text><line class="ar" x1="894" y1="52" x2="920" y2="52" marker-end="url(#ah-map)"/><rect class="bx" x="922" y="20" width="200" height="64" rx="10"/><text x="1022.0" y="49.0" text-anchor="middle">5 Draw the graph</text><text class="sm" x="1022.0" y="66.0" text-anchor="middle">titles, topics and links</text><text class="sm" x="10" y="116">Steps 1 to 4 happen at upload. The text stays at the company in step 4. Only titles, topics and links reach the drawing in step 5.</text></svg></div>
+    <ol>
+      <li><b>Read the file.</b> The text is taken out of the .txt, .md, .csv, .json, .pdf or .docx file.</li>
+      <li><b>Name its place.</b> The person chooses the company and the catalogue item. The context graph is the one chosen, a new one with a name, or one graph for each subfolder of a folder or a zip.</li>
+      <li><b>Match the topics.</b> Code compares the text with the names of the concepts in the group vocabulary. Each concept the text names gets a "mentions" link. No new concept is invented, so a topic the vocabulary does not hold adds nothing.</li>
+      <li><b>Keep at the node.</b> The record with the text is written to the folder of the company, and the search index of that company is rebuilt.</li>
+      <li><b>Draw the graph.</b> The centre receives the title, the tags and the concept list, never the text, and draws the file with everything one link away from it.</li>
+    </ol>
+    <p>The mapping from the file to the graph:</p>
+    <div class="tablebox"><table><thead><tr><th>In the file or the form</th><th>Becomes in the graph</th></tr></thead><tbody><tr><td>The file itself</td><td>One Document node with its title</td></tr><tr><td>The company chosen</td><td>The Subsidiary node, joined through the item</td></tr><tr><td>The catalogue item chosen</td><td>The Datapoint node, joined to the document by "in datapoint"</td></tr><tr><td>A topic the text names</td><td>A "mentions" link from the document to that Concept node</td></tr><tr><td>Two topics named in one sentence</td><td>A proposed "related to" link between the two concepts, shown under the file as "Found in the text"</td></tr><tr><td>The text</td><td>Nothing. It stays at the company</td></tr></tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>How a concept connects the inputs</h3>
+    <p>On the Context graph page an orange triangle is a concept: one topic of the group vocabulary, for example Employee onboarding. A document is linked to a concept when its text names it. The concept is what joins documents to each other.</p>
+    <div class="dgbox"><svg class="dg" viewBox="0 0 1140 360" role="img" aria-label="Three documents mention one concept, and the concept is linked to two other concepts"><defs><marker id="ah-concept" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect class="bx" x="20" y="20" width="300" height="64" rx="10"/><text x="170.0" y="49.0" text-anchor="middle">Document: Intern knowledge</text><text class="sm" x="170.0" y="66.0" text-anchor="middle">Zensar, text stays at Zensar</text><rect class="bx" x="20" y="128" width="300" height="64" rx="10"/><text x="170.0" y="157.0" text-anchor="middle">Document: Employee knowledge</text><text class="sm" x="170.0" y="174.0" text-anchor="middle">Zensar, text stays at Zensar</text><rect class="bx" x="20" y="236" width="300" height="64" rx="10"/><text x="170.0" y="265.0" text-anchor="middle">Document: Induction checklist</text><text class="sm" x="170.0" y="282.0" text-anchor="middle">another company, as an example</text><rect class="bx hi" x="430" y="128" width="280" height="64" rx="10"/><text x="570.0" y="157.0" text-anchor="middle">Concept: Employee onboarding</text><text class="sm" x="570.0" y="174.0" text-anchor="middle">one topic of the group vocabulary</text><rect class="bx" x="820" y="40" width="300" height="64" rx="10"/><text x="970.0" y="69.0" text-anchor="middle">Concept: Knowledge transfer</text><text class="sm" x="970.0" y="86.0" text-anchor="middle">linked in the mesh before the upload</text><rect class="bx md" x="820" y="216" width="300" height="64" rx="10"/><text x="970.0" y="245.0" text-anchor="middle">Concept: Integration checklist</text><text class="sm" x="970.0" y="262.0" text-anchor="middle">proposed from a sentence, to review</text><line class="ar" x1="320" y1="52" x2="428" y2="140" marker-end="url(#ah-concept)"/><text class="lb" x="392" y="84" text-anchor="middle">mentions</text><line class="ar" x1="320" y1="160" x2="428" y2="160" marker-end="url(#ah-concept)"/><text class="lb" x="374" y="152" text-anchor="middle">mentions</text><line class="ar" x1="320" y1="268" x2="428" y2="182" marker-end="url(#ah-concept)"/><text class="lb" x="392" y="246" text-anchor="middle">mentions</text><line class="ar" x1="710" y1="146" x2="818" y2="84" marker-end="url(#ah-concept)"/><text class="lb" x="748" y="100" text-anchor="middle">related to</text><line class="ar da" x1="710" y1="176" x2="818" y2="238" marker-end="url(#ah-concept)"/><text class="lb" x="748" y="232" text-anchor="middle">related to</text><text class="sm" x="20" y="336">A question about onboarding reaches the concept first, and then every document that mentions it, in each company that may share it.</text><text class="sm" x="20" y="354">The dashed link was found in the text of an upload and counts only after Approve.</text></svg></div>
+    <ul>
+      <li><b>mentions</b> (thin grey line): the text of the document names the concept. Made when the file is uploaded.</li>
+      <li><b>related to, broader</b> (solid blue line): a link between two concepts that the mesh already holds.</li>
+      <li><b>related to, proposed</b> (dashed line): two concepts named in one sentence of an upload. It is listed under the input as "Found in the text" and counts after Approve. The chip Proposed links shows or hides these lines.</li>
+      <li><b>Why it helps.</b> Two documents that share a concept are one step apart, also when two companies wrote them. A concept that every input of a graph mentions is the common subject of the set, and a concept only one input mentions is special to that input.</li>
+      <li><b>Tree from here</b> draws one entity with what it is linked to in rows below it. <b>Back to the graph</b> returns. <b>Large view</b> draws the graph over the whole window.</li>
+    </ul>
+  </div>
+  <div class="page">
+    <h3>Step by step: how to read a graph</h3>
+    <ol>
+      <li>Find the light blue dots. These are the files of the graph.</li>
+      <li>Follow the grey lines from a file to its orange triangles. These are the topics that file covers.</li>
+      <li>A triangle joined to several files is a subject those files share. A triangle joined to one file is special to that file.</li>
+      <li>Look at the blue lines between triangles. They show how the topics belong together in the group vocabulary.</li>
+      <li>Click a mark. Its links are listed at the right, and the rest of the drawing fades.</li>
+      <li>Press <b>Tree from here</b> to see one mark with its links in rows below it, and <b>Back to the graph</b> to return.</li>
+      <li>Press <b>Proposed links</b> to show or hide the dashed lines, and <b>Large view</b> to draw the graph over the whole window.</li>
+    </ol>
+  </div>
+  <div class="page">
+    <h3>How the graph helps</h3>
+    <div class="tablebox"><table><thead><tr><th>Need</th><th>Without the graph</th><th>With the graph</th></tr></thead><tbody><tr><td>Find what the group knows about a topic</td><td>Search the files of each company by keyword</td><td>Open the concept. Every file that mentions it is one click away</td></tr><tr><td>Connect two companies</td><td>Someone has to know that both files exist</td><td>Both files are joined to the same concept, so each is one step from the other</td></tr><tr><td>See what a set of files covers</td><td>Read every file</td><td>The concepts joined to every file are the common subject. The concepts joined to one file are what only that file adds</td></tr><tr><td>Know who owns a file and what may leave</td><td>Ask the owner</td><td>The item and the company are on the drawing, and the item carries the sharing rule</td></tr><tr><td>Answer a question</td><td>Ask every company</td><td>Ask NeuralMesh finds the concepts in the question and asks the companies whose files mention them</td></tr></tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Example: try it on the page</h3>
+    <ol>
+      <li>Sign in as the presenter and open <b>Context graph</b>.</li>
+      <li>Choose "33 kV cable joint failures" in the list. The drawing shows 8 marks: 1 company, 1 item, 1 file and 5 concepts.</li>
+      <li>Click the triangle "Root cause analysis". The right side lists "mentions" with the teardown file, and "related to" with Failure pattern.</li>
+      <li>Press <b>Proposed links</b>. One dashed line appears between Failure pattern and Root cause analysis.</li>
+      <li>Click the light blue dot and press <b>Tree from here</b>. The file is at the top and its item and 5 concepts are in a row below it.</li>
+      <li>Type "root cause" in the search box at the left. "More in the graph" lists the concept, and its panel names every file of the mesh that mentions it.</li>
+    </ol>
+  </div>
+  <div class="page">
+    <h3>Words used on this tab</h3>
+    <div class="tablebox"><table><thead><tr><th>Word</th><th>Meaning</th></tr></thead><tbody><tr><td>Node, entity</td><td>One thing in the graph, drawn as a mark</td></tr><tr><td>Edge, link</td><td>One fact that joins two nodes, drawn as a line with an arrow</td></tr><tr><td>Concept</td><td>One topic of the group vocabulary, for example Root cause analysis</td></tr><tr><td>Group vocabulary</td><td>The list of concepts all companies share, with other names for each concept. Admin shows it as Ontology mappings</td></tr><tr><td>Datapoint, catalogue item</td><td>The place a file is filed under at its company. It decides what other companies may read</td></tr><tr><td>Context graph</td><td>A named set of files that belong together, with the part of the graph they made</td></tr><tr><td>Approved, proposed</td><td>An approved link counts. A proposed link is a suggestion, drawn dashed, until a person approves or rejects it</td></tr><tr><td>One step apart</td><td>Two nodes joined by one link, or two files joined to the same concept</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<section class="panel" id="business" role="tabpanel">
+  <h2>The business view of each page</h2>
+  <p class="sub">What each part of a page is for, in the words of the business: who uses it, what it tells them and why it is there. The tab "Check each page" has the steps to check each part.</p>
+  <div class="page">
+    <h3>In short</h3>
+    <ul>
+      <li>The RPG companies each hold knowledge the others could use: how a problem was solved, who has done a task before, what a standard says. NeuralMesh lets a person in one company find and use it.</li>
+      <li>Each company keeps its own documents and decides what leaves. The centre holds only titles, topics and links.</li>
+      <li>Three pages are for everyone: Dashboard, Ask NeuralMesh and Expert Finder. Two are for the people who own the data: Governance and Context graph. Four are for the team that runs the mesh: Mesh Nodes, Domains, Applications and Admin.</li>
+      <li>The data on the development stack is invented for the pilot, except the files a person uploaded.</li>
+    </ul>
+  </div>
+  <div class="page">
+    <h3>Dashboard</h3>
+    <p><b>Who uses it and when.</b> A manager or the pilot owner opens it first, to see in one look whether the mesh is running and how it is used.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Four tiles</td><td>How many company nodes are online, that no source record was copied to the centre, how many companies are in your scope and how many approvals wait.</td><td>Trust. A company agrees to join only if its data stays with it and the mesh is seen to be running.</td></tr>
+      <tr><td>Pilot companies table</td><td>Each company with its state and what it shares.</td><td>Shows which companies take part today, before anyone asks a question.</td></tr>
+      <tr><td>Decision outcomes and Search decisions by node</td><td>How many documents the nodes released or held back, and which company answered most.</td><td>Shows that the sharing rules are applied on every question, and where the knowledge of the group is asked for most.</td></tr>
+      <tr><td>Node activity</td><td>The latest decisions of the nodes.</td><td>A quick sign that questions are reaching the companies.</td></tr>
+      <tr><td>Potential monthly value</td><td>A rupee figure that moves with a slider. The page marks it as illustrative only and not a measured saving.</td><td>A way to talk about value with a sponsor. It is a formula with its assumptions printed under it, not a result of the pilot.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Ask NeuralMesh</h3>
+    <p><b>Who uses it and when.</b> Any employee asks a question in plain words and gets one answer built from the knowledge of several companies.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Question and purpose</td><td>The question, and why it is asked: problem solving, bid support, compliance and so on.</td><td>The purpose decides what a company releases. The same document can be shared for problem solving and held back for career mobility.</td></tr>
+      <tr><td>Answer</td><td>A short written answer where every sentence cites its sources.</td><td>Saves the reading of many documents, and every claim can be checked against a source.</td></tr>
+      <tr><td>Approved links</td><td>Statements that join documents of two companies, for example that a practice of one company addresses a gap another company states.</td><td>This is the cross-company value: what one company learned is put beside the problem of another.</td></tr>
+      <tr><td>Evidence cards</td><td>The documents the answer used, each with its company, catalogue item and how much of it was shared. The first 5 show, and View more opens the rest.</td><td>The reader sees who owns each piece of knowledge and can follow it up with that company.</td></tr>
+      <tr><td>Withheld by policy</td><td>Titles of documents that exist but were not shared, with the rule.</td><td>The asker learns that the knowledge exists and can ask its owner for access, without the content leaking.</td></tr>
+      <tr><td>Node responses</td><td>Which companies answered, and which were not reached.</td><td>Explains an incomplete answer: a company that was offline is named.</td></tr>
+      <tr><td>Choose nodes myself</td><td>A choice of the companies to ask.</td><td>For a person who already knows where the knowledge is, or who must keep a question inside some companies.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Expert Finder</h3>
+    <p><b>Who uses it and when.</b> A person who needs help beyond documents looks for a colleague in another company with the right experience.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Search</td><td>Roles, skills and evidence of experts who agreed to be listed, without names.</td><td>Finds the right person across the group while protecting people from unwanted contact.</td></tr>
+      <tr><td>Request intro</td><td>A request to the expert&#x27;s company to release the name.</td><td>The company and the expert stay in control of who may contact them.</td></tr>
+      <tr><td>Name after approval</td><td>The name, shown to the asker for 24 hours after approval.</td><td>The introduction happens only with consent, and it expires.</td></tr>
+      <tr><td>Opted-out experts</td><td>Nothing: an expert who did not agree is never listed.</td><td>Consent is a condition of the product, not an option.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Mesh Nodes</h3>
+    <p><b>Who uses it and when.</b> The mesh admin or an architect checks what each company connected and how the companies are joined.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Company cards and View capabilities</td><td>Each company node with its state, what it holds and what it may be asked.</td><td>Shows that every company runs its own node with its own rules. This is the federated design in one view.</td></tr>
+      <tr><td>Mesh graph</td><td>Every company, item, document, concept, skill and expert of the group with the links between them. No document text.</td><td>The map of the group&#x27;s knowledge: where topics overlap between companies and where one company stands alone.</td></tr>
+      <tr><td>Find an entity, Tree from here, Large view</td><td>One topic or document with what it is linked to.</td><td>Answers &quot;who else in the group works on this&quot; without asking around.</td></tr>
+      <tr><td>Reload from nodes</td><td>A fresh read of what each company publishes.</td><td>Used after a company changes its content, so the map is current.</td></tr>
+      <tr><td>Graph checks</td><td>Six checks of the graph, each ok or with the entities to review.</td><td>Quality control of the shared map. A broken link is found here before it misleads an answer.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Governance</h3>
+    <p><b>Who uses it and when.</b> The owner of a company&#x27;s data, or the mesh admin standing in for the owners in the pilot, decides what leaves the company.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Approvals</td><td>Requests for the full text of a withheld document and for the name of an expert, each with Deny and Approve 24 hours.</td><td>Sharing beyond the standing rule needs a named owner&#x27;s decision, and the grant ends after 24 hours.</td></tr>
+      <tr><td>Links between companies</td><td>Proposed links between documents of two companies, with one decision per side.</td><td>A link that joins two companies counts only when both owners agree.</td></tr>
+      <tr><td>Application entries</td><td>Entries an application such as Snap and Score proposed for the graph.</td><td>Nothing an application sends becomes shared knowledge until a person accepts it.</td></tr>
+      <tr><td>Decision log</td><td>The last 100 decisions of the nodes, without the question text, and a check that no ledger line was changed.</td><td>Evidence for audit and compliance: who was given what, when and under which rule.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Domains</h3>
+    <p><b>Who uses it and when.</b> An architect or the data owner looks at how the knowledge is organised.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Layers</td><td>The kinds of entities and links the graph allows, with live counts.</td><td>One agreed structure for all companies. Without it each company would describe its knowledge differently and nothing would connect.</td></tr>
+      <tr><td>Entities and Links</td><td>The counts by kind.</td><td>Shows how much each kind of knowledge has grown.</td></tr>
+      <tr><td>Last loads</td><td>When each source last sent its content.</td><td>Shows stale sources at a glance.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Context graph</h3>
+    <p><b>Who uses it and when.</b> A mesh admin or a team that owns an application brings new knowledge in and checks what the mesh made of it.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Uploaded graphs: search and list</td><td>Every named set of inputs, and one search over graphs, inputs, topics and skills.</td><td>The place to find what was already brought in, before uploading it a second time.</td></tr>
+      <tr><td>Graph panel and input details</td><td>The files of one set, each with its company, catalogue item, kind and sharing rule.</td><td>Shows who owns each file and what other companies may read of it.</td></tr>
+      <tr><td>The drawing</td><td>The files with the topics they mention and the links between the topics.</td><td>Shows what a set of files covers, what the files share and how they connect to the rest of the group. The tab &quot;The graph, step by step&quot; explains how to read it.</td></tr>
+      <tr><td>Found in the text, Approve and Reject</td><td>Links suggested from sentences of a file.</td><td>A person confirms what the code found, so only checked links count.</td></tr>
+      <tr><td>Upload input: a file, a folder or a zip</td><td>A form that reads the files, proposes title, kind and graph, and lists what will be added before anything is kept.</td><td>A team brings in its documents in one step, and sees refused files with the reason before saving.</td></tr>
+      <tr><td>Company and Catalogue item</td><td>Where the files belong and what may leave the company.</td><td>The sharing decision is taken once at upload and then applied to every question.</td></tr>
+      <tr><td>Paste a graph JSON and Ingest</td><td>A graph a team wrote itself, checked before it is kept.</td><td>For a team whose application already holds its knowledge as things and relationships.</td></tr>
+      <tr><td>Quick check after Add</td><td>The graph and the files just added, below the form.</td><td>The person sees the result at once and can correct it.</td></tr>
+      <tr><td>Download JSON</td><td>The graph as a file.</td><td>The team can take the graph into its own application, or correct it and load it back.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Applications</h3>
+    <p><b>Who uses it and when.</b> The owner of a connected application, or the mesh admin, sees what each application may do.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Cards</td><td>Each registered application with the tools it may call and the packs it sends.</td><td>An application gets only the access written in its registry entry. Nothing is open by default.</td></tr>
+      <tr><td>What it loaded</td><td>The entities and links an application sent, and when.</td><td>Shows whether the application is alive and what it added to the shared knowledge.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="page">
+    <h3>Admin</h3>
+    <p><b>Who uses it and when.</b> The team that runs the mesh checks its settings.</p>
+    <div class="tablebox"><table><thead><tr><th>Part of the page</th><th>What it tells you</th><th>Why it is there</th></tr></thead><tbody>
+      <tr><td>Orchestrator status</td><td>The steps a question goes through, and whether the answer model is ready.</td><td>The first place to look when answers stop.</td></tr>
+      <tr><td>Node registry</td><td>The registered company nodes.</td><td>Shows which companies are part of the mesh.</td></tr>
+      <tr><td>Answer model</td><td>Which model writes the answers.</td><td>A real company document may only go to an approved model, so the model in use must be visible.</td></tr>
+      <tr><td>Shared vocabulary (Ontology mappings)</td><td>Each concept with the other names people use for it.</td><td>Companies use different words for one topic. The vocabulary is what lets &quot;post-merger&quot; and &quot;first 100 days&quot; reach the same concept.</td></tr>
+      <tr><td>Guardrails</td><td>The safety rules that are on.</td><td>Shows that policy is enforced at the company, that answers cite their sources and that no source record is copied to the centre.</td></tr>
     </tbody></table></div>
   </div>
 </section>

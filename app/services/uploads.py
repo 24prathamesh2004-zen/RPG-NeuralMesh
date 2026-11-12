@@ -512,6 +512,8 @@ def list_uploads(rt: Any, company: str, roles: list[str]) -> list[dict[str, Any]
         items = datapoints_of(node)
         for status in ("accepted", "removed"):
             for record in packgen.contributions_of(node, status):
+                if record.get("cleared"):  # the removed records of a graph taken off the list: kept on disk, not shown
+                    continue
                 item = public(record, node)
                 item["removed"] = record.get("removed")
                 dp = items.get(record["document"]["datapoint"].split(":", 1)[1], {})
@@ -767,3 +769,20 @@ def drop_graph(graph_id: str, user: dict, build_vectors: bool = True) -> dict[st
         except Exception as exc:  # noqa: BLE001 - the other packs are still rebuilt, and the failure is reported
             failed[f"{node}.{domain}"] = str(exc).removeprefix("Pack validation failed: ") or type(exc).__name__
     return {"graph": graph_ref((accepted or removed_before)[0][1]), "removed": removed, "rebuilt": rebuilt, "failed": failed}
+
+
+@_one_at_a_time
+def clear_graph(graph_id: str, user: dict) -> dict[str, Any]:
+    """Take a context graph with no input left off the list. Its removed records stay on disk, marked cleared with who
+    and when, and are no longer listed. KeyError when no record carries the id, ValueError while an input is still in
+    the graph (drop the graph first)."""
+    removed = [(node, r) for node, r in _all_records(("removed",)) if graph_ref(r)["id"] == graph_id and not r.get("cleared")]
+    if any(graph_ref(r)["id"] == graph_id for _, r in _all_records()):
+        raise ValueError("The graph still has inputs. Drop the graph first.")
+    if not removed:
+        raise KeyError(graph_id)
+    stamp = {"by_role": "Mesh admin", "by_company": str(user.get("company", "")), "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    for node, record in removed:
+        record["cleared"] = stamp
+        _write_atomic(_folder(node) / f"{record['document']['id'].split(':', 1)[1]}.json", record)
+    return {"graph": graph_ref(removed[0][1]), "cleared": len(removed)}

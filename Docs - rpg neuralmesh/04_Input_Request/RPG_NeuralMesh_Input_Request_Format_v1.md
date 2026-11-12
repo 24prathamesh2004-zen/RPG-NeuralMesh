@@ -6,7 +6,7 @@ NeuralMesh builds a context graph from the content of your application, for exam
 
 Use this when the content is documents. NeuralMesh reads each file and builds the graph.
 
-**Folder layout.** One folder for the application. Inside it, one subfolder for each topic. Each subfolder becomes one context graph, and every file in it becomes one input of that graph.
+**Folder layout.** One folder for the application, sent as it is or as one .zip file of up to 100 files and 200 MB. Inside it, one subfolder for each topic. Each subfolder becomes one context graph, and every file in it becomes one input of that graph.
 
 ```
 onboarding_buddy/

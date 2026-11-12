@@ -1,0 +1,28 @@
+{
+ "document": "zensar:F-03-U011",
+ "made": "2026-11-12T10:50:18+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-fa0cca6d1a",
+   "source": "concept:acquisition-integration",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Nina Patel: Nina Patel: Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-796768888c",
+   "source": "concept:acquisition-integration",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Olivia Chen: Olivia Chen: Before we call this ready, how are we handling the identity-provider test environment has been unstable, especially while whether the integration test tenant will be available this week?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

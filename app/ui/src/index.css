@@ -554,6 +554,11 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .context-detail dd { margin: 0; color: var(--mesh-ink); }
 .context-download { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .context-form-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.context-file-field { display: grid; gap: 4px; min-width: 0; }
+.context-file-field > span { font-size: var(--mesh-text-small); line-height: 18px; color: var(--mesh-muted); }
+.context-file-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.context-file-row > input { flex: 1 1 260px; min-width: 0; }
+.context-file-row .mesh-outline-action { white-space: nowrap; }
 .context-template-actions { display: grid; gap: 4px; align-content: start; }
 .context-template-label { color: var(--mesh-ink); font-size: var(--mesh-text-small); font-weight: 700; line-height: 18px; }
 .context-template-buttons { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
@@ -598,3 +603,24 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .context-found em.approved { background: #ebfbee; color: #2b6a35; }
 .context-found-actions { display: flex; gap: 6px; margin-top: 2px; }
 .context-found-actions .mesh-outline-action { padding: 2px 10px; font-size: 12px; }
+
+/* Upload input: the list of the files of a folder or a zip, checked before anything is kept */
+.context-batch { overflow-x: auto; }
+.context-batch table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.context-batch th, .context-batch td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--mesh-border, #e6e8f0); }
+.context-batch tr.refused td { color: #8a4b00; }
+.context-batch em { font-style: normal; font-size: 12px; padding: 1px 6px; border-radius: 6px; background: #fff4e5; color: #8a4b00; white-space: nowrap; }
+.context-batch em.approved { background: #ebfbee; color: #2b6a35; }
+.context-batch small { display: block; margin-top: 6px; color: var(--mesh-text-muted, #5c6378); }
+
+/* The graph drawing over the whole window */
+.mesh-graph-explorer.wide { position: fixed; inset: 12px; z-index: 60; background: #fff; border: 1px solid var(--mesh-line); border-radius: 12px; padding: 14px; box-shadow: 0 20px 60px rgba(20, 24, 40, .25); overflow: auto; }
+.mesh-graph-explorer.wide .mesh-graph-canvas, .mesh-graph-explorer.wide .mesh-graph-detail { height: calc(100vh - 130px); }
+.mesh-graph-explorer.wide .mesh-graph-body { grid-template-columns: minmax(0, 1fr) 340px; }
+
+/* Lists that scroll inside their panel */
+.admin-ontology-list { max-height: 460px; overflow-y: auto; padding-right: 8px; }
+.ask-sources-wide { grid-column: 1 / -1; min-width: 0; }
+.ask-source-more { justify-self: start; }
+/* Context graph: the details of an input open under its card */
+.context-input-detail { border: 1px solid var(--mesh-line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; background: #fff; }

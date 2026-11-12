@@ -1,0 +1,18 @@
+{
+ "document": "zensar:F-03-U003",
+ "made": "2026-11-12T10:50:17+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-ada7b44b4f",
+   "source": "concept:employee-onboarding",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Elena Petrova: Elena Petrova: Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

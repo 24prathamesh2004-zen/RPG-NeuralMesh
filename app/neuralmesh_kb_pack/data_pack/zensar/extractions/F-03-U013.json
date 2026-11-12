@@ -1,0 +1,18 @@
+{
+ "document": "zensar:F-03-U013",
+ "made": "2026-11-12T10:50:18+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-dcb0f94e4b",
+   "source": "concept:acquisition-integration",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Keiko Sato: Keiko Sato: Before we call this ready, how are we handling removing an account before confirming its purpose could interrupt a scheduled integration, especially while whether one legacy account is still required by the reporting integration?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

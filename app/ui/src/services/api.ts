@@ -383,6 +383,12 @@ export const renderJsonTemplate = (graphId: string, template?: unknown) => api.p
 export const uploadExportTemplate = (form: FormData) => api.post<{ format: ExportFormat; export_format_list: ExportFormat[] }>('/mesh/uploads/formats/file', form, { headers: { 'Content-Type': 'multipart/form-data' } })
 export const removeExportFormat = (formatId: string) => api.delete<{ removed: string; export_format_list: ExportFormat[] }>(`/mesh/uploads/formats/${encodeURIComponent(formatId)}`)
 export const getUploadItems = (nodeId: CompanyId) => api.get<{ node_id: CompanyId; items: UploadItem[]; new_item_areas?: NewItemArea[] }>(`/mesh/uploads/items/${nodeId}`)
+export interface BatchEntry { path: string; file?: string; status: 'ok' | 'refused'; reason?: string; graph?: string; graph_id?: string | null; title?: string; kind?: string; company?: string; item?: string }
+export interface BatchPlan { name: string; new_item?: { title: string; area: string } | null; entries: BatchEntry[]; graphs: { name: string; id: string | null; new: boolean; files: number }[]; ok: number; refused: number; notes: string[] }
+export interface BatchResult { saved: (UploadRecord & { path: string })[]; refused: BatchEntry[]; graphs: (ContextGraphRef & { files: number })[]; new_item?: { code: string; title: string } | null; notes: string[] }
+// many files, a folder or one zip: the same form with check=true reads every file and keeps nothing
+export const checkUploads = (form: FormData) => api.post<BatchPlan>('/mesh/uploads/batch', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 600_000 })
+export const addUploads = (form: FormData) => api.post<BatchResult>('/mesh/uploads/batch', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 1_800_000 })
 export const addUpload = (form: FormData) => api.post<UploadRecord>('/mesh/uploads', form, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300_000 })
 export const removeUpload = (docId: string) => api.delete<UploadRecord>(`/mesh/uploads/${encodeURIComponent(docId)}`)
 export const getUploadGraph = (docId: string) => api.get<UploadGraph>(`/mesh/uploads/${encodeURIComponent(docId)}/graph`)
@@ -393,6 +399,7 @@ export const downloadContextGraph = (graphId: string, format: string) =>
   api.get<Blob>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`, { params: { format }, responseType: 'blob' })
 export const dropContextGraph = (graphId: string) =>
   api.delete<{ graph: ContextGraphRef; removed: UploadRecord[]; rebuilt: string[]; failed: Record<string, string>; refresh: Record<string, string>; corrections_dropped?: string[] }>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}`)
+export const clearContextGraph = (graphId: string) => api.post<{ graph: ContextGraphRef; cleared: number }>(`/mesh/uploads/graphs/${encodeURIComponent(graphId)}/clear`)
 export const searchGraph = (q: string) => api.get<{ query: string; results: GraphSearchResult[]; by_vector: boolean; total: number }>('/mesh/graph/search', { params: { q } })
 export const getGraphEntity = (id: string) => api.get<GraphEntity>(`/mesh/graph/entity/${id}`)
 

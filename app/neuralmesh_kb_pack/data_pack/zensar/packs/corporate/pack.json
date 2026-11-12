@@ -34,6 +34,34 @@
         "bid_support",
         "learning"
       ]
+    },
+    {
+      "id": "zensar:F-02",
+      "catalogue_id": "F-02",
+      "title": "Onboarding AI Buddy Doc",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Node owner",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true
+    },
+    {
+      "id": "zensar:F-03",
+      "catalogue_id": "F-03",
+      "title": "meeting transcripts",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Node owner",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true
     }
   ],
   "documents": [
@@ -53,6 +81,375 @@
       "concepts": [
         "concept:responsible-ai-use"
       ]
+    },
+    {
+      "id": "zensar:F-02-U001",
+      "datapoint": "zensar:F-02",
+      "title": "Zensar Employee Knowledge Enhanced",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+        "employee-onboarding",
+        "ai-assisted-delivery",
+        "client-status-update",
+        "knowledge-transfer-and-handover",
+        "client-service-desk"
+      ],
+      "summary": "ZENSAR TECHNOLOGIES AN RPG ENTERPRISES COMPANY Zensar Employee Knowledge Consolidated Knowledge Base & Operational Governance Manual Table of Contents This Table of Contents provides a complete three-column index of all chapters and detailed subtopics. Serial numbering reflects the hierarchical knowledge structure, and page numbers denote the exact starting page of each section.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:ai-assisted-delivery",
+        "concept:breakdown-rca",
+        "concept:cable-termination",
+        "concept:client-service-desk",
+        "concept:client-status-update",
+        "concept:compliance-calendar",
+        "concept:contamination-control",
+        "concept:data-quality-check",
+        "concept:employee-onboarding",
+        "concept:engagement-plan",
+        "concept:ethical-promotion",
+        "concept:failure-pattern",
+        "concept:finance-benchmark-pre-results",
+        "concept:incoming-quality-control",
+        "concept:knowledge-transfer",
+        "concept:line-clearance",
+        "concept:overseas-mobilisation-terms",
+        "concept:pricing",
+        "concept:project-delay-pattern",
+        "concept:recurring-pattern",
+        "concept:responsible-ai-use",
+        "concept:time-to-use-limit"
+      ],
+      "body_file": "contributions/F-02-U001.json"
+    },
+    {
+      "id": "zensar:F-02-U002",
+      "datapoint": "zensar:F-02",
+      "title": "Zensar General Knowledge Enhanced",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+        "client-service-desk",
+        "local-labour-contract-and-payment-terms",
+        "client-status-update",
+        "employee-onboarding",
+        "recurring-pattern-across-sites"
+      ],
+      "summary": "ZENSAR TECHNOLOGIES AN RPG ENTERPRISES COMPANY Zensar General Knowledge Consolidated Knowledge Base & Operational Governance Manual Table of Contents This Table of Contents provides a complete three-column index of all chapters and detailed subtopics. Serial numbering reflects the hierarchical knowledge structure, and page numbers denote the exact starting page of each section.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:client-service-desk",
+        "concept:client-status-update",
+        "concept:compliance-calendar",
+        "concept:contamination-control",
+        "concept:data-quality-check",
+        "concept:employee-onboarding",
+        "concept:esg-water-energy",
+        "concept:failure-pattern",
+        "concept:finance-benchmark-pre-results",
+        "concept:installation-quality-records",
+        "concept:knowledge-transfer",
+        "concept:line-clearance",
+        "concept:materials-handling",
+        "concept:out-of-specification-handling",
+        "concept:overseas-mobilisation-terms",
+        "concept:pricing",
+        "concept:project-delay-pattern",
+        "concept:recurring-pattern",
+        "concept:regulatory-change-control",
+        "concept:responsible-ai-use",
+        "concept:supplier-quality",
+        "concept:time-to-use-limit",
+        "concept:tower-design-standard"
+      ],
+      "body_file": "contributions/F-02-U002.json"
+    },
+    {
+      "id": "zensar:F-02-U003",
+      "datapoint": "zensar:F-02",
+      "title": "Zensar Intern Knowledge Enhanced",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+        "employee-onboarding",
+        "client-service-desk",
+        "ai-assisted-delivery",
+        "client-status-update"
+      ],
+      "summary": "ZENSAR TECHNOLOGIES AN RPG ENTERPRISES COMPANY Zensar Intern Knowledge Consolidated Knowledge Base & Operational Governance Manual Table of Contents This Table of Contents provides a complete three-column index of all chapters and detailed subtopics. Serial numbering reflects the hierarchical knowledge structure, and page numbers denote the exact starting page of each section.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:ai-assisted-delivery",
+        "concept:batch-record-practice",
+        "concept:breakdown-rca",
+        "concept:client-service-desk",
+        "concept:client-status-update",
+        "concept:compliance-calendar",
+        "concept:compliance-checklist",
+        "concept:data-quality-check",
+        "concept:employee-onboarding",
+        "concept:engagement-plan",
+        "concept:failure-pattern",
+        "concept:finance-benchmark-pre-results",
+        "concept:incoming-quality-control",
+        "concept:installation-quality-records",
+        "concept:integration-checklist",
+        "concept:knowledge-transfer",
+        "concept:line-clearance",
+        "concept:overseas-mobilisation-terms",
+        "concept:project-delay-pattern",
+        "concept:responsible-ai-use",
+        "concept:time-to-use-limit",
+        "concept:title-dispute"
+      ],
+      "body_file": "contributions/F-02-U003.json"
+    },
+    {
+      "id": "zensar:F-03-U001",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: API latency incident review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: API latency incident review Meeting Date: 2026-10-23 Mei Tan: Mei Tan: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Andre Lewis: Andre Lewis: The current picture is the service recovered after connection-pool limits were reduced.",
+      "concepts": [
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U001.json"
+    },
+    {
+      "id": "zensar:F-03-U002",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Customer data migration cutover planning",
+      "kind": "playbook",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Customer data migration cutover planning Meeting Date: 2026-11-06 Camila Torres: Camila Torres: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Ryan Mitchell: Ryan Mitchell: The current picture is the rehearsal completed, but two address fields still need a mapping decision.",
+      "concepts": [
+        "concept:data-quality-check",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms",
+        "concept:process-ownership-before-cut-over"
+      ],
+      "body_file": "contributions/F-03-U002.json"
+    },
+    {
+      "id": "zensar:F-03-U003",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Customer onboarding campaign launch review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Customer onboarding campaign launch review Meeting Date: 2026-11-09 Elena Petrova: Elena Petrova: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Michael Grant: Michael Grant: The current picture is the copy and audience segments are drafted, and legal review has one unresolved consent question.",
+      "concepts": [
+        "concept:employee-onboarding",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U003.json"
+    },
+    {
+      "id": "zensar:F-03-U004",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Customer portal release readiness",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Customer portal release readiness Meeting Date: 2026-10-22 Priyanka Rao: Priyanka Rao: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Lucas Martin: Lucas Martin: The current picture is the main user journeys pass, and the final accessibility review is still underway.",
+      "concepts": [
+        "concept:failure-pattern",
+        "concept:integration-checklist",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U004.json"
+    },
+    {
+      "id": "zensar:F-03-U005",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Engineering onboarding improvements",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Engineering onboarding improvements Meeting Date: 2026-11-02 Amara Okafor: Amara Okafor: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Theo Bennett: Theo Bennett: The current picture is new hires can build the service, but access requests and local setup take inconsistent amounts of time.",
+      "concepts": [
+        "concept:employee-onboarding",
+        "concept:integration-checklist",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms",
+        "concept:pilot-results",
+        "concept:pricing",
+        "concept:project-delay-pattern"
+      ],
+      "body_file": "contributions/F-03-U005.json"
+    },
+    {
+      "id": "zensar:F-03-U006",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Enterprise customer health update",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Enterprise customer health update Meeting Date: 2026-10-26 Isabella Moore: Isabella Moore: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Benjamin Clark: Benjamin Clark: The current picture is weekly active usage is improving, though two departments have not completed onboarding.",
+      "concepts": [
+        "concept:employee-onboarding",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U006.json"
+    },
+    {
+      "id": "zensar:F-03-U007",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Event API architecture review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Event API architecture review Meeting Date: 2026-10-30 Zoe Campbell: Zoe Campbell: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Nathan Brooks: Nathan Brooks: The current picture is the draft contract is backward-compatible for reads but changes retry semantics for writes.",
+      "concepts": [
+        "concept:client-status-update",
+        "concept:failure-pattern",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U007.json"
+    },
+    {
+      "id": "zensar:F-03-U008",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Mobile release defect triage",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Mobile release defect triage Meeting Date: 2026-10-28 Lena Fischer: Lena Fischer: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Gabriel Young: Gabriel Young: The current picture is the offline sync fix passed regression, and one notification defect remains intermittent.",
+      "concepts": [
+        "concept:failure-pattern",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms",
+        "concept:recurring-pattern"
+      ],
+      "body_file": "contributions/F-03-U008.json"
+    },
+    {
+      "id": "zensar:F-03-U009",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Operations capacity review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Operations capacity review Meeting Date: 2026-11-06 Sam Rivera: The synthetic operations group can confirm a readiness window after its capacity check. Taylor Brooks: Synthetic Group Beta is checking capacity before confirming the shared delivery window. Taylor Brooks: Taylor Brooks: Let's anchor the discussion on scope and expected outcome.",
+      "concepts": [
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U009.json"
+    },
+    {
+      "id": "zensar:F-03-U010",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Payments sprint stand-up",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Payments sprint stand-up Meeting Date: 2026-10-21 Alicia Gomez: Alicia Gomez: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Noah Williams: Noah Williams: The current picture is the retry change is merged, but the reconciliation job is waiting on a data contract review.",
+      "concepts": [
+        "concept:data-quality-check",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U010.json"
+    },
+    {
+      "id": "zensar:F-03-U011",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Platform sprint planning",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Platform sprint planning Meeting Date: 2026-10-20 Nina Patel: Nina Patel: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Ethan Brooks: Ethan Brooks: The current picture is the authentication refactor is ready, while the audit-log work still needs an estimate.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U011.json"
+    },
+    {
+      "id": "zensar:F-03-U012",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Prior checklist discussion",
+      "kind": "playbook",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Prior checklist discussion Meeting Date: 2026-10-29 Maya Chen: Maya Chen: Before we finish, can we confirm who will put together the readiness checklist for the next rollout discussion? Jordan Lee: Jordan Lee: I can prepare the first draft of the rollout readiness checklist. I will collect the checks we already use and flag anything that still needs an owner.",
+      "concepts": [
+        "concept:integration-checklist",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U012.json"
+    },
+    {
+      "id": "zensar:F-03-U013",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Quarterly access-control evidence review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Quarterly access-control evidence review Meeting Date: 2026-11-04 Fatima Rahman: Fatima Rahman: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Peter Wallace: Peter Wallace: The current picture is the employee roster is reconciled, but several service accounts still need owner confirmation.",
+      "concepts": [
+        "concept:acquisition-integration",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U013.json"
+    },
+    {
+      "id": "zensar:F-03-U014",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Quarterly delivery budget review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Quarterly delivery budget review Meeting Date: 2026-11-03 Sophie Laurent: Sophie Laurent: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? David Kim: David Kim: The current picture is vendor renewal estimates are available, while cloud usage forecasts still have a wide range.",
+      "concepts": [
+        "concept:data-quality-check",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U014.json"
+    },
+    {
+      "id": "zensar:F-03-U015",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Quarterly product roadmap review",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Quarterly product roadmap review Meeting Date: 2026-10-27 Harper Scott: Harper Scott: Let's anchor the discussion on scope and expected outcome. What has actually changed since the last check-in? Elijah Davis: Elijah Davis: The current picture is the team has customer evidence for reporting improvements but incomplete sizing for automation.",
+      "concepts": [
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms"
+      ],
+      "body_file": "contributions/F-03-U015.json"
+    },
+    {
+      "id": "zensar:F-03-U016",
+      "datapoint": "zensar:F-03",
+      "title": "Meeting Title: Staged rollout planning",
+      "kind": "note",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "Meeting Title: Staged rollout planning Meeting Date: 2026-11-05 Maya Chen: Maya Chen: Thanks, everyone. The goal today is to agree how we start the rollout and leave with clear owners for the readiness work. Jordan Lee: Jordan Lee: I would start with a small internal cohort. That gives us a chance to check the support process before we widen access. Priya Shah: Priya Shah: Agreed.",
+      "concepts": [
+        "concept:integration-checklist",
+        "concept:materials-handling",
+        "concept:overseas-mobilisation-terms",
+        "concept:pilot-results"
+      ],
+      "body_file": "contributions/F-03-U016.json"
     }
   ]
 }

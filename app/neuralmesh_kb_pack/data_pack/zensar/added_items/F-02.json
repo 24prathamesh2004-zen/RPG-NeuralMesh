@@ -1,0 +1,14 @@
+{
+  "code": "F-02",
+  "title": "Onboarding AI Buddy Doc",
+  "sensitivity": "Restricted",
+  "ceiling": "MD",
+  "never_leave": true,
+  "owner_role": "Node owner",
+  "synthetic": false,
+  "added": {
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-12T10:40:00+00:00"
+  }
+}

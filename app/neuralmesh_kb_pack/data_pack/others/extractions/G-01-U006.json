@@ -1,0 +1,38 @@
+{
+ "document": "others:G-01-U006",
+ "made": "2026-11-12T10:22:22+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-34f091a775",
+   "source": "concept:client-service-desk",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "The Zensar Information Systems (IS) Service Desk serves as the central point of contact for all technical issues, hardware failures, application access requests, and infrastructure support.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-90b3db0130",
+   "source": "concept:acquisition-integration",
+   "target": "concept:employee-onboarding",
+   "type": "RELATED_TO",
+   "evidence": "Upon receiving initial temporary credentials from the Talent Acquisition or Onboarding Operations team, associates are required to perform their initial system login through this portal.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-20c445a623",
+   "source": "concept:client-service-desk",
+   "target": "concept:project-delay-pattern",
+   "type": "RELATED_TO",
+   "evidence": "24-Hour Account Synchronization Delay Notice: For newly onboarded associates and interns, directory identity synchronization between Active Directory and ServiceNow / IS Service Desk requires up to twenty-four (24) hours following network ID creation.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
+}

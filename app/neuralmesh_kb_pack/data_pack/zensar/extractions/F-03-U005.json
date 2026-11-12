@@ -1,0 +1,88 @@
+{
+ "document": "zensar:F-03-U005",
+ "made": "2026-11-12T10:50:17+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-6f0eb343c2",
+   "source": "concept:integration-checklist",
+   "target": "concept:project-delay-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Ella Morgan: Ella Morgan: My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
+   "by": "code",
+   "sentences": 11,
+   "status": "proposed"
+  },
+  {
+   "id": "x-ee9df2bf29",
+   "source": "concept:integration-checklist",
+   "target": "concept:pilot-results",
+   "type": "RELATED_TO",
+   "evidence": "Amara Okafor: Amara Okafor: For the record, pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 11,
+   "status": "proposed"
+  },
+  {
+   "id": "x-7961c50894",
+   "source": "concept:integration-checklist",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Amara Okafor: Amara Okafor: Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-4f67da78c2",
+   "source": "concept:overseas-mobilisation-terms",
+   "target": "concept:pilot-results",
+   "type": "RELATED_TO",
+   "evidence": "Amara Okafor: Amara Okafor: Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-f59b4637e6",
+   "source": "concept:integration-checklist",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Ella Morgan: Ella Morgan: Before we call this ready, how are we handling a checklist alone may hide delays caused by approvals outside the engineering team, especially while which setup steps can be automated without broadening default permissions?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-ca415a32d4",
+   "source": "concept:materials-handling",
+   "target": "concept:project-delay-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Ella Morgan: Ella Morgan: Before we call this ready, how are we handling a checklist alone may hide delays caused by approvals outside the engineering team, especially while which setup steps can be automated without broadening default permissions?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-eb1c328fb2",
+   "source": "concept:employee-onboarding",
+   "target": "concept:integration-checklist",
+   "type": "RELATED_TO",
+   "evidence": "We will pilot a day-one checklist and track access wait time separately from setup time, and Theo Bennett will draft the onboarding guide and validate it with the next two new starters before the next onboarding date.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-9874d98332",
+   "source": "concept:employee-onboarding",
+   "target": "concept:pilot-results",
+   "type": "RELATED_TO",
+   "evidence": "We will pilot a day-one checklist and track access wait time separately from setup time, and Theo Bennett will draft the onboarding guide and validate it with the next two new starters before the next onboarding date.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

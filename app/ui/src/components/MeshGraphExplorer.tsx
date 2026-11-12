@@ -61,7 +61,8 @@ function short(text: string, max = 28) {
 
 // startIds: the entities shown first when the graph is too large to show at once (default: the companies and items).
 // edgeLabels: every link carries its type as a label, for a graph whose link types a person wrote.
-export default function MeshGraphExplorer({ graph, revealAll = false, startIds, edgeLabels = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean; startIds?: string[]; edgeLabels?: boolean }) {
+// proposedOff: the links that wait for review are left out of the drawing until Proposed links is pressed.
+export default function MeshGraphExplorer({ graph, revealAll = false, startIds, edgeLabels = false, proposedOff = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean; startIds?: string[]; edgeLabels?: boolean; proposedOff?: boolean }) {
   const container = useRef<HTMLDivElement | null>(null)
   const network = useRef<Network | null>(null)
   const nodesDs = useRef<DataSet<any> | null>(null)
@@ -70,6 +71,10 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set())
   const [selected, setSelected] = useState<string | null>(null)
   const [treeRoot, setTreeRoot] = useState<string | null>(null)
+  const [showProposed, setShowProposed] = useState(!proposedOff) // links that wait for review: drawn dashed, and left out until asked for when proposedOff
+  const proposedCount = useMemo(() => graph.edges.filter((e) => e.status === 'proposed').length, [graph])
+  const [wide, setWide] = useState(false) // the drawing over the whole window, for a graph too large for its panel
+  useEffect(() => { const t = window.setTimeout(() => { network.current?.redraw(); network.current?.fit() }, 60); return () => window.clearTimeout(t) }, [wide])
   const [menu, setMenu] = useState<{ x: number; y: number; id: string } | null>(null)
   const [search, setSearch] = useState('')
   const fitNext = useRef(true)
@@ -100,31 +105,33 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
   // Boot the engine once per graph. Every node is in the data set from the start, hidden until revealed.
   useEffect(() => {
     if (!container.current) return
+    const big = graph.nodes.length > 80 ? 2.4 : 1 // a graph of many entities is seen from further away, so its marks and names are drawn larger
     const nodes = new DataSet<any>(graph.nodes.map((n) => {
       const tone = (n.subsidiary && own(COMPANY_TONES, n.subsidiary)) || (n.type === 'Subsidiary' && own(COMPANY_TONES, n.id.split(':')[1])) || typeColour(n.type)
       const fill = n.type === 'Subsidiary' ? tone : typeColour(n.type)
       return {
         id: n.id, label: n.type === 'Subsidiary' ? n.label : short(n.label), title: `${n.type}: ${n.label}\n${n.id}`,
-        shape: own(SHAPES, n.type) ?? 'dot', size: own(SIZES, n.type) ?? 9, hidden: true, ntype: n.type,
+        shape: own(SHAPES, n.type) ?? 'dot', size: (own(SIZES, n.type) ?? 9) * big, hidden: true, ntype: n.type,
         color: { background: fill, border: tone, highlight: { background: fill, border: '#212529' } }, borderWidth: n.type === 'Subsidiary' ? 1 : 2,
-        font: n.type === 'Subsidiary' ? { color: '#ffffff', size: 18, bold: true } : { color: '#343a40', size: 13 },
+        font: n.type === 'Subsidiary' ? { color: '#ffffff', size: 18 * big, bold: true } : { color: '#343a40', size: 13 * big },
         margin: n.type === 'Subsidiary' ? 10 : undefined, mass: n.type === 'Subsidiary' ? 3 : 1,
       }
     }))
     const edgeDs = new DataSet<any>(edges.map((e) => ({
-      id: e.id, from: e.source, to: e.target, hidden: true, etype: e.type,
+      id: e.id, from: e.source, to: e.target, hidden: true, etype: e.type, estatus: e.status,
       label: edgeLabels ? e.type : LINK_TYPES.has(e.type) ? e.type.toLowerCase().replace(/_/g, ' ') : undefined, // a type a person wrote is shown as written
       title: `${e.type}${e.status !== 'approved' ? ` (${e.status})` : ''}`,
       color: { color: own(EDGE_COLOURS, e.type) ?? '#ced4da', highlight: own(EDGE_COLOURS, e.type) ?? '#495057' },
-      width: LINK_TYPES.has(e.type) ? 2.5 : 1, dashes: e.status !== 'approved',
+      width: LINK_TYPES.has(e.type) ? 2.5 : 1, baseWidth: LINK_TYPES.has(e.type) ? 2.5 : 1, dashes: e.status !== 'approved',
     })))
     nodesDs.current = nodes
     edgesDs.current = edgeDs
     const net = new Network(container.current, { nodes, edges: edgeDs } as any, {
-      physics: { solver: 'forceAtlas2Based', forceAtlas2Based: { springLength: 80, gravitationalConstant: -45, centralGravity: 0.02 }, stabilization: { iterations: 250 } },
+      // a graph of many entities gets longer links and a push between labels, so the names do not sit on each other
+      physics: { solver: 'forceAtlas2Based', forceAtlas2Based: graph.nodes.length > 25 && graph.nodes.length <= 80 ? { springLength: 140, gravitationalConstant: -90, centralGravity: 0.012, avoidOverlap: 0.6 } : { springLength: 80, gravitationalConstant: -45, centralGravity: 0.02 }, stabilization: { iterations: 250 } },
       edges: { arrows: { to: { enabled: true, scaleFactor: 0.5 } }, smooth: { enabled: true, type: 'dynamic' }, font: { size: 10, color: '#495057', strokeWidth: 3, strokeColor: '#ffffff' } },
       nodes: { scaling: { label: { drawThreshold: 2 } } },
-      interaction: { hover: true, tooltipDelay: 150 },
+      interaction: { hover: true, tooltipDelay: 150, dragNodes: true, dragView: true, zoomView: true },
     } as any)
     network.current = net
     net.on('stabilizationIterationsDone', () => { if (!treeRef.current) fitWithMargin(net) })
@@ -187,10 +194,23 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
       visible = new Set(order)
       const pos = new Map<string, { x: number; y: number }>()
       let leaf = 0
+      const PER_ROW = 7 // the leaves of one entity are set in rows of this many, so a document with 24 topics stays in view
       const place = (id: string): number => {
         const kids = children.get(id) ?? []
-        const x = kids.length ? kids.map(place).reduce((a, b) => a + b, 0) / kids.length : (leaf++) * 125
-        pos.set(id, { x, y: (depth.get(id) ?? 0) * 130 })
+        const level = (depth.get(id) ?? 0) * 210
+        const ends = kids.filter((k) => !(children.get(k) ?? []).length)
+        if (ends.length > PER_ROW) { // the entities with links of their own go first in a row, the others in rows of PER_ROW beside them
+          const xs = kids.filter((k) => (children.get(k) ?? []).length).map(place)
+          const start = leaf
+          ends.forEach((k, j) => pos.set(k, { x: (start + (j % PER_ROW)) * 170, y: level + 210 + Math.floor(j / PER_ROW) * 95 }))
+          leaf += PER_ROW
+          xs.push(start * 170, (start + PER_ROW - 1) * 170)
+          const x = (Math.min(...xs) + Math.max(...xs)) / 2
+          pos.set(id, { x, y: level })
+          return x
+        }
+        const x = kids.length ? kids.map(place).reduce((a, b) => a + b, 0) / kids.length : (leaf++) * 170
+        pos.set(id, { x, y: level })
         return x
       }
       place(treeRoot)
@@ -201,16 +221,29 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
       net.setOptions({ physics: { enabled: true }, edges: { smooth: { enabled: true, type: 'dynamic' } } } as any)
     }
     nodes.update(nodes.get().filter((n: any) => n.hidden === visible.has(n.id)).map((n: any) => ({ id: n.id, hidden: !visible.has(n.id) })))
-    edgeDs.update(edgeDs.get().map((e: any) => ({ id: e.id, hidden: treeEdges ? !treeEdges.has(e.id) : !(visible.has(e.from) && visible.has(e.to)) }))
+    edgeDs.update(edgeDs.get().map((e: any) => ({ id: e.id, hidden: (!showProposed && e.estatus === 'proposed') || (treeEdges ? !treeEdges.has(e.id) : !(visible.has(e.from) && visible.has(e.to))) }))
       .filter((u: any) => (edgeDs.get(u.id) as any)?.hidden !== u.hidden))
     if (treeRoot || fitNext.current) {
       fitNext.current = false
       setTimeout(() => { try { fitWithMargin(net, [...visible], true) } catch { /* noop */ } }, treeRoot ? 0 : 900)
+      if (treeRoot) setTimeout(() => { try { fitWithMargin(net, [...visible], true) } catch { /* noop */ } }, 700) // once more, after a move to a found entity has ended
     }
-  }, [revealed, hiddenTypes, treeRoot, adjacency, byId])
+  }, [revealed, hiddenTypes, treeRoot, adjacency, byId, showProposed])
+
+  // The entity chosen stands out: its links and neighbours keep their colour, the rest of the drawing is faded
+  useEffect(() => {
+    const nodes = nodesDs.current, edgeDs = edgesDs.current
+    if (!nodes || !edgeDs) return
+    const near = selected ? new Set([selected, ...(adjacency.get(selected) ?? []).map((nb) => nb.other.id)]) : null
+    nodes.update(nodes.get().map((n: any) => ({ id: n.id, opacity: !near || near.has(n.id) ? 1 : 0.2 })))
+    edgeDs.update(edgeDs.get().map((e: any) => {
+      const on = !selected || e.from === selected || e.to === selected
+      return { id: e.id, color: { ...e.color, opacity: on ? 1 : 0.08 }, width: selected && on ? Math.max(e.baseWidth ?? 1, 2) : e.baseWidth ?? 1 }
+    }))
+  }, [selected, adjacency, graph])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenu(null); if (treeRef.current) fitNext.current = true; setTreeRoot(null) } }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenu(null); if (treeRef.current) { fitNext.current = true; setTreeRoot(null) } else setWide(false) } }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
@@ -247,7 +280,7 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
   const shown = [...revealed].filter((id) => !hiddenTypes.has(byId.get(id)?.type ?? '')).length
 
   return (
-    <div className="mesh-graph-explorer">
+    <div className={`mesh-graph-explorer${wide ? ' wide' : ''}`}>
       <div className="mesh-graph-toolbar">
         <div className="mesh-graph-counts">
           {[...TYPE_ORDER.filter((t) => graph.counts[t]), ...Object.keys(graph.counts).filter((t) => !TYPE_ORDER.includes(t)).sort((a, b) => graph.counts[b] - graph.counts[a] || a.localeCompare(b))].map((t) => (
@@ -255,18 +288,22 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
               <i style={{ background: typeColour(t) }} />{t} {graph.counts[t]}
             </button>
           ))}
+          {proposedCount > 0 && <button type="button" className={showProposed ? '' : 'off'} onClick={() => setShowProposed((v) => !v)} aria-pressed={showProposed} title="Links that wait for review, drawn dashed">
+            <i style={{ background: 'transparent', border: '1.5px dashed #4c6ef5' }} />Proposed links {proposedCount}
+          </button>}
         </div>
         <form className="mesh-graph-search" onSubmit={(e) => { e.preventDefault(); runSearch() }}>
           <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Find an entity" aria-label="Find an entity" />
           <button type="submit" className="mesh-outline-action">Find</button>
           <button type="button" className="mesh-outline-action" onClick={() => { fitNext.current = true; setTreeRoot(null); setRevealed(startSet()); setSelected(null) }}>Reset</button>
           <button type="button" className="mesh-outline-action" onClick={() => { fitNext.current = true; setTreeRoot(null); setRevealed(new Set(graph.nodes.map((n) => n.id))) }}>Show all</button>
+          <button type="button" className="mesh-outline-action" aria-pressed={wide} onClick={() => setWide((w) => !w)}>{wide ? 'Close the large view' : 'Large view'}</button>
         </form>
       </div>
       <div className="mesh-graph-body">
         <div className="mesh-graph-canvas-wrap">
           <div ref={container} className="mesh-graph-canvas" role="img" aria-label="Mesh graph" />
-          <div className="mesh-graph-hint">{treeRoot ? `Tree from ${byId.get(treeRoot)?.label ?? treeRoot}, two steps out. Esc returns.` : `${shown} of ${graph.nodes.length} shown. Double-click to open connections, right-click for a tree.`}</div>
+          <div className="mesh-graph-hint">{treeRoot ? `Tree from ${byId.get(treeRoot)?.label ?? treeRoot}, two steps out. Back to the graph or Esc returns.` : `${shown} of ${graph.nodes.length} shown. Double-click to open connections, right-click for a tree.`}</div>
           {menu && (
             <div className="mesh-graph-menu" style={{ left: menu.x, top: menu.y }} onMouseLeave={() => setMenu(null)}>
               {menu.id && <button type="button" onClick={() => { expand(menu.id); setMenu(null) }}>Open connections</button>}
@@ -284,7 +321,9 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
               {node.subsidiary && <p>Company: {node.subsidiary}</p>}
               <div className="mesh-graph-actions">
                 <button type="button" className="mesh-outline-action" onClick={() => expand(node.id)}>Open connections</button>
-                <button type="button" className="mesh-outline-action" onClick={() => setTreeRoot(node.id)}>Tree from here</button>
+                {treeRoot === node.id
+                  ? <button type="button" className="mesh-outline-action" aria-pressed="true" onClick={() => { fitNext.current = true; setTreeRoot(null) }}>Back to the graph</button>
+                  : <button type="button" className="mesh-outline-action" onClick={() => setTreeRoot(node.id)}>Tree from here</button>}
               </div>
               {groups.map(([type, list]) => (
                 <div key={type} className="mesh-graph-group">

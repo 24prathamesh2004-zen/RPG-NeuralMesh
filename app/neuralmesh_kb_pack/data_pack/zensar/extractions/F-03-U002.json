@@ -1,0 +1,28 @@
+{
+ "document": "zensar:F-03-U002",
+ "made": "2026-11-12T10:50:16+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-abb4ae3557",
+   "source": "concept:overseas-mobilisation-terms",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "RELATED_TO",
+   "evidence": "Camila Torres: Camila Torres: Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-5d650acf75",
+   "source": "concept:materials-handling",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "RELATED_TO",
+   "evidence": "Anika Desai: Anika Desai: Before we call this ready, how are we handling a cutover before reconciliation could create duplicate or incomplete customer profiles, especially while whether blank legacy region codes should remain blank or use a reviewed mapping?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}

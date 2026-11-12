@@ -1,0 +1,118 @@
+{
+ "document": "others:G-01-U007",
+ "made": "2026-11-12T10:22:25+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-8e21259f98",
+   "source": "concept:employee-onboarding",
+   "target": "concept:integration-checklist",
+   "type": "RELATED_TO",
+   "evidence": "2.6 Onboarding Checklist",
+   "by": "code",
+   "sentences": 4,
+   "status": "proposed"
+  },
+  {
+   "id": "x-c50be516f4",
+   "source": "concept:acquisition-integration",
+   "target": "concept:employee-onboarding",
+   "type": "RELATED_TO",
+   "evidence": "The onboarding journey initiates with the formal issuance of the Zensar Internship Offer Letter via the official Campus Talent Acquisition portal or designated corporate email.",
+   "by": "code",
+   "sentences": 3,
+   "status": "proposed"
+  },
+  {
+   "id": "x-e829a31119",
+   "source": "concept:employee-onboarding",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "To ensure a seamless transition into Zensar, interns must systematically complete the Onboarding Checklist covering all pre-joining, Day 1, and First-Week milestones.",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  },
+  {
+   "id": "x-5a1243aece",
+   "source": "concept:integration-checklist",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "To ensure a seamless transition into Zensar, interns must systematically complete the Onboarding Checklist covering all pre-joining, Day 1, and First-Week milestones.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-3bc2c059b6",
+   "source": "concept:client-service-desk",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Any setup impediments, such as locked domain accounts, VPN access failures, or missing software licenses, must be promptly escalated by raising a ticket on the IS Service Desk (`https://servicedesk.zensar.com`) under the TIMS category.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-6305a857ae",
+   "source": "concept:acquisition-integration",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "As interns transition into project pods, work assignments transition into real user stories, such as developing microservice endpoints, creating responsive React web pages, writing automated integration tests, implementing data transformation pipelines, or building proof-of-concept AI agents.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-582af30907",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:client-status-update",
+   "type": "RELATED_TO",
+   "evidence": "Third, interns submit a comprehensive Weekly Status Report (WSR) to their mentor and manager every Friday, detailing completed tasks, code review links, upcoming sprint commitments, and any dependencies requiring management intervention.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-bae99da761",
+   "source": "concept:knowledge-transfer",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "The clearance workflow requires electronic departmental approvals: (1) Project / Practice Clearance: confirmation of code handover and timesheet sign-offs; (2) IT Asset Clearance: physical return and inspection of laptop, power brick, security tokens, and peripherals to the TIMS IT counter; (3) Secu",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-c1bf8030a8",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "Phase 3: Project Shadowing | Weeks 11–20 | Live project user stories, code reviews, sprint ceremonies | Mid-term Performance Review by Delivery Lead.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-64fbe5ffe2",
+   "source": "concept:client-service-desk",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "02:00 – 04:30 | IT Asset Handover & Network Setup | IS Service Desk (TIMS) | Laptop issuance, password creation, and MFA setup.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-cd259155d0",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:project-delay-pattern",
+   "type": "RELATED_TO",
+   "evidence": "Level 1 (Informal) | Technical Mentor / Buddy | Technical blockers, code review delays, lab setup issues | Within 24 Hours",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
+}

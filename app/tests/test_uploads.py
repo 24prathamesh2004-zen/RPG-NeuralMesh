@@ -791,3 +791,20 @@ def test_the_json_of_an_uploaded_graph_loaded_back_corrects_that_graph_and_goes_
     # dropping the uploaded graph drops its correction too
     dropped = client.delete(f"/api/v1/mesh/uploads/graphs/{ref['id']}", headers=ADMIN).json()
     assert dropped["corrections_dropped"] == [graph["id"]] and ingested.get(graph["id"]) is None
+
+
+def test_a_dropped_graph_is_taken_off_the_list_and_its_records_stay_on_disk(mesh):
+    client = TestClient(app)
+    up = _upload(client, "A short note on covered storage, ventilation and first in, first out issue of the rubber lots.", graph_name="Graph to clear").json()
+    gid, doc = up["context_graph"]["id"], up["document"]["id"]
+    assert client.post(f"/api/v1/mesh/uploads/graphs/{gid}/clear", headers=ADMIN).status_code == 409  # it still has an input
+    client.delete(f"/api/v1/mesh/uploads/graphs/{gid}", headers=ADMIN)
+    assert any(g["id"] == gid and g["inputs"] == 0 for g in client.get("/api/v1/mesh/uploads", headers=ADMIN).json()["graphs"])
+    assert client.post(f"/api/v1/mesh/uploads/graphs/{gid}/clear", headers=_headers("ceat")).status_code == 403
+    cleared = client.post(f"/api/v1/mesh/uploads/graphs/{gid}/clear", headers=ADMIN)
+    assert cleared.status_code == 200 and cleared.json()["cleared"] == 1
+    listed = client.get("/api/v1/mesh/uploads", headers=ADMIN).json()
+    assert all(g["id"] != gid for g in listed["graphs"]) and all(u["document"]["id"] != doc for u in listed["uploads"])
+    kept = json.loads((DATA / "ceat" / "contributions" / f"{doc.split(':')[1]}.json").read_text())
+    assert kept["status"] == "removed" and kept["cleared"]["by_role"] == "Mesh admin"  # the record is still on disk
+    assert client.post(f"/api/v1/mesh/uploads/graphs/{gid}/clear", headers=ADMIN).status_code == 404

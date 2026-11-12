@@ -1,0 +1,18 @@
+{
+ "document": "zensar:F-03-U008",
+ "made": "2026-11-12T10:50:17+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-0eac7ab92a",
+   "source": "concept:failure-pattern",
+   "target": "concept:materials-handling",
+   "type": "RELATED_TO",
+   "evidence": "Avery Johnson: Avery Johnson: Before we call this ready, how are we handling the team could close the defect based on a single clean run without understanding the trigger, especially while whether the intermittent behavior is caused by permission timing or background limits?",
+   "by": "code",
+   "sentences": 2,
+   "status": "proposed"
+  }
+ ]
+}
