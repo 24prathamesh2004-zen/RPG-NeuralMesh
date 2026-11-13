@@ -49,14 +49,14 @@ export default function ExpertFinderPage() {
   return (
     <div className="mesh-data-page">
       <header className="mesh-page-heading">
-        <div><div className="mesh-eyebrow">People and expertise</div><h1>Expert Finder</h1><p>Search opted-in expertise across the subsidiaries in your current scope.</p></div>
+        <div><div className="mesh-eyebrow">People and expertise</div><h1>Expert Finder</h1><p>Search for people who agreed to be listed as experts, in the companies you selected.</p></div>
       </header>
       <section className="mesh-section-panel expert-search-panel">
                 <div className="expert-search-row"><div className="expert-field"><label htmlFor="expert-query">Describe the experience you need</label><div className="expert-query-wrap"><Search size={16} /><input id="expert-query" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && void search()} placeholder={EXAMPLE_QUERY} /></div></div>
           <label className="expert-purpose">Purpose<select value={purpose} onChange={(event) => setPurpose(event.target.value as typeof purpose)}><option value="problem_solving">Problem solving</option><option value="compliance">Compliance</option><option value="bid_support">Bid support</option></select></label>
           <button type="button" className="mesh-primary-action" onClick={() => void search()} disabled={busy || !query.trim()}>{busy ? <LoaderCircle size={15} className="animate-spin" /> : <Search size={15} />}Search experts</button>
         </div>
-        <p className="mesh-panel-footnote">Only opted-in role, skill and evidence fields are searchable. Names require an approved introduction.</p>
+        <p className="mesh-panel-footnote">Only the role, skills and experience each person agreed to share are searched. A name is shown only after an introduction is approved.</p>
       </section>
       {error && <div className="mesh-alert error">{error}</div>}
       {experts.length > 0 && <div className="expert-results-heading"><h2>Matched expertise</h2><span>{experts.length} opted-in {experts.length === 1 ? 'profile' : 'profiles'}</span></div>}
@@ -72,8 +72,8 @@ export default function ExpertFinderPage() {
             {requested.includes(expert.expert_id) ? <span className="mesh-result-state success">Introduction requested</span> : <button type="button" className="mesh-outline-action" onClick={() => void requestIntro(expert)}><UserRoundPlus size={14} />Request intro <ArrowRight size={13} /></button>}
           </div>
         </article>)}
-        {!busy && query && experts.length === 0 && !error && <div className="ask-empty-results">No opted-in profiles matched. Try a related skill or another subsidiary scope.</div>}
-        {!query && <div className="expert-empty-state"><UserRound size={22} /><strong>Search the mesh’s opted-in experts</strong><span>Matches come from consented profiles maintained by each subsidiary.</span></div>}
+        {!busy && query && experts.length === 0 && !error && <div className="ask-empty-results">No expert matched. Try a related skill or select more companies.</div>}
+        {!query && <div className="expert-empty-state"><UserRound size={22} /><strong>Search the mesh’s opted-in experts</strong><span>Results come from people who agreed to be listed. Each company keeps its own profiles.</span></div>}
       </section>
     </div>
   )

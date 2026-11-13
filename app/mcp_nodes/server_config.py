@@ -1,6 +1,8 @@
 """Node configuration, capability listing and the metadata-only graph export of one subsidiary node."""
 from __future__ import annotations
 
+import json
+
 
 import os
 from dataclasses import dataclass, field
@@ -64,6 +66,18 @@ def load_node_config(node_id: str, data_root: Path | None = None) -> NodeConfig:
     datapoints = policy.get("datapoints")
     defaults = policy.get("defaults", {})
     calendar_name = policy.get("calendar")
+
+    # A catalogue item a mesh admin named at upload (data_pack/<node>/added_items) is an item of this node as well: without
+    # it the policy calls every document under it an unknown datapoint. An item of the policy file is never replaced.
+    if isinstance(datapoints, dict):
+        datapoints = dict(datapoints)
+        for path in sorted((node_dir / "added_items").glob("*.json")):
+            try:
+                item = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if isinstance(item, dict) and isinstance(item.get("code"), str) and all(isinstance(item.get(f), str) for f in ("title", "sensitivity", "ceiling")):
+                datapoints.setdefault(item["code"], {k: item[k] for k in ("title", "sensitivity", "ceiling", "never_leave", "owner_role") if k in item})
 
     if node.get("node_id") != node_id or policy.get("node") != node_id:
         raise ValueError(f"Node and policy identity do not match {node_id}")

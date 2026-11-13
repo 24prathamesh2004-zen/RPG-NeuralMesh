@@ -466,3 +466,91 @@ No model key exists on this machine and no local model runtime is installed, so 
 ## How to Run the Stack
 
 From `app/`: `bash scripts/dev_stack.sh start` starts the stand-in model, the eight registered nodes (seven companies and the shared inputs node Others), the API with the stand-in policy, the gateway and the Vite UI. `make test`, `make live-check`, `python -m evaluations.golden_answers`, `make eval-recall` and `evaluations/ui_render_check.mjs` are the checks. `bash scripts/dev_stack.sh stop` stops everything.
+
+## Built on 2026-11-13: the Graph Review Points
+
+The plan and the result of the check are in `RPG_NeuralMesh_Graph_Review_Plan_Description_Relations_API.md`. A copy of the repo as it was before these changes is in `~/Backups/RPG-NeuralMesh_2026-11-13_before_lead_call_3_changes`.
+
+- **Context graph page.** A chosen graph has three tabs: Inputs, Graph and Use this graph. Several inputs stay open together. The description of the graph shows above the tabs.
+- **Description.** Made by code from the inputs, or written by a person (`services/graph_describe.py`, `PUT /mesh/uploads/graphs/{id}/description`).
+- **Link names.** A switch writes the name of every link on the drawing. A link takes the relation its sentence states, from 15 relation wordings (`graph_extract.RELATION_WORDS`). Two inputs that share three topics or more get a calculated link.
+- **Review only on a doubt.** A link with a stated relation, or with both topics named in full in two sentences or more, is approved by the rule. A topic found by one word of its name never settles a link. An input that shares no topic with its graph is listed for a person (`POST /mesh/uploads/{doc_id}/keep`).
+- **Graph API.** `GET /context-graphs/{id}` and `POST /context-graphs/{id}/query` also take the id of an uploaded graph. `GET /context-graphs?uploaded=true` lists them.
+- **Ask NeuralMesh.** The routing names the context graphs a question is about and, when the wording names no topic and no company, asks the companies of the matched graph.
+- **Fixed.** A catalogue item named at upload was unknown to the policy of its node, so its documents were withheld from Ask as "Unknown datapoint" (`mcp_nodes/server_config.py`).
+- **Wording.** 41 description lines on nine pages were rewritten in plain words.
+- **What an input states.** Decisions, next actions and risks stated in set wordings become nodes linked from their input (`graph_extract.code_statements`). `POST /mesh/uploads/extractions?write=true&refresh=true` makes the extraction of every input again and keeps each decision a person made.
+- **Checks.** 300 backend tests pass. The browser checks passed 13 of 13 and 5 of 5. The two downloaded zip files passed 21 of 21 on a copy of the data.
+- **Open.** Vocabulary entries for employee and delivery topics, named relations on real documents by a model inside the allowed boundary, and the API reference for the uploaded graphs.
+
+## Built on 2026-11-13 (Later): the Model Steps and Real Data
+
+- **The model policy now knows which documents are real.** Before this, Ask and the kind step told the policy that every document was invented. A cloud model would then have read a real upload. Now one real upload in the evidence keeps a cloud model away from the whole question, and a file counts as real at upload unless it was sent as invented (`uploads.is_real`, `tests/test_model_gate_real_data.py`).
+- **A policy for a model inside the group network.** `config/model_policy.group-gateway.json` sets every step to the gateway tier, which may read real data. The address, the model id and the key come from `NEURALMESH_GATEWAY_BASE_URL`, `NEURALMESH_GATEWAY_MODEL` and `NEURALMESH_GATEWAY_API_KEY`. It was checked against a test address only, not against a real gateway.
+- **The extract step reads more.** Prompt `mesh_extract_v2` also asks for systems, teams, processes, forms and policies, and never for a person. A long text is read in up to 4 parts of 6,000 characters. Code keeps a link only when its evidence sentence is in the text and names both ends, compared word by word.
+- **Measured with Claude Sonnet 5.5 on the 10 invented sample files:** the model proposed 37 links and code kept 19. The earlier prompt was tried on 3 of these files and gave 1 link.
+- **Check guide.** New sections on how a question gets its data through the graph and on how a "similar to" link is made, and the tab "Onboarding buddy graph, start to end".
+- **Open.** A real gateway address to run against, the extraction of the inputs uploaded before 13 November, and the vocabulary entries for employee topics.
+
+## Run on 2026-11-13 (Night): Every Input Read Again by the Model
+
+- **Local testing policy.** `config/model_policy.dev-llm.json` lets the cloud model read real uploads in development only. The running stack uses it. Outside development a cloud model is refused whatever the file says.
+- **The whole file is read.** A long text is read in parts of 6,000 characters that follow each other, up to 40 parts, four at a time. A reply that is not valid JSON is read object by object, so one broken link no longer loses a part. The output limit of the extract step is 4,000 tokens.
+- **One input can be done alone:** `POST /mesh/uploads/extractions?write=true&refresh=true&document=<id>`.
+- **Result on the running stack.** All 37 inputs were read again by Claude Sonnet 5.5 in 124 calls. "Onboarding AI Buddy Doc" went from 39 nodes and 108 links to 181 nodes and 226 links, with 115 links named by the model in 54 relation names. "Meeting transcripts app" has 174 nodes and 283 links, with 47 model links and 83 decisions, actions and risks.
+- **A thing the model types as Document** is shown as Record, so it is not counted as an input.
+- **Checks.** 304 backend tests pass. The browser check passed 5 of 5.
+- **Open.** The model's links all wait for a person: 137 on the onboarding graph and 68 on the meeting graph. The six Snap and Score files are still kept as documents and need the exact mapping.
+
+## Built on 2026-11-13 (Late Night): the Model Writes the Description, and Ask Answers from the Graph
+
+- **Description by the model.** New step `describe` with prompt `mesh_describe_v1`. The model gets the facts of a graph, never the raw text: its inputs, the things and relations taken from them, what they state, and the vocabulary topics. The description is kept with a fingerprint of the inputs and their extractions, and it shows only while that fingerprint holds. A description a person wrote stands over it. It is written again after an upload and after the extraction is made again, and by `POST /mesh/uploads/graphs/{id}/description/generate`.
+- **Match by the things of a graph.** A question that names a thing of a graph in full, for example ZenFusion, finds that graph. A name of one common word does not count.
+- **Ask answers from the matched graph.** The first matched graph is asked the question through the graph's own question call, and Ask shows the result as "From this graph".
+- **Result on the running stack.** The model wrote the description of all 10 uploaded graphs. Five test questions each found a graph, and three of them got a correct answer from the graph.
+- **Checks.** 306 backend tests pass. The browser check passed 4 of 4.
+- **Open.** A question whose words are not in any node name finds the graph but gets no answer from it. Things named twice under two spellings are not merged.
+
+## Built on 2026-11-13 (Night, Later): Structured Ingest and Re-rank Fix
+
+- **Structured ingest prompt** `mesh_extract_v3`: 16 listed types (System, Team, Role, Process, Form, Policy, Programme, Service, Asset, Part, Material, Standard, Defect, Test, Site, Organisation) and 23 listed relations. Code maps a type or relation outside the lists through a synonym, turns a relation written from the other end round, and leaves out what has no listed meaning, a name longer than 8 words, and more than 25 new things for one document, the most linked first.
+- **Incremental update.** The model is shown the things already taken from the other inputs of the graph and reuses their names. A thing's id is its company and its name as words, so the same thing in two files, in any capitals or a plural, is one node.
+- **Decisions, actions and risks** have a short name of at most 10 words, and the whole sentence stays as evidence.
+- **Drawing.** Waiting links are drawn by default on the Context graph page, so no thing floats. A graph of up to 150 nodes opens in full.
+- **Re-rank** prompt `mesh_rerank_v2` keeps a document unless it is clearly about something else, and the evidence keeps at least the 6 best ranked documents. With Claude, S1 and S3 had lost the documents the question is about.
+- **Input limit** of the extract step raised to 6,000 tokens. With 2,500, 40 of 124 calls were skipped once the prompt listed the graph's things.
+- **Result.** Onboarding graph: 107 nodes and 194 links, 68 things in 10 types, 12 things named by two or more inputs. Meeting graph: 133 nodes and 248 links, 102 things in 10 types. Before: 181 and 174 nodes, 23 and 28 types, 83 names that were whole sentences.
+- **Checks.** 307 backend tests, golden 15 of 15 with Claude, live wiring 34 of 34, live step by step 23 of 23, browser 4 of 4 and 4 of 4.
+
+## Built on 2026-11-13 (Night): the Model Checks Every Link and Topic, a Person Decides Only the High-Priority Doubts
+
+- **Link check.** New step `verify` with prompt `mesh_verify_v1`. After an extraction, the model reads each link that no rule settled and no person decided, with the sentence it came from, and gives "supported", "not_supported" or "unsure". Supported links are approved as "checked by the model". Not supported ones are set aside, not drawn, and listed under the input with Approve. Unsure ones stay proposed. A person is asked only when the link says who owns, approves or must do what, or touches a policy, standard or defect. A verdict is kept while the sentence stays the same.
+- **Topic check.** The same step checks each topic a document was linked to at upload, from the first sentence that names it. A topic named in no sentence, or one the sentence does not treat, is taken off the document. The record keeps it under "topics_set_aside" with the reason, and the pack is rebuilt. Ask routing, the links between inputs and the descriptions no longer rest on it. This runs only when the model gave verdicts, so code alone never takes a topic off.
+- **Links between inputs.** In a graph of four inputs or more, a topic named by more than half of them is left out of "shares topics with". Proposed vocabulary "similar to" links are no longer drawn on a context graph.
+- **Result on the running stack, all 10 graphs.** 141 topics taken off, for example "Materials handling" from a meeting where "handling" was used in another sense, and cable and tower topics from the CEAT tyre files. Onboarding graph: 106 waiting links became 2 to review, 7 unsure of low priority, 79 checked by the model and 26 set aside. Meeting graph: 6 to review. Every unrelated "shares topics with" link on the meeting graph is gone.
+- **Checks.** 309 backend tests, golden 15 of 15 with Claude, live wiring 34 of 34, live step by step 23 of 23, browser 3 of 3 and 4 of 4.
+
+## Built on 2026-11-13 (Night, Last): Noise Check of Every Link, and Key Points First
+
+- **Noise check.** Prompt `mesh_verify_v2` asks a second question for every link that no person decided, also for a link a rule settled: is it worth keeping. A link judged noise is left out, also when the sentence states it, and is listed under its input as "left out as not needed" with Approve. `POST /mesh/uploads/extractions?write=true&refresh=true&check_only=true` runs the check alone, without extracting again.
+- **Result on the running stack.** 96 links left out as not needed, for example "Client service desk related to Failure pattern", where "failure" was matched by chance. Onboarding graph: 79 nodes, 80 links from the text, 1 to review. Meeting graph: 2 to review.
+- **Drawing.** A graph of more than 40 points opens with its company, item, inputs, topics and the 12 most linked things. Show all draws the rest. Every thing the model found is linked from the input it came from, so no group of points hangs apart. The quality notes are no longer shown on the page.
+- **Checks.** 310 backend tests, golden 15 of 15 with Claude, live step by step 23 of 23, browser 5 of 5.
+
+## Built on 2026-11-13 (Night, Final): Answers by Meaning, the Graph Chosen by the Model, and No Graph Id Needed
+
+- **Answers by meaning.** A graph question also finds the nodes and links closest in meaning to it (`context_graph_ingest.by_meaning`). When the caller may read the text of the inputs, the parts of the text closest to the question go to the answer model as passages P1 to P4 (`passages`, prompt `graph_answer_v2`). An answer is cleaned of list and bold marks.
+- **The graph chosen by the model.** `graph_describe.choose` lets code choose when one graph is clearly ahead. Otherwise the model reads the question with the names, descriptions and input titles of the candidates and chooses one, two or none (step `choose`, prompt `mesh_choose_v1`). With 12 graphs or fewer the model sees all of them. Ask NeuralMesh uses it.
+- **No graph id needed.** `POST /api/v1/context-graphs/query` with `{"question": "..."}` answers from the chosen graph and names it, why, and the graphs that came close. The id stays optional, and the other kinds of query still need it. "Use this graph" shows the call.
+- **Decisions, actions and risks** are off the drawing of a graph of more than 40 points until their chip is pressed. A decision written as "a working agreement, not a claim that the risk is gone: prioritize X" is named "Prioritize X".
+- **Result.** 14 test questions: the right graph for all 14, an answer for 13, and "The graph does not answer this question" for the moisture limit, which no file holds. A question about the weather chose no graph.
+- **Checks.** 312 backend tests, golden 15 of 15 with Claude, live wiring 34 of 34, live step by step 23 of 23, browser 5 of 5, 5 of 5 and 4 of 4.
+
+## Built on 2026-11-13 (Night, Close): the Model Routes Every Question, Unclear Questions Get Suggestions, Code Review
+
+- **The model routes.** `graph_describe.choose` gives the model every graph the person may see (up to 30, the closest by code first when there are more), with names, descriptions and input titles. The model returns the intent (clear, unclear, off_topic, greeting), the question as it understood it, the graphs, and for a question that is not clear up to three full questions to ask instead (prompt `mesh_choose_v2`). Code only limits what the model may read and checks its reply. Without a model nothing is chosen.
+- **Unclear and misspelt questions.** `POST /api/v1/context-graphs/query` answers a clear question as understood, so "who aproves leter of confirmaton" is answered. An unclear, off-topic or greeting question gets no answer and up to three suggestions. Ask NeuralMesh shows "Did you mean" with the suggestions as buttons, and "Understood as" when a question was restated.
+- **Edge cases, live with Claude, 25 of 25:** ten clear questions, four one-word or vague questions, two misspelt, two greetings, two off-topic, two questions in one, an injection attempt, a Hindi question (translated and answered), a number only, and a person of another company (never shown the never-leave graph).
+- **Code review fixes.** A model-written description is shown only to a viewer who may read the text of every input. Extraction files are changed under one lock, and the link check writes its answers into the file as it is at that moment, so a person's decision made meanwhile stays. Taking topics off a record re-reads it under the uploads lock. A topic a person tagged is never taken off. An upload whose record cannot be read counts as real for the model gate. `check_only` works without `refresh`. The description facts leave out links to a topic taken off. A two-sentence description is accepted.
+- **Open from the review.** The model approves a link it finds supported, also one of high priority, without a person. Each question reads every upload record from disk, and `/mesh/query` makes up to three more model calls. The upload lock is held during the model calls of an upload. The description is written again inside the upload request. Two things of one company with the same name are one node.
+- **Checks.** 314 backend tests, golden 15 of 15 with Claude, live wiring 34 of 34, live step by step 23 of 23, edge cases 25 of 25, browser 4 of 4, 5 of 5, 5 of 5, 4 of 4, 4 of 4 and 8 of 8.

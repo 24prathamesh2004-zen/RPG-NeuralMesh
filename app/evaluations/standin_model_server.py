@@ -13,6 +13,8 @@ reachable. POST /control {"mode": ...} switches a misbehaviour on for negative t
 """
 from __future__ import annotations
 
+import json
+
 import re
 from typing import Any
 
@@ -126,7 +128,8 @@ def compose_graph_answer(prompt: str) -> str:
     edges = prompt.split("\nEdges:\n", 1)[1].splitlines() if "\nEdges:\n" in prompt else []
     found = [m.groups() for line in edges if (m := GRAPH_EDGE.match(line.strip()))][:2]
     if not found:
-        return "The graph does not answer this question."
+        first = next((line for line in prompt.split("\nPassages:\n", 1)[1].splitlines() if line.startswith("P1 ")), "") if "\nPassages:\n" in prompt else ""
+        return f"{first[3:].split(') ', 1)[-1][:200].rstrip('.')} [P1]." if first else "The graph does not answer this question."
     return " ".join(f"{text} [{ref}]." for ref, text in found)
 
 
@@ -171,7 +174,8 @@ def compose_extract(prompt: str) -> str:
     Part, linked to a known concept named in the same sentence, with that sentence as evidence."""
     import json
     import re
-    known = [line[2:] for line in prompt.split("\n\nText:\n", 1)[0].splitlines() if line.startswith("- ")]
+    head = prompt.split("\n\nText:\n", 1)[0].split("Things already in the graph:", 1)[0]
+    known = [line[2:] for line in head.splitlines() if line.startswith("- ")]
     text = prompt.split("\n\nText:\n", 1)[-1]
     entities, links = {}, []
     for sentence in re.split(r"(?<=[.!?])\s+", " ".join(text.split())):
@@ -179,8 +183,33 @@ def compose_extract(prompt: str) -> str:
             entities.setdefault(code, {"name": code, "type": "Part"})
             for label in known:
                 if label.lower() in sentence.lower():
-                    links.append({"source": code, "relation": "NAMED_WITH", "target": label, "evidence": sentence})
+                    links.append({"source": code, "relation": "APPLIES_TO", "target": label, "evidence": sentence})
     return json.dumps({"entities": list(entities.values()), "links": links})
+
+
+def compose_verify(prompt: str) -> str:
+    """The stand-in for the link check: a link is supported when its sentence holds both names, unsure otherwise."""
+    import json
+    import re
+    out = []
+    for block in prompt.split("\n\n"):
+        found = dict(re.findall(r"^(id|source|target|sentence): (.*)$", block, re.M))
+        if "id" in found:
+            said = found.get("sentence", "").lower()
+            both = found.get("source", "").lower() in said and found.get("target", "").lower() in said
+            out.append({"id": found["id"], "verdict": "supported" if both else "unsure", "keep": True, "reason": "both names in the sentence" if both else "a name is missing"})
+    return json.dumps(out)
+
+
+def compose_describe(prompt: str) -> str:
+    """The stand-in for the description of a context graph: the name and the first things of the facts, in four sentences."""
+    lines = [x.strip() for x in prompt.splitlines() if x.strip()]
+    name = next((x.split(":", 1)[1].strip() for x in lines if x.startswith("Graph:")), "This graph")
+    owner = next((x.split(":", 1)[1].strip() for x in lines if x.startswith("Companies:")), "its company")
+    things = [x[2:].split(" (")[0] for x in lines if x.startswith("- ")][:6]
+    named = ", ".join(things) if things else "the topics of its inputs"
+    return (f"{name} holds the inputs of {owner} on one subject. Its inputs name {named}. "
+            f"It can answer questions about these things and how they relate. It belongs to {owner}.")
 
 
 def compose_map(prompt: str) -> str:
@@ -233,7 +262,7 @@ def chat(body: dict[str, Any]) -> dict[str, Any]:
     STATE["calls"] += 1
     system = next((m["content"] for m in body.get("messages", []) if m.get("role") == "system"), "")
     user = next((m["content"] for m in body.get("messages", []) if m.get("role") == "user"), "")
-    if "relevant to the question" in system:
+    if "relevant to the question" in system or "can help answer the question" in system:
         text = compose_rerank(user)
     elif "knowledge nodes of the RPG group" in system:
         text = compose_classify(user)
@@ -241,7 +270,14 @@ def chat(body: dict[str, Any]) -> dict[str, Any]:
         text = compose_kind(user)
     elif "You map a document uploaded" in system:
         text = compose_map(user)
-    elif "list what it says between things" in system:
+    elif "You are the question router of a company knowledge mesh" in system:
+        question = user.split("\n", 1)[0].removeprefix("Question: ").strip()
+        text = json.dumps({"intent": "clear", "understood_as": question, "graphs": ["G1"] if "\nG1: " in user else [], "suggestions": [], "reason": "first graph"})
+    elif "You check links that were taken from one document" in system:
+        text = compose_verify(user)
+    elif "what one context graph of a company knowledge mesh is about" in system:
+        text = compose_describe(user)
+    elif "list what it says between things" in system or "list the things it names and what it states between them" in system:
         text = compose_extract(user)
     elif "from one context graph that a company wrote" in system:
         text = compose_graph_answer(user)

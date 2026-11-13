@@ -62,15 +62,16 @@ function short(text: string, max = 28) {
 // startIds: the entities shown first when the graph is too large to show at once (default: the companies and items).
 // edgeLabels: every link carries its type as a label, for a graph whose link types a person wrote.
 // proposedOff: the links that wait for review are left out of the drawing until Proposed links is pressed.
-export default function MeshGraphExplorer({ graph, revealAll = false, startIds, edgeLabels = false, proposedOff = false }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean; startIds?: string[]; edgeLabels?: boolean; proposedOff?: boolean }) {
+export default function MeshGraphExplorer({ graph, revealAll = false, startIds, edgeLabels = false, proposedOff = false, hideAtStart = [] }: { graph: Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'>; revealAll?: boolean; startIds?: string[]; edgeLabels?: boolean; proposedOff?: boolean; hideAtStart?: string[] }) {
   const container = useRef<HTMLDivElement | null>(null)
   const network = useRef<Network | null>(null)
   const nodesDs = useRef<DataSet<any> | null>(null)
   const edgesDs = useRef<DataSet<any> | null>(null)
   const [revealed, setRevealed] = useState<Set<string>>(new Set())
-  const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set())
+  const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(() => new Set(hideAtStart)) // kinds left off the drawing until their chip is pressed
   const [selected, setSelected] = useState<string | null>(null)
   const [treeRoot, setTreeRoot] = useState<string | null>(null)
+  const [showNames, setShowNames] = useState(edgeLabels || graph.edges.length <= 60) // the name of every link on the drawing. Off at first for a graph of many links, where the names would cover each other
   const [showProposed, setShowProposed] = useState(!proposedOff) // links that wait for review: drawn dashed, and left out until asked for when proposedOff
   const proposedCount = useMemo(() => graph.edges.filter((e) => e.status === 'proposed').length, [graph])
   const [wide, setWide] = useState(false) // the drawing over the whole window, for a graph too large for its panel
@@ -119,7 +120,9 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
     }))
     const edgeDs = new DataSet<any>(edges.map((e) => ({
       id: e.id, from: e.source, to: e.target, hidden: true, etype: e.type, estatus: e.status,
-      label: edgeLabels ? e.type : LINK_TYPES.has(e.type) ? e.type.toLowerCase().replace(/_/g, ' ') : undefined, // a type a person wrote is shown as written
+      ename: edgeLabels ? e.type : e.type.toLowerCase().replace(/_/g, ' '),
+      elabel: edgeLabels ? e.type : LINK_TYPES.has(e.type) || (e.by && e.type !== 'RELATED_TO') ? e.type.toLowerCase().replace(/_/g, ' ') : '', // shown also when the link names are off
+      label: edgeLabels ? e.type : LINK_TYPES.has(e.type) || (e.by && e.type !== 'RELATED_TO') ? e.type.toLowerCase().replace(/_/g, ' ') : undefined, // a type a person wrote is shown as written, and so is the relation a sentence states
       title: `${e.type}${e.status !== 'approved' ? ` (${e.status})` : ''}`,
       color: { color: own(EDGE_COLOURS, e.type) ?? '#ced4da', highlight: own(EDGE_COLOURS, e.type) ?? '#495057' },
       width: LINK_TYPES.has(e.type) ? 2.5 : 1, baseWidth: LINK_TYPES.has(e.type) ? 2.5 : 1, dashes: e.status !== 'approved',
@@ -221,14 +224,14 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
       net.setOptions({ physics: { enabled: true }, edges: { smooth: { enabled: true, type: 'dynamic' } } } as any)
     }
     nodes.update(nodes.get().filter((n: any) => n.hidden === visible.has(n.id)).map((n: any) => ({ id: n.id, hidden: !visible.has(n.id) })))
-    edgeDs.update(edgeDs.get().map((e: any) => ({ id: e.id, hidden: (!showProposed && e.estatus === 'proposed') || (treeEdges ? !treeEdges.has(e.id) : !(visible.has(e.from) && visible.has(e.to))) }))
+    edgeDs.update(edgeDs.get().map((e: any) => ({ id: e.id, label: showNames ? e.ename : e.elabel, hidden: (!showProposed && e.estatus === 'proposed') || (treeEdges ? !treeEdges.has(e.id) : !(visible.has(e.from) && visible.has(e.to))) }))
       .filter((u: any) => (edgeDs.get(u.id) as any)?.hidden !== u.hidden))
     if (treeRoot || fitNext.current) {
       fitNext.current = false
       setTimeout(() => { try { fitWithMargin(net, [...visible], true) } catch { /* noop */ } }, treeRoot ? 0 : 900)
       if (treeRoot) setTimeout(() => { try { fitWithMargin(net, [...visible], true) } catch { /* noop */ } }, 700) // once more, after a move to a found entity has ended
     }
-  }, [revealed, hiddenTypes, treeRoot, adjacency, byId, showProposed])
+  }, [revealed, hiddenTypes, treeRoot, adjacency, byId, showProposed, showNames])
 
   // The entity chosen stands out: its links and neighbours keep their colour, the rest of the drawing is faded
   useEffect(() => {
@@ -288,7 +291,10 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
               <i style={{ background: typeColour(t) }} />{t} {graph.counts[t]}
             </button>
           ))}
-          {proposedCount > 0 && <button type="button" className={showProposed ? '' : 'off'} onClick={() => setShowProposed((v) => !v)} aria-pressed={showProposed} title="Links that wait for review, drawn dashed">
+          <button type="button" className={showNames ? '' : 'off'} onClick={() => setShowNames((v) => !v)} aria-pressed={showNames} title="The name of each link, written on its line">
+            <i style={{ background: 'transparent', border: '1.5px solid #868e96' }} />Link names
+          </button>
+          {proposedCount > 0 && <button type="button" className={showProposed ? '' : 'off'} onClick={() => setShowProposed((v) => !v)} aria-pressed={showProposed} title="Links that wait for approval, drawn as dashed lines">
             <i style={{ background: 'transparent', border: '1.5px dashed #4c6ef5' }} />Proposed links {proposedCount}
           </button>}
         </div>
@@ -303,7 +309,7 @@ export default function MeshGraphExplorer({ graph, revealAll = false, startIds, 
       <div className="mesh-graph-body">
         <div className="mesh-graph-canvas-wrap">
           <div ref={container} className="mesh-graph-canvas" role="img" aria-label="Mesh graph" />
-          <div className="mesh-graph-hint">{treeRoot ? `Tree from ${byId.get(treeRoot)?.label ?? treeRoot}, two steps out. Back to the graph or Esc returns.` : `${shown} of ${graph.nodes.length} shown. Double-click to open connections, right-click for a tree.`}</div>
+          <div className="mesh-graph-hint">{treeRoot ? `Tree from ${byId.get(treeRoot)?.label ?? treeRoot}, with everything within two links of it. Back to the graph or Esc returns.` : `${shown} of ${graph.nodes.length} shown. Double-click an item to show what it links to, right-click for its tree.`}</div>
           {menu && (
             <div className="mesh-graph-menu" style={{ left: menu.x, top: menu.y }} onMouseLeave={() => setMenu(null)}>
               {menu.id && <button type="button" onClick={() => { expand(menu.id); setMenu(null) }}>Open connections</button>}

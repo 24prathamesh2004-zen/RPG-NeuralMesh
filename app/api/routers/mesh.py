@@ -837,6 +837,7 @@ async def add_upload(
     if template is not None:
         await asyncio.to_thread(json_templates.set_for_graph, record["context_graph"]["id"], template, str(user.get("email") or user.get("sub") or ""))
     refreshed = await rt.refresh_from_nodes()
+    await _describe_again(rt, [record["context_graph"]["id"]])
     company, roles = _person(user)
     graph = None
     try:
@@ -886,6 +887,7 @@ async def add_uploads(
         return {**planned, "entries": [upload_batch.public(x) for x in planned["entries"]], "checked_only": True}
     result = await asyncio.to_thread(upload_batch.save, rt, user, planned)
     refreshed = await rt.refresh_from_nodes() if result["saved"] else {}
+    await _describe_again(rt, [g["id"] for g in result["graphs"]])
     return {**result, "refresh": {node: refreshed.get(node, "") for node in sorted({r["node_id"] for r in result["saved"]})}}
 
 
@@ -1002,24 +1004,111 @@ async def decide_link(doc_id: str, link_id: str, body: dict, user: dict = Depend
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from None
 
 
+async def _describe_again(rt, graph_ids: list[str]) -> int:
+    """Have the model write the description of each graph again, after its inputs or their extractions changed. A graph
+    the model may not read, or a reply that is not usable, keeps the description made by code. Never fails the request."""
+    from services import graph_describe
+    written = 0
+    for graph_id in graph_ids:
+        try:
+            written += 1 if await asyncio.to_thread(graph_describe.refresh, rt, graph_id) else 0
+        except Exception:  # noqa: BLE001 - the description is an addition to the upload, never a reason to fail it
+            pass
+    return written
+
+
+@router.post("/uploads/graphs/{graph_id}/description/generate")
+async def generate_description(graph_id: str, user: dict = Depends(require_user)) -> dict:
+    """Have the model write the description of a context graph again from what its inputs name and state. It does not
+    replace a description a person wrote. A mesh admin, or a person of a company that keeps an input in the graph."""
+    from services import uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        view = await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is in the graph, or none is shown to you") from None
+    if not view["description"]["can_write"]:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "A mesh admin or a company that keeps an input in the graph writes its description")
+    made = await _describe_again(rt, [graph_id])
+    view = await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+    return {"id": graph_id, "written": bool(made), "description": view["description"]}
+
+
+@router.put("/uploads/graphs/{graph_id}/description")
+async def describe_context_graph(graph_id: str, body: dict, user: dict = Depends(require_user)) -> dict:
+    """Write what a context graph is about, with {"text": "..."} of 20 to 1,000 characters. An empty text takes the
+    written description away, and the one made by code from the inputs shows again. A mesh admin, or a person of a
+    company that keeps an input in the graph, writes it."""
+    from services import graph_describe, uploads
+    rt = await asyncio.to_thread(runtime)
+    company, roles = _person(user)
+    try:
+        view = await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No input of this context graph is in the graph, or none is shown to you") from None
+    if not view["description"]["can_write"]:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "A mesh admin or a company that keeps an input in the graph writes its description")
+    try:
+        await asyncio.to_thread(graph_describe.write, graph_id, str(body.get("text") or ""), user)
+    except graph_describe.Refused as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from None
+    view = await asyncio.to_thread(uploads.context_graph_view, rt, graph_id, company, roles)
+    return {"id": graph_id, "description": view["description"]}
+
+
+@router.post("/uploads/{doc_id}/keep")
+async def keep_input(doc_id: str, user: dict = Depends(require_user)) -> dict:
+    """Say that an input listed for review belongs to its context graph, so it is no longer listed. A mesh admin or a
+    person of the company that keeps the upload decides."""
+    from services import uploads
+    node = doc_id.split(":", 1)[0]
+    company, roles = _person(user)
+    if node not in NODE_IDS or uploads.record_of(node, doc_id) is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document")
+    if "mesh_admin" not in roles and company != node:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "A mesh admin or the company that keeps the upload decides on its inputs")
+    try:
+        return await asyncio.to_thread(uploads.keep_input, node, doc_id, user)
+    except KeyError:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No upload record for this document") from None
+
+
 @router.post("/uploads/extractions")
-async def extract_uploads(write: bool = False, user: dict = Depends(require_role("mesh_admin"))) -> dict:
-    """Take entities and links from the text of every accepted upload that has none yet. Without ``write`` nothing is
-    kept and the answer gives what the code part would find for each input (the model part runs only with ``write``)."""
+async def extract_uploads(write: bool = False, refresh: bool = False, document: str | None = None, check_only: bool = False,
+                          user: dict = Depends(require_role("mesh_admin"))) -> dict:
+    """Take entities and links from the text of every accepted upload that has none yet, or of every accepted upload
+    with ``refresh``, which keeps each decision a person made on a link. Without ``write`` nothing is kept and the
+    answer gives what the code part would find for each input (the model part runs only with ``write``). ``document``
+    limits the run to the input with that id. ``check_only`` with ``write`` keeps every extraction as it is and only has
+    the model check the links it has not checked yet (graph_extract.verify)."""
     from services import graph_extract, uploads
     rt = await asyncio.to_thread(runtime)
     out = []
+    touched: set[str] = set()
     for node, record in uploads._all_records():
         doc = record["document"]
-        if graph_extract.read(doc["id"]) is not None:
+        if document and doc["id"] != document:
             continue
-        if write:
+        if graph_extract.read(doc["id"]) is not None and not refresh and not check_only:
+            continue
+        if write and check_only:
+            dp = uploads.datapoints_of(node).get(doc["datapoint"].split(":", 1)[1], {})
+            call = uploads._extract_caller(rt, dp.get("sensitivity"), record.get("synthetic") is True)
+            asked = await asyncio.to_thread(graph_extract.verify, rt, doc["id"], call)
+            made = {**(graph_extract.summary(graph_extract.read(doc["id"])) or {}), "asked": asked}
+        elif write:
             made = await asyncio.to_thread(uploads.extract_record, rt, node, record)
         else:
             links = graph_extract.code_links(rt, doc.get("body") or "", list(doc.get("concepts") or []))
-            made = {"links": len(links), "entities": 0, "model": "not run without write"}
+            stated, stated_links = graph_extract.code_statements(rt, node, doc["id"], doc.get("body") or "", list(doc.get("concepts") or []))
+            made = {"links": len(links) + len(stated_links), "entities": len(stated), "model": "not run without write"}
         out.append({"document": doc["id"], "title": doc["title"], **(made or {})})
-    return {"written": write, "documents": out}
+        touched.add(uploads.graph_ref(record)["id"])
+    if write and any((d.get("topics_set_aside") or 0) for d in out):
+        await rt.refresh_from_nodes()  # topics taken off a document change the central graph
+    described = await _describe_again(rt, sorted(touched)) if write else 0
+    return {"written": write, "documents": out, "descriptions_written": described}
 
 
 @router.get("/graph/search")

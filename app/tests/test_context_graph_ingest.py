@@ -58,7 +58,7 @@ def test_the_sample_is_kept_and_the_answer_names_the_id_the_name_and_what_was_fi
     assert (graph["company"], graph["company_name"], graph["nodes"], graph["edges"]) == ("ceat", "CEAT", 7, 7)
     assert graph["endpoints"]["query"] == f"/api/v1/context-graphs/{graph['id']}/query"
     assert body["filled"] == ["7 edge ids made from the type"] and body["ignored"] == [] and not body["replaced"]
-    assert body["defaults"] == ["synthetic: false, so the data is treated as real and no cloud model reads it"]
+    assert body["defaults"] == ["synthetic: false, so the data is treated as real"]
     kept = json.loads((FOLDER / f"{graph['id']}.json").read_text())
     assert [e["id"] for e in kept["edges"]][:3] == ["has-line-1", "has-machine-1", "uses-part-1"]
     log = (FOLDER / ingested.LOG_FILE).read_text()

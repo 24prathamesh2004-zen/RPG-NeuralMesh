@@ -11,6 +11,7 @@ _STATE = Path(tempfile.mkdtemp(prefix="neuralmesh-tests-"))
 os.environ.setdefault("NEURALMESH_GRAPH_DB", str(_STATE / "mesh_graph.db"))
 os.environ.setdefault("NEURALMESH_CENTRAL_AUDIT", str(_STATE / "central_audit.jsonl"))
 os.environ.setdefault("NEURALMESH_CONTEXT_GRAPHS", str(_STATE / "context_graphs"))
+os.environ.setdefault("NEURALMESH_GRAPH_NOTES", str(_STATE / "graph_notes"))
 
 # The tests run on a copy of the node packs with the pinned sample talent packs (tests/fixtures), never on the packs an
 # application last sent through the import tool, so a live import cannot change what a test expects, and a test never

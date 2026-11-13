@@ -47,7 +47,9 @@ def main() -> None:
             rows.append((sid, "node outage is a separate check (make live-check); kec is " + kec["status"], True))
             continue
         body = http.post(f"{API}/mesh/query", json={"question": scenario["question"], "purpose": "problem_solving"}).json()
-        text = json.dumps(body)
+        # what was released: the answer and the evidence. The routing is left out, because it names catalogue items by their
+        # titles, and the title of R-02 itself holds the words "client names masked"
+        text = json.dumps({k: v for k, v in body.items() if k != "routing"})
         evidence_dps = {e["datapoint"].split(":", 1)[1] for e in body["evidence"] if e.get("datapoint")}
         found_dps = evidence_dps | {e["datapoint"].split(":", 1)[1] for e in body.get("also_found", []) if e.get("datapoint")}
         withheld = {w["datapoint"].split(":", 1)[1]: w for w in body["withheld"] if w.get("datapoint")}

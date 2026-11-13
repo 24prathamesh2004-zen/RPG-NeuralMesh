@@ -47,7 +47,7 @@ class LiveNode:
 
     def _read_stamp(self) -> tuple:
         node_dir = self._root / self._config.node_id
-        files = [node_dir / "node.yaml", node_dir / "policy.yaml", node_dir / "experts.yaml", *sorted(node_dir.glob("packs/*/pack.json"))]
+        files = [node_dir / "node.yaml", node_dir / "policy.yaml", node_dir / "experts.yaml", *sorted(node_dir.glob("packs/*/pack.json")), *sorted(node_dir.glob("added_items/*.json"))]
         return tuple((str(f), f.stat().st_mtime_ns, f.stat().st_size) for f in files if f.is_file())
 
     def _check(self) -> None:

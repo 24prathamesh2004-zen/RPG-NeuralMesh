@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import functools
 import hashlib
+from collections import Counter
 import io
 import json
 import os
@@ -323,26 +324,95 @@ def _extract_caller(rt: Any, sensitivity: str | None, synthetic: bool):
                        sensitivities={sensitivity} if sensitivity else set(), all_synthetic=bool(synthetic), calls=[])
 
 
+def set_topics_aside(rt: Any, node: str, record: dict, call, dp: dict) -> int:
+    """Take off the document the topics the check finds it is not about (graph_extract.check_topics), so that the central
+    graph, the routing of Ask, the links between inputs and the description no longer rest on them. Two kinds go: one
+    the model judged the document is not about, and one matched only by its words standing apart in the text, with no
+    sentence naming it, which code takes off once the model gave its verdicts on the others. A topic the person tagged is
+    never taken off. The record keeps each one under "topics_set_aside" with the reason, and the pack of its domain is
+    rebuilt. Nothing is taken off when the model gave no verdict. The number of topics taken off."""
+    if call is None or not record["document"].get("concepts"):
+        return 0
+    checks = graph_extract.check_topics(rt, record, call)
+    if not any(v.get("by") == "model" for v in checks.values()):
+        return 0  # the model gave no verdict: nothing is taken off by code alone
+    gone = {cid: v for cid, v in checks.items() if v["verdict"] == "not_supported" and cid not in (record.get("topics_kept") or [])}
+    if not gone:
+        return 0
+    doc_id = record["document"]["id"]
+    with _WRITES:  # the record is read again here, so a removal or a person's change made meanwhile is not overwritten
+        current = record_of(node, doc_id)
+        if current is None or current.get("status") != "accepted":
+            return 0
+        doc = current["document"]
+        doc["concepts"] = [c for c in doc.get("concepts") or [] if c not in gone]
+        current["concept_matches"] = {c: m for c, m in (current.get("concept_matches") or {}).items() if c not in gone}
+        gone_tags = {c.split(":", 1)[1] for c in gone}
+        doc["tags"] = [t for t in doc.get("tags") or [] if t not in gone_tags]
+        current["topics_set_aside"] = [*(current.get("topics_set_aside") or []), *({"concept": c, **v} for c, v in gone.items())]
+        if not doc["concepts"]:
+            doc.pop("concepts")
+        _write_atomic(_folder(node) / f"{doc_id.split(':', 1)[1]}.json", current)
+        if dp.get("domain"):
+            packgen.rebuild_domain_pack(node, dp["domain"], build_vectors=True)
+    record.update(current)
+    return len(gone)
+
+
+def things_of_graph(node: str, graph_id: str, leave_out: str | None = None) -> list[tuple[str, str]]:
+    """The things the model took from the other inputs of a graph kept by the same company, as (name, type), the most
+    named first. The model is shown them so that it names a thing it finds again the same way."""
+    count: Counter[tuple[str, str]] = Counter()
+    for n, r in _all_records():
+        if n != node or graph_ref(r)["id"] != graph_id or r["document"]["id"] == leave_out:
+            continue
+        for e in (graph_extract.read(r["document"]["id"]) or {}).get("entities", []):
+            if e.get("by") == "model" and e.get("type") in graph_extract.ENTITY_TYPES:
+                count[(e["name"], e["type"])] += 1
+    return [x for x, _ in count.most_common(graph_extract.EXISTING_MAX)]
+
+
 def extract_record(rt: Any, node: str, record: dict) -> dict[str, Any] | None:
     """Make the extraction of an accepted upload (services.graph_extract) and return its counts. A failure is returned,
     never raised: the upload is kept either way, and the extraction can be made again."""
     try:
         dp = datapoints_of(node).get(record["document"]["datapoint"].split(":", 1)[1], {})
-        made = graph_extract.extract(rt, node, record, _extract_caller(rt, dp.get("sensitivity"), record.get("synthetic") is True))
-        return graph_extract.summary(made)
+        call = _extract_caller(rt, dp.get("sensitivity"), record.get("synthetic") is True)
+        graph_extract.extract(rt, node, record, call, existing=things_of_graph(node, graph_ref(record)["id"], record["document"]["id"]))
+        graph_extract.verify(rt, record["document"]["id"], call)  # the model checks every link it or code proposed against its sentence
+        out = graph_extract.summary(graph_extract.read(record["document"]["id"])) or {}
+        removed = set_topics_aside(rt, node, record, call, dp)
+        return {**out, **({"topics_set_aside": removed} if removed else {})}
     except Exception as exc:  # noqa: BLE001 - reported with the upload
         return {"failed": type(exc).__name__}
 
 
-def _kind_caller(rt: Any, sensitivity: str | None):
-    """The model caller for the kind step, bound to the item's sensitivity, or None when no model is configured."""
+def is_real(doc_id: str | None) -> bool:
+    """Whether a document is an upload that was not sent as invented data. A document of the sample packs, which are
+    invented, is not. The model policy reads this before a cloud model may see the document (the real data plan, step 1)."""
+    node = (doc_id or "").split(":", 1)[0]
+    if not doc_id or node not in node_ids():
+        return False
+    if not re.search(r"-U\d{3,}$", doc_id):
+        return False  # a document of the sample packs, which are invented
+    try:  # the record of an upload is one file named after the document
+        record = json.loads((_folder(node) / f"{doc_id.split(':', 1)[1]}.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return True  # an upload whose record cannot be read counts as real, so no cloud model reads it by mistake
+    return not (isinstance(record, dict) and record.get("synthetic") is True)
+
+
+def _kind_caller(rt: Any, sensitivity: str | None, synthetic: bool = False):
+    """The model caller for the kind step and the map step, bound to the item's sensitivity and to whether the file was
+    sent as invented data, so the model policy keeps a cloud model away from a real file. A file read before it is
+    saved carries no mark yet and counts as real. None when no model is configured."""
     orchestrator = getattr(rt, "orchestrator", None)
     backend = getattr(orchestrator, "backend", None)
     if backend is None:
         return None
     from services.context.llm import make_caller
     return make_caller(backend, app_env=getattr(orchestrator, "app_env", "development"), trace_id=f"upload-{uuid.uuid4().hex[:8]}",
-                       sensitivities={sensitivity} if sensitivity else set(), all_synthetic=True, calls=[])
+                       sensitivities={sensitivity} if sensitivity else set(), all_synthetic=bool(synthetic), calls=[])
 
 
 @_one_at_a_time
@@ -383,7 +453,7 @@ def add_upload(rt: Any, user: dict, node: str, code: str, kind: str, title: str,
     detected = None
     if kind == AUTO_KIND:
         from services import upload_kind
-        detected = upload_kind.detect(title[:200], Path(filename).name, text, KINDS, fmt=fmt, call_model=_kind_caller(rt, dp.get("sensitivity")))
+        detected = upload_kind.detect(title[:200], Path(filename).name, text, KINDS, fmt=fmt, call_model=_kind_caller(rt, dp.get("sensitivity"), synthetic))
         kind, kind_label = detected["kind"], detected["label"]
     doc_id = _next_id(node, code)
     document: dict[str, Any] = {"id": doc_id, "datapoint": f"{node}:{code}", "title": title[:200], "kind": kind, "version": version,
@@ -577,8 +647,14 @@ def context_graph_view(rt: Any, graph_id: str, company: str, roles: list[str]) -
     for doc_id in documents:
         keep |= _around(rt, doc_id, company, roles)
     shown = [(node, r) for node, r in records if r["document"]["id"] in documents]
-    view = _with_extractions(_view(rt, keep), shown, company, roles)
-    return {"id": graph_id, "name": graph_ref(records[0][1])["name"], "documents": documents, **view, "quality": graph_quality(shown, view)}
+    base = _view(rt, keep)
+    # a similarity the job calculated between two topics and nobody approved says nothing the inputs state: not drawn here
+    base["edges"] = [e for e in base["edges"] if not (e["type"] == "SIMILAR_TO" and e["status"] != "approved")]
+    view = _with_topic_links(rt, _with_extractions(rt, base, shown, company, roles), shown)
+    from services import graph_describe
+    return {"id": graph_id, "name": graph_ref(records[0][1])["name"], "documents": documents, **view,
+            "description": graph_describe.of(rt, graph_id, shown, len(shown) == len(records), company, roles),
+            "review": inputs_to_review(shown), "quality": graph_quality(shown, view)}
 
 
 def _may_read_text(node: str, record: dict, company: str, roles: list[str]) -> bool:
@@ -589,28 +665,148 @@ def _may_read_text(node: str, record: dict, company: str, roles: list[str]) -> b
     return not dp.get("never_leave") and dp.get("ceiling") == "RAG"
 
 
-def _with_extractions(view: dict[str, Any], records: list[tuple[str, dict]], company: str, roles: list[str]) -> dict[str, Any]:
-    """The view with the entities and the links taken from the text of each input the person may read, proposed and
-    approved. A rejected link is left out, and so is a link whose end the view does not show."""
+def _with_extractions(rt: Any, view: dict[str, Any], records: list[tuple[str, dict]], company: str, roles: list[str]) -> dict[str, Any]:
+    """The view with the entities and the links taken from the text of each input the person may read. A link carries
+    the relation its sentence states (graph_extract.named) and the status the rule or a person gave it
+    (graph_extract.effective). A link a person rejected is left out. A link the model's check set aside is not drawn and
+    is listed in "set_aside", so a person can still approve it. A link whose end the view does not show is left out. A
+    proposed link carries its priority (graph_extract.priority): only a high one waits for a person."""
     ids = {n["id"] for n in view["nodes"]}
+    view.setdefault("set_aside", [])
     for node, record in records:
         data = graph_extract.read(record["document"]["id"])
         if not data or not _may_read_text(node, record, company, roles):
             continue
         entities = {e["id"]: e for e in data.get("entities", [])}
         for link in data.get("links", []):
+            link = graph_extract.effective(graph_extract.named(rt, link))
             ends = (link["source"], link["target"])
+            if link["status"] == "rejected" and link.get("settled_by") == "model":
+                g = rt.mesh.graph  # a topic taken off the document is no longer in the view: its name comes from the graph
+                name = lambda x: entities[x]["name"] if x in entities else str(g.nodes[x].get("label") or x) if x in g else x  # noqa: E731
+                view["set_aside"].append({"id": link["id"], "type": link["type"], "source": link["source"], "target": link["target"], "status": "rejected",
+                                          "source_label": name(link["source"]), "target_label": name(link["target"]), "evidence": link["evidence"],
+                                          "by": link["by"], "document": record["document"]["id"], "settled_by": "model", "reason": (link.get("check") or {}).get("reason", ""),
+                                          "why": "not_needed" if link.get("settled_reason") == "not_needed" else "not_supported"})
+                continue
             if link["status"] == "rejected" or not all(x in ids or x in entities for x in ends):
                 continue
             for end in ends:
                 if end not in ids:
                     e = entities[end]
-                    view["nodes"].append({"id": end, "type": e["type"], "label": e["name"], "subsidiary": node})
-                    view["counts"][e["type"]] = view["counts"].get(e["type"], 0) + 1
+                    kind = graph_extract.entity_type(e["type"])  # also for an entity kept before the reserved types were renamed
+                    name = (graph_extract.statement_name(e["sentence"]) if e.get("sentence") else None) or e["name"]  # a statement named the way code names it now
+                    view["nodes"].append({"id": end, "type": kind, "label": name, "subsidiary": node})
+                    view["counts"][kind] = view["counts"].get(kind, 0) + 1
                     ids.add(end)
             view["edges"].append({"id": link["id"], "type": link["type"], "source": link["source"], "target": link["target"], "status": link["status"],
-                                  "evidence": link["evidence"], "by": link["by"], "document": record["document"]["id"]})
+                                  "evidence": link["evidence"], "by": link["by"], "document": record["document"]["id"],
+                                  **({"sentences": link["sentences"]} if link.get("sentences") else {}),
+                                  **({"settled_by": link["settled_by"], "settled_reason": link["settled_reason"]} if link.get("settled_by") else {}),
+                                  **({"check_reason": link["check"]["reason"]} if link.get("check") and link["check"].get("reason") else {})})
+        # every thing the model took from this input is linked from it, so that no thing hangs apart from the file it
+        # came from, and a thing two inputs name shows both of them
+        made = {(e["source"], e["target"]) for e in view["edges"]}
+        doc = record["document"]["id"]
+        for eid, e in entities.items():
+            if eid in ids and e.get("by") == "model" and e.get("type") not in ("Decision", "Action", "Risk") and (doc, eid) not in made and doc in ids:
+                view["edges"].append({"id": f"n-{hashlib.sha256(f'{doc}|{eid}'.encode()).hexdigest()[:10]}", "type": "MENTIONS", "source": doc, "target": eid, "status": "approved"})
+                made.add((doc, eid))
+    types = {n["id"]: n["type"] for n in view["nodes"]}
+    for e in view["edges"]:
+        if e.get("status") == "proposed" and e.get("by") in ("code", "model"):
+            e["priority"] = graph_extract.priority(e, types)
     return view
+
+
+TOPICS_SHARED_AT = 3  # concepts two inputs both name, from which the two are linked as sharing topics
+TOPIC_LINKS_EACH = 2  # the closest inputs each input is linked to
+
+
+def _with_topic_links(rt: Any, view: dict[str, Any], records: list[tuple[str, dict]]) -> dict[str, Any]:
+    """The view with a SHARES_TOPICS_WITH link between two inputs of the graph that name TOPICS_SHARED_AT concepts or
+    more in common, for each input the TOPIC_LINKS_EACH inputs it shares most with. The link is calculated each time
+    the graph is read and names the shared concepts as its evidence. Nothing is kept."""
+    g = rt.mesh.graph
+    ids = {n["id"] for n in view["nodes"]}
+    docs = [(r["document"]["id"], set(r["document"].get("concepts") or []) & ids) for _, r in records if r["document"]["id"] in ids]
+    if len(docs) >= 4:  # a topic most inputs name says nothing about which two of them belong together
+        common = Counter(c for _, cs in docs for c in cs)
+        docs = [(d, {c for c in cs if common[c] <= len(docs) // 2}) for d, cs in docs]
+    pairs: dict[tuple[str, str], set[str]] = {}
+    for a, ca in docs:
+        near = sorted(((len(ca & cb), b, ca & cb) for b, cb in docs if b != a and len(ca & cb) >= TOPICS_SHARED_AT), key=lambda x: (-x[0], x[1]))
+        for _, b, shared in near[:TOPIC_LINKS_EACH]:
+            pairs[tuple(sorted((a, b)))] = shared
+    for (a, b), shared in sorted(pairs.items()):
+        labels = sorted(str(g.nodes[c].get("label") or c) for c in shared if c in g)
+        view["edges"].append({"id": f"t-{hashlib.sha256(f'{a}|{b}'.encode()).hexdigest()[:10]}", "type": "SHARES_TOPICS_WITH", "source": a, "target": b,
+                              "status": "approved", "by": "calculated", "evidence": f"Both name {len(labels)} topics: {', '.join(labels[:6])}{' and more' if len(labels) > 6 else ''}"})
+    return view
+
+
+def inputs_to_review(records: list[tuple[str, dict]]) -> list[dict[str, str]]:
+    """The inputs a person should look at because they do not match the rest of the graph: an input that names no known
+    topic, or one that shares no topic with the other inputs. Only for a graph of two inputs or more, and not for an
+    input a person already kept (keep_input)."""
+    docs = [r for _, r in records]
+    if len(docs) < 2:
+        return []
+    out = []
+    for r in docs:
+        if r.get("fit", {}).get("kept"):
+            continue
+        own = set(r["document"].get("concepts") or [])
+        others = {c for o in docs if o is not r for c in o["document"].get("concepts") or []}
+        if not own:
+            out.append({"document": r["document"]["id"], "reason": "It names no known topic, so nothing shows that it belongs to this graph."})
+        elif not own & others:
+            out.append({"document": r["document"]["id"], "reason": "It shares no topic with the other inputs of this graph."})
+    return out
+
+
+@_one_at_a_time
+def keep_input(node: str, doc_id: str, user: dict) -> dict[str, Any]:
+    """A person says that an input belongs to its graph, so it is no longer listed for review. KeyError when the node
+    keeps no such input."""
+    record = record_of(node, doc_id)
+    if record is None or record.get("status") != "accepted":
+        raise KeyError(doc_id)
+    record["fit"] = {"kept": True, "by_company": str(user.get("company", "")), "by_role": "Mesh admin" if "mesh_admin" in (user.get("roles") or []) else "User",
+                     "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    _write_atomic(_folder(node) / f"{doc_id.split(':', 1)[1]}.json", record)
+    return {"document": doc_id, "fit": record["fit"]}
+
+
+SENSITIVITY_ORDER = ("Public", "Internal", "Confidential", "Restricted")
+
+
+def as_graph_record(rt: Any, graph_id: str, company: str, roles: list[str]) -> dict[str, Any]:
+    """An uploaded context graph in the shape of an ingested one (services.context_graph_ingest), made from what the
+    person may see, so that the same graph API reads and queries both kinds. Nothing is kept. The sensitivity is the
+    highest among the catalogue items of its inputs, and it counts as invented only when every input is marked so, which
+    is what the model policy reads before a written answer. KeyError as for context_graph_view."""
+    view = context_graph_view(rt, graph_id, company, roles)
+    records = [(d.split(":", 1)[0], r) for d in view["documents"] if (r := record_of(d.split(":", 1)[0], d))]
+    levels = [datapoints_of(node).get(r["document"]["datapoint"].split(":", 1)[1], {}).get("sensitivity") or "Restricted" for node, r in records]
+    by_doc = {r["document"]["id"]: r for _, r in records}
+    nodes = []
+    for n in view["nodes"]:
+        doc = by_doc.get(n["id"], {}).get("document")
+        props = {"kind": doc.get("kind_label") or doc.get("kind"), "tags": list(doc.get("tags") or [])} if doc else {}
+        nodes.append({"id": n["id"], "type": n["type"], "name": n["label"], "aliases": [], "properties": {k: v for k, v in props.items() if v}})
+    edges = [{"id": e["id"], "type": e["type"], "source": e["source"], "target": e["target"],
+              "properties": {k: e[k] for k in ("status", "evidence") if e.get(k)}} for e in view["edges"]]
+    nodes_of = sorted({node for node, _ in records})
+    first = min((r["upload"] for _, r in records), key=lambda u: u["at"])
+    return {"id": graph_id, "name": view["name"], "company": nodes_of[0] if len(nodes_of) == 1 else "others", "description": view["description"]["text"],
+            "sensitivity": max(levels, key=lambda x: SENSITIVITY_ORDER.index(x) if x in SENSITIVITY_ORDER else len(SENSITIVITY_ORDER)) if levels else "Restricted",
+            "sharing": "company", "synthetic": bool(records) and all(r.get("synthetic") is True for _, r in records),
+            "nodes": nodes, "edges": edges, "created": {"at": first["at"], "by_company": first.get("by_company", "")}, "updated": None,
+            "uploaded": True, "inputs": len(records),
+            # the text of the inputs the caller may read, for the passages of an answer. Never part of the JSON of the graph
+            "_texts": [{"doc": r["document"]["id"], "title": r["document"]["title"], "text": r["document"].get("body") or ""}
+                       for node, r in records if _may_read_text(node, r, company, roles) and r["document"].get("body")]}
 
 
 NEAR_COPY = 0.85  # the share of words two inputs have in common above which one is taken as a copy of the other
@@ -634,13 +830,16 @@ def graph_quality(records: list[tuple[str, dict]], view: dict[str, Any]) -> list
             elif len(wa) >= 20 and len(wb) >= 20 and len(wa & wb) / len(wa | wb) >= NEAR_COPY:
                 notes.append({"level": "warn", "text": f"{title(a)} and {title(b)} have nearly the same text"})
     if len(docs) >= 2:
-        alone = [title(r) for r in docs if r["document"].get("concepts")
+        alone = [title(r) for r in docs if r["document"].get("concepts") and not r.get("fit", {}).get("kept")
                  and not set(r["document"]["concepts"]) & {c for o in docs if o is not r for c in o["document"].get("concepts") or []}]
         if alone:
-            notes.append({"level": "note", "text": f"Shares no concept with the other inputs of the graph: {', '.join(alone)}"})
-    waiting = sum(1 for e in view["edges"] if e.get("status") == "proposed" and e.get("by"))
+            notes.append({"level": "warn", "text": f"{'Does' if len(alone) == 1 else 'Do'} not match the rest of the graph and {'waits' if len(alone) == 1 else 'wait'} for a person to keep or remove {'it' if len(alone) == 1 else 'them'}: {', '.join(alone)}"})
+    waiting = sum(1 for e in view["edges"] if e.get("status") == "proposed" and e.get("priority") == "high")
     if waiting:
         notes.append({"level": "note", "text": f"{waiting} {'link' if waiting == 1 else 'links'} found in the text {'waits' if waiting == 1 else 'wait'} for review"})
+    unsure = sum(1 for e in view["edges"] if e.get("status") == "proposed" and e.get("priority") == "low")
+    if unsure:
+        notes.append({"level": "note", "text": f"{unsure} {'link' if unsure == 1 else 'links'} of low priority {'is' if unsure == 1 else 'are'} kept as proposed without asking anyone"})
     return notes or [{"level": "ok", "text": "Every input links to a known concept, and no input repeats another"}]
 
 

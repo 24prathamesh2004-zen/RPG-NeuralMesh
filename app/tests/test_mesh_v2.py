@@ -351,7 +351,7 @@ def test_checks_accept_the_marker_sentence_and_the_withheld_template():
 def test_prompts_are_versioned_files_and_every_step_is_timed(local_policy):
     from services.context import prompts
 
-    assert prompts.versions() == {"answer": "mesh_answer_v5", "rerank": "mesh_rerank_v1", "classify": "mesh_classify_v1", "kind": "mesh_kind_v1", "map": "mesh_map_v2", "extract": "mesh_extract_v1"}
+    assert prompts.versions() == {"answer": "mesh_answer_v5", "rerank": "mesh_rerank_v2", "classify": "mesh_classify_v1", "kind": "mesh_kind_v1", "map": "mesh_map_v2", "extract": "mesh_extract_v3", "describe": "mesh_describe_v1", "verify": "mesh_verify_v2", "choose": "mesh_choose_v2"}
     assert all(prompts.load(step).text for step in prompts.versions())
     orchestrator, _, _ = build_mesh(backend=FakeBackend())
     result = run(orchestrator, GOLDEN[0]["question"])
@@ -397,7 +397,7 @@ def test_check_rejects_more_than_ten_sentences():
     assert {f["rule"] for f in run_checks(answer, {"ceat:E-03-01"}, set(), [], [], [], [])} == {7}
 
 
-def test_rerank_that_rejects_everything_keeps_the_top_three(local_policy):
+def test_rerank_that_rejects_everything_keeps_the_best_ranked_documents(local_policy):
     import re as _re
 
     class RejectAll(FakeBackend):
@@ -409,9 +409,9 @@ def test_rerank_that_rejects_everything_keeps_the_top_three(local_policy):
 
     orchestrator, _, _ = build_mesh(backend=RejectAll())
     result = run(orchestrator, GOLDEN[2]["question"])
-    assert result["scope"]["rerank"].endswith("_all_rejected_kept_top3")
+    assert result["scope"]["rerank"].endswith("_kept_top6")
     kept = {r["document"] for r in result["records"]} - {l["source"] for l in result["relationships"]["used"]} - {l["target"] for l in result["relationships"]["used"]}
-    assert 1 <= len(kept) <= 3 and result["scope"]["also_found"]
+    assert 1 <= len(kept) <= 6
     assert result["answer"]["status"] == "answered"
 
 

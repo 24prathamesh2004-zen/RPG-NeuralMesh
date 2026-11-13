@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import inspect
 import json
+import re
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -165,6 +166,7 @@ class MeshOrchestrator:
                                    "named_subsidiaries": resolved.get("named_subsidiaries", []), "datapoints": []}
         if self.mesh is not None:
             routing["concept_labels"] = {c: self.mesh.label(c) for c in concepts}
+            routing["context_graphs"], routing["question_check"] = await asyncio.to_thread(self._context_graphs, state, concepts)
         if chosen:
             routing.update(method="user", subsidiaries=chosen)
             if self.mesh is not None and concepts:
@@ -197,6 +199,12 @@ class MeshOrchestrator:
             if owners:
                 routing.update(method="context", subsidiaries=owners, context_documents=sorted(docs))
                 return {"routing": routing}
+        chosen = [g for g in routing.get("context_graphs", []) if g.get("chosen")]
+        by_graph = sorted({n for g in chosen for n in g["nodes"] if n in self.node_urls})
+        if by_graph:  # no concept and no company in the wording, but a context graph is about the question: its companies are asked
+            names = ", ".join(g["name"] for g in chosen)
+            routing.update(method="context_graph", subsidiaries=by_graph, reason=f"The question matches the context graph {names}.")
+            return {"routing": routing}
         classified = await self._classify(state)
         own = state.get("company") or ""
         if classified["nodes"]:
@@ -207,6 +215,36 @@ class MeshOrchestrator:
         else:
             routing.update(method="none", subsidiaries=[], reason=classified["reason"])
         return {"routing": routing}
+
+    def _context_graphs(self, state: MeshQueryState, concepts: list[str]) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+        """The context graphs the question is about, from what the asker may see (services.graph_describe.choose): the
+        chosen ones first, each with the answer the graph itself gives, then the ones the question touches, and the check
+        of the question: its intent, how it was understood, and for a question that is not clear, the questions the
+        person could ask instead. A failure leaves both empty: the question is still routed by its concepts."""
+        try:
+            from services import context_graph_ingest as ingested, graph_describe, uploads
+            from services.graph_extract import STATEMENT_LINKS
+            company, roles = state.get("company") or "", list(state.get("roles") or [])
+            view = _RuntimeView(self.mesh, self)
+            result = graph_describe.choose(view, state["question"], set(concepts), company, roles, graph_describe.model_caller(self.backend, self.app_env))
+            keys = ("id", "name", "kind", "description", "nodes", "score", "matched_on", "shared_things", "shared_concepts", "shared_words")
+            check = {k: result[k] for k in ("intent", "understood_as", "suggestions", "reason")}
+            out = [{**{k: g.get(k) for k in keys}, "chosen": True, "chosen_by": result["by"], "why": g.get("why", "")} for g in result["chosen"]]
+            out += [{**{k: g.get(k) for k in keys}, "chosen": False} for g in result["close"][:max(0, 3 - len(out))]]
+            for graph in (g for g in out if g["chosen"]):
+                # what the graph holds about the question, and the answer it gives itself, as the asker may see it
+                record = (ingested.shown(graph["id"], company, roles) if graph["kind"] == "ingested" else uploads.as_graph_record(view, graph["id"], company, roles))
+                held = ingested.retrieve(record, state["question"])
+                edges = sorted(held["edges"], key=lambda e: e["type"] not in STATEMENT_LINKS)  # what the inputs state comes first
+                graph["found"] = {"nodes": [n["name"] for n in held["matched"][:5]],
+                                  "links": [{"source": e["source"]["name"], "type": e["type"], "target": e["target"]["name"]} for e in edges[:8]]}
+                said = ingested.ask(record, result["understood_as"] or state["question"], app_env=self.app_env, backend=self.backend)
+                text = re.sub(r"\s+([.,;:!?])", r"\1", re.sub(r"\s{2,}", " ", ingested.CITATION.sub("", said.get("answer") or ""))).strip()
+                graph["answer"] = text if text and text != ingested.NO_ANSWER else None
+                graph["answer_note"] = None if graph["answer"] else said.get("answer_note") or ("The graph does not answer this question." if text == ingested.NO_ANSWER else None)
+            return out, (check if result["by"] == "model" else None)
+        except Exception:  # noqa: BLE001 - the graphs are an addition to the routing, never a reason to fail a question
+            return [], None
 
     async def _classify(self, state: MeshQueryState) -> dict[str, Any]:
         if self.mesh is None or self.backend is None:
@@ -288,8 +326,12 @@ class MeshOrchestrator:
         if self.backend is None:
             return None
         sens = {r.sensitivity for r in recs if r.sensitivity}
+        # the sample packs are invented. An uploaded file is real unless it was sent as invented, and one real record in
+        # the evidence keeps a cloud model away from the whole question (the real data plan, step 1)
+        from services import uploads
+        real = any(uploads.is_real(r.document) for r in recs)
         return make_caller(self.backend, app_env=self.app_env, trace_id=state.get("trace_id", ""), sensitivities=sens,
-                           all_synthetic=True, calls=calls)
+                           all_synthetic=not real, calls=calls)
 
     async def scope(self, state: MeshQueryState) -> dict[str, Any]:
         released, withheld = records.from_node_results(state.get("node_results", []))
@@ -306,12 +348,14 @@ class MeshOrchestrator:
             result = await asyncio.to_thread(scoping.rerank, state["question"], selected, call)
             if key and result.rerank == "done":
                 RERANK_CACHE.put(key, result.verdicts)
-        if selected and not result.selected:
-            kept = dict(list(selected.items())[:3])  # a re-rank is a precision boost, never an empty answer
-            for doc in kept:
+        if selected and len(result.selected) < scoping.KEEP_AT_LEAST:
+            # a re-rank is a precision boost, never a thin answer: the best ranked documents it rejected come back up to
+            # KEEP_AT_LEAST, in the order the search ranked them
+            back = [doc for doc in selected if doc not in result.selected][:scoping.KEEP_AT_LEAST - len(result.selected)]
+            for doc in back:
                 result.also_found.pop(doc, None)
-            result.selected = kept
-            result.rerank += "_all_rejected_kept_top3"
+            result.selected = {doc: selected[doc] for doc in selected if doc in result.selected or doc in back}
+            result.rerank += f"_kept_top{scoping.KEEP_AT_LEAST}" if back else ""
         result.also_found.update(overflow)
         return {
             "records": [r.model_dump() for recs in result.selected.values() for r in recs],

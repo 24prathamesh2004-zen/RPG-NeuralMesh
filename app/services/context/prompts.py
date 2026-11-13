@@ -13,11 +13,14 @@ from pathlib import Path
 PROMPTS_DIR = Path(__file__).resolve().parents[2] / "config" / "prompts"
 FILES = {
     "answer": "mesh_answer_v5.txt",
-    "rerank": "mesh_rerank_v1.txt",
+    "rerank": "mesh_rerank_v2.txt",
     "classify": "mesh_classify_v1.txt",
     "kind": "mesh_kind_v1.txt",
     "map": "mesh_map_v2.txt",
-    "extract": "mesh_extract_v1.txt",
+    "extract": "mesh_extract_v3.txt",
+    "describe": "mesh_describe_v1.txt",
+    "verify": "mesh_verify_v2.txt",
+    "choose": "mesh_choose_v2.txt",
 }
 
 

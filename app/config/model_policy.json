@@ -56,8 +56,23 @@
     },
     "extract": {
       "model": "claude-dev",
-      "max_input_tokens": 2500,
-      "max_output_tokens": 1200
+      "max_input_tokens": 6000,
+      "max_output_tokens": 4000
+    },
+    "describe": {
+      "model": "claude-dev",
+      "max_input_tokens": 3500,
+      "max_output_tokens": 500
+    },
+    "verify": {
+      "model": "claude-dev",
+      "max_input_tokens": 6000,
+      "max_output_tokens": 2500
+    },
+    "choose": {
+      "model": "claude-dev",
+      "max_input_tokens": 12000,
+      "max_output_tokens": 600
     }
   }
 }

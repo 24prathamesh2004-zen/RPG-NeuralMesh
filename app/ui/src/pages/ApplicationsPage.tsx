@@ -26,7 +26,7 @@ export default function ApplicationsPage() {
   return (
     <div className="mesh-data-page">
       <header className="mesh-page-heading">
-        <div><div className="mesh-eyebrow">Connected applications</div><h1>Applications</h1><p>Each application brings its own vocabulary and asks for context through the same tools. It never holds another company's documents or the sharing rules.</p></div>
+        <div><div className="mesh-eyebrow">Connected applications</div><h1>Applications</h1><p>Each application has its own list of terms and asks the mesh for context in the same way. It never keeps the documents of a company or the sharing rules.</p></div>
         <button type="button" className="mesh-outline-action" onClick={() => void load()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh</button>
       </header>
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
@@ -42,7 +42,7 @@ export default function ApplicationsPage() {
             <h3>Tools it calls</h3>
             <div className="app-tools">{app.tools.map((t) => <code key={t}>{t}</code>)}</div>
             <h3>What it loaded</h3>
-            <p className="app-loaded">{app.loaded.entities} entities and {app.loaded.links} links from {app.loaded.sources.length} source{app.loaded.sources.length === 1 ? '' : 's'}{app.loaded.warnings > 0 && `, ${app.loaded.warnings} unresolved references`}</p>
+            <p className="app-loaded">{app.loaded.entities} entities and {app.loaded.links} links from {app.loaded.sources.length} source{app.loaded.sources.length === 1 ? '' : 's'}{app.loaded.warnings > 0 && `, ${app.loaded.warnings} ${app.loaded.warnings === 1 ? 'link' : 'links'} whose other end is not loaded yet`}</p>
             {app.loaded.sources.length > 0 && <ul className="app-sources">{app.loaded.sources.map((s) => <li key={s}><code>{s}</code></li>)}</ul>}
             {app.imports && <>
               <h3>Packs it sends</h3>

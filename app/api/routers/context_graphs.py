@@ -67,9 +67,22 @@ async def _body(request: Request) -> Any:
 
 
 async def _shown(graph_id: str, user: dict) -> dict[str, Any]:
+    """The graph as a record the query functions read: an ingested graph from its file, or a graph made by Upload
+    input, put into the same shape from what the caller may see (uploads.as_graph_record)."""
     company, roles = _person(user)
     try:
         return await asyncio.to_thread(ingested.shown, graph_id, company, roles)  # the file is read off the event loop
+    except KeyError:
+        pass
+    if ingested.GRAPH_ID.fullmatch(graph_id or ""):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_SHOWN)
+    corrected = next((r for r in await asyncio.to_thread(ingested.records) if r.get("corrects") == graph_id and ingested.may_see(r, company, roles)), None)
+    if corrected:  # the drawing a person loaded for this uploaded graph stands in its place
+        return corrected
+    try:
+        from api.routers.mesh import runtime
+        rt = await asyncio.to_thread(runtime)
+        return await asyncio.to_thread(uploads.as_graph_record, rt, graph_id, company, roles)
     except KeyError:
         raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_SHOWN) from None
 
@@ -92,15 +105,66 @@ async def ingest(request: Request, check: bool = False, user: dict = Depends(req
 
 
 @router.get("")
-async def graphs(user: dict = Depends(require_user)) -> dict:
+async def graphs(uploaded: bool = False, user: dict = Depends(require_user)) -> dict:
+    """The graphs ingested as JSON that the caller may see. With uploaded=true also the graphs made by Upload input, in
+    "uploaded": id, name, description, inputs and the same three addresses."""
     company, roles = _person(user)
-    return {"graphs": await asyncio.to_thread(ingested.visible, company, roles)}
+    out: dict[str, Any] = {"graphs": await asyncio.to_thread(ingested.visible, company, roles)}
+    if uploaded:
+        from api.routers.mesh import runtime
+        from services import graph_describe
+        rt = await asyncio.to_thread(runtime)
+        found = await asyncio.to_thread(graph_describe._uploaded, rt, company, roles)
+        out["uploaded"] = [{"id": g["id"], "name": g["name"], "description": g["description"], "companies": g["nodes"], "endpoints": ingested.endpoints(g["id"])}
+                           for g in sorted(found, key=lambda g: g["name"].casefold())]
+    return out
 
 
 @router.get("/sample")
 async def sample(user: dict = Depends(require_user)) -> dict:
     """A small invented graph in the format, for the caller's company."""
     return ingested.sample(str(user.get("company", "")))
+
+
+@router.post("/query")
+async def query_any(request: Request, user: dict = Depends(require_user)) -> dict:
+    """A question with no graph id: {"question": "..."}. The model reads the question with the graphs the caller may
+    see (services.graph_describe.choose) and decides what is meant and which graph holds the answer. A clear question
+    is answered from that graph, as the model understood it, and the reply names the graph and why. A question that is
+    too short, unclear or about nothing the graphs hold gets no answer: the reply gives up to three full questions the
+    caller could ask instead. The other kinds of query need a graph id."""
+    body = await _body(request)
+    question = body.get("question") if isinstance(body, dict) else None
+    if not isinstance(question, str) or not question.strip():
+        raise HTTPException(UNPROCESSABLE, 'Send {"question": "..."}. To ask one graph, use /context-graphs/{graph_id}/query.')
+    if len(question) > ingested.QUESTION_MAX:
+        raise HTTPException(UNPROCESSABLE, f"A question has at most {ingested.QUESTION_MAX:,} characters.")
+    from api.routers.mesh import runtime
+    from services import graph_describe
+    from services.context.pii import strip_contact_details
+    from services.mesh_runtime import _backend
+    question, _ = strip_contact_details(" ".join(question.split()))
+    company, roles = _person(user)
+    rt = await asyncio.to_thread(runtime)
+    backend = await asyncio.to_thread(_backend)
+    result = await asyncio.to_thread(graph_describe.choose, rt, question, set(), company, roles, graph_describe.model_caller(backend, get_settings().app_env))
+    head = {"question": question, "intent": result["intent"], "understood_as": result["understood_as"], "chosen_by": result["by"], "why": result["reason"],
+            "also_close": [{"id": g["id"], "name": g["name"]} for g in result["close"][:3]]}
+    if not result["chosen"]:
+        note = {"unclear": "The question is too short or unclear to answer well. Ask one of the suggested questions, or say more.",
+                "off_topic": "None of the context graphs you may see is about this question.",
+                "greeting": "Ask a question about the context graphs you may see.",
+                }.get(result["intent"], f"No graph was chosen: {result['reason']}." if result["reason"] else "No graph was chosen.")
+        if result["intent"] == "clear":
+            note = "None of the context graphs you may see holds the answer to this question."
+        return {**head, "graph": None, "suggestions": result["suggestions"], "answer": None, "answer_note": note}
+    first = result["chosen"][0]
+    record = await _shown(first["id"], user)
+    await asyncio.to_thread(audit, {"event": "context_graph_query", "graph_id": record["id"], "graph_company": record["company"], "kind": "question_any_graph",
+                                    "chosen_by": result["by"], "caller_company": str(user.get("company", "")), "caller_sub": str(user.get("sub", ""))})
+    answer = await asyncio.to_thread(ingested.ask, record, result["understood_as"], app_env=get_settings().app_env, backend_factory=_backend)
+    return {**head, "graph": {"id": record["id"], "name": record["name"], "company": record["company"], "company_name": ingested.company_name(record["company"])},
+            "also_chosen": [{"id": g["id"], "name": g["name"]} for g in result["chosen"][1:]], "suggestions": [], **{k: v for k, v in answer.items() if k != "question"}}
 
 
 @router.get("/{graph_id}")

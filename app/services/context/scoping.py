@@ -9,6 +9,7 @@ from contracts.evidence import EvidenceRecord
 from services.context import prompts
 
 TOP_DOCUMENTS = 12
+KEEP_AT_LEAST = 6  # documents a re-rank leaves in the evidence at least, the best ranked first
 TEXTS_PER_DOCUMENT = 3
 
 

@@ -48,8 +48,8 @@ from services.mesh_graph import _phrase_in, norm_tokens
 from shared.registry import company_nodes, is_shared, node as registered_node, node_ids
 
 APP_ROOT = Path(__file__).resolve().parents[1]
-PROMPT_FILE = APP_ROOT / "config" / "prompts" / "graph_answer_v1.txt"
-PROMPT_VERSION = "graph_answer_v1"
+PROMPT_FILE = APP_ROOT / "config" / "prompts" / "graph_answer_v2.txt"
+PROMPT_VERSION = "graph_answer_v2"
 LOG_FILE = "ingest_log.jsonl"
 GRAPH_ID = re.compile(r"cg-[0-9a-f]{8}")
 SENSITIVITIES = ("Public", "Internal", "Confidential", "Restricted")
@@ -79,7 +79,7 @@ EDGE_KEYS = frozenset({"id", "type", "source", "target", "from", "to", "properti
 TOP_KEYS = frozenset({"graph", "graph_id", "company", "companies", "description", "sensitivity", "sharing", "synthetic",
                       "nodes", "edges", "relationships", "documents"})
 EMAIL = re.compile(r"[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,8}")  # bounded, so a long text without an @ costs little
-CITATION = re.compile(r"\[\s*([NE]\d+(?:\s*,\s*[NE]\d+)*)\s*\]")
+CITATION = re.compile(r"\[\s*([NEP]\d+(?:\s*,\s*[NEP]\d+)*)\s*\]")
 STOPWORDS = frozenset("a an the of to for in on at by with and or is are was were be been do doe does did which what who whom whose "
                       "how many much when where why this that these those it its their them they there from into about any all "
                       "list show give tell me us our we you your can could should would will has have had not no".split())
@@ -239,7 +239,7 @@ def parse(data: Any) -> tuple[dict[str, Any], dict[str, list[str]]]:
     raw = data.get("synthetic")
     synthetic = False
     if raw is None:
-        defaults.append("synthetic: false, so the data is treated as real and no cloud model reads it")
+        defaults.append("synthetic: false, so the data is treated as real")
     elif isinstance(raw, bool):
         synthetic = raw
     else:
@@ -1055,6 +1055,12 @@ def retrieve(record: dict[str, Any], question: str) -> dict[str, Any]:
     if not scored and types_named:
         typed = [n for n in record["nodes"] if n["type"] in types_named][:CONTEXT_NODES]
         scored = {n["id"]: (0.75, "type") for n in typed}
+    near_ids, near_edges = by_meaning(record, question)
+    for i in near_ids:
+        scored.setdefault(i, (1.0, "meaning"))
+    for e in near_edges:  # an edge close in meaning brings its two ends
+        for end in (e["source"], e["target"]):
+            scored.setdefault(end, (0.9, "meaning"))
     if not scored:
         return {"matched": [], "nodes": [], "edges": []}
 
@@ -1076,6 +1082,88 @@ def retrieve(record: dict[str, Any], question: str) -> dict[str, Any]:
             "nodes": nodes, "edges": [{"ref": f"E{k}", **_edge_out(e, by_id)} for k, e in enumerate(edges, 1)]}
 
 
+MEANING_NODE_MIN = 0.40  # cosine from which a node or an edge answers a question by meaning
+MEANING_NODES = 10
+MEANING_EDGES = 15
+PASSAGE_CHARS = 700  # characters in one passage of a document
+PASSAGES = 4  # passages given to the answer model
+PASSAGE_MIN = 0.30
+_vec_cache: dict[str, Any] = {}
+
+
+def _vectors(key: str, texts: list[str]):
+    """The vectors of texts, kept in memory under a key made from their content, so a graph or a document is embedded once."""
+    from knowledge import embedder
+    k = hashlib.sha256((key + "\x00" + "\x00".join(texts)).encode()).hexdigest()
+    if k not in _vec_cache:
+        if len(_vec_cache) > 64:
+            _vec_cache.clear()
+        _vec_cache[k] = embedder.embed(texts)
+    return _vec_cache[k]
+
+
+def by_meaning(record: dict[str, Any], question: str) -> tuple[list[str], list[dict[str, Any]]]:
+    """(node ids, edges) of the graph closest in meaning to the question, for a question whose words are not the names
+    of the graph: "Where is a hardware repair raised?" finds "Hardware Repair Ticket RAISED_ON IS Service Desk". Empty
+    when the vectors cannot be made."""
+    try:
+        from knowledge import embedder
+        by_id = {n["id"]: n for n in record["nodes"]}
+        nodes = record["nodes"]
+        edges = [e for e in record["edges"] if e["source"] in by_id and e["target"] in by_id]
+        q = embedder.embed([question])[0]
+        node_vec = _vectors(f'n:{record["id"]}', [f'{n["name"]} ({n["type"]})' for n in nodes])
+        edge_vec = _vectors(f'e:{record["id"]}', [f'{by_id[e["source"]]["name"]} {e["type"].lower().replace("_", " ")} {by_id[e["target"]]["name"]}. '
+                                                  f'{(e.get("properties") or {}).get("evidence", "")}' for e in edges])
+    except Exception:  # noqa: BLE001 - no vectors: the names alone decide
+        return [], []
+    node_score = node_vec @ q if len(nodes) else []
+    edge_score = edge_vec @ q if len(edges) else []
+    top_nodes = [nodes[i]["id"] for i in sorted(range(len(nodes)), key=lambda i: -node_score[i])[:MEANING_NODES] if node_score[i] >= MEANING_NODE_MIN]
+    top_edges = [edges[i] for i in sorted(range(len(edges)), key=lambda i: -edge_score[i])[:MEANING_EDGES] if edge_score[i] >= MEANING_NODE_MIN]
+    return top_nodes, top_edges
+
+
+def passages(record: dict[str, Any], question: str) -> list[dict[str, Any]]:
+    """The parts of the documents behind the graph closest in meaning to the question, when the caller may read their
+    text (record["_texts"], set by uploads.as_graph_record). Each part is up to PASSAGE_CHARS characters, cut at sentence
+    ends."""
+    texts = record.get("_texts") or []
+    if not texts:
+        return []
+    chunks = []
+    for t in texts:
+        current = ""
+        for sentence in re.split(r"(?<=[.!?])\s+|\n{2,}", t["text"]):
+            sentence = " ".join(sentence.split())
+            if not sentence:
+                continue
+            if current and len(current) + len(sentence) + 1 > PASSAGE_CHARS:
+                chunks.append((t, current))
+                current = ""
+            current = f"{current} {sentence}".strip()[:PASSAGE_CHARS]
+        if current:
+            chunks.append((t, current))
+    if not chunks:
+        return []
+    try:
+        from knowledge import embedder
+        q = embedder.embed([question])[0]
+        vec = _vectors(f'p:{record["id"]}', [c for _, c in chunks])
+    except Exception:  # noqa: BLE001
+        return []
+    score = vec @ q
+    words = set(_content(norm_tokens(question)))
+    ranked = sorted(range(len(chunks)), key=lambda i: -(float(score[i]) + 0.05 * len(words & set(norm_tokens(chunks[i][1])))))
+    out = []
+    for i in ranked[:PASSAGES]:
+        if float(score[i]) < PASSAGE_MIN:
+            continue
+        t, text = chunks[i]
+        out.append({"ref": f"P{len(out) + 1}", "document": t["doc"], "title": t["title"], "text": text})
+    return out
+
+
 def _one_line(value: Any, limit: int) -> str:
     """Any text of the graph as one line, so it can never start a line of its own in the prompt."""
     return " ".join(str(value).split())[:limit]
@@ -1089,7 +1177,7 @@ def _properties_text(props: dict[str, Any]) -> str:
     return ". ".join(parts)
 
 
-def prompt(question: str, nodes: list[dict[str, Any]], edges: list[dict[str, Any]]) -> tuple[str, str]:
+def prompt(question: str, nodes: list[dict[str, Any]], edges: list[dict[str, Any]], passages: list[dict[str, Any]] = ()) -> tuple[str, str]:
     system = PROMPT_FILE.read_text(encoding="utf-8").strip()
     lines = [f"Question: {_one_line(question, QUESTION_MAX)}", "", "<graph_data>", "Nodes:"]
     for n in nodes:
@@ -1099,8 +1187,22 @@ def prompt(question: str, nodes: list[dict[str, Any]], edges: list[dict[str, Any
     for e in edges:
         props = _properties_text(e["properties"])
         lines.append(f'{e["ref"]} {_one_line(e["text"], 2 * TEXT_MAX + TYPE_MAX + 2)}{". " + props if props else ""}')
+    if passages:
+        lines += ["", "Passages:"]
+        lines += [f'{p["ref"]} ({_one_line(p["title"], TEXT_MAX)}) {_one_line(p["text"], PASSAGE_CHARS)}' for p in passages]
     lines.append("</graph_data>")
     return system, "\n".join(lines)
+
+
+def plain(text: str | None) -> str:
+    """A model answer as plain sentences: list marks, bold and heading marks taken off, one paragraph."""
+    lines = []
+    for line in (text or "").splitlines():
+        line = re.sub(r"^\s*(?:[-*•]|\d+[.)])\s+", "", line)  # a list mark at the start of a line
+        line = line.replace("**", "").replace("__", "").lstrip("#").strip()
+        if line:
+            lines.append(line if line.endswith((".", "!", "?", ":", "]")) else line)
+    return " ".join(lines)
 
 
 def checked_answer(text: str, refs: set[str]) -> tuple[str | None, int]:
@@ -1146,8 +1248,9 @@ def ask(record: dict[str, Any], question: str, *, app_env: str, backend: Any = N
 
     question, _ = strip_contact_details(" ".join(question.split())[:QUESTION_MAX])
     found = retrieve(record, question)
-    out: dict[str, Any] = {"question": question, **found, "answer": None, "answer_note": None}
-    if not found["nodes"]:
+    texts = passages(record, question)
+    out: dict[str, Any] = {"question": question, **found, "passages": [{k: p[k] for k in ("ref", "document", "title")} for p in texts], "answer": None, "answer_note": None}
+    if not found["nodes"] and not texts:
         out["answer_note"] = "Nothing in the graph matches the question. Name a node, another name or a type of the graph."
         return out
     choice = model_policy.choice_for("answer")
@@ -1157,11 +1260,16 @@ def ask(record: dict[str, Any], question: str, *, app_env: str, backend: Any = N
         if backend is None:
             out["answer_note"] = "No answer model is configured, so the nodes and edges are the answer."
             return out
-    system, user_text = prompt(question, found["nodes"], found["edges"])
+    system, user_text = prompt(question, found["nodes"], found["edges"], texts)
     edges = list(found["edges"])
-    while model_policy.estimate_tokens(system + user_text) > choice.max_input_tokens and len(edges) > 1:
-        edges = edges[:-1]
-        system, user_text = prompt(question, found["nodes"], edges)
+    while model_policy.estimate_tokens(system + user_text) > choice.max_input_tokens and (len(edges) > 1 or texts):
+        if len(texts) > 1:
+            texts = texts[:-1]
+        elif len(edges) > 1:
+            edges = edges[:-1]
+        else:
+            texts = []
+        system, user_text = prompt(question, found["nodes"], edges, texts)
     calls: list[dict[str, Any]] = []
     call = make_caller(backend, app_env=app_env, trace_id=uuid.uuid4().hex, sensitivities={record["sensitivity"]},
                        all_synthetic=bool(record["synthetic"]), calls=calls)
@@ -1172,8 +1280,8 @@ def ask(record: dict[str, Any], question: str, *, app_env: str, backend: Any = N
     if text is None:
         out["answer_note"] = "The answer model did not answer, so the nodes and edges are the answer."
         return out
-    refs = {n["ref"] for n in found["nodes"]} | {e["ref"] for e in edges}
-    answer, dropped = checked_answer(text, refs)
+    refs = {n["ref"] for n in found["nodes"]} | {e["ref"] for e in edges} | {p["ref"] for p in texts}
+    answer, dropped = checked_answer(plain(text), refs)
     out["answer"] = answer
     if answer is None:
         out["answer_note"] = "The answer of the model cited no node or edge, so it is not shown. The nodes and edges are the answer."

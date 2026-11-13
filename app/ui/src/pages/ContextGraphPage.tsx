@@ -1,10 +1,10 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Braces, Download, FilePlus2, FileUp, FolderUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
+import { Braces, Check, Copy, Download, FilePlus2, FileUp, FolderUp, LoaderCircle, Pencil, RefreshCw, Upload, X, Search, Trash2, Waypoints } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
 import MeshGraphExplorer, { TYPE_COLOURS } from '../components/MeshGraphExplorer'
-import { addUpload, addUploads, checkGraph, checkUploads, clearContextGraph, decideLink, downloadContextGraph, dropContextGraph, dropIngestedGraph, getContextGraph, getGraphEntity, getIngestedGraph, getIngestedGraphs, getIngestedGraphView, getIngestSample, getMeshNodes, getGraphTemplate, getUploadItems, getUploads, ingestGraph, removeUpload, renderJsonTemplate, searchGraph, suggestUpload } from '../services/api'
-import type { BatchPlan, BatchResult, CompanyId, ContextGraphSummary, QualityNote, ExportFormat, UploadSuggestion, ContextGraphView, GraphEntity, GraphSearchResult, IngestedGraphSummary, IngestRefusal, IngestResult, MeshNodeInfo, NewItemArea, UploadItem, UploadRecord } from '../services/api'
+import { addUpload, addUploads, checkGraph, checkUploads, clearContextGraph, decideLink, describeGraph, downloadContextGraph, dropContextGraph, dropIngestedGraph, getContextGraph, getGraphEntity, getIngestedGraph, getIngestedGraphs, getIngestedGraphView, getIngestSample, getMeshNodes, getGraphTemplate, getUploadItems, getUploads, ingestGraph, keepInput, removeUpload, renderJsonTemplate, searchGraph, suggestUpload } from '../services/api'
+import type { BatchPlan, BatchResult, CompanyId, ContextGraphSummary, GraphDescription, ExportFormat, UploadSuggestion, ContextGraphView, GraphEntity, GraphSearchResult, IngestedGraphSummary, IngestRefusal, IngestResult, MeshNodeInfo, NewItemArea, UploadItem, UploadRecord } from '../services/api'
 import { formatDateTime, linkWords, sharingWords, typeWords } from '../lib/format'
 
 type Tab = 'inputs' | 'upload'
@@ -17,7 +17,7 @@ const NEW_ITEM = 'new' // the value of the Catalogue item choice that names a ne
 const MATCH_WORDS: Record<string, string> = { phrase: 'named in the text', words: 'all its words in the text', tag: 'from a tag' }
 const FORMAT_WORDS: Record<string, string> = { json: 'Structured JSON', graphml: 'GraphML (for graph tools)', csv: 'CSV (one row per entity and link)', pack: 'Knowledge pack (the documents)' }
 const NEW_GRAPH = 'new' // the context graph choice that opens a new graph with the name typed
-const REVEAL_ALL_UP_TO = 80 // entities drawn at once. A larger context graph opens from its companies and items, as the mesh graph does
+const REVEAL_ALL_UP_TO = 40 // entities drawn at once. A larger context graph opens from its companies and items, as the mesh graph does
 const START_MOST_LINKED = 15 // a larger ingested graph opens from its most linked nodes, since its types are the person's own
 const SEARCH_MIN = 2 // letters typed before the graph is searched as well as the list
 const SEARCH_PAUSE_MS = 400 // the pause in typing after which the graph is searched, so not every letter asks the server
@@ -48,6 +48,20 @@ const isGraphJson = (text: string) => {
 }
 const fileNameOf = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'graph'
 // the three most linked nodes and their neighbours, up to START_MOST_LINKED, so the first drawing shows links
+// what a larger uploaded graph opens with: its company, item, inputs and topics, and the things most linked in it. The
+// rest opens with Show all, or by a double-click on a point
+const KEY_THINGS = 12
+const STATEMENT_KINDS = ['Decision', 'Action', 'Risk'] // what the inputs state: listed under each input, drawn when their chip is pressed
+const hiddenKinds = (view: ContextGraphView) => (view.nodes.length > REVEAL_ALL_UP_TO ? STATEMENT_KINDS : [])
+const STRUCTURE = new Set(['Subsidiary', 'Datapoint', 'Document', 'Concept'])
+const keyPoints = (view: ContextGraphView) => {
+  const degree = new Map<string, number>()
+  for (const e of view.edges) for (const end of [e.source, e.target]) degree.set(end, (degree.get(end) ?? 0) + 1)
+  const things = view.nodes.filter((n) => !STRUCTURE.has(n.type) && (degree.get(n.id) ?? 0) >= 3)
+    .sort((a, b) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0)).slice(0, KEY_THINGS)
+  return [...view.nodes.filter((n) => STRUCTURE.has(n.type)).map((n) => n.id), ...things.map((n) => n.id)]
+}
+
 const mostLinked = (view: ContextGraphView) => {
   const degree = new Map<string, number>()
   const near = new Map<string, string[]>()
@@ -118,7 +132,11 @@ type Row = { kind: 'upload'; graph: ContextGraphSummary; hits: UploadRecord[]; a
 function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focus, onFocusUsed, onChanged, onAddTo }: { uploads: UploadRecord[]; graphs: ContextGraphSummary[]; ingested: IngestedGraphSummary[]; loading: boolean; isAdmin: boolean; company: string; focus: Focus | null; onFocusUsed: () => void; onChanged: () => void; onAddTo: (graphId: string) => void }) {
   const [q, setQ] = useState('')
   const [graphId, setGraphId] = useState<string | null>(null)
-  const [docId, setDocId] = useState<string | null>(null)
+  const [openDocs, setOpenDocs] = useState<string[]>([]) // the inputs whose details are open, the last one opened at the end
+  const [pane, setPane] = useState<'inputs' | 'graph' | 'use'>('inputs') // the part of the chosen graph that shows: its inputs, its drawing or how an application uses it
+  const docId = openDocs[openDocs.length - 1] ?? null
+  const setDocId = (id: string | null) => { setOpenDocs(id ? [id] : []); if (id) setPane('inputs') }
+  const toggleDoc = (id: string) => setOpenDocs((open) => (open.includes(id) ? open.filter((x) => x !== id) : [...open, id])) // the others stay open, to compare
   const [loadedView, setView] = useState<ContextGraphView | null>(null)
   const [viewError, setViewError] = useState('')
   const [format, setFormat] = useState('json') // the JSON file in the standard JSON structure, the same file Upload input gives
@@ -169,7 +187,7 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
       .catch((reason) => { if (!stale) setViewError(detail(reason, 'The context graph could not be read.')) })
     return () => { stale = true }
   }, [graphId, uploads, emptied, keptKey])
-  const start = useMemo(() => (kept && view ? mostLinked(view) : undefined), [kept, view])
+  const start = useMemo(() => (!view ? undefined : kept ? mostLinked(view) : keyPoints(view)), [kept, view])
   useEffect(() => { // the one search box also searches the graph, once the typing stops
     const query = q.trim()
     setSearchError('')
@@ -272,12 +290,17 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
     clearContextGraph(graph.id).then(() => { setDocId(null); setGraphId(nextAfter(graph.id)); onChanged() })
       .catch((reason) => setActionError(detail(reason, 'The graph was not removed from the list.'))).finally(() => setBusy(false))
   }
-  const remove = () => {
-    if (!current) return
+  const reviewOf = (docId: string) => view?.review?.find((r) => r.document === docId)?.reason ?? ''
+  const keep = (u: UploadRecord) => {
+    setBusy(true)
+    setActionError('')
+    keepInput(u.document.id).then(() => onChanged()).catch((reason) => setActionError(detail(reason, 'The input was not kept.'))).finally(() => setBusy(false))
+  }
+  const remove = (current: UploadRecord) => {
     if (!window.confirm(`Remove "${current.document.title}" from the pack, the index and the graph? The upload record stays, marked removed.`)) return
     setBusy(true)
     setActionError('')
-    removeUpload(current.document.id).then(() => onChanged()).catch((reason) => setActionError(detail(reason, 'The document was not removed.'))).finally(() => setBusy(false))
+    removeUpload(current.document.id).then(() => { setOpenDocs((open) => open.filter((x) => x !== current.document.id)); onChanged() }).catch((reason) => setActionError(detail(reason, 'The document was not removed.'))).finally(() => setBusy(false))
   }
 
   const nothing = !uploads.length && !ingested.length
@@ -308,7 +331,7 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
         {q.trim() && !rows.length && !more.length && !searching && !searchError && <div className="ask-empty-results">Nothing matches {q}.</div>}
         {searchError && <div role="alert" className="mesh-alert error">{searchError}</div>}
         {more.length > 0 && <div className="mesh-eyebrow" id="context-more">More in the graph</div>}
-        {more.length > 0 && shownFound?.byVector && <p className="mesh-panel-footnote">No name matched the words, so these are the closest concepts by meaning.</p>}
+        {more.length > 0 && shownFound?.byVector && <p className="mesh-panel-footnote">No name matched your words. These entries are the closest in meaning.</p>}
         {more.length > 0 && <div role="list" aria-labelledby="context-more" className="context-upload-list">
           {more.map((r) => (
             <button type="button" role="listitem" key={r.id} className={`context-upload-row ${entity?.id === r.id ? 'active' : ''}`} onClick={() => openEntity(r.id)}>
@@ -331,56 +354,81 @@ function UploadsTab({ uploads, graphs, ingested, loading, isAdmin, company, focu
               {graph.inputs === 0 && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={clear} aria-label="Remove from the list">{busy ? <LoaderCircle size={14} className="animate-spin" /> : <Trash2 size={14} />}Remove from the list</button>}
               {graph.inputs > 0 && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={drop}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : <Trash2 size={14} />}Drop graph</button>}
             </div>}</div>
-          <div className="context-inputs" role="list" aria-label="Inputs of the context graph">
+          {view?.description && <GraphDescriptionBlock key={graph.id} graphId={graph.id} description={view.description} onSaved={onChanged} />}
+          <div className="mesh-tabs" role="tablist" aria-label="Parts of the context graph">
+            <button type="button" role="tab" aria-selected={pane === 'inputs'} className={pane === 'inputs' ? 'active' : ''} onClick={() => setPane('inputs')}>Inputs <span>{inputs.length}</span></button>
+            <button type="button" role="tab" aria-selected={pane === 'graph'} className={pane === 'graph' ? 'active' : ''} onClick={() => setPane('graph')}><Waypoints size={15} />Graph</button>
+            <button type="button" role="tab" aria-selected={pane === 'use'} className={pane === 'use' ? 'active' : ''} onClick={() => setPane('use')}><Braces size={15} />Use this graph</button>
+          </div>
+          {pane === 'use' && <UseGraph graphId={graph.id} />}
+          {pane === 'inputs' && <div className="context-inputs" role="list" aria-label="Inputs of the context graph">
             {inputs.map((u) => (
               <Fragment key={u.document.id}>
-                <button type="button" role="listitem" className={`context-upload-row ${u.document.id === docId ? 'active' : ''}`} aria-expanded={u.document.id === docId} onClick={() => setDocId(u.document.id === docId ? null : u.document.id)}>
+                <button type="button" role="listitem" className={`context-upload-row ${openDocs.includes(u.document.id) ? 'active' : ''}`} aria-expanded={openDocs.includes(u.document.id)} onClick={() => toggleDoc(u.document.id)}>
                   <strong>{u.document.title}</strong>
                   <small>{companyOf(u)} · {itemOf(u)} · {kindOf(u)}</small>
-                  <small>{u.upload.file} · {formatDateTime(u.upload.at)} · {statusOf(u)}</small>
+                  <small>{u.upload.file} · {formatDateTime(u.upload.at)} · {statusOf(u)}{reviewOf(u.document.id) ? ' · To review' : ''}</small>
                 </button>
-                {current && u.document.id === docId && <div className="context-input-detail">{/* the details open under the input chosen, not below the whole list */}
+                {openDocs.includes(u.document.id) && <div className="context-input-detail">
+            {reviewOf(u.document.id) && <div className="mesh-alert note context-review">
+              <span>{reviewOf(u.document.id)} Keep it if it belongs here, or remove it.</span>
+              {(isAdmin || u.node_id === company) && <button type="button" className="mesh-outline-action" disabled={busy} onClick={() => keep(u)}>Keep in this graph</button>}
+            </div>}{/* the details open under their input and stay open until it is pressed again */}
 
-            <div className="mesh-section-heading" style={{ marginBottom: 0 }}><div><div className="mesh-eyebrow">{companyOf(current)}</div><h2>{current.document.title}</h2></div><span className={`mesh-result-state ${current.in_graph ? 'success' : 'warning'}`}>{sharingWords(current.sharing, companyOf(current))}</span></div>
+            <div className="mesh-section-heading" style={{ marginBottom: 0 }}><div><div className="mesh-eyebrow">{companyOf(u)}</div><h2>{u.document.title}</h2></div><span className={`mesh-result-state ${u.in_graph ? 'success' : 'warning'}`}>{sharingWords(u.sharing, companyOf(u))}</span></div>
             <dl>
-              <dt>Document</dt><dd>{current.document.id}</dd>
-              <dt>Catalogue item</dt><dd>{current.sharing.item_title ?? current.document.datapoint}</dd>
-              <dt>Kind</dt><dd>{kindOf(current)} · version {current.document.version}</dd>
-              <dt>File</dt><dd>{current.upload.file} · {current.upload.format} · {current.upload.chars.toLocaleString()} characters of text</dd>
-              <dt>Uploaded</dt><dd>{formatDateTime(current.upload.at)} by the {current.upload.by_role.toLowerCase()} of {current.upload.by_company_name ?? current.upload.by_company}</dd>
-              {current.document.tags.length > 0 && <><dt>Tags</dt><dd>{current.document.tags.join(', ')}</dd></>}
+              <dt>Document</dt><dd>{u.document.id}</dd>
+              <dt>Catalogue item</dt><dd>{u.sharing.item_title ?? u.document.datapoint}</dd>
+              <dt>Kind</dt><dd>{kindOf(u)} · version {u.document.version}</dd>
+              <dt>File</dt><dd>{u.upload.file} · {u.upload.format} · {u.upload.chars.toLocaleString()} characters of text</dd>
+              <dt>Uploaded</dt><dd>{formatDateTime(u.upload.at)} by the {u.upload.by_role.toLowerCase()} of {u.upload.by_company_name ?? u.upload.by_company}</dd>
+              {u.document.tags.length > 0 && <><dt>Tags</dt><dd>{u.document.tags.join(', ')}</dd></>}
+              {u.document.summary && <><dt>Start of the file</dt><dd>{startOf(u.document.summary)}</dd></>}
+              <dt>Who can read it</dt><dd>{readersOf(u.sharing, companyOf(u))}</dd>
             </dl>
-            {view && <FoundLinks view={view} docId={current.document.id} canDecide={isAdmin || current.node_id === company} onDecided={onChanged} />}
-            {current.document.summary && <p className="mesh-panel-footnote">{current.sharing.shared ? 'What every company may read, the first sentences of the file: ' : 'What the group may read under a summary item, the first sentences of the file: '}{current.document.summary}</p>}
+            {view && <FoundLinks view={view} docId={u.document.id} canDecide={isAdmin || u.node_id === company} onDecided={onChanged} />}
+            {isAdmin && u.status !== 'removed' && <div style={{ display: 'flex', justifyContent: 'flex-end' }}><button type="button" className="mesh-outline-action danger" disabled={busy} onClick={() => remove(u)}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : null}Remove this input</button></div>}
           
                 </div>}
               </Fragment>
             ))}
-          </div>
+          </div>}
           <div className="context-download">
             {!correction && <>
             <label htmlFor="context-format" className="mesh-panel-footnote" style={{ margin: 0 }}>Download this context graph as</label>
             <select id="context-format" value={format} onChange={(event) => setFormat(event.target.value)}>{Object.keys(FORMAT_WORDS).map((f) => <option key={f} value={f}>{FORMAT_WORDS[f]}</option>)}</select>
             <button type="button" className="mesh-outline-action" onClick={() => void download()} disabled={!view}><Download size={14} />Download</button>
             </>}
-            {isAdmin && current && current.status !== 'removed' && <button type="button" className="mesh-outline-action danger" disabled={busy} onClick={remove}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : null}Remove this input</button>}
           </div>
           {actionError && <div role="alert" className="mesh-alert error">{actionError}</div>}
         </section>}
-        {kept && <IngestedPanel key={kept.id} graph={kept} onDropped={() => { if (kept !== correction) setGraphId(nextAfter(kept.id)); onChanged() }} />}
-        {(graph || kept) && <section className="mesh-section-panel" aria-label="Graph of the inputs">
+        {kept && (!graph || pane === 'graph') && <IngestedPanel key={kept.id} graph={kept} onDropped={() => { if (kept !== correction) setGraphId(nextAfter(kept.id)); onChanged() }} />}
+        {(graph ? pane === 'graph' : Boolean(kept)) && <section className="mesh-section-panel" aria-label="Graph of the inputs">
           <div className="mesh-section-heading"><div><div className="mesh-eyebrow">Context graph</div><h2>{kept ? 'Nodes and edges' : 'What these inputs are linked to'}</h2></div>{view && <small className="mesh-panel-footnote" style={{ margin: 0 }}>{kept ? `${view.nodes.length} ${view.nodes.length === 1 ? 'node' : 'nodes'} · ${view.edges.length} ${view.edges.length === 1 ? 'edge' : 'edges'}` : `${view.documents.length} ${view.documents.length === 1 ? 'input' : 'inputs'} · ${view.nodes.length} entities · ${view.edges.length} links`}</small>}</div>
           {viewError && <div className="mesh-alert error">{viewError}</div>}
-          {view?.quality && <QualityNotes notes={view.quality} />}
           {emptied && <div className="ask-empty-results">Every input of this context graph was removed. The records stay in the list.</div>}
           {!view && !viewError && !emptied && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Loading the context graph</div>}
-          {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(kept)} />}
+          {view && <MeshGraphExplorer key={view.id} graph={view} revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(kept)} hideAtStart={kept ? [] : hiddenKinds(view)} />}
           {view && !kept && <div className="context-concepts" aria-label="Linked entities">{view.nodes.filter((n) => !view.documents.includes(n.id)).map((n) => <span key={n.id} title={n.type}>{typeWords(n.type)}: {n.label}{current?.concept_matches?.[n.id] ? ` (${MATCH_WORDS[current.concept_matches[n.id]]})` : ''}</span>)}</div>}
         </section>}
         </>}
       </div>
     </div>
   )
+}
+
+// the first lines of a file as kept in its record. A transcript repeats the speaker ("Asha: Asha: ..."), said once here
+const startOf = (text: string) => text.replace(/([^\s:][^:\n]{1,40}):\s+\1:/g, '$1:')
+// who can read the first lines of an input, by the sharing rule of its catalogue item
+const readersOf = (rule: UploadRecord['sharing'], company: string) => {
+  if (rule.shared) return 'Every connected company can read the full file.'
+  if (rule.never_leave) return `Only ${company}. Other companies see nothing of this file.`
+  switch (String(rule.ceiling ?? '').toUpperCase()) {
+    case 'MD': return `Other companies see the title only. The text stays in ${company}.`
+    case 'SUM': return `Other companies can read these first lines. The full file stays in ${company}.`
+    case 'RAG': return 'Other companies can read the full file.'
+    default: return `${company}.`
+  }
 }
 
 // why a file fits a graph, said with the concepts both name. The reason text of the model is not shown: it is free text
@@ -453,6 +501,11 @@ function BatchOutcome({ result, onOpen }: { result: BatchResult; onOpen: (graphI
       </div>}
       {graph && <>
         <div className="mesh-section-heading" style={{ marginBottom: 0 }}><div><div className="mesh-eyebrow">Context graph</div><h2>{graph.name}</h2></div></div>
+        {/* the drawing first, then the files that made it */}
+        {error && <div role="alert" className="mesh-alert error">{error}</div>}
+        {!view && !error && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Drawing the graph</div>}
+        {view && <MeshGraphExplorer key={view.id} graph={view} revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={keyPoints(view)} hideAtStart={hiddenKinds(view)} />}
+        <div className="mesh-eyebrow">Files added</div>
         <div className="context-inputs" role="list" aria-label="Files added">
           {files.map((r) => (
             <div role="listitem" key={r.document.id} className="context-upload-row">
@@ -465,10 +518,6 @@ function BatchOutcome({ result, onOpen }: { result: BatchResult; onOpen: (graphI
       {result.refused.length > 0 && <div className="context-ingest-outcome">Not kept<ul className="context-ingest-list">{result.refused.map((x) => <li key={x.path}>{x.path}: {x.reason}</li>)}</ul></div>}
       {result.new_item && <small className="mesh-panel-footnote">New catalogue item {result.new_item.code} · {result.new_item.title}</small>}
       {result.notes.map((n) => <small key={n} className="mesh-panel-footnote">{n}</small>)}
-      {view?.quality && <QualityNotes notes={view.quality} />}
-      {error && <div role="alert" className="mesh-alert error">{error}</div>}
-      {graph && !view && !error && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Drawing the graph</div>}
-      {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} />}
     </section>
   )
 }
@@ -487,7 +536,7 @@ function QuickCheck({ checked, onOpen }: { checked: Exclude<Checked, { kind: 'ba
     ask.then(({ data }) => { if (!stale) setView(data) }).catch((reason) => { if (!stale) setError(detail(reason, 'The graph could not be drawn.')) })
     return () => { stale = true }
   }, [checked, graphId])
-  const start = useMemo(() => (ingestedGraph && view ? mostLinked(view) : undefined), [ingestedGraph, view])
+  const start = useMemo(() => (!view ? undefined : ingestedGraph ? mostLinked(view) : keyPoints(view)), [ingestedGraph, view])
   const download = () => {
     setError('')
     const made = checked.kind === 'upload' ? renderJsonTemplate(graphId).then(({ data }) => data.output) : getIngestedGraph(graphId).then(({ data }) => data)
@@ -517,11 +566,10 @@ function QuickCheck({ checked, onOpen }: { checked: Exclude<Checked, { kind: 'ba
           <button type="button" className="mesh-primary-action" onClick={() => onOpen(ingestedGraph ? ingestedGraph.corrects ?? ingestedGraph.id : graphId)}><Waypoints size={15} />Open in Uploaded graphs</button>
         </div></div>
       {notes.filter(([, items]) => items.length > 0).map(([title, items]) => <div key={title} className="context-ingest-outcome">{title}<ul className="context-ingest-list">{items.map((item, i) => <li key={i}>{item}</li>)}</ul></div>)}
-      {view?.quality && <QualityNotes notes={view.quality} />}
       {ingestedGraph && <small className="mesh-panel-footnote">Applications query it with <code>POST {ingestedGraph.endpoints.query}</code></small>}
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
       {!view && !error && <div className="mesh-alert pending"><LoaderCircle size={15} className="animate-spin" />Drawing the graph</div>}
-      {view && <MeshGraphExplorer graph={view} proposedOff revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(ingestedGraph)} />}
+      {view && <MeshGraphExplorer key={view.id} graph={view} revealAll={view.nodes.length <= REVEAL_ALL_UP_TO} startIds={start} edgeLabels={Boolean(ingestedGraph)} hideAtStart={ingestedGraph ? [] : hiddenKinds(view)} />}
     </section>
   )
 }
@@ -972,7 +1020,7 @@ function IngestedPanel({ graph, onDropped }: { graph: IngestedGraphSummary; onDr
       <dl>
         <dt>Graph id</dt><dd>{graph.id}</dd>
         <dt>Sharing</dt><dd>{sharingOf(graph)} · {graph.sensitivity}</dd>
-        <dt>Data</dt><dd>{graph.synthetic ? 'Invented for testing' : 'Real data. No cloud model reads it'}</dd>
+        <dt>Data</dt><dd>{graph.synthetic ? 'Invented for testing' : 'Real data'}</dd>
         {graph.description && <><dt>Description</dt><dd>{graph.description}</dd></>}
         <dt>{graph.updated ? 'Replaced' : 'Ingested'}</dt><dd>{formatDateTime(stamp.at)} by the {stamp.by_role.toLowerCase()} of {stamp.by_company_name ?? stamp.by_company}</dd>
         <dt>Query</dt><dd><code>POST {graph.endpoints.query}</code></dd>
@@ -1073,18 +1121,26 @@ function IngestTab({ companyName, isAdmin, initialText, initialName, onChecked, 
 }
 
 // The points to look at in a graph: an input with no concept, a copy, a node with no edge, links waiting for review
-function QualityNotes({ notes }: { notes: QualityNote[] }) {
-  const shown = notes.filter((q) => q.level !== 'ok') // a graph with nothing to look at shows no note
-  if (!shown.length) return null
-  return <ul className="context-quality" aria-label="Graph quality">{shown.map((q, i) => <li key={i} className={q.level}>{q.text}</li>)}</ul>
-}
-
 // The links taken from the text of one input: each with its sentence, proposed until a mesh admin or the owning company decides
+// the state of a link found in the text, said by what settled it: a relation the sentence states, the two topics named
+// in full in several sentences, a person, or nobody yet
+const linkState = (e: ContextGraphView['edges'][number]) =>
+  e.settled_reason === 'relation' ? 'stated in the text'
+    : e.settled_reason === 'repeated' ? `named together in ${e.sentences ?? 2} sentences`
+      : e.settled_by === 'model' ? 'checked by the model'
+        : e.status === 'proposed' ? (e.priority === 'high' ? 'to review' : 'unsure, low priority')
+          : e.status === 'approved' ? 'approved by a person' : e.status
+
+// what an input states, by the link that carries it
+const STATED: Record<string, string> = { HAS_DECISION: 'Decision', HAS_ACTION: 'Action', HAS_RISK: 'Risk' }
+
 function FoundLinks({ view, docId, canDecide, onDecided }: { view: ContextGraphView; docId: string; canDecide: boolean; onDecided: () => void }) {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
-  const links = view.edges.filter((e) => e.by && e.document === docId)
-  if (!links.length) return null
+  const rank = (e: ContextGraphView['edges'][number]) => (e.status === 'proposed' && e.priority === 'high' ? 0 : e.status === 'proposed' ? 1 : 2)
+  const links = view.edges.filter((e) => e.by && e.document === docId && e.type !== 'ABOUT').sort((a, b) => rank(a) - rank(b)) // the ones a person is asked about first
+  const aside = (view.set_aside ?? []).filter((e) => e.document === docId)
+  if (!links.length && !aside.length) return null
   const label = (id: string) => view.nodes.find((n) => n.id === id)?.label ?? id
   const decide = (linkId: string, status: 'approved' | 'rejected') => {
     setBusy(linkId)
@@ -1096,15 +1152,77 @@ function FoundLinks({ view, docId, canDecide, onDecided }: { view: ContextGraphV
       <div className="mesh-eyebrow">Found in the text</div>
       <ul>{links.map((e) => (
         <li key={e.id}>
-          <span><strong>{label(e.source)}</strong> {linkWords(e.type)} <strong>{label(e.target)}</strong> <em className={e.status}>{e.status}</em></span>
-          <small>"{e.evidence}"{e.by === 'model' ? ' · found by the model' : ''}</small>
+          {STATED[e.type]
+            ? <span><strong>{STATED[e.type]}</strong> {label(e.target)}</span>
+            : <><span><strong>{label(e.source)}</strong> {linkWords(e.type)} <strong>{label(e.target)}</strong> <em className={e.status}>{linkState(e)}</em></span>
+              <small>"{e.evidence}"{e.by === 'model' ? ' · found by the model' : ''}{e.check_reason ? ` · ${e.check_reason}` : ''}</small></>}
           {canDecide && <span className="context-found-actions">
             {e.status !== 'approved' && <button type="button" className="mesh-outline-action" disabled={busy === e.id} onClick={() => decide(e.id, 'approved')}>Approve</button>}
             <button type="button" className="mesh-outline-action danger" disabled={busy === e.id} onClick={() => decide(e.id, 'rejected')}>Reject</button>
           </span>}
         </li>
+      ))}
+      {aside.map((e) => (
+        <li key={e.id} className="context-found-aside">
+          <span><strong>{e.source_label}</strong> {linkWords(e.type)} <strong>{e.target_label}</strong> <em className="rejected">{e.why === 'not_needed' ? 'left out as not needed' : 'set aside by the model'}</em></span>
+          <small>"{e.evidence}"{e.reason ? ` · ${e.reason}` : ''}</small>
+          {canDecide && <span className="context-found-actions"><button type="button" className="mesh-outline-action" disabled={busy === e.id} onClick={() => decide(e.id, 'approved')}>Approve</button></span>}
+        </li>
       ))}</ul>
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
+    </div>
+  )
+}
+
+// What the graph is about. The text is made by code from the inputs until a person writes one, and an emptied text
+// brings the made one back
+function GraphDescriptionBlock({ graphId, description, onSaved }: { graphId: string; description: GraphDescription; onSaved: () => void }) {
+  const [editing, setEditing] = useState(false)
+  const [text, setText] = useState(description.text)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const save = (value: string) => {
+    setBusy(true)
+    setError('')
+    describeGraph(graphId, value).then(() => { setEditing(false); onSaved() }).catch((reason) => setError(detail(reason, 'The description was not saved.'))).finally(() => setBusy(false))
+  }
+  return (
+    <div className="context-description" aria-label="Description of the context graph">
+      <div className="context-description-head"><span className="mesh-eyebrow">Description</span>
+        {description.can_write && !editing && <button type="button" className="mesh-link-action" onClick={() => { setText(description.text); setEditing(true) }}><Pencil size={13} />Edit</button>}</div>
+      {!editing && <p>{description.text}</p>}
+      {editing && <>
+        <textarea className="mesh-field" rows={4} maxLength={1000} value={text} onChange={(event) => setText(event.target.value)} aria-label="Description" />
+        <div className="context-form-actions">
+          <button type="button" className="mesh-primary-action" disabled={busy || text.trim().length < 20} onClick={() => save(text)}>{busy ? <LoaderCircle size={14} className="animate-spin" /> : null}Save</button>
+          <button type="button" className="mesh-outline-action" disabled={busy} onClick={() => setEditing(false)}>Cancel</button>
+          {description.by === 'person' && <button type="button" className="mesh-outline-action" disabled={busy} onClick={() => save('')}>Use the one made from the inputs</button>}
+        </div>
+      </>}
+      {error && <div role="alert" className="mesh-alert error">{error}</div>}
+    </div>
+  )
+}
+
+// How an application reads and queries the graph: its id and the three calls, with the id already in them
+function UseGraph({ graphId }: { graphId: string }) {
+  const [copied, setCopied] = useState('')
+  const base = `${window.location.origin}/api/v1/context-graphs/${graphId}`
+  const calls = [
+    { name: 'Read the graph as JSON', text: `curl -H "Authorization: Bearer $TOKEN" \\\n  ${base}` },
+    { name: 'Ask the graph a question', text: `curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \\\n  -d '{"question": "Which topics does this graph cover?"}' \\\n  ${base}/query` },
+    { name: 'List its node types and link types', text: `curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \\\n  -d '{"overview": true}' \\\n  ${base}/query` },
+    { name: 'Ask without a graph id', text: `curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \\\n  -d '{"question": "Who approves the Letter of Confirmation?"}' \\\n  ${window.location.origin}/api/v1/context-graphs/query` },
+  ]
+  const copy = (name: string, text: string) => { void navigator.clipboard?.writeText(text).then(() => { setCopied(name); window.setTimeout(() => setCopied(''), 1500) }) }
+  return (
+    <div className="context-use" aria-label="Use this graph">
+      <dl><dt>Graph id</dt><dd><code>{graphId}</code></dd><dt>Access</dt><dd>Each call carries the token of the application or the person. The answer holds only what that caller may see.</dd></dl>
+      {calls.map((c) => <div key={c.name} className="context-use-call">
+        <div><strong>{c.name}</strong><button type="button" className="mesh-link-action" onClick={() => copy(c.name, c.text)}>{copied === c.name ? <Check size={13} /> : <Copy size={13} />}{copied === c.name ? 'Copied' : 'Copy'}</button></div>
+        <pre>{c.text}</pre>
+      </div>)}
+      <p className="mesh-panel-footnote">Without a graph id the mesh chooses the graph among the ones the caller may see, and the answer names it. The query call with an id also takes a node with its neighbours, nodes or links by type, the path between two nodes, and the nodes most similar to one.</p>
     </div>
   )
 }

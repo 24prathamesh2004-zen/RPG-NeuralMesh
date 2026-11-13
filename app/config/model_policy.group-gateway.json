@@ -1,0 +1,60 @@
+{
+  "note": "The policy for a deployment inside the group network: every step uses the group's approved model gateway, so documents never leave the network. The address, the model id and the key come from the environment: NEURALMESH_GATEWAY_BASE_URL (an OpenAI-compatible address ending in /v1), NEURALMESH_GATEWAY_MODEL and NEURALMESH_GATEWAY_API_KEY. Start the API with NEURALMESH_MODEL_POLICY=config/model_policy.group-gateway.json.",
+  "models": {
+    "group-gateway": {
+      "id": "gpt-4.1-mini",
+      "id_env": "NEURALMESH_GATEWAY_MODEL",
+      "tier": "gateway",
+      "base_url": "https://gateway.rpg.example/openai/v1",
+      "base_url_env": "NEURALMESH_GATEWAY_BASE_URL",
+      "api_key_env": "NEURALMESH_GATEWAY_API_KEY"
+    }
+  },
+  "steps": {
+    "answer": {
+      "model": "group-gateway",
+      "max_input_tokens": 8000,
+      "max_output_tokens": 1200
+    },
+    "rerank": {
+      "model": "group-gateway",
+      "max_input_tokens": 2500,
+      "max_output_tokens": 1200
+    },
+    "classify": {
+      "model": "group-gateway",
+      "max_input_tokens": 600,
+      "max_output_tokens": 100
+    },
+    "kind": {
+      "model": "group-gateway",
+      "max_input_tokens": 800,
+      "max_output_tokens": 120
+    },
+    "map": {
+      "model": "group-gateway",
+      "max_input_tokens": 3000,
+      "max_output_tokens": 900
+    },
+    "extract": {
+      "model": "group-gateway",
+      "max_input_tokens": 6000,
+      "max_output_tokens": 4000
+    },
+    "describe": {
+      "model": "group-gateway",
+      "max_input_tokens": 3500,
+      "max_output_tokens": 500
+    },
+    "verify": {
+      "model": "group-gateway",
+      "max_input_tokens": 6000,
+      "max_output_tokens": 2500
+    },
+    "choose": {
+      "model": "group-gateway",
+      "max_input_tokens": 12000,
+      "max_output_tokens": 600
+    }
+  }
+}

@@ -86,7 +86,9 @@ export interface MeshLink {
 }
 
 export interface MeshRouting {
-  method?: 'graph' | 'classifier' | 'user' | 'named' | 'own' | 'context' | 'none'
+  method?: 'graph' | 'classifier' | 'user' | 'named' | 'own' | 'context' | 'context_graph' | 'none'
+  question_check?: { intent: 'clear' | 'unclear' | 'off_topic' | 'greeting' | 'unknown'; understood_as: string; suggestions: string[]; reason: string } | null // how the question was understood, and full questions to ask instead of an unclear one
+  context_graphs?: { id: string; name: string; kind: 'uploaded' | 'ingested'; description: string; matched_on: 'things' | 'concepts' | 'words' | 'meaning'; shared_things?: string[]; shared_concepts: string[]; shared_words: string[]; answer?: string | null; answer_note?: string | null; chosen?: boolean; why?: string; found?: { nodes: string[]; links: { source: string; type: string; target: string }[] } }[] // the context graphs the question is about, and what the first one holds about it
   concepts?: string[]
   concept_labels?: Record<string, string>
   subsidiaries?: string[]
@@ -136,7 +138,7 @@ export interface GraphCheck { rule: string; meaning: string; failures: number; e
 
 export interface MeshGraphView {
   nodes: { id: string; type: string; label: string; subsidiary?: string | null }[]
-  edges: { id: string; type: string; source: string; target: string; status: string; evidence?: string; by?: 'code' | 'model'; document?: string }[] // evidence, by and document: a link taken from the text of an upload
+  edges: { id: string; type: string; source: string; target: string; status: string; evidence?: string; by?: 'code' | 'model' | 'calculated'; document?: string; settled_by?: 'rule' | 'model'; settled_reason?: 'relation' | 'repeated' | 'checked' | 'not_supported' | 'not_needed'; sentences?: number; priority?: 'high' | 'low'; check_reason?: string }[] // evidence, by and document: a link taken from the text of an upload
   counts: Record<string, number>
   exports: Record<string, string>
   revision?: number
@@ -351,7 +353,15 @@ export interface UploadRecord {
 }
 export interface UploadGraph extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { centre: string }
 export interface QualityNote { level: 'ok' | 'warn' | 'note'; text: string }
-export interface ContextGraphView extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> { id: string; name: string; documents: string[]; quality?: QualityNote[] }
+export interface GraphDescription { text: string; by: 'person' | 'model' | 'code'; at?: string; can_write: boolean }
+export interface ContextGraphView extends Pick<MeshGraphView, 'nodes' | 'edges' | 'counts'> {
+  id: string; name: string; documents: string[]; quality?: QualityNote[]
+  description?: GraphDescription // what the graph is about: written by a person, or made by code from the inputs
+  review?: { document: string; reason: string }[] // the inputs that do not match the rest of the graph, until a person keeps or removes them
+  set_aside?: { id: string; type: string; source: string; target: string; source_label: string; target_label: string; evidence: string; document: string; reason: string; why?: 'not_needed' | 'not_supported' }[] // links the model's check left out: not stated by the sentence, or noise
+}
+export const describeGraph = (graphId: string, text: string) => api.put<{ id: string; description: GraphDescription }>(`/mesh/uploads/graphs/${graphId}/description`, { text })
+export const keepInput = (docId: string) => api.post(`/mesh/uploads/${docId}/keep`)
 export const decideLink = (docId: string, linkId: string, status: 'approved' | 'rejected') => api.post(`/mesh/uploads/${docId}/links/${linkId}`, { status })
 export interface UploadItem { code: string; title: string; ceiling: string; never_leave: boolean; owner_role?: string | null; domain: string }
 export interface NewItemArea { letter: string; domain: string; title: string }

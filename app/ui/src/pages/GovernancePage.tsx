@@ -99,8 +99,8 @@ export default function GovernancePage() {
 
   return (
     <div className="mesh-data-page">
-      <header className="mesh-page-heading"><div><div className="mesh-eyebrow">Access and evidence</div><h1>Governance</h1><p>Review synthetic pilot requests and inspect the content-free decision ledger.</p></div><button type="button" className="mesh-outline-action" onClick={() => void refresh()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh</button></header>
-      <div className="mesh-governance-notice"><ShieldAlert size={16} /><span><strong>POC review controls.</strong> Decisions below simulate the configured subsidiary owner role for local demo accounts only.</span></div>
+      <header className="mesh-page-heading"><div><div className="mesh-eyebrow">Access and evidence</div><h1>Governance</h1><p>Approve or deny requests for access and for expert introductions, and read the decision log. The log holds no question text and no document text.</p></div><button type="button" className="mesh-outline-action" onClick={() => void refresh()} disabled={loading}><RefreshCw size={14} className={loading ? 'animate-spin' : ''} />Refresh</button></header>
+      <div className="mesh-governance-notice"><ShieldAlert size={16} /><span><strong>Demo review.</strong> A decision made here stands in for the owner at the company and applies to the demo accounts only.</span></div>
       {error && <div role="alert" className="mesh-alert error">{error}</div>}
       <div className="mesh-tabs" role="tablist" aria-label="Governance views">
         <button type="button" role="tab" aria-selected={tab === 'requests'} className={tab === 'requests' ? 'active' : ''} onClick={() => setTab('requests')}><Clock3 size={15} />Approvals <span>{pending.length}</span></button>
@@ -143,7 +143,7 @@ export default function GovernancePage() {
         {!links.length && <div className="ask-empty-results">No links between companies.</div>}
       </section>}
       {!loading && tab === 'entries' && <section className="governance-list">
-        <p className="mesh-panel-footnote">Links an application proposed between its own vocabulary and the companies' data, for example an asset of Snap and Score that belongs to an asset family. A link joins answers only after each side approves its own end: a company for its own data, the group curator for shared vocabulary. Each card counts the entries of one kind and how many still wait, and your buttons decide only the entries that wait for your side.</p>
+        <p className="mesh-panel-footnote">Links an application proposed between its own vocabulary and the companies' data, for example an asset of Snap and Score that belongs to an asset family. A link is used in answers only after both ends approve it. A company approves the end in its own data, and the group curator approves the end in the shared vocabulary. Each card shows the entries of one kind and how many still wait. Your buttons decide only the entries that wait for your side.</p>
         {groups.map((group) => {
           const key = `${group.application}:${group.type}`
           const mine = group.sides.filter((side) => yourSides.includes(side)).map(sideName).join(' and ')
@@ -174,14 +174,14 @@ export default function GovernancePage() {
         {!groups.length && <div className="ask-empty-results">No application has proposed entries.</div>}
       </section>}
       {!loading && tab === 'audit' && <section className="mesh-section-panel audit-panel">
-        <div className="mesh-audit-heading"><div><h2>Node decision ledger</h2><p>Decisions and identifiers only. Query text and source content are not recorded. Each node links every entry to the one before it by a hash, so a changed, added or removed entry breaks the chain.</p></div>
+        <div className="mesh-audit-heading"><div><h2>Node decision ledger</h2><p>Each entry records a decision and its ids. Question text and document text are not recorded. Each node ties every entry to the one before it, so a changed, added or removed entry shows as a break when you press Check the chains.</p></div>
           <button type="button" className="mesh-outline-action" onClick={() => void checkChain()} disabled={checking}>{checking ? <LoaderCircle size={14} className="animate-spin" /> : <Fingerprint size={14} />}Check the chains</button></div>
         {chain && <div className={`mesh-alert ${chain.valid ? 'note' : 'error'}`}>{chain.valid
           ? (chain.nodes.length ? `The chain is intact at ${chain.nodes.length === 1 ? chain.nodes[0].company : `all ${chain.nodes.length} nodes`} (${chain.nodes.reduce((n, c) => n + c.entries, 0)} entries).` : 'There is no ledger of your company to check.')
           : `The chain is broken at ${chain.nodes.filter((c) => !c.valid).map((c) => c.company).join(', ')}. The other nodes are intact.`}</div>}
         {audit.length ? <div className="mesh-audit-table-wrap"><table className="mesh-audit-table"><thead><tr><th>Time</th><th>Decision</th><th>Node of</th><th>Asked by</th><th>Action</th><th>Datapoint</th><th>Rule applied</th></tr></thead><tbody>{audit.map((entry, index) => <tr key={`${entry.trace_id}-${index}`}><td>{entry.timestamp ? formatDateTime(entry.timestamp, true) : '—'}</td><td><span className={`mesh-result-state ${decisionTone(entry.decision)}`}>{decisionLabel(entry.decision)}</span></td><td>{companyName(entry.node_id)}</td><td>{companyName(entry.caller_company)}</td><td>{actionWords(entry.action)}</td><td>{entry.datapoint_id}{entry.datapoint_title ? ` · ${entry.datapoint_title}` : entry.datapoint_hidden ? ` · kept at ${companyName(entry.node_id)}` : ''}</td><td title={entry.rule_id}>{ruleMeaning(entry.rule_id) || entry.rule_id}</td></tr>)}</tbody></table></div> : <div className="ask-empty-results">No decisions recorded yet.</div>}
       </section>}
-      <div className="mesh-page-footnote"><FileSearch size={14} />Each subsidiary node retains its own grant database and audit chain.</div>
+      <div className="mesh-page-footnote"><FileSearch size={14} />The node of each company keeps its own approvals and its own decision log.</div>
     </div>
   )
 }

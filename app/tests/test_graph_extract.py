@@ -40,7 +40,8 @@ def test_two_known_concepts_in_one_sentence_become_a_proposed_link_shown_and_dec
     view = client.get(f"/api/v1/mesh/uploads/graphs/{graph_id}", headers=ADMIN).json()
     edge = next(e for e in view["edges"] if e["id"] == link["id"])
     assert edge["status"] == "proposed" and edge["document"] == doc_id and edge["evidence"] == link["evidence"]
-    assert any("1 link found in the text waits for review" in q["text"] for q in view["quality"])
+    assert edge["priority"] == "low"  # a link between two topics: no person is asked, it stays proposed
+    assert any("1 link of low priority is kept as proposed without asking anyone" in q["text"] for q in view["quality"])
     # another company may not decide, the owning company and a mesh admin may
     url = f"/api/v1/mesh/uploads/{doc_id}/links/{link['id']}"
     assert client.post(url, json={"status": "approved"}, headers=_headers("kec")).status_code == 403
@@ -86,11 +87,12 @@ def test_the_model_part_keeps_only_what_the_text_holds(mesh):
     calls = []
     record = {"document": {"id": "ceat:E-03-U900", "body": text, "concepts": [next(n for n, d in mesh.mesh.graph.nodes(data=True) if d.get("label") == a)]}}
     out = graph_extract.extract(mesh, "ceat", record, lambda *args: calls.append(args) or json.dumps(reply))
-    assert calls and calls[0][0] == "extract" and calls[0][3] == "mesh_extract_v1"
+    assert calls and calls[0][0] == "extract" and calls[0][3] == "mesh_extract_v3"
     names = {e["name"]: e for e in out["entities"]}
-    assert set(names) == {"RS-200", "Mixer M-01"} and names["RS-200"]["type"] == "Part" and names["RS-200"]["id"] == "entity:ceat:rs-200"
+    assert set(names) == {"RS-200", "Mixer M-01"} and names["RS-200"]["type"] == "Part" and names["Mixer M-01"]["type"] == "Asset" and names["RS-200"]["id"] == "entity:ceat:rs-200"
     kinds = {(link["type"], link["by"]) for link in out["links"]}
-    assert ("USES_PART", "model") in kinds and ("WEARS_NEAR", "model") in kinds  # the known concept is an end under its own id
+    assert ("USES", "model") in kinds  # "uses part" is read as the listed relation USES
+    assert not any(link["type"] == "WEARS_NEAR" for link in out["links"])  # a relation outside the list is left out
     assert not any(link["type"] in ("DRIVES", "FEEDS") for link in out["links"])  # not in the text, or evidence not in the text
     assert all(link["status"] == "proposed" for link in out["links"]) and out["model"] == "made"
     # a reply that is not JSON leaves the code part only
@@ -133,3 +135,19 @@ def test_extraction_of_existing_inputs_writes_nothing_without_write(mesh):
     assert dry["written"] is False and row["links"] == 1 and graph_extract.read(doc_id) is None
     wet = client.post("/api/v1/mesh/uploads/extractions?write=true", headers=ADMIN).json()
     assert any(d["document"] == doc_id for d in wet["documents"]) and graph_extract.read(doc_id)["links"][0]["status"] == "proposed"
+
+
+def test_the_model_reads_the_whole_of_a_long_text_in_parts_that_cut_no_sentence(mesh):
+    line = "The mixer M-07 uses the rotor seal RS-200 on the second shift of every week. "
+    text = (line * 30 + "\n") * 9  # about 21,000 characters
+    parts = graph_extract._parts(text)
+    assert len(parts) == 4 and "".join(parts) == text and all(len(p) <= graph_extract.MODEL_TEXT_CHARS for p in parts)
+    assert all(p.endswith(("\n", ". ")) for p in parts[:-1])
+    seen = []
+    reply = json.dumps({"entities": [{"name": "mixer M-07", "type": "Machine"}, {"name": "rotor seal RS-200", "type": "Part"}],
+                        "links": [{"source": "mixer M-07", "relation": "USES_PART", "target": "rotor seal RS-200", "evidence": line.strip()}]})
+    record = {"document": {"id": "ceat:E-03-U901", "body": text, "concepts": []}}
+    out = graph_extract.extract(mesh, "ceat", record, lambda step, system, user, version: seen.append(user) or reply)
+    assert len(seen) == 4 and out["model"] == "made, 4 of 4 parts read"
+    assert [(link["type"], link["by"]) for link in out["links"] if link["by"] == "model"] == [("USES", "model")]  # the same link from four parts is kept once
+    assert len(graph_extract._parts("x" * (graph_extract.MODEL_PARTS * graph_extract.MODEL_TEXT_CHARS + 5))) == graph_extract.MODEL_PARTS

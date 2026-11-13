@@ -624,3 +624,21 @@ input[type="file"].mesh-field::file-selector-button { height: 100%; margin: 0 10
 .ask-source-more { justify-self: start; }
 /* Context graph: the details of an input open under its card */
 .context-input-detail { border: 1px solid var(--mesh-line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; background: #fff; }
+
+/* Context graph: the description of a graph, the calls of "Use this graph", and an input listed for review */
+.context-description { display: grid; gap: 6px; padding: 10px 12px; border-radius: 10px; background: var(--mesh-surface-muted, #f5f6fa); }
+.context-description-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.context-description p { margin: 0; font-size: var(--mesh-text-small); line-height: 1.55; color: var(--mesh-ink); }
+.mesh-link-action { display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; padding: 2px 4px; color: var(--mesh-accent-dark); font-size: var(--mesh-text-small); font-weight: 700; cursor: pointer; }
+.context-use { display: grid; gap: 12px; }
+.context-use-call { display: grid; gap: 4px; min-width: 0; }
+.context-use-call > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: var(--mesh-text-small); }
+.context-use-call pre { margin: 0; padding: 10px 12px; border-radius: 8px; background: #1f2433; color: #e8ebf5; font-family: var(--mesh-mono); font-size: 12px; line-height: 1.5; overflow-x: auto; white-space: pre; }
+.context-review { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.ask-graph-description { color: var(--mesh-muted); font-size: var(--mesh-text-small); }
+.ask-graph-links { display: grid; gap: 2px; margin-top: 6px; font-size: var(--mesh-text-small); }
+.ask-graph-links em { color: var(--mesh-accent-dark); font-style: normal; font-weight: 700; }
+.ask-graph-answer { display: block; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--mesh-accent-soft); color: var(--mesh-ink); font-size: var(--mesh-text-small); line-height: 1.55; }
+.context-found-aside { opacity: 0.75; }
+.ask-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.ask-suggestions .mesh-outline-action { text-align: left; white-space: normal; }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import type { FormEvent } from 'react'
 import type { CSSProperties } from 'react'
-import { AlertTriangle, ArrowUpRight, Check, CircleCheck, GitBranch, LoaderCircle, LockKeyhole, Send, ServerOff } from 'lucide-react'
+import { AlertTriangle, Check, CircleCheck, GitBranch, LoaderCircle, LockKeyhole, Send, ServerOff, Waypoints } from 'lucide-react'
 import { getMeshNodes, queryMesh } from '../services/api'
 import type { CompanyId, EvidenceRecord, MeshPurpose, MeshQueryResponse } from '../services/api'
 import { useMeshScope } from '../context/MeshScopeContext'
@@ -24,11 +24,14 @@ const LINK_LABELS: Record<string, string> = {
   SUPERSEDES: 'replaces',
 }
 
+// what an input of a context graph states, by the link that carries it
+const STATED: Record<string, string> = { HAS_DECISION: 'Decision:', HAS_ACTION: 'Action:', HAS_RISK: 'Risk:' }
 const ROUTE_LABELS: Record<string, string> = {
   graph: 'Routed by the mesh graph',
   classifier: 'Routed from node profiles',
   named: 'Routed to the companies named',
   own: 'No company matched the wording, so your own company was asked',
+  context_graph: 'Routed by the context graph the question matches',
   user: 'Nodes you chose',
   none: 'No node matched',
 }
@@ -111,7 +114,7 @@ export default function AskPage() {
         <div>
           <div className="mesh-eyebrow">Cross-subsidiary query</div>
           <h1>Ask NeuralMesh</h1>
-          <p>Ask in your own words. Selected subsidiary nodes return only policy-approved evidence.</p>
+          <p>Ask in your own words. Each company answers only with what its sharing rules allow.</p>
         </div>
         {response && <span className={`mesh-result-state ${response.status === 'ok' ? 'success' : 'warning'}`}>{response.status === 'ok' ? 'All routed nodes responded' : response.status === 'partial' ? 'Partial response' : 'No node matched. Choose the nodes to ask.'}</span>}
       </header>
@@ -120,7 +123,7 @@ export default function AskPage() {
         <div className="ask-composer-main">
           <label htmlFor="mesh-question">Question</label>
           <textarea id="mesh-question" value={question} onChange={(event) => setQuestion(event.target.value)} rows={3} maxLength={2000} placeholder={EXAMPLE_QUESTION} />
-          <div className="ask-field-meta"><span>Use any wording or domain combination</span><span>{question.length}/2000</span></div>
+          <div className="ask-field-meta"><span>Ask about one topic or several</span><span>{question.length}/2000</span></div>
 
           <div className="ask-controls">
             <fieldset>
@@ -161,7 +164,7 @@ export default function AskPage() {
           </div>
         </div>
         <div className="ask-composer-foot">
-          <LockKeyhole size={14} /> Each node applies its own exposure rules before evidence leaves its subsidiary.
+          <LockKeyhole size={14} /> The node of each company checks its own sharing rules before anything is sent out.
         </div>
       </form>
 
@@ -174,10 +177,17 @@ export default function AskPage() {
             <div className="ask-section-heading"><h2 id="evidence-heading">Retrieved evidence</h2><span>{plural(cards.length, 'source', 'sources')} · {plural(new Set(cards.map((item) => String(item.node_id ?? String(item.doc_id ?? '').split(':')[0]))).size, 'company', 'companies')}</span></div>
             {response.routing.method && <div className="mesh-answer-panel"><div className="mesh-answer-title"><GitBranch size={13} /> {ROUTE_LABELS[response.routing.method] ?? response.routing.method}</div>
               <p>{(response.routing.subsidiaries ?? []).map(displayNode).join(', ') || 'None'}{response.routing.concepts?.length ? ` · topics: ${response.routing.concepts.map((c) => response.routing.concept_labels?.[c] ?? c).join(', ')}` : ''}</p></div>}
+            {response.routing.question_check && response.routing.question_check.intent !== 'clear' && response.routing.question_check.suggestions.length > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title">Did you mean</div>
+              <div className="ask-suggestions">{response.routing.question_check.suggestions.map((q) => <button type="button" key={q} className="mesh-outline-action" onClick={() => { setQuestion(q); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>{q}</button>)}</div></div>}
+            {response.routing.question_check?.intent === 'clear' && response.routing.question_check.understood_as && response.routing.question_check.understood_as.toLowerCase() !== response.question.toLowerCase() && <div className="mesh-alert note">Understood as: {response.routing.question_check.understood_as}</div>}
+            {(response.routing.context_graphs?.length ?? 0) > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title"><Waypoints size={13} /> Context graphs this question is about</div>
+              {response.routing.context_graphs!.map((g) => <p key={g.id}><strong>{g.name}</strong>{g.chosen ? (g.why ? ` · ${g.why}` : '') : ' · also touched by the question'}<br /><span className="ask-graph-description">{g.description}</span>
+                {g.answer && <span className="ask-graph-answer"><b>From this graph:</b> {g.answer}</span>}
+                {(g.found?.links.length ?? 0) > 0 && <span className="ask-graph-links">{g.found!.links.map((l, i) => STATED[l.type] ? <span key={i}><em>{STATED[l.type]}</em> {l.target} <span className="ask-graph-description">({l.source})</span></span> : <span key={i}>{l.source} <em>{l.type.toLowerCase().replace(/_/g, ' ')}</em> {l.target}</span>)}</span>}</p>)}</div>}
             {response.answer
               ? <div className="mesh-answer-panel"><div className="mesh-answer-title">Answer · {seconds.toFixed(1)} s{response.cached ? ' · reused from the same question asked before' : ''}</div>{answerSentences(response.answer).map((sentence, index) => <p key={index} className={sentence.startsWith('[NOT IN EVIDENCE]') ? 'ask-not-in-evidence' : ''}>{shownSentence(sentence, cards.map((s) => String(s.doc_id ?? '')))}</p>)}</div>
               : response.answer_reason && <div className="mesh-alert note">{response.answer_reason}</div>}
-            {response.omitted > 0 && <div className="mesh-alert note">Partial set: {response.omitted} {response.omitted === 1 ? 'item was' : 'items were'} left out for size or replaced by a newer version.</div>}
+            {response.omitted > 0 && <div className="mesh-alert note">{response.omitted} {response.omitted === 1 ? 'item is' : 'items are'} not shown. An item is left out when the answer has no room for it or when a newer version replaced it.</div>}
             {response.relationships.length > 0 && <div className="mesh-answer-panel"><div className="mesh-answer-title">Approved links</div>
               {response.relationships.map((link) => <p key={link.id} title={`${link.source} and ${link.target}`}><b>{link.source_title ?? link.source}</b> {LINK_LABELS[link.type] ?? link.type} <b>{link.target_title ?? link.target}</b>{link.note ? ` · ${link.note}` : ''}</p>)}</div>}
           </section>
@@ -218,7 +228,6 @@ export default function AskPage() {
                       : <p className="ask-source-text">{String(source.text ?? source.summary ?? '')}</p>}
                     {typeof source.superseded_by === 'string' && <p className="ask-source-meta">Replaced by {source.superseded_by}</p>}
                     <div className="ask-source-footer"><span className="ask-mode-tag" title={`Shared as: ${String(source.mode ?? 'SUM')}`}>{source.aggregate ? 'Grouped figures, computed now' : modeLabel(String(source.mode ?? 'SUM'))}</span><span className="ask-citation"><CircleCheck size={13} />{String(source.citation ?? 'Citation available')}</span>
-                      {typeof source.doc_id === 'string' && <span title={source.doc_id} className="ask-source-ref"><ArrowUpRight size={13} />Source ref</span>}
                     </div>
                   </article>
                 )
