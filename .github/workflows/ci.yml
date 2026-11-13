@@ -1,8 +1,8 @@
 name: ci
 
+# Runs only when started by hand (Actions > ci > Run workflow), not on every push or pull request.
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   backend:
