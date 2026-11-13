@@ -1,7 +1,104 @@
 {
  "document": "zensar:F-03-U015",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
- "links": []
+ "made": "2026-11-13T12:24:08+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u015-risk-54c82ae6",
+   "type": "Risk",
+   "name": "Broad automation promise could outpace the team's ability to support ...",
+   "sentence": "My concern is a broad automation promise could outpace the team's ability to support edge cases.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u015-action-97abd873",
+   "type": "Action",
+   "name": "Compare the two options using user frequency, risk, and support ...",
+   "sentence": "A practical next step is to compare the two options using user frequency, risk, and support cost.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u015-action-49296a2e",
+   "type": "Action",
+   "name": "Write a one-page outcome brief with success measures and excluded ...",
+   "sentence": "The follow-up is to write a one-page outcome brief with success measures and excluded scope before roadmap estimates begin next week, with design research must validate the reporting concepts with administrators still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u015-decision-e6e2a2c5",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: prioritize reporting ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: prioritize reporting clarity and a bounded review workflow for the next planning cycle.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u015-risk-abf9205f",
+   "type": "Risk",
+   "name": "Design research must validate the reporting concepts with administrators",
+   "sentence": "The dependency is design research must validate the reporting concepts with administrators.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-615b862e36",
+   "source": "zensar:F-03-U015",
+   "target": "entity:zensar:f-03-u015-risk-54c82ae6",
+   "type": "HAS_RISK",
+   "evidence": "My concern is a broad automation promise could outpace the team's ability to support edge cases.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-7f341f79e8",
+   "source": "zensar:F-03-U015",
+   "target": "entity:zensar:f-03-u015-action-97abd873",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to compare the two options using user frequency, risk, and support cost.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-0d4e175b9c",
+   "source": "zensar:F-03-U015",
+   "target": "entity:zensar:f-03-u015-action-49296a2e",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to write a one-page outcome brief with success measures and excluded scope before roadmap estimates begin next week, with design research must validate the reporting concepts with administrators still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-2c0baa103b",
+   "source": "zensar:F-03-U015",
+   "target": "entity:zensar:f-03-u015-decision-e6e2a2c5",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: prioritize reporting clarity and a bounded review workflow for the next planning cycle.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-199c3f98b0",
+   "source": "entity:zensar:f-03-u015-decision-e6e2a2c5",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: prioritize reporting clarity and a bounded review workflow for the next planning cycle.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-1b01cd6414",
+   "source": "zensar:F-03-U015",
+   "target": "entity:zensar:f-03-u015-risk-abf9205f",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is design research must validate the reporting concepts with administrators.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
 }

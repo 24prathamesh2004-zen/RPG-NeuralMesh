@@ -1,8 +1,252 @@
 {
  "document": "zensar:F-02-U001",
- "made": "2026-11-12T10:40:01+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:21:01+00:00",
+ "model": "made, 22 of 22 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:zensar-talent-acquisition-portal",
+   "type": "System",
+   "name": "Zensar Talent Acquisition portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:role-description",
+   "type": "Form",
+   "name": "Role Description",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:offer-of-employment",
+   "type": "Form",
+   "name": "Offer of Employment",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:confirmation-review",
+   "type": "Process",
+   "name": "Confirmation Review",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:letter-of-confirmation",
+   "type": "Form",
+   "name": "Letter of Confirmation",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:probation",
+   "type": "Process",
+   "name": "Probation",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:hr-helpdesk-portal",
+   "type": "System",
+   "name": "HR Helpdesk portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:hrbp",
+   "type": "Role",
+   "name": "HRBP",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:delivery-unit-head",
+   "type": "Role",
+   "name": "Delivery Unit Head",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:performance-improvement-plan",
+   "type": "Process",
+   "name": "Performance Improvement Plan",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:payslip",
+   "type": "Form",
+   "name": "Payslip",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:income-tax-portal",
+   "type": "System",
+   "name": "Income Tax Portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:exempted-pf-trust",
+   "type": "Programme",
+   "name": "Exempted PF Trust",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:swish-club",
+   "type": "System",
+   "name": "Swish Club",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:happyxchange",
+   "type": "System",
+   "name": "HappyXchange",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:medi-assist-portal",
+   "type": "System",
+   "name": "Medi Assist portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:zend",
+   "type": "System",
+   "name": "ZenD",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:certification-portal",
+   "type": "System",
+   "name": "Certification Portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:travel-request",
+   "type": "Form",
+   "name": "Travel Request",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:opportunity-marketplace",
+   "type": "System",
+   "name": "Opportunity Marketplace",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:role-reclassification-letter",
+   "type": "Form",
+   "name": "Role Reclassification Letter",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:resignation",
+   "type": "Process",
+   "name": "Resignation",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:knowledge-transfer-sign-off",
+   "type": "Form",
+   "name": "Knowledge Transfer Sign-Off",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:access-request",
+   "type": "Form",
+   "name": "Access Request",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:attendance-regularization",
+   "type": "Process",
+   "name": "Attendance Regularization",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:eform-portal",
+   "type": "System",
+   "name": "eForms portal",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:hr-operation",
+   "type": "Team",
+   "name": "HR Operations",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:is-service-desk",
+   "type": "Service",
+   "name": "IS Service Desk",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:onerpg",
+   "type": "System",
+   "name": "OneRPG",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:payroll-helpdesk",
+   "type": "Service",
+   "name": "Payroll Helpdesk",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:reporting-manager",
+   "type": "Role",
+   "name": "Reporting Manager",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:resilience-work",
+   "type": "Organisation",
+   "name": "Resilience Works",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zenexpense",
+   "type": "System",
+   "name": "ZenExpense",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zenfusion",
+   "type": "System",
+   "name": "ZenFusion",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zensar-technologie",
+   "type": "Organisation",
+   "name": "Zensar Technologies",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zensarian-assistance-program-zap",
+   "type": "Programme",
+   "name": "Zensarian Assistance Program (ZAP)",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zentravel",
+   "type": "System",
+   "name": "ZenTravel",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:f-02-u001-decision-83436bac",
+   "type": "Decision",
+   "name": "Buyout | Offset against final receivables",
+   "sentence": "Notice Pay Shortfall | Basic Salary for unserved notice days | Deducted if early release was approved on buyout | Offset against final receivables.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-849f7105eb",
@@ -12,7 +256,15 @@
    "evidence": "The employment lifecycle at Zensar is structured into five progressive phases: Onboarding & Induction, Probation & Confirmation, Continuous Performance & Growth, Career Mobility & Leadership, and Separation & Transition.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence lists lifecycle phases; handover not mentioned.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-15c9af5ac2",
@@ -22,7 +274,15 @@
    "evidence": "When an associate consistently fails to meet agreed delivery benchmarks, exhibits chronic quality defects, or receives a 'Needs Development' / 'Unsatisfactory' PRIDE rating, the organization initiates a structured Performance Improvement Plan (PIP).",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Benchmarks here are delivery, not finance/capex benchmarks.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-318335b2d5",
@@ -32,7 +292,15 @@
    "evidence": "If an associate encounters hardware faults (battery degradation, keyboard failure, screen issues, or unexpected crashes), a maintenance ticket must be lodged on the IS Service Desk under `TIMS - Hardware Repair / Maintenance`.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Hardware faults ticket; 'failure pattern' matched by chance.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-b50aecf373",
@@ -42,7 +310,15 @@
    "evidence": "Referral Eligibility & Policy Governance: (1) All active full-time employees are eligible to refer candidates and claim referral bonuses, with the exception of Talent Acquisition recruiters, hiring managers evaluating the open requisition, and leadership team members (Vice Presidents and above) for ",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Referral eligibility has nothing to do with local labour terms.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-22ecad2dc0",
@@ -52,7 +328,15 @@
    "evidence": "Onboarding | Asset issuance, M365 setup, Day 1 orientation, BGV | ZenFusion, IS Service Desk, Welcome Kit | Full technical and administrative readiness.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Table row ties service desk to onboarding asset setup.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-3559cdbedf",
@@ -62,7 +346,15 @@
    "evidence": "Timely Acceptance: Failure to complete digital acceptance within the stipulated offer validity period may result in automated offer expiration in the talent acquisition system.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Word 'failure' matched by chance; offer acceptance sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-6438a4bd3e",
@@ -72,7 +364,15 @@
    "evidence": "Project Delivery & Quality | 40% to 50% | Sprint velocity, defect leakage, code review score, client SLA | Core engineering delivery benchmark.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Delivery benchmark table row; not a failure pattern.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
   },
   {
    "id": "x-1d4467d7d7",
@@ -82,7 +382,672 @@
    "evidence": "Project Delivery & Quality | 40% to 50% | Sprint velocity, defect leakage, code review score, client SLA | Core engineering delivery benchmark.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Delivery benchmark, not finance or capex benchmarks.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-f8584e5ce5",
+   "source": "zensar:F-02-U001",
+   "target": "entity:zensar:f-02-u001-decision-83436bac",
+   "type": "HAS_DECISION",
+   "evidence": "Notice Pay Shortfall | Basic Salary for unserved notice days | Deducted if early release was approved on buyout | Offset against final receivables.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Table row loosely links shortfall to buyout; target is an odd fragment.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-7f926c517f",
+   "source": "entity:zensar:role-description",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "Role descriptions are accessible on ZenFusion and reviewed annually during PRIDE goal-setting cycles.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Role descriptions accessible on ZenFusion, stated directly.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-7570e931c2",
+   "source": "entity:zensar:offer-of-employment",
+   "target": "entity:zensar:zensar-talent-acquisition-portal",
+   "type": "RAISED_ON",
+   "evidence": "The professional journey at Zensar begins with the issuance of the formal Offer of Employment through the Zensar Talent Acquisition portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Offer issued through the Talent Acquisition portal.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-fbf714a71f",
+   "source": "entity:zensar:zenfusion",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Following credential setup, associates must access ZenFusion via OneRPG > My Applications > ZenFusion to complete two mandatory statutory profiles before the 20th of their joining month:",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZenFusion accessed via OneRPG > My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-5d27e43707",
+   "source": "entity:zensar:confirmation-review",
+   "target": "entity:zensar:zenfusion",
+   "type": "RAISED_ON",
+   "evidence": "Upon approaching the conclusion of the six-month probation period, the associate's Reporting Manager initiates the formal Confirmation Review in Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Confirmation Review initiated in ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-8f2411292a",
+   "source": "entity:zensar:confirmation-review",
+   "target": "entity:zensar:reporting-manager",
+   "type": "MANAGED_BY",
+   "evidence": "Upon approaching the conclusion of the six-month probation period, the associate's Reporting Manager initiates the formal Confirmation Review in Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Reporting Manager initiates the Confirmation Review.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-55c8b7d8fb",
+   "source": "entity:zensar:letter-of-confirmation",
+   "target": "entity:zensar:delivery-unit-head",
+   "type": "APPROVED_BY",
+   "evidence": "Upon successful evaluation and sign-off by the Reporting Manager, Delivery Unit Head, and HRBP, a formal Letter of Confirmation is generated and delivered to the associate.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Delivery Unit Head signs off the confirmation letter.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-a26c4dd93f",
+   "source": "entity:zensar:letter-of-confirmation",
+   "target": "entity:zensar:reporting-manager",
+   "type": "APPROVED_BY",
+   "evidence": "Upon successful evaluation and sign-off by the Reporting Manager, Delivery Unit Head, and HRBP, a formal Letter of Confirmation is generated and delivered to the associate.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Reporting Manager signs off the confirmation letter.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-02ded43572",
+   "source": "entity:zensar:letter-of-confirmation",
+   "target": "entity:zensar:hrbp",
+   "type": "APPROVED_BY",
+   "evidence": "Upon successful evaluation and sign-off by the Reporting Manager, Delivery Unit Head, and HRBP, a formal Letter of Confirmation is generated and delivered to the associate.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "HRBP signs off the confirmation letter.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-1b3fce4c0b",
+   "source": "entity:zensar:probation",
+   "target": "entity:zensar:confirmation-review",
+   "type": "PRECEDES",
+   "evidence": "Upon approaching the conclusion of the six-month probation period, the associate's Reporting Manager initiates the formal Confirmation Review in Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Confirmation Review follows end of probation.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-036f529f65",
+   "source": "entity:zensar:probation",
+   "target": "entity:zensar:performance-improvement-plan",
+   "type": "PRECEDES",
+   "evidence": "If an associate's performance or attendance falls below acceptable benchmarks, the management reserves the right to extend the probation period by an additional three (3) months, accompanied by a targeted Performance Improvement Plan (PIP).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "PIP accompanies probation extension; precedes is loose.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-e13d727ed8",
+   "source": "entity:zensar:probation",
+   "target": "entity:zensar:reporting-manager",
+   "type": "USES",
+   "evidence": "During probation, associates are assigned specific performance goals under the PRIDE framework and undergo ongoing feedback reviews with their Reporting Manager.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Probation does not 'use' manager; feedback reviews happen with them.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-1f7ee1af68",
+   "source": "entity:zensar:hr-helpdesk-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "For personalized assistance, associates can log support tickets on the HR Helpdesk portal (`OneRPG > HR Connect`) or reach out directly to their assigned Business Unit HR Partner (HRBP).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "HR Helpdesk portal reached via OneRPG > HR Connect.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-2a0bff35ea",
+   "source": "entity:zensar:attendance-regularization",
+   "target": "entity:zensar:zenfusion",
+   "type": "RAISED_ON",
+   "evidence": "an Attendance Regularization must be submitted via Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Regularization submitted via ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-ff13a6edf4",
+   "source": "entity:zensar:reporting-manager",
+   "target": "entity:zensar:zenfusion",
+   "type": "APPROVED_BY",
+   "evidence": "Upon submission in ZenFusion, the leave application routes electronically to the associate's immediate Reporting Manager.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Leave routes to manager for approval; direction and relation wrong.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-e04dccb1a5",
+   "source": "entity:zensar:payslip",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "Monthly electronic payslips are generated and published securely on Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Payslips published on ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-907653011c",
+   "source": "entity:zensar:income-tax-portal",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "Zensar provides an automated Income Tax Portal accessible via ZenFusion (`Me > Pay > Income Tax Declarations`) allowing associates to declare planned investments and submit statutory tax-saving proofs.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Income Tax Portal accessible via ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:30+00:00"
+   }
+  },
+  {
+   "id": "x-064ac5a313",
+   "source": "entity:zensar:exempted-pf-trust",
+   "target": "entity:zensar:zensar-technologie",
+   "type": "OWNED_BY",
+   "evidence": "Zensar Technologies operates an Exempted PF Trust approved by the Employees' Provident Fund Organization (EPFO).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Zensar operates the trust; ownership is fair.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-d36c8d2a63",
+   "source": "entity:zensar:zenexpense",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "All reimbursement claims must be lodged through the ZenExpense portal (`OneRPG > My Applications > ZenExpense`) within 30 calendar days of incurring the expense.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZenExpense accessed via OneRPG path.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-c242939184",
+   "source": "entity:zensar:zensarian-assistance-program-zap",
+   "target": "entity:zensar:resilience-work",
+   "type": "PROVIDED_BY",
+   "evidence": "Zensarian Assistance Program (ZAP): Powered by Resilience Works, ZAP offers round-the-clock confidential mental health, counseling, and wellness support for employees and their immediate families across four pillars: physical, mental/emotional, social, and professional health.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZAP powered by Resilience Works.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-e533a35f05",
+   "source": "entity:zensar:swish-club",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Full-time employees enjoy exclusive corporate pricing through Swish Club, an internal e-commerce gateway accessed via OneRPG.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Swish Club accessed via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-82dac0663e",
+   "source": "entity:zensar:happyxchange",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "HappyXchange Reward & Recognition Platform: Located at OneRPG > My Applications > HappyXchange, this portal enables peer-to-peer appreciation, Spot Awards, and leadership recognition aligned with RPG Values.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "HappyXchange located in OneRPG applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-49867e1bd7",
+   "source": "entity:zensar:medi-assist-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Associates must log into the Medi Assist portal via OneRPG SSO to download digital health e-cards for themselves and registered dependents.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Medi Assist accessed via OneRPG SSO.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-a06affba43",
+   "source": "entity:zensar:zend",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Zensar manages employee performance and goal alignment through ZenD (accessible via OneRPG > My Applications > ZenD / SuccessFactors).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZenD accessible via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-e01d0dade6",
+   "source": "entity:zensar:certification-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "PART_OF",
+   "evidence": "To claim reimbursement, associates must obtain pre-approval from their Practice Lead, clear the official examination, and submit the passing score scorecard and tax invoice via the Certification Portal on OneRPG within 30 days of examination.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Portal is on OneRPG; part-of is loosely implied.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-3bbd0b8f02",
+   "source": "entity:zensar:opportunity-marketplace",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Zensar actively promotes internal career mobility through the Opportunity Marketplace accessible via OneRPG (`OneRPG SSO > Me > Opportunity Marketplace`) and the ZenRich internal referral and staffing platform.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Marketplace accessible via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-fe8dc9dc8f",
+   "source": "entity:zensar:travel-request",
+   "target": "entity:zensar:zentravel",
+   "type": "RAISED_ON",
+   "evidence": "Associates required to travel for client meetings, on-site project discovery, or corporate conferences must initiate a Travel Request on ZenTravel (`OneRPG > My Applications > ZenTravel`) at least 14 days in advance for domestic travel and at least 30 days in advance for international travel.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Travel Request initiated on ZenTravel.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-16742bfd22",
+   "source": "entity:zensar:zentravel",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Associates required to travel for client meetings, on-site project discovery, or corporate conferences must initiate a Travel Request on ZenTravel (`OneRPG > My Applications > ZenTravel`) at least 14 days in advance for domestic travel and at least 30 days in advance for international travel.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZenTravel path under OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-aa37122d13",
+   "source": "entity:zensar:travel-request",
+   "target": "entity:zensar:reporting-manager",
+   "type": "APPROVED_BY",
+   "evidence": "Domestic travel requests route sequentially to the Reporting Manager and Delivery Unit Head.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Requests route to Reporting Manager for approval.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-5429bb56f4",
+   "source": "entity:zensar:access-request",
+   "target": "entity:zensar:is-service-desk",
+   "type": "RAISED_ON",
+   "evidence": "Project-specific entitlements—such as client VPNs, Git repositories, AWS/Azure cloud consoles, and database credentials—require formal Access Requests raised on the IS Service Desk (`https://servicedesk.zensar.com`).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Access Requests raised on IS Service Desk.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-bc48504732",
+   "source": "entity:zensar:zenexpense",
+   "target": "entity:zensar:reporting-manager",
+   "type": "PRECEDES",
+   "evidence": "Once an expense claim is submitted on ZenExpense, it routes to the Reporting Manager and Finance Travel Audit team for verification against corporate policy caps and tax invoice authenticity.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Routing after submission, not tool preceding a person.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-5f16647e80",
+   "source": "entity:zensar:hrbp",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Associates can schedule 1-on-1 confidential discussions with their HRBP or submit general HR queries through the OneRPG HR Connect portal (`OneRPG > HR Connect`).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "HR Connect portal is accessed via OneRPG, not the HRBP.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-433c1df0ec",
+   "source": "entity:zensar:resignation",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "When an associate decides to separate from Zensar Technologies, the formal resignation process must be initiated digitally through Oracle Fusion (ZenFusion) under `OneRPG > My Applications > ZenFusion > Me > Resignation / Separation`.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Resignation initiated through ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-a4f44e059a",
+   "source": "entity:zensar:zenfusion",
+   "target": "entity:zensar:onerpg",
+   "type": "PART_OF",
+   "evidence": "When an associate decides to separate from Zensar Technologies, the formal resignation process must be initiated digitally through Oracle Fusion (ZenFusion) under `OneRPG > My Applications > ZenFusion > Me > Resignation / Separation`.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZenFusion sits under OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-f65e5068ad",
+   "source": "entity:zensar:resignation",
+   "target": "entity:zensar:reporting-manager",
+   "type": "APPROVED_BY",
+   "evidence": "Upon submission, the resignation routes electronically to the Reporting Manager and Business Unit HRBP.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Resignation routes to Reporting Manager.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-02c6423ef3",
+   "source": "entity:zensar:role-reclassification-letter",
+   "target": "entity:zensar:hr-operation",
+   "type": "PROVIDED_BY",
+   "evidence": "Role changes are reviewed by Practice Heads and formalized through a written Role Reclassification Letter issued by HR Operations.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Letter issued by HR Operations.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-caf6306303",
+   "source": "entity:zensar:knowledge-transfer-sign-off",
+   "target": "entity:zensar:eform-portal",
+   "type": "RAISED_ON",
+   "evidence": "The Reporting Manager evaluates the handover completeness, verifies code commits, and executes the formal Knowledge Transfer Sign-Off on the eForms portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sign-off executed on eForms portal.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-0f88415313",
+   "source": "entity:zensar:knowledge-transfer-sign-off",
+   "target": "entity:zensar:reporting-manager",
+   "type": "APPROVED_BY",
+   "evidence": "The Reporting Manager evaluates the handover completeness, verifies code commits, and executes the formal Knowledge Transfer Sign-Off on the eForms portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Reporting Manager executes the sign-off.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-ab700fe478",
+   "source": "entity:zensar:opportunity-marketplace",
+   "target": "entity:zensar:onerpg",
+   "type": "PART_OF",
+   "evidence": "Explore open global positions on the Opportunity Marketplace on OneRPG to advance your career within Zensar across diverse client accounts.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": false,
+    "reason": "Duplicates the access link; low added value.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-207de932d2",
+   "source": "entity:zensar:resignation",
+   "target": "entity:zensar:zenfusion",
+   "type": "RAISED_ON",
+   "evidence": "A resignation is legally recognized only when submitted via Oracle Fusion (ZenFusion).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Resignation recognized only via ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
+  },
+  {
+   "id": "x-06848456ee",
+   "source": "entity:zensar:payroll-helpdesk",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "For specific salary or payslip inquiries, log a support ticket on ZenFusion under `Me > Pay > Payroll Helpdesk`.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Payroll Helpdesk ticket logged on ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:37+00:00"
+   }
   }
  ]
 }

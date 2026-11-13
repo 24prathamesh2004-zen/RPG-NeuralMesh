@@ -1,7 +1,104 @@
 {
  "document": "zensar:F-03-U014",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
- "links": []
+ "made": "2026-11-13T12:24:05+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u014-risk-377b053b",
+   "type": "Risk",
+   "name": "Cutting observability work could reduce spend while making reliability incidents ...",
+   "sentence": "My concern is cutting observability work could reduce spend while making reliability incidents harder to diagnose.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u014-action-93154ab5",
+   "type": "Action",
+   "name": "Hold a small contingency rather than pre-allocating the entire variance",
+   "sentence": "A practical next step is to hold a small contingency rather than pre-allocating the entire variance.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u014-action-2a97749e",
+   "type": "Action",
+   "name": "Prepare low, expected, and high spend scenarios with the assumptions ...",
+   "sentence": "The follow-up is to prepare low, expected, and high spend scenarios with the assumptions visible before finance review next Tuesday, with finance must confirm whether the vendor renewal is charged centrally still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u014-decision-b310e15e",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: use the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: use the conservative cloud forecast for planning and revisit it after two weeks of usage data.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u014-risk-4093f5ff",
+   "type": "Risk",
+   "name": "Finance must confirm whether the vendor renewal is charged centrally",
+   "sentence": "The dependency is finance must confirm whether the vendor renewal is charged centrally.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-df8db75ac2",
+   "source": "zensar:F-03-U014",
+   "target": "entity:zensar:f-03-u014-risk-377b053b",
+   "type": "HAS_RISK",
+   "evidence": "My concern is cutting observability work could reduce spend while making reliability incidents harder to diagnose.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-de74d982fb",
+   "source": "zensar:F-03-U014",
+   "target": "entity:zensar:f-03-u014-action-93154ab5",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to hold a small contingency rather than pre-allocating the entire variance.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-c8c8bd93ec",
+   "source": "zensar:F-03-U014",
+   "target": "entity:zensar:f-03-u014-action-2a97749e",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to prepare low, expected, and high spend scenarios with the assumptions visible before finance review next Tuesday, with finance must confirm whether the vendor renewal is charged centrally still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-dfb89edee3",
+   "source": "zensar:F-03-U014",
+   "target": "entity:zensar:f-03-u014-decision-b310e15e",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: use the conservative cloud forecast for planning and revisit it after two weeks of usage data.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-b25a4f6c59",
+   "source": "entity:zensar:f-03-u014-decision-b310e15e",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: use the conservative cloud forecast for planning and revisit it after two weeks of usage data.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-4c28ef6b66",
+   "source": "zensar:F-03-U014",
+   "target": "entity:zensar:f-03-u014-risk-4093f5ff",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is finance must confirm whether the vendor renewal is charged centrally.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  }
+ ]
 }

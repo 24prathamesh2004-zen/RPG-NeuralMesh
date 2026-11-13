@@ -1,0 +1,55 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U004",
+    "datapoint": "ceat:E-04",
+    "title": "Insurance policies",
+    "kind": "policy",
+    "version": "2026-11",
+    "tags": [],
+    "summary": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1. High-resolution sidewall and bead photographic capture, 2.",
+    "body": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1. High-resolution sidewall and bead photographic capture, 2. Barcode & DOT serial number OCR verification, 3. Generate Snap & Score Cryptographically Hashed Inspection PDF Dossier, 4. Automatic dispatch to CEAT Warranty & Risk Portal via NeuralMesh webhook\n\nsubsidiary: harrisons, cover_type: stock_policy, policy_ref: POL-RPG-HARRISONS-09, underwriter: United India Insurance Marine Cargo & Stock Floater, insured: True, covered_perils: Storage Mould Bloom due to excessive ambient moisture, Transit Water Ingress, Spontaneous Heat Oxidation, claim_workflow_steps: 1. Measure mould surface coverage ratio via CV colorimetry, 2. Cross-reference warehouse hygrothermograph sensor log for RH > 65% trigger, 3. Compile Marine Underwriting Survey Dossier with SSIM loss verification, 4. Forward claim pack to HML Plant Risk Management Bureau\n\nsubsidiary: kec, cover_type: project_policy, policy_ref: POL-RPG-KEC-09, underwriter: ICICI Lombard EPC Erection All Risks (EAR) & Delay in Startup Policy, insured: True, covered_perils: Severe Atmospheric Galvanic Depletion, Wind Storm Member Buckling, Transport Joint Rupture, claim_workflow_steps: 1. Record GPS tower coordinates and phase identifier, 2. Document zinc coating loss percentage and structural chord deflection, 3. Issue P1/P2 field maintenance work order and bill-of-quantities replacement, 4. Transmit structural proof dossier to project insurer\n\nsubsidiary: raychem, cover_type: project_policy, policy_ref: POL-RPG-RAYCHEM-09, underwriter: Tata AIG Comprehensive Product Liability & Infrastructure Guarantee, insured: True, covered_perils: Dielectric Flashover, Thermal Runaway under rated voltage, Defective Polymer Shrink Recovery, claim_workflow_steps: 1. Record thermal imaging infrared gradient and partial discharge (HFPD) readings, 2. Quarantine defective joint splice assembly, 3. Export Snap & Score engineering dossier with visual carbon tree proof, 4. Dispatch remake kit claim to Raychem Quality & Warranty Bureau",
+    "concepts": [
+      "concept:project-delay-pattern"
+    ]
+  },
+  "concept_matches": {
+    "concept:project-delay-pattern": "phrase"
+  },
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"policy\" in the first lines"
+  },
+  "upload": {
+    "file": "insurance_policies.json",
+    "format": "json",
+    "chars": 2276,
+    "sha256": "167b7ed72e67e23d29b99157fa2244dbb42dbcbfe9dd11386ad950df63d66b8f",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:44+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:failure-pattern",
+      "verdict": "not_supported",
+      "reason": "Sentence lists insurance cover details, not a failure pattern topic.",
+      "sentence": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1.",
+      "by": "model",
+      "at": "2026-11-13T12:19:59+00:00"
+    },
+    {
+      "concept": "concept:overseas-mobilisation-terms",
+      "verdict": "not_supported",
+      "reason": "Nothing about labour, contracts or payment terms; it describes a stock policy.",
+      "sentence": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1.",
+      "by": "model",
+      "at": "2026-11-13T12:19:59+00:00"
+    }
+  ]
+}

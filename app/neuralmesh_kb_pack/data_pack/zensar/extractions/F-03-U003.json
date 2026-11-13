@@ -1,8 +1,56 @@
 {
  "document": "zensar:F-03-U003",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:22:49+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:launch-record",
+   "type": "Form",
+   "name": "launch record",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:audience-file",
+   "type": "Form",
+   "name": "audience file",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u003-risk-4dd107e5",
+   "type": "Risk",
+   "name": "Sending to an outdated segment could contact users who opted ...",
+   "sentence": "My concern is sending to an outdated segment could contact users who opted out.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u003-action-21d82490",
+   "type": "Action",
+   "name": "Exclude that segment until its consent rule is confirmed",
+   "sentence": "A practical next step is to exclude that segment until its consent rule is confirmed.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u003-action-fb734581",
+   "type": "Action",
+   "name": "Refresh the audience file and save legal's consent decision with ...",
+   "sentence": "The follow-up is to refresh the audience file and save legal's consent decision with the launch record before the scheduled campaign window, with legal must confirm the consent language for one regional segment still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u003-decision-17188f15",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: run a ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u003-risk-ff549a66",
+   "type": "Risk",
+   "name": "Legal must confirm the consent language for one regional segment",
+   "sentence": "The dependency is legal must confirm the consent language for one regional segment.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-ada7b44b4f",
@@ -12,7 +60,150 @@
    "evidence": "Elena Petrova: Elena Petrova: Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence concerns a customer campaign, not employee onboarding or labour terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-28db051b40",
+   "source": "zensar:F-03-U003",
+   "target": "entity:zensar:f-03-u003-risk-4dd107e5",
+   "type": "HAS_RISK",
+   "evidence": "My concern is sending to an outdated segment could contact users who opted out.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states the risk of contacting opted-out users.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-d3c8c1d2f5",
+   "source": "zensar:F-03-U003",
+   "target": "entity:zensar:f-03-u003-action-21d82490",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to exclude that segment until its consent rule is confirmed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence proposes excluding the segment as a next step.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-2244973cfa",
+   "source": "zensar:F-03-U003",
+   "target": "entity:zensar:f-03-u003-action-fb734581",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to refresh the audience file and save legal's consent decision with the launch record before the scheduled campaign window, with legal must confirm the consent language for one regional segment still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated directly in the sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-8e2c9cf3aa",
+   "source": "zensar:F-03-U003",
+   "target": "entity:zensar:f-03-u003-decision-17188f15",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement to run opted-in cohort first is the decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-5cb96b65c3",
+   "source": "entity:zensar:f-03-u003-decision-17188f15",
+   "target": "concept:employee-onboarding",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Customer campaign onboarding, not Employee onboarding topic.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-842eb74aa4",
+   "source": "entity:zensar:f-03-u003-decision-17188f15",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: run a small opted-in cohort first and judge the campaign on onboarding completion.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "No mention of labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-b463195cf9",
+   "source": "zensar:F-03-U003",
+   "target": "entity:zensar:f-03-u003-risk-ff549a66",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is legal must confirm the consent language for one regional segment.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Legal confirmation dependency is stated as a risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
+  },
+  {
+   "id": "x-3dbd1670f0",
+   "source": "entity:zensar:audience-file",
+   "target": "entity:zensar:launch-record",
+   "type": "PRECEDES",
+   "evidence": "Michael Grant will refresh the audience file and save legal's consent decision with the launch record before the scheduled campaign window.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence orders refreshing and saving before window, not file preceding record.",
+    "by": "model",
+    "at": "2026-11-13T12:51:17+00:00"
+   }
   }
  ]
 }

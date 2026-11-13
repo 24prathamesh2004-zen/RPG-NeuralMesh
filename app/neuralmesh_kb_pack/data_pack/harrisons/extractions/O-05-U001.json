@@ -1,0 +1,25 @@
+{
+ "document": "harrisons:O-05-U001",
+ "made": "2026-11-13T12:24:26+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-88915f3fd7",
+   "source": "concept:latex-collection-and-transport",
+   "target": "concept:latex-pre-coagulation",
+   "type": "RELATED_TO",
+   "evidence": "week_starting,season,collection_to_factory_time,estates_reporting,latex_spoilage_percent,pre_coagulation_share_of_spoilage_percent",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Header row pairs collection-to-factory time with pre-coagulation share of spoilage, so both appear together.",
+    "by": "model",
+    "at": "2026-11-13T12:24:28+00:00"
+   }
+  }
+ ]
+}

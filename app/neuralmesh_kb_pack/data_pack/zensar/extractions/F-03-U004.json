@@ -1,8 +1,69 @@
 {
  "document": "zensar:F-03-U004",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:22:55+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:release-checklist",
+   "type": "Form",
+   "name": "release checklist",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:release-candidate",
+   "type": "Asset",
+   "name": "release candidate",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:accessibility-pass",
+   "type": "Test",
+   "name": "accessibility pass",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:readiness-review",
+   "type": "Process",
+   "name": "readiness review",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:f-03-u004-risk-8810286f",
+   "type": "Risk",
+   "name": "Launching before the accessibility findings are triaged could block key ...",
+   "sentence": "My concern is launching before the accessibility findings are triaged could block key users.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u004-action-81774d8d",
+   "type": "Action",
+   "name": "Use a limited internal preview while the final browser checks ...",
+   "sentence": "A practical next step is to use a limited internal preview while the final browser checks complete.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u004-action-3d812348",
+   "type": "Action",
+   "name": "Finish the accessibility pass and attach retest evidence to the ...",
+   "sentence": "The follow-up is to finish the accessibility pass and attach retest evidence to the release checklist before the Friday go-or-no-go, with the accessibility reviewer must return the annotated report still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u004-decision-0380c442",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release candidate in readiness review and do not announce a launch date yet.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u004-risk-9a91fa70",
+   "type": "Risk",
+   "name": "Accessibility reviewer must return the annotated report",
+   "sentence": "The dependency is the accessibility reviewer must return the annotated report.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-0267975b77",
@@ -12,7 +73,166 @@
    "evidence": "We have the release checklist has 41 of 45 checks complete and no open severity-one defects, and the signal I am watching is the unresolved checks are keyboard navigation, support handoff, and two browser combinations.",
    "by": "code",
    "sentences": 11,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Failure pattern is vague; release checklist matched to Integration checklist loosely.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-dba6d06fe9",
+   "source": "zensar:F-03-U004",
+   "target": "entity:zensar:f-03-u004-risk-8810286f",
+   "type": "HAS_RISK",
+   "evidence": "My concern is launching before the accessibility findings are triaged could block key users.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Meeting states the risk of launching before accessibility triage.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-56d3f187a1",
+   "source": "zensar:F-03-U004",
+   "target": "entity:zensar:f-03-u004-action-81774d8d",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to use a limited internal preview while the final browser checks complete.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states the preview action.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-b5380554a2",
+   "source": "zensar:F-03-U004",
+   "target": "entity:zensar:f-03-u004-action-3d812348",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to finish the accessibility pass and attach retest evidence to the release checklist before the Friday go-or-no-go, with the accessibility reviewer must return the annotated report still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated in the sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-2193d85408",
+   "source": "entity:zensar:f-03-u004-action-3d812348",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to finish the accessibility pass and attach retest evidence to the release checklist before the Friday go-or-no-go, with the accessibility reviewer must return the annotated report still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Release checklist plausibly equals Integration checklist, but name differs.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-6adc657e32",
+   "source": "zensar:F-03-U004",
+   "target": "entity:zensar:f-03-u004-decision-0380c442",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release candidate in readiness review and do not announce a launch date yet.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement stated as decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-71db9f6fa2",
+   "source": "entity:zensar:f-03-u004-decision-0380c442",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release candidate in readiness review and do not announce a launch date yet.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Labour, contract and payment terms unrelated to the decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-35eef06887",
+   "source": "zensar:F-03-U004",
+   "target": "entity:zensar:f-03-u004-risk-9a91fa70",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the accessibility reviewer must return the annotated report.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency on the reviewer's report is stated.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-d3d73dc7f5",
+   "source": "entity:zensar:release-candidate",
+   "target": "entity:zensar:readiness-review",
+   "type": "RAISED_ON",
+   "evidence": "We will proceed on this basis: keep the release candidate in readiness review and do not announce a launch date yet.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Candidate is kept in review, not raised on it.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
+  },
+  {
+   "id": "x-e0a9302a58",
+   "source": "entity:zensar:accessibility-pass",
+   "target": "entity:zensar:release-checklist",
+   "type": "PRECEDES",
+   "evidence": "Lucas Martin will finish the accessibility pass and attach retest evidence to the release checklist before the Friday go-or-no-go.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Accessibility pass finishes before checklist evidence and go-or-no-go.",
+    "by": "model",
+    "at": "2026-11-13T12:51:21+00:00"
+   }
   }
  ]
 }

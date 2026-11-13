@@ -1,8 +1,251 @@
 {
  "document": "zensar:F-02-U002",
- "made": "2026-11-12T10:40:01+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:21:41+00:00",
+ "model": "made, 18 of 18 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:rpg-enterprise",
+   "type": "Organisation",
+   "name": "RPG Enterprises",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:zensar-kharadi-knowledge-park",
+   "type": "Site",
+   "name": "Zensar Kharadi Knowledge Park",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:pune",
+   "type": "Site",
+   "name": "Pune",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:cio-organization",
+   "type": "Team",
+   "name": "CIO Organization",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:project-manager",
+   "type": "Role",
+   "name": "Project Manager",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:microsoft-intune",
+   "type": "System",
+   "name": "Microsoft Intune",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:microsoft-intune-company-portal",
+   "type": "System",
+   "name": "Microsoft Intune Company Portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:multi-factor-authentication",
+   "type": "Process",
+   "name": "Multi-Factor Authentication",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:vpn",
+   "type": "System",
+   "name": "VPN",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:microsoft-entra-id",
+   "type": "System",
+   "name": "Microsoft Entra ID",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:cisco-anyconnect-secure-mobility-client",
+   "type": "System",
+   "name": "Cisco AnyConnect Secure Mobility Client",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:cisco-security-service-edge",
+   "type": "System",
+   "name": "Cisco Security Service Edge",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:active-directory",
+   "type": "System",
+   "name": "Active Directory",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:servicenow",
+   "type": "System",
+   "name": "ServiceNow",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:project-delivery-head",
+   "type": "Role",
+   "name": "Project Delivery Head",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:tim-fulfillment-team",
+   "type": "Team",
+   "name": "TIMS Fulfillment Team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:learning-management-system",
+   "type": "System",
+   "name": "Learning Management System",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:it-information-security",
+   "type": "Team",
+   "name": "IT Information Security",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:myleave",
+   "type": "System",
+   "name": "MyLeaves",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:zent-e-support-team",
+   "type": "Team",
+   "name": "ZenT&E Support Team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:pulse-learning-lms",
+   "type": "System",
+   "name": "Pulse Learning (LMS)",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:hr-connect-portal",
+   "type": "System",
+   "name": "HR Connect portal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:ethic-whistleblower-committee",
+   "type": "Team",
+   "name": "Ethics & Whistleblower Committee",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:whistleblower-officer-legal-team",
+   "type": "Team",
+   "name": "Whistleblower Officer / Legal Team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:adselfservice",
+   "type": "System",
+   "name": "ADSelfService",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:eform-portal",
+   "type": "System",
+   "name": "eForms portal",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:is-service-desk",
+   "type": "Service",
+   "name": "IS Service Desk",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:onerpg",
+   "type": "System",
+   "name": "OneRPG",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:payroll-helpdesk",
+   "type": "Service",
+   "name": "Payroll Helpdesk",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:reporting-manager",
+   "type": "Role",
+   "name": "Reporting Manager",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:resilience-work",
+   "type": "Organisation",
+   "name": "Resilience Works",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:timesheet",
+   "type": "Form",
+   "name": "Timesheet",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:timesheet-portal",
+   "type": "System",
+   "name": "Timesheet Portal",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zenexpense",
+   "type": "System",
+   "name": "ZenExpense",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zenfusion",
+   "type": "System",
+   "name": "ZenFusion",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zensar-technologie",
+   "type": "Organisation",
+   "name": "Zensar Technologies",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zensarian-assistance-program-zap",
+   "type": "Programme",
+   "name": "Zensarian Assistance Program (ZAP)",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:zentravel",
+   "type": "System",
+   "name": "ZenTravel",
+   "by": "model",
+   "existing": true
+  }
+ ],
  "links": [
   {
    "id": "x-48b454e306",
@@ -12,7 +255,15 @@
    "evidence": "The Zensar Information Systems (IS) Service Desk serves as the central point of contact for all technical issues, hardware failures, application access requests, and infrastructure support.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence mentions hardware failures, not a 'Failure pattern' entity.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
   },
   {
    "id": "x-50e9e08f2c",
@@ -22,7 +273,15 @@
    "evidence": "Upon receiving initial temporary credentials from the Talent Acquisition or Onboarding Operations team, associates are required to perform their initial system login through this portal.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Sentence about onboarding credentials and portal login; source 'Acquisition integration' unrelated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
   },
   {
    "id": "x-27b39743dd",
@@ -32,7 +291,543 @@
    "evidence": "24-Hour Account Synchronization Delay Notice: For newly onboarded associates and interns, directory identity synchronization between Active Directory and ServiceNow / IS Service Desk requires up to twenty-four (24) hours following network ID creation.",
    "by": "code",
    "sentences": 1,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sync delay is not a project delay pattern.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-f8e80fada3",
+   "source": "entity:zensar:zensar-technologie",
+   "target": "entity:zensar:rpg-enterprise",
+   "type": "PART_OF",
+   "evidence": "Zensar Technologies Limited is a leading global technology consulting and services organization with an engineering-led heritage, operating as an integral technology business of RPG Enterprises—one of India's prominent industrial conglomerates.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Zensar is a technology business of RPG Enterprises.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-378aced7ac",
+   "source": "entity:zensar:zensar-kharadi-knowledge-park",
+   "target": "entity:zensar:pune",
+   "type": "PART_OF",
+   "evidence": "Headquartered at the Zensar Kharadi Knowledge Park in Pune, Maharashtra, India, the company employs over 11,000 skilled associates across more than 30 strategic delivery hubs, innovation labs, and client executive centers worldwide.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Knowledge Park is located in Pune, where HQ sits.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-98284cddd8",
+   "source": "entity:zensar:onerpg",
+   "target": "entity:zensar:cio-organization",
+   "type": "MANAGED_BY",
+   "evidence": "Chief Information Officer (CIO) Organization: Governing enterprise IT, cybersecurity, internal applications (OneRPG, ZenFusion), infrastructure, and service desk operations.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "CIO Organization governs OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-4d2d91444c",
+   "source": "entity:zensar:zenfusion",
+   "target": "entity:zensar:cio-organization",
+   "type": "MANAGED_BY",
+   "evidence": "Chief Information Officer (CIO) Organization: Governing enterprise IT, cybersecurity, internal applications (OneRPG, ZenFusion), infrastructure, and service desk operations.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "CIO Organization governs ZenFusion.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-5f092abc13",
+   "source": "entity:zensar:timesheet-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Associates submit time records electronically via the enterprise Timesheet Portal, accessible directly at https://timesheet.zensar.com/login or via OneRPG > My Applications > Timesheet Portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Timesheet Portal reachable via OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-005075539b",
+   "source": "entity:zensar:timesheet",
+   "target": "entity:zensar:reporting-manager",
+   "type": "APPROVED_BY",
+   "evidence": "Submitted timesheets are automatically routed to the designated Project Manager (PM) or Reporting Manager for electronic review and approval in the portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Timesheets routed to Reporting Manager for approval.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-0b82dc1773",
+   "source": "entity:zensar:timesheet",
+   "target": "entity:zensar:project-manager",
+   "type": "APPROVED_BY",
+   "evidence": "Submitted timesheets are automatically routed to the designated Project Manager (PM) or Reporting Manager for electronic review and approval in the portal.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Timesheets routed to Project Manager for approval.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-6d0fd800c8",
+   "source": "entity:zensar:onerpg",
+   "target": "entity:zensar:adselfservice",
+   "type": "ACCESSED_VIA",
+   "evidence": "The password configured via ADSelfService operates as a unified Single Sign-On (SSO) credential, controlling access to corporate Exchange webmail, OneRPG SharePoint intranet, Talent@Zensar (T@Z), Zenith ERP, ServiceNow/IS Service Desk, and Windows network domain logon.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "ADSelfService password controls OneRPG access; 'accessed via' is loose.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-ffdea6357e",
+   "source": "entity:zensar:is-service-desk",
+   "target": "entity:zensar:adselfservice",
+   "type": "ACCESSED_VIA",
+   "evidence": "The password configured via ADSelfService operates as a unified Single Sign-On (SSO) credential, controlling access to corporate Exchange webmail, OneRPG SharePoint intranet, Talent@Zensar (T@Z), Zenith ERP, ServiceNow/IS Service Desk, and Windows network domain logon.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Password via ADSelfService controls Service Desk login; relation loose.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-7f2f32f319",
+   "source": "entity:zensar:multi-factor-authentication",
+   "target": "entity:zensar:onerpg",
+   "type": "APPLIES_TO",
+   "evidence": "Multi-Factor Authentication (MFA) is mandatory for accessing all Zensar enterprise systems, including Microsoft 365, Outlook email, OneRPG intranet, single sign-on (SSO) portals, and VPN connections.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "MFA mandatory for OneRPG access.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-a859923824",
+   "source": "entity:zensar:multi-factor-authentication",
+   "target": "entity:zensar:vpn",
+   "type": "APPLIES_TO",
+   "evidence": "Multi-Factor Authentication (MFA) is mandatory for accessing all Zensar enterprise systems, including Microsoft 365, Outlook email, OneRPG intranet, single sign-on (SSO) portals, and VPN connections.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "MFA mandatory for VPN connections.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-be8dff95b1",
+   "source": "entity:zensar:multi-factor-authentication",
+   "target": "entity:zensar:microsoft-entra-id",
+   "type": "PART_OF",
+   "evidence": "Zensar enforces mandatory Multi-Factor Authentication across Microsoft Entra ID (formerly Azure Active Directory) for all enterprise identities.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "MFA enforced across Entra ID; 'part of' is imprecise.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-10c2da03a1",
+   "source": "entity:zensar:microsoft-intune",
+   "target": "entity:zensar:microsoft-intune-company-portal",
+   "type": "ACCESSED_VIA",
+   "evidence": "Any associate wishing to access corporate email, calendar, Microsoft Teams, or OneDrive on personal iOS or Android devices must enroll through the Microsoft Intune Company Portal application.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Enrollment goes through Company Portal app; Intune linked to its own portal.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-26116060e8",
+   "source": "entity:zensar:cisco-anyconnect-secure-mobility-client",
+   "target": "entity:zensar:cisco-security-service-edge",
+   "type": "USES",
+   "evidence": "Remote connectivity to Zensar's corporate network and internal applications is established using Cisco AnyConnect Secure Mobility Client connected to cloud-based Cisco Security Service Edge (SSE) infrastructure.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "AnyConnect client connects to Cisco SSE infrastructure.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-5fb4c6c6d2",
+   "source": "entity:zensar:is-service-desk",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "All IT incidents, hardware faults, software requests, and enterprise access requisitions are managed through the centralized Information Services (IS) Service Desk, accessible via OneRPG > My Applications > IS Service Desk (https://servicedesk.zensar.com).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Service Desk accessible via OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-d3078fe504",
+   "source": "entity:zensar:active-directory",
+   "target": "entity:zensar:servicenow",
+   "type": "PRECEDES",
+   "evidence": "For newly onboarded associates and interns, directory identity synchronization between Active Directory and ServiceNow / IS Service Desk requires up to twenty-four (24) hours following network ID creation.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sync between systems; no precedence relation stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-b33cc3d449",
+   "source": "entity:zensar:eform-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Requisition of non-standard software licenses, physical hardware infrastructure, and administrative permissions is strictly governed through the eForms portal (accessible at https://eforms.zensar.com or OneRPG > My Applications > eForms).",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "eForms accessible via OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-e317091035",
+   "source": "entity:zensar:reporting-manager",
+   "target": "entity:zensar:project-delivery-head",
+   "type": "PRECEDES",
+   "evidence": "Once an eForm is submitted, the automated workflow routes through the associate's Reporting Manager -> Project Delivery Head -> IT Information Security (for privilege/software compliance) -> TIMS Fulfillment Team.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Workflow order: Reporting Manager then Project Delivery Head.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-60e15b39f9",
+   "source": "entity:zensar:project-delivery-head",
+   "target": "entity:zensar:it-information-security",
+   "type": "PRECEDES",
+   "evidence": "Once an eForm is submitted, the automated workflow routes through the associate's Reporting Manager -> Project Delivery Head -> IT Information Security (for privilege/software compliance) -> TIMS Fulfillment Team.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Workflow order: Delivery Head then IT Information Security.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-db80b0c7f4",
+   "source": "entity:zensar:it-information-security",
+   "target": "entity:zensar:tim-fulfillment-team",
+   "type": "PRECEDES",
+   "evidence": "Once an eForm is submitted, the automated workflow routes through the associate's Reporting Manager -> Project Delivery Head -> IT Information Security (for privilege/software compliance) -> TIMS Fulfillment Team.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Workflow order: Information Security then TIMS Fulfillment.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-223125606c",
+   "source": "entity:zensar:learning-management-system",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Zensar manages its enterprise learning initiatives through its dedicated Learning Management System (LMS) / Pulse Learning Portal, accessible via OneRPG.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "LMS accessible via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-c21a56bab0",
+   "source": "entity:zensar:zensarian-assistance-program-zap",
+   "target": "entity:zensar:resilience-work",
+   "type": "PROVIDED_BY",
+   "evidence": "Zensar partners with Resilience Works to deliver the Zensarian Assistance Program (ZAP), a comprehensive, 24x7 confidential counseling and wellness support ecosystem.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Resilience Works delivers ZAP for Zensar.",
+    "by": "model",
+    "at": "2026-11-13T12:50:45+00:00"
+   }
+  },
+  {
+   "id": "x-f6cee8b3b2",
+   "source": "entity:zensar:zenfusion",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Log in to OneRPG > My Applications > ZenFusion > Me > Family and Emergency Contacts.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Path states ZenFusion is reached via OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-f913244be3",
+   "source": "entity:zensar:is-service-desk",
+   "target": "entity:zensar:microsoft-entra-id",
+   "type": "PART_OF",
+   "evidence": "Key platforms include Microsoft Entra ID (Azure AD) for identity governance, Microsoft Intune for mobile device management, Palo Alto / Cisco VPN for remote access, and the IS Service Desk for ticket lifecycle management.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Both are listed as separate platforms; not part-of.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-b6ee650acb",
+   "source": "entity:zensar:zentravel",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "ZenTravel | Travel Management | Domestic and international flight/hotel bookings, itineraries, and project travel routing. | OneRPG > My Applications > ZenTravel",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Access path OneRPG > My Applications > ZenTravel.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-dc4b80e6f2",
+   "source": "entity:zensar:zenexpense",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "ZenExpense | Expense Reimbursement | Travel per-diem claims, project expense reporting, invoice uploads, finance approval. | OneRPG > My Applications > ZenExpense",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Access path given for ZenExpense via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-2de7730c78",
+   "source": "entity:zensar:myleave",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "MyLeaves | Leave Management | Leave balance inquiry, annual leave planning, application, and manager approvals. | OneRPG > My Applications > MyLeaves",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Access path given for MyLeaves via OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-bf60580f6c",
+   "source": "entity:zensar:pulse-learning-lms",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Pulse Learning (LMS) | Learning & Development | Mandatory compliance courses, technical certifications, upskilling modules. | OneRPG > My Applications > Learning",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Learning app accessed under OneRPG My Applications.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-1a7ab9a973",
+   "source": "entity:zensar:payroll-helpdesk",
+   "target": "entity:zensar:zenfusion",
+   "type": "ACCESSED_VIA",
+   "evidence": "Payroll & Compensation | Salary queries, tax declarations, Form 16, payroll deductions. | indpayroll@zensar.com / hrpayroll@zensar.com | ZenFusion > Payroll Helpdesk",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Payroll Helpdesk reached via ZenFusion > Payroll Helpdesk.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-9c808cff3e",
+   "source": "entity:zensar:hr-connect-portal",
+   "target": "entity:zensar:onerpg",
+   "type": "PART_OF",
+   "evidence": "HR Connect: Submit HR policy inquiries, certificate requests, and general questions via the HR Connect portal on OneRPG.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "HR Connect portal is on OneRPG.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-edd40954fd",
+   "source": "entity:zensar:zent-e-support-team",
+   "target": "entity:zensar:zentravel",
+   "type": "USES",
+   "evidence": "ZenT&E Travel Support | Assistance with business travel, flights, hotels, and expense claims. | ZenT&E Support Team / ZenTravel Portal | Standard Business Hours",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Support team/ZenTravel Portal listed as channel; use implied loosely.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-3d34af207c",
+   "source": "entity:zensar:zensarian-assistance-program-zap",
+   "target": "entity:zensar:onerpg",
+   "type": "ACCESSED_VIA",
+   "evidence": "Zensarian Assistance Program (ZAP) | Confidential psychological counseling, wellness, and mental health support. | OneRPG > Employee Wellness | 100% Third-Party Confidential",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "ZAP accessed via OneRPG > Employee Wellness.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
+  },
+  {
+   "id": "x-ef3bf96c47",
+   "source": "entity:zensar:ethic-whistleblower-committee",
+   "target": "entity:zensar:whistleblower-officer-legal-team",
+   "type": "MANAGED_BY",
+   "evidence": "Ethics & Whistleblower Committee | Reporting financial fraud, corruption, severe Code of Conduct violations. | Whistleblower Officer / Legal Team | Anonymous / Protected",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Table row lists officer/legal team as handler, ownership implied.",
+    "by": "model",
+    "at": "2026-11-13T12:50:49+00:00"
+   }
   }
  ]
 }

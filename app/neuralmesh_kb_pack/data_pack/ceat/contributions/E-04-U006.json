@@ -1,0 +1,78 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U006",
+    "datapoint": "ceat:E-04",
+    "title": "Sop standards",
+    "kind": "sop",
+    "version": "2026-11",
+    "tags": [],
+    "summary": "standard_id: CEAT-QC-TY-02, subsidiary: ceat, title: CEAT Commercial & Passenger Radial Plant Quality Standard, authority: CEAT Corporate Quality Council & ISO 10191, clauses: clause_ref: Clause 4.1.2 - Carcass Structural Integrity & Bulges, condition_id: bulge, acceptance_limit: Zero Tolerance (0% visible area).",
+    "body": "standard_id: CEAT-QC-TY-02, subsidiary: ceat, title: CEAT Commercial & Passenger Radial Plant Quality Standard, authority: CEAT Corporate Quality Council & ISO 10191, clauses: clause_ref: Clause 4.1.2 - Carcass Structural Integrity & Bulges, condition_id: bulge, acceptance_limit: Zero Tolerance (0% visible area). Any sidewall bulge mandates immediate scrap., remedial_action: Mark with red indelible crayon. Quarantine to Defective Bay 03. High carcass blowout hazard under highway inflation., verification_method: Laser profilometry or ArUco-referenced monocular shadow depth mapping., clause_ref: Clause 5.3.1 - Tread Groove Micro-cracking & Ozone Aging, condition_id: crack, acceptance_limit: Crack width <= 1.0mm, cumulative surface area <= 3.0% of tread contact patch., remedial_action: Downgrade to Grade B (Secondary Dispatch / Commercial Fleet pool). Re-audit if depth approaches cord layer., verification_method: Optical 16x zoom inspection and DinoV2 patch embedding anomaly distance., clause_ref: Clause 6.2.4 - Bead Lip & Seating Ring Damage, condition_id: bead_damage, acceptance_limit: Zero broken or displaced bead wires; rubber chaffing restricted to < 5mm circumferential length., remedial_action: Scrap tyre immediately. Disallow retreading casing salvage., verification_method: 360-degree tactile and visual bead lip inspection gauge.\n\nstandard_id: HML-GREEN-BOOK-RSS, subsidiary: harrisons, title: International Standards of Quality & Packing for Natural Rubber (The Green Book), authority: International Rubber Study Group (IRSG) & Rubber Board of India, clauses: clause_ref: Clause 2.3 - Mould Contamination & Spore Thresholds, condition_id: mould, acceptance_limit: Grade 1: Completely mould-free | Grade 2: Trace dry wrapper mould | Grade 3: Superficial mould <5% area | Grade 4/5: Reject, remedial_action: Immediate transfer to hot-smoke shed re-drying (<60°C with thymol anti-fungal misting). Dispatch within 10 days., verification_method: Standard illuminated light-box table survey with calibrated colorimetry., clause_ref: Clause 3.1 - Foreign Impurities, Sand & Bark Specks, condition_id: dirt_foreign, acceptance_limit: Dispersed bark specks < 1.0% total area for RSS-2; strict zero sand/gravel tolerance across all grades., remedial_action: Downgrade bale grade accordingly; route lot to lower compounding tier (footwear or mats)., verification_method: SSIM background difference filter and patch anomaly clustering., clause_ref: Clause 4.2 - Latex Gas Pockets & Pinhead Bubbles, condition_id: bubbles, acceptance_limit: Small pinhead bubbles permissible up to Grade 3 provided they are non-continuous and dry., remedial_action: Maintain in dry ventilated bay (RH < 65%). Package with moisture-barrier liner., verification_method: Cross-polarized transmission lighting.\n\nstandard_id: KEC-PATROL-P01, subsidiary: kec, title: Overhead Transmission Line Structural Patrol & Audit Manual, authority: Central Electricity Authority (CEA) & IS 802, clauses: clause_ref: Clause 8.4 - Zinc Galvanizing Depletion & Rust Scaling, condition_id: zinc_loss, acceptance_limit: Residual zinc DFT >= 80 µm. If steel substrate red rust exceeds 5% area, assign Priority P2., remedial_action: Wire-brush loose iron oxide; apply 2-coat zinc-rich cold galvanizing compound (minimum DFT 80 µm) within 7 days., verification_method: Magnetic eddy-current thickness gauge and colorimetric rust segmentation., clause_ref: Clause 9.2 - Lattice Member Mechanical Buckling & Strut Deflection, condition_id: bent_member, acceptance_limit: Zero tolerance for main leg members; diagonal bracing deflection > 15mm warrants Priority P1., remedial_action: P1 Emergency action: Install temporary guy-wire tensioning rig; replace deformed tower angle member within 24 hours., verification_method: Theodolite line survey and photogrammetric edge linearity check., clause_ref: Clause 11.1 - Fastener Tightness & Missing Lock Nuts, condition_id: missing_part, acceptance_limit: Zero missing bolts in critical structural gussets; torque check 100% of tower base bolts., remedial_action: Install grade 8.8 galvanized bolt with anti-theft punched thread immediately., verification_method: Calibrated torque wrench and drone zoom imagery.\n\nstandard_id: RAYCHEM-HV-SOP-404, subsidiary: raychem, title: High Voltage Extruded Cable Jointing & Termination QA Standard, authority: IEEE 404 / IEC 60502-4 / CENELEC HD 629.1, clauses: clause_ref: Clause 9.1 - Electrical Stress Control & Carbon Tracking Paths, condition_id: tracking_mark, acceptance_limit: Zero tolerance for continuous dendritic tracking marks. Partial discharge limit < 5 pC at 1.73 Uo., remedial_action: Mandatory feeder de-energization. Cut out compromised joint and rebuild with new stress control kit., verification_method: High-frequency CT partial discharge (HFPD) sensor and high-resolution macroscopic inspection., clause_ref: Clause 10.3 - Heat-Shrink Temperature Window & Void Enclosure, condition_id: uneven_shrink, acceptance_limit: Circumferential recovery uniformity within +/- 1.5mm; zero trapped air blisters over stress mastic., remedial_action: Re-heat smoothly from center outwards using soft-yellow propane flame until temperature paint transitions., verification_method: Infrared thermal imaging and acoustic ultrasound void scanning., clause_ref: Clause 12.4 - Substation Moisture Barrier & Outer Sealing, condition_id: burnt, acceptance_limit: Outer hermetic polyolefin barrier intact; zero scorch damage or water penetration., remedial_action: Scrap kit if charred during torch installation. Do not energize., verification_method: Visual audit and insulation resistance Megger test (>10,000 M-Ohm)."
+  },
+  "concept_matches": {},
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"sop\" in the file name or title"
+  },
+  "upload": {
+    "file": "sop_standards.json",
+    "format": "json",
+    "chars": 5674,
+    "sha256": "f998596b5955959f170e3f8abac9aa49a51f873195207602e9bfa59547edce15",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:44+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:cable-joint-installation",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:14+00:00"
+    },
+    {
+      "concept": "concept:cable-termination",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:14+00:00"
+    },
+    {
+      "concept": "concept:contamination-control",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:14+00:00"
+    },
+    {
+      "concept": "concept:lot-acceptance",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:14+00:00"
+    },
+    {
+      "concept": "concept:compound-formulation",
+      "verdict": "not_supported",
+      "reason": "Sentence concerns rust remediation with galvanizing compound, not compound formulation as a topic.",
+      "sentence": "If steel substrate red rust exceeds 5% area, assign Priority P2., remedial_action: Wire-brush loose iron oxide; apply 2-coat zinc-rich cold galvanizing compound (minimum DFT 80 µm) within 7 days., verification_method: Magnetic eddy-current thickness gauge and colorimetric rust segmentation., clause_",
+      "by": "model",
+      "at": "2026-11-13T12:20:16+00:00"
+    },
+    {
+      "concept": "concept:knowledge-transfer",
+      "verdict": "not_supported",
+      "reason": "Sentence is about cable joint rebuild and inspection, not knowledge transfer or handover.",
+      "sentence": "Cut out compromised joint and rebuild with new stress control kit., verification_method: High-frequency CT partial discharge (HFPD) sensor and high-resolution macroscopic inspection., clause_ref: Clause 10.3 - Heat-Shrink Temperature Window & Void Enclosure, condition_id: uneven_shrink, acceptance_l",
+      "by": "model",
+      "at": "2026-11-13T12:20:16+00:00"
+    }
+  ]
+}

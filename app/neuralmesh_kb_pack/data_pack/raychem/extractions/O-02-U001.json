@@ -1,0 +1,148 @@
+{
+ "document": "raychem:O-02-U001",
+ "made": "2026-11-13T12:24:34+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:raychem:digital-job-card",
+   "type": "Form",
+   "name": "Digital job card",
+   "by": "model"
+  },
+  {
+   "id": "entity:raychem:head-of-field-service",
+   "type": "Role",
+   "name": "Head of field service",
+   "by": "model"
+  },
+  {
+   "id": "entity:raychem:quality-lead",
+   "type": "Role",
+   "name": "Quality lead",
+   "by": "model"
+  },
+  {
+   "id": "entity:raychem:jointing-procedure",
+   "type": "Process",
+   "name": "Jointing procedure",
+   "by": "model"
+  },
+  {
+   "id": "entity:raychem:o-02-u001-decision-d5a5eb66",
+   "type": "Decision",
+   "name": "All 5 records",
+   "sentence": "The second engineer had signed off all 5 records.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-2c3e3c532f",
+   "source": "concept:failure-pattern",
+   "target": "concept:root-cause-analysis",
+   "type": "RELATED_TO",
+   "evidence": "Teardown findings, failed 33 kV cable joints, July to September 2026 Failure analysis by the field service team of Raychem RPG, November 2026.",
+   "by": "code",
+   "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "Teardown findings and failure analysis suggest root cause work, but it is not stated.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  },
+  {
+   "id": "x-b83694dc17",
+   "source": "concept:cable-accessory-failure-analysis",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "This failed joint teardown followed the failure analysis procedure of the field service team.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "Sentence is about failure analysis of a joint; 'Failure pattern' is not explicitly mentioned.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  },
+  {
+   "id": "x-df8a65647f",
+   "source": "concept:cable-accessory-failure-analysis",
+   "target": "concept:root-cause-analysis",
+   "type": "RELATED_TO",
+   "evidence": "This failed joint teardown followed the failure analysis procedure of the field service team.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "Failure analysis procedure is close to root cause analysis but not named.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  },
+  {
+   "id": "x-36a54dc15d",
+   "source": "concept:cable-joint-installation",
+   "target": "concept:installation-quality-records",
+   "type": "RELATED_TO",
+   "evidence": "Put the rule to stop work when rain or dust reaches the open cable on the first page of the jointing procedure Head of field service 30 November 2026 Make the photo of the sealed sleeve end a required field of the digital job card, and add it to the sign-off of the second engineer Quality lead 15 De",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "Job card photo and sign-off relate to installation records, but loosely.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  },
+  {
+   "id": "x-512ea40b66",
+   "source": "raychem:O-02-U001",
+   "target": "entity:raychem:o-02-u001-decision-d5a5eb66",
+   "type": "HAS_DECISION",
+   "evidence": "The second engineer had signed off all 5 records.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-ef333d2d97",
+   "source": "entity:raychem:jointing-procedure",
+   "target": "entity:raychem:head-of-field-service",
+   "type": "OWNED_BY",
+   "evidence": "Put the rule to stop work when rain or dust reaches the open cable on the first page of the jointing procedure Head of field service 30 November 2026",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Action on jointing procedure is assigned to Head of field service.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  },
+  {
+   "id": "x-2a41d59730",
+   "source": "entity:raychem:digital-job-card",
+   "target": "entity:raychem:quality-lead",
+   "type": "OWNED_BY",
+   "evidence": "Make the photo of the sealed sleeve end a required field of the digital job card, and add it to the sign-off of the second engineer Quality lead 15 December 2026",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Digital job card action is assigned to Quality lead.",
+    "by": "model",
+    "at": "2026-11-13T12:24:37+00:00"
+   }
+  }
+ ]
+}

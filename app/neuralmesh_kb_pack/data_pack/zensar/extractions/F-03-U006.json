@@ -1,8 +1,56 @@
 {
  "document": "zensar:F-03-U006",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:12+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:customer-administrator",
+   "type": "Role",
+   "name": "Customer administrator",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:onboarding-lead",
+   "type": "Role",
+   "name": "Onboarding lead",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u006-risk-672fcc02",
+   "type": "Risk",
+   "name": "Customer may interpret the unresolved export issue as a commitment ...",
+   "sentence": "My concern is the customer may interpret the unresolved export issue as a commitment to a custom feature.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u006-action-45ce3d41",
+   "type": "Action",
+   "name": "Offer a working session before discussing any product change",
+   "sentence": "A practical next step is to offer a working session before discussing any product change.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u006-action-0d671f1d",
+   "type": "Action",
+   "name": "Send an adoption plan with named customer contacts and the ...",
+   "sentence": "The follow-up is to send an adoption plan with named customer contacts and the current export guidance by Thursday's customer check-in, with the customer administrator must nominate an onboarding lead for each department still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u006-decision-e3a9c618",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: focus the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: focus the next customer session on department onboarding and the existing export workflow.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u006-risk-ef47b084",
+   "type": "Risk",
+   "name": "Customer administrator must nominate an onboarding lead for each department",
+   "sentence": "The dependency is the customer administrator must nominate an onboarding lead for each department.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-674e77f4a0",
@@ -12,7 +60,184 @@
    "evidence": "Isabella Moore: Isabella Moore: Let's capture that as a working agreement, not a claim that the risk is gone: focus the next customer session on department onboarding and the existing export workflow.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence says nothing about labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-21ec1a2291",
+   "source": "zensar:F-03-U006",
+   "target": "entity:zensar:f-03-u006-risk-672fcc02",
+   "type": "HAS_RISK",
+   "evidence": "My concern is the customer may interpret the unresolved export issue as a commitment to a custom feature.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states this risk directly.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-b92daab746",
+   "source": "zensar:F-03-U006",
+   "target": "entity:zensar:f-03-u006-action-45ce3d41",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to offer a working session before discussing any product change.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states this next-step action.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-7a70613af5",
+   "source": "zensar:F-03-U006",
+   "target": "entity:zensar:f-03-u006-action-0d671f1d",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to send an adoption plan with named customer contacts and the current export guidance by Thursday's customer check-in, with the customer administrator must nominate an onboarding lead for each department still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated with deadline.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-f49a110f18",
+   "source": "entity:zensar:f-03-u006-action-0d671f1d",
+   "target": "concept:employee-onboarding",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to send an adoption plan with named customer contacts and the current export guidance by Thursday's customer check-in, with the customer administrator must nominate an onboarding lead for each department still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Adoption plan concerns customer onboarding of departments.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-356037936a",
+   "source": "zensar:F-03-U006",
+   "target": "entity:zensar:f-03-u006-decision-e3a9c618",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: focus the next customer session on department onboarding and the existing export workflow.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement stated as a decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-e91bc4d070",
+   "source": "entity:zensar:f-03-u006-decision-e3a9c618",
+   "target": "concept:employee-onboarding",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: focus the next customer session on department onboarding and the existing export workflow.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Decision focuses on department onboarding.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-c3935031d4",
+   "source": "entity:zensar:f-03-u006-decision-e3a9c618",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: focus the next customer session on department onboarding and the existing export workflow.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "No link to labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-029bfd7cc0",
+   "source": "zensar:F-03-U006",
+   "target": "entity:zensar:f-03-u006-risk-ef47b084",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the customer administrator must nominate an onboarding lead for each department.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency stated; risk framing reasonable.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-5d792ce898",
+   "source": "entity:zensar:f-03-u006-risk-ef47b084",
+   "target": "concept:employee-onboarding",
+   "type": "ABOUT",
+   "evidence": "The dependency is the customer administrator must nominate an onboarding lead for each department.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency is about nominating onboarding leads.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
+  },
+  {
+   "id": "x-be641e25c0",
+   "source": "entity:zensar:customer-administrator",
+   "target": "entity:zensar:onboarding-lead",
+   "type": "ASSIGNED_TO",
+   "evidence": "If the customer administrator must nominate an onboarding lead for each department, what do we tell the people relying on this work?",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Nomination implies assignment, but direction and phrasing are loose.",
+    "by": "model",
+    "at": "2026-11-13T12:51:32+00:00"
+   }
   }
  ]
 }

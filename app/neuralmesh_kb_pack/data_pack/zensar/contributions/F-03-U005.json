@@ -17,20 +17,14 @@
     "concepts": [
       "concept:employee-onboarding",
       "concept:integration-checklist",
-      "concept:materials-handling",
-      "concept:overseas-mobilisation-terms",
       "concept:pilot-results",
-      "concept:pricing",
       "concept:project-delay-pattern"
     ]
   },
   "concept_matches": {
     "concept:employee-onboarding": "phrase",
     "concept:integration-checklist": "phrase",
-    "concept:materials-handling": "phrase",
-    "concept:overseas-mobilisation-terms": "phrase",
     "concept:pilot-results": "phrase",
-    "concept:pricing": "phrase",
     "concept:project-delay-pattern": "phrase"
   },
   "kind_detected": {
@@ -45,5 +39,31 @@
     "by_role": "Mesh admin",
     "by_company": "zensar",
     "at": "2026-11-12T10:50:17+00:00"
-  }
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:materials-handling",
+      "verdict": "not_supported",
+      "reason": "'handling' is used in a generic sense, not materials handling.",
+      "sentence": "Ella Morgan: Ella Morgan: Before we call this ready, how are we handling a checklist alone may hide delays caused by approvals outside the engineering team, especially while which setup steps can be automated without broadening default permissions?",
+      "by": "model",
+      "at": "2026-11-13T12:23:10+00:00"
+    },
+    {
+      "concept": "concept:overseas-mobilisation-terms",
+      "verdict": "not_supported",
+      "reason": "Nothing about labour, contract or payment terms.",
+      "sentence": "Amara Okafor: Amara Okafor: Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+      "by": "model",
+      "at": "2026-11-13T12:23:10+00:00"
+    },
+    {
+      "concept": "concept:pricing",
+      "verdict": "not_supported",
+      "reason": "No pricing or bids; about setup steps and escalation.",
+      "sentence": "Dylan Price: Dylan Price: We can separate self-service setup steps from access dependencies and assign an escalation contact.",
+      "by": "model",
+      "at": "2026-11-13T12:23:10+00:00"
+    }
+  ]
 }

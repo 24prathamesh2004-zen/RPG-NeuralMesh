@@ -1,0 +1,65 @@
+{
+ "document": "ceat:E-03-U001",
+ "made": "2026-11-13T12:19:08+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:ceat:natural-rubber-bale",
+   "type": "Material",
+   "name": "Natural rubber bales",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:kochi-supplier",
+   "type": "Organisation",
+   "name": "Kochi supplier",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:ageing-check",
+   "type": "Test",
+   "name": "Ageing check",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:mixing",
+   "type": "Process",
+   "name": "Mixing",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-498dca05cd",
+   "source": "entity:ceat:natural-rubber-bale",
+   "target": "entity:ceat:kochi-supplier",
+   "type": "SUPPLIED_BY",
+   "evidence": "Natural rubber bales from the Kochi supplier are kept on pallets in the covered bay and issued first in, first out.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Bales are stated as coming from the Kochi supplier.",
+    "by": "model",
+    "at": "2026-11-13T12:49:57+00:00"
+   }
+  },
+  {
+   "id": "x-1f9f079554",
+   "source": "entity:ceat:ageing-check",
+   "target": "entity:ceat:mixing",
+   "type": "PRECEDES",
+   "evidence": "A bale stored for more than ninety days is given an ageing check before it goes to mixing.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Ageing check happens before the bale goes to mixing.",
+    "by": "model",
+    "at": "2026-11-13T12:49:57+00:00"
+   }
+  }
+ ]
+}

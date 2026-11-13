@@ -1,0 +1,101 @@
+{
+ "document": "others:G-01-U001",
+ "made": "2026-11-13T12:24:43+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:others:zensar",
+   "type": "Organisation",
+   "name": "Zensar",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:system-cut-over-runbook",
+   "type": "Form",
+   "name": "Systems cut-over runbook",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:system-cut-over",
+   "type": "Process",
+   "name": "System cut-over",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:process-owner",
+   "type": "Role",
+   "name": "Process owner",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-1ce3b5bf91",
+   "source": "concept:acquisition-integration",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "FOLLOWS",
+   "evidence": "From 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Rule states integrations follow a sign-off-before-cutover rule; target named as a rule loosely",
+    "by": "model",
+    "at": "2026-11-13T12:52:44+00:00"
+   }
+  },
+  {
+   "id": "x-374dcc9251",
+   "source": "concept:acquisition-integration",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "The review of local labour, contract and payment terms is due by day 30 of every integration.",
+   "by": "code",
+   "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Review of those terms is due by day 30 of every integration",
+    "by": "model",
+    "at": "2026-11-13T12:52:44+00:00"
+   }
+  },
+  {
+   "id": "x-80fc5ed694",
+   "source": "entity:others:system-cut-over",
+   "target": "entity:others:process-owner",
+   "type": "REQUIRES",
+   "evidence": "From 1 October 2026 every integration in the group follows one rule: a system cut-over starts only after the process owner signs off the target process.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Cut-over starts only after process owner signs off target process",
+    "by": "model",
+    "at": "2026-11-13T12:52:44+00:00"
+   }
+  },
+  {
+   "id": "x-c62119d9eb",
+   "source": "entity:others:system-cut-over-runbook",
+   "target": "entity:others:zensar",
+   "type": "OWNED_BY",
+   "evidence": "The systems cut-over runbook of Zensar is the common runbook of the group.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Runbook is Zensar's, serving as group's common runbook",
+    "by": "model",
+    "at": "2026-11-13T12:52:44+00:00"
+   }
+  }
+ ]
+}

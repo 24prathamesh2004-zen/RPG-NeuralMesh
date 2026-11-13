@@ -1,7 +1,146 @@
 {
  "document": "zensar:F-03-U009",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
- "links": []
+ "made": "2026-11-13T12:23:33+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u009-risk-d0484996",
+   "type": "Risk",
+   "name": "Release issue could wait too long for a response during ...",
+   "sentence": "My concern is a release issue could wait too long for a response during the uncovered slot.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u009-action-192bdb42",
+   "type": "Action",
+   "name": "Move the optional change to the following maintenance window",
+   "sentence": "A practical next step is to move the optional change to the following maintenance window.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u009-action-5b438448",
+   "type": "Action",
+   "name": "Confirm the backup owner and update the operations rota before ...",
+   "sentence": "The follow-up is to confirm the backup owner and update the operations rota before the release readiness check, with the service lead must confirm who is available for escalation still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u009-decision-eee8515a",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release window only if a backup escalation owner is confirmed.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u009-risk-45cb4aed",
+   "type": "Risk",
+   "name": "Service lead must confirm who is available for escalation",
+   "sentence": "The dependency is the service lead must confirm who is available for escalation.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-94762a1970",
+   "source": "zensar:F-03-U009",
+   "target": "entity:zensar:f-03-u009-risk-d0484996",
+   "type": "HAS_RISK",
+   "evidence": "My concern is a release issue could wait too long for a response during the uncovered slot.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states the risk of delayed release issue response during the uncovered slot.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  },
+  {
+   "id": "x-b845638f95",
+   "source": "zensar:F-03-U009",
+   "target": "entity:zensar:f-03-u009-action-192bdb42",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to move the optional change to the following maintenance window.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence proposes moving optional change as a next step.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  },
+  {
+   "id": "x-a5f0abd49c",
+   "source": "zensar:F-03-U009",
+   "target": "entity:zensar:f-03-u009-action-5b438448",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to confirm the backup owner and update the operations rota before the release readiness check, with the service lead must confirm who is available for escalation still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action to confirm backup owner and update rota is stated.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  },
+  {
+   "id": "x-d4e976afa2",
+   "source": "zensar:F-03-U009",
+   "target": "entity:zensar:f-03-u009-decision-eee8515a",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release window only if a backup escalation owner is confirmed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement to keep release window conditional on backup owner is a decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  },
+  {
+   "id": "x-4af9b93cb4",
+   "source": "entity:zensar:f-03-u009-decision-eee8515a",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the release window only if a backup escalation owner is confirmed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence says nothing about labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  },
+  {
+   "id": "x-14007ba140",
+   "source": "zensar:F-03-U009",
+   "target": "entity:zensar:f-03-u009-risk-45cb4aed",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the service lead must confirm who is available for escalation.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Described as a dependency, which loosely fits a risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:44+00:00"
+   }
+  }
+ ]
 }

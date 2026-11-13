@@ -1,8 +1,56 @@
 {
  "document": "zensar:F-03-U007",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:19+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:api-specification",
+   "type": "Form",
+   "name": "API specification",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:implementation-ticket",
+   "type": "Form",
+   "name": "implementation ticket",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u007-risk-a9ccfc86",
+   "type": "Risk",
+   "name": "Clients may continue retrying permanent validation failures and create noisy ...",
+   "sentence": "My concern is clients may continue retrying permanent validation failures and create noisy traffic.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u007-action-9447ed2c",
+   "type": "Action",
+   "name": "Start with a 24-hour retention window and revisit using observed ...",
+   "sentence": "A practical next step is to start with a 24-hour retention window and revisit using observed retry patterns.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u007-action-4c9b62f7",
+   "type": "Action",
+   "name": "Update the API specification and review it with the three ...",
+   "sentence": "The follow-up is to update the API specification and review it with the three client owners before the implementation ticket is marked ready, with client owners need to confirm their current retry behavior still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u007-decision-a0649c36",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the idempotency key in the contract and return distinct retryable and permanent error classes.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u007-risk-ef6932b1",
+   "type": "Risk",
+   "name": "Client owners need to confirm their current retry behavior",
+   "sentence": "The dependency is client owners need to confirm their current retry behavior.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-eff01e1c04",
@@ -12,7 +60,166 @@
    "evidence": "Leila Haddad: Leila Haddad: Before we call this ready, how are we handling clients may continue retrying permanent validation failures and create noisy traffic, especially while how long idempotency keys should remain valid for delayed retries?",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "'handling' matched by chance; not materials handling",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-11f9ad416b",
+   "source": "zensar:F-03-U007",
+   "target": "entity:zensar:f-03-u007-risk-a9ccfc86",
+   "type": "HAS_RISK",
+   "evidence": "My concern is clients may continue retrying permanent validation failures and create noisy traffic.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Concern stated is a risk raised in the meeting",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-e77f8dd7d4",
+   "source": "entity:zensar:f-03-u007-risk-a9ccfc86",
+   "target": "concept:failure-pattern",
+   "type": "ABOUT",
+   "evidence": "My concern is clients may continue retrying permanent validation failures and create noisy traffic.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": false,
+    "reason": "Generic 'failure pattern' label adds little",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-295669413e",
+   "source": "zensar:F-03-U007",
+   "target": "entity:zensar:f-03-u007-action-9447ed2c",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to start with a 24-hour retention window and revisit using observed retry patterns.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Next step proposed: 24-hour retention window",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-3122a6ebc6",
+   "source": "zensar:F-03-U007",
+   "target": "entity:zensar:f-03-u007-action-4c9b62f7",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to update the API specification and review it with the three client owners before the implementation ticket is marked ready, with client owners need to confirm their current retry behavior still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated in the sentence",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-458263bee4",
+   "source": "zensar:F-03-U007",
+   "target": "entity:zensar:f-03-u007-decision-a0649c36",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the idempotency key in the contract and return distinct retryable and permanent error classes.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement captured as decision",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-38c61ac1b2",
+   "source": "entity:zensar:f-03-u007-decision-a0649c36",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the idempotency key in the contract and return distinct retryable and permanent error classes.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "'contract' matched by chance; unrelated to labour terms",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-6b8ab5aab6",
+   "source": "zensar:F-03-U007",
+   "target": "entity:zensar:f-03-u007-risk-ef6932b1",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is client owners need to confirm their current retry behavior.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency on client owners confirming retry behavior",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-1908a1f07d",
+   "source": "entity:zensar:implementation-ticket",
+   "target": "entity:zensar:api-specification",
+   "type": "REQUIRES",
+   "evidence": "Nathan Brooks will update the API specification and review it with the three client owners before the implementation ticket is marked ready.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Direction reversed: ticket readiness needs spec, but 'requires' is loose; sentence says spec update before ticket ready",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
+  },
+  {
+   "id": "x-51125677e3",
+   "source": "entity:zensar:api-specification",
+   "target": "entity:zensar:implementation-ticket",
+   "type": "PRECEDES",
+   "evidence": "Nathan Brooks will update the API specification and review it with the three client owners before the implementation ticket is marked ready.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Spec update comes before ticket marked ready",
+    "by": "model",
+    "at": "2026-11-13T12:51:37+00:00"
+   }
   }
  ]
 }

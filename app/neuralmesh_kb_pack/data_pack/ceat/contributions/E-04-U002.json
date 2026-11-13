@@ -1,0 +1,72 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U002",
+    "datapoint": "ceat:E-04",
+    "title": "Asset taxonomy",
+    "kind": "rca",
+    "version": "2026-11",
+    "tags": [],
+    "summary": "version: 1.0.0 project: RPG Snap & Score AI -> NeuralMesh Knowledge Graph description: Enterprise asset hierarchy, camera viewpoints, scan codes, and grading scales across all 4 RPG subsidiaries.",
+    "body": "version: 1.0.0\n\nproject: RPG Snap & Score AI -> NeuralMesh Knowledge Graph\n\ndescription: Enterprise asset hierarchy, camera viewpoints, scan codes, and grading scales across all 4 RPG subsidiaries.\n\nsubsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: sidewall, tread, shoulder, bead, grade_scale: tyre_plant, default_cover: stock_policy, baseline_lifespan: 60,000 km / 48 Months, id: ceat.claim_tyre, name: Returned Warranty / Field Claim Tyre, scan_type: claim_id, views: sidewall, tread, inner_liner, grade_scale: tyre_fleet, default_cover: warranty_claim, baseline_lifespan: Field Investigation Cycle, id: ceat.fleet_tyre, name: Fleet In-Service Commercial Tyre, scan_type: vehicle_position, views: sidewall, tread, grade_scale: tyre_fleet, default_cover: asset_policy, baseline_lifespan: 60,000 km Operational Service, id: ceat.retread_casing, name: Retread Qualified Casing, scan_type: casing_id, views: sidewall, crown, inner_liner, grade_scale: tyre_plant, default_cover: stock_policy, baseline_lifespan: 35,000 km Secondary Life, id: ceat.cured_tyre, name: Plant Cured Tyre (Pre-Dispatch Gate), scan_type: batch_serial, views: sidewall, tread, grade_scale: tyre_plant, default_cover: stock_policy, baseline_lifespan: Zero-defect OEM Baseline, id: ceat.tubes_flaps, name: Inner Tubes and Flaps, assets: id: ceat.butyl_tube, name: Heavy Duty Butyl Rubber Tube, scan_type: tube_barcode, views: body, valve_joint, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: 36 Months, id: harrisons, name: Harrisons Malayalam Limited, sector: Natural Rubber & Plantation Agribusiness, headquarters: Kochi, Kerala, families: id: harrisons.rubber, name: Natural Rubber Sheets & Crepe, assets: id: harrisons.smoked_sheet, name: Ribbed Smoked Sheet (RSS-1 to RSS-5), scan_type: lot_tag, views: whole_sheet, edge, grade_scale: sheet_visual, default_cover: stock_policy, baseline_lifespan: 24 Months Warehouse Storage, id: harrisons.sheet_lot, name: Export Rubber Bale Pallet Lot, scan_type: lot_id, views: stack, face, grade_scale: sheet_visual, default_cover: stock_policy, baseline_lifespan: 24 Months Transit/Storage, id: harrisons.lump_crepe, name: Estate Cup Lump & Raw Crepe, scan_type: lot_id, views: surface, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: 12 Months Processing Window, id: harrisons.other_crops, name: Tea & Estate Secondary Produce, assets: id: harrisons.produce_lot, name: Estate Produce Lot, scan_type: lot_id, views: sample_tray, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: 18 Months, id: harrisons.tea_lot, name: Orthodox & CTC Black Tea Lot, scan_type: invoice_id, views: sample_tray, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: 18 Months Shelf-Life, id: kec, name: KEC International Limited, sector: Power Transmission, Rail Infrastructure & EPC, headquarters: Mumbai, Maharashtra, families: id: kec.tower_line, name: High Voltage Transmission Towers & Hardware, assets: id: kec.tower_member, name: Galvanized Steel Tower Angle Member, scan_type: tower_member_id, views: joint, member_length, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 40 Years Design Structural Life, id: kec.fastener_set, name: Tower High-Tensile Bolt & Nut Set, scan_type: tower_position, views: bolt_and_plate, grade_scale: qa_basic, default_cover: project_policy, baseline_lifespan: 25 Years Maintenance Window, id: kec.insulator_string, name: Tension/Suspension Insulator String, scan_type: tower_phase, views: whole_string, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 30 Years Dielectric Operation, id: kec.conductor_fitting, name: Vibration Damper, Spacer & Clamp, scan_type: span_id, views: close_up, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 20 Years Mechanical Fatigue Life, id: kec.cable_rail, name: Railway Electrification & Heavy Power Cables, assets: id: kec.cable_reel, name: Underground Power Cable Drum Reel, scan_type: reel_id, views: surface, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: Transit to Trench Deployment, id: kec.rail_mast, name: Railway Overhead Electrification (OHE) Mast, scan_type: mast_id, views: base, joint, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 35 Years Trackside Service, id: kec.solar, name: Solar Tracker & Mounting Infrastructure, assets: id: kec.solar_structure, name: Photovoltaic Tracker Strut & Purlin Assembly, scan_type: table_id, views: bracket_joint, purlin, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 25 Years Solar Plant Life, id: raychem, name: Raychem RPG Limited, sector: Engineered Cable Accessories, Connectors & Energy, headquarters: Thane, Maharashtra, families: id: raychem.cable_accessories, name: Medium & High Voltage Cable Joints and Terminations, assets: id: raychem.joint, name: 33kV Heat-Shrink Cable Splice Joint, scan_type: joint_id, views: whole_joint, sleeve_end, grade_scale: qa_basic, default_cover: project_policy, baseline_lifespan: 30 Years Dielectric Insulation Life, id: raychem.lug, name: Mechanical Shear-Bolt Terminal Lug, scan_type: joint_position, views: crimp_zone, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: 30 Years Substation Life, id: raychem.sleeve, name: Heavy-Wall Polyolefin Heat-Shrink Sleeve, scan_type: batch, views: sleeve, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: Shelf Storage & In-Ground Life, id: raychem.insulation, name: Polymeric High Voltage Outdoor Insulators, assets: id: raychem.installed_insulator, name: Composite Substation Bushing Insulator, scan_type: asset_tag, views: surface, grade_scale: patrol_priority, default_cover: project_policy, baseline_lifespan: 25 Years Severe Pollution Duty, id: raychem.packaging, name: Critical Kit Labelling & Traceability, assets: id: raychem.kit_label, name: Jointing Kit QR Traceability Seal, scan_type: batch_qr, views: label, grade_scale: qa_basic, default_cover: stock_policy, baseline_lifespan: Plant Dispatch Compliance"
+  },
+  "concept_matches": {},
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"investigation\" in the first lines"
+  },
+  "upload": {
+    "file": "asset_taxonomy.json",
+    "format": "json",
+    "chars": 6384,
+    "sha256": "4d6c05800a5abfa162dffe5ea2839706c4d97a124d6cc699ce1e0dc838e08284",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:44+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:cable-termination",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:19:27+00:00"
+    },
+    {
+      "concept": "concept:lot-traceability",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:19:27+00:00"
+    },
+    {
+      "concept": "concept:failure-pattern",
+      "verdict": "not_supported",
+      "reason": "Sentence lists subsidiary, tyre families and assets; no failure patterns mentioned.",
+      "sentence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+      "by": "model",
+      "at": "2026-11-13T12:19:29+00:00"
+    },
+    {
+      "concept": "concept:overseas-mobilisation-terms",
+      "verdict": "not_supported",
+      "reason": "No labour, contract or payment terms in the sentence.",
+      "sentence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+      "by": "model",
+      "at": "2026-11-13T12:19:29+00:00"
+    },
+    {
+      "concept": "concept:raw-material-storage",
+      "verdict": "not_supported",
+      "reason": "Finished tyre asset listed; raw material storage is not discussed.",
+      "sentence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+      "by": "model",
+      "at": "2026-11-13T12:19:29+00:00"
+    }
+  ]
+}

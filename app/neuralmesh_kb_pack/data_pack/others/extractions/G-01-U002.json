@@ -1,0 +1,79 @@
+{
+ "document": "others:G-01-U002",
+ "made": "2026-11-13T12:24:49+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:others:ai-assistant",
+   "type": "System",
+   "name": "AI assistant",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:approved-gateway",
+   "type": "System",
+   "name": "approved gateways",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:g-01-u002-decision-37314f6f",
+   "type": "Decision",
+   "name": "The information security lead of the company decides whether a ...",
+   "sentence": "The information security lead of the company decides whether a tool is approved.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-0430da55cd",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:responsible-ai-use",
+   "type": "RELATED_TO",
+   "evidence": "An AI assistant is used only through the approved gateways of the company.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Sentence is about assistant use via gateways; the link between the two topics is loose and vague.",
+    "by": "model",
+    "at": "2026-11-13T12:52:49+00:00"
+   }
+  },
+  {
+   "id": "x-53e51e1a97",
+   "source": "others:G-01-U002",
+   "target": "entity:others:g-01-u002-decision-37314f6f",
+   "type": "HAS_DECISION",
+   "evidence": "The information security lead of the company decides whether a tool is approved.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states the information security lead decides tool approval.",
+    "by": "model",
+    "at": "2026-11-13T12:52:49+00:00"
+   }
+  },
+  {
+   "id": "x-9e2f9c8c55",
+   "source": "entity:others:ai-assistant",
+   "target": "entity:others:approved-gateway",
+   "type": "ACCESSED_VIA",
+   "evidence": "An AI assistant is used only through the approved gateways of the company.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Assistant is used only through approved gateways; states access route.",
+    "by": "model",
+    "at": "2026-11-13T12:52:49+00:00"
+   }
+  }
+ ]
+}

@@ -1,0 +1,157 @@
+{
+ "document": "ceat:E-04-U004",
+ "made": "2026-11-13T12:19:52+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:ceat:pol-rpg-ceat-09",
+   "type": "Policy",
+   "name": "POL-RPG-CEAT-09",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:new-india-assurance",
+   "type": "Organisation",
+   "name": "New India Assurance",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:pol-rpg-harrison-09",
+   "type": "Policy",
+   "name": "POL-RPG-HARRISONS-09",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:united-india-insurance",
+   "type": "Organisation",
+   "name": "United India Insurance",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:pol-rpg-kec-09",
+   "type": "Policy",
+   "name": "POL-RPG-KEC-09",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:icici-lombard",
+   "type": "Organisation",
+   "name": "ICICI Lombard",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:pol-rpg-raychem-09",
+   "type": "Policy",
+   "name": "POL-RPG-RAYCHEM-09",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:tata-aig",
+   "type": "Organisation",
+   "name": "Tata AIG",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-d582c2025f",
+   "source": "concept:failure-pattern",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence is about an insurance policy, not labour or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  },
+  {
+   "id": "x-616b330e02",
+   "source": "concept:overseas-mobilisation-terms",
+   "target": "concept:project-delay-pattern",
+   "type": "RELATED_TO",
+   "evidence": "subsidiary: kec, cover_type: project_policy, policy_ref: POL-RPG-KEC-09, underwriter: ICICI Lombard EPC Erection All Risks (EAR) & Delay in Startup Policy, insured: True, covered_perils: Severe Atmospheric Galvanic Depletion, Wind Storm Member Buckling, Transport Joint Rupture, claim_workflow_steps:",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence lists KEC policy details; no labour terms or delay pattern stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  },
+  {
+   "id": "x-2f9d29ae07",
+   "source": "entity:ceat:pol-rpg-ceat-09",
+   "target": "entity:ceat:new-india-assurance",
+   "type": "PROVIDED_BY",
+   "evidence": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Policy ref with underwriter New India Assurance stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  },
+  {
+   "id": "x-5d1241caf1",
+   "source": "entity:ceat:pol-rpg-harrison-09",
+   "target": "entity:ceat:united-india-insurance",
+   "type": "PROVIDED_BY",
+   "evidence": "subsidiary: harrisons, cover_type: stock_policy, policy_ref: POL-RPG-HARRISONS-09, underwriter: United India Insurance Marine Cargo & Stock Floater, insured: True",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Policy ref with underwriter United India Insurance stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  },
+  {
+   "id": "x-fd0bbb76a8",
+   "source": "entity:ceat:pol-rpg-kec-09",
+   "target": "entity:ceat:icici-lombard",
+   "type": "PROVIDED_BY",
+   "evidence": "subsidiary: kec, cover_type: project_policy, policy_ref: POL-RPG-KEC-09, underwriter: ICICI Lombard EPC Erection All Risks (EAR) & Delay in Startup Policy, insured: True",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Policy ref with underwriter ICICI Lombard stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  },
+  {
+   "id": "x-91a955b7e6",
+   "source": "entity:ceat:pol-rpg-raychem-09",
+   "target": "entity:ceat:tata-aig",
+   "type": "PROVIDED_BY",
+   "evidence": "subsidiary: raychem, cover_type: project_policy, policy_ref: POL-RPG-RAYCHEM-09, underwriter: Tata AIG Comprehensive Product Liability & Infrastructure Guarantee, insured: True",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Policy ref with underwriter Tata AIG stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:08+00:00"
+   }
+  }
+ ]
+}

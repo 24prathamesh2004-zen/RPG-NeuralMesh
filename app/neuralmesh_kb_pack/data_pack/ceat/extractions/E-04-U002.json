@@ -1,0 +1,91 @@
+{
+ "document": "ceat:E-04-U002",
+ "made": "2026-11-13T12:19:24+00:00",
+ "model": "made, 2 of 2 parts read",
+ "entities": [
+  {
+   "id": "entity:ceat:inner-tube-and-flap",
+   "type": "Asset",
+   "name": "Inner Tubes and Flaps",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:heavy-duty-butyl-rubber-tube",
+   "type": "Asset",
+   "name": "Heavy Duty Butyl Rubber Tube",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-09a6de8df7",
+   "source": "concept:failure-pattern",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence is a tyre asset catalog; no link between failure pattern and labour terms.",
+    "by": "model",
+    "at": "2026-11-13T12:49:59+00:00"
+   }
+  },
+  {
+   "id": "x-70322de39e",
+   "source": "concept:failure-pattern",
+   "target": "concept:raw-material-storage",
+   "type": "RELATED_TO",
+   "evidence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence doesn't mention failure pattern or raw material storage relation.",
+    "by": "model",
+    "at": "2026-11-13T12:49:59+00:00"
+   }
+  },
+  {
+   "id": "x-c9b8c6ca16",
+   "source": "concept:overseas-mobilisation-terms",
+   "target": "concept:raw-material-storage",
+   "type": "RELATED_TO",
+   "evidence": "subsidiaries: id: ceat, name: CEAT Limited, sector: Tyre & Automotive Rubber Manufacturing, headquarters: Mumbai, Maharashtra, families: id: ceat.tyre, name: Commercial & Passenger Tyres, assets: id: ceat.finished_tyre, name: Radial Finished Tyre (Commercial/Bus), scan_type: serial_barcode, views: s",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Catalog sentence; labour terms and raw material storage unrelated here.",
+    "by": "model",
+    "at": "2026-11-13T12:49:59+00:00"
+   }
+  },
+  {
+   "id": "x-f2a736597f",
+   "source": "entity:ceat:heavy-duty-butyl-rubber-tube",
+   "target": "entity:ceat:inner-tube-and-flap",
+   "type": "PART_OF",
+   "evidence": "id: ceat.tubes_flaps, name: Inner Tubes and Flaps, assets: id: ceat.butyl_tube, name: Heavy Duty Butyl Rubber Tube, scan_type: tube_barcode",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Butyl tube asset listed under the Inner Tubes and Flaps family.",
+    "by": "model",
+    "at": "2026-11-13T12:49:59+00:00"
+   }
+  }
+ ]
+}

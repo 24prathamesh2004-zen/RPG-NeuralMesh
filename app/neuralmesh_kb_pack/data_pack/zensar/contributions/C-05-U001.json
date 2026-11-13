@@ -20,15 +20,13 @@
     "concepts": [
       "concept:acquisition-integration",
       "concept:integration-checklist",
-      "concept:overseas-mobilisation-terms",
-      "concept:process-ownership-before-cut-over"
+      "concept:overseas-mobilisation-terms"
     ]
   },
   "concept_matches": {
     "concept:acquisition-integration": "phrase",
     "concept:integration-checklist": "phrase",
-    "concept:overseas-mobilisation-terms": "phrase",
-    "concept:process-ownership-before-cut-over": "phrase"
+    "concept:overseas-mobilisation-terms": "phrase"
   },
   "upload": {
     "file": "systems_cutover_runbook.md",
@@ -39,5 +37,15 @@
     "by_company": "zensar",
     "at": "2026-08-11T09:15:47+00:00"
   },
-  "sample_input": "systems_cutover_runbook.md"
+  "sample_input": "systems_cutover_runbook.md",
+  "topics_set_aside": [
+    {
+      "concept": "concept:process-ownership-before-cut-over",
+      "verdict": "not_supported",
+      "reason": "Sentence is only the title; says nothing about process ownership.",
+      "sentence": "Systems cut-over runbook for an acquired unit",
+      "by": "model",
+      "at": "2026-11-13T12:20:34+00:00"
+    }
+  ]
 }

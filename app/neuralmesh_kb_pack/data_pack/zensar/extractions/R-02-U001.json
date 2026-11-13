@@ -1,0 +1,87 @@
+{
+ "document": "zensar:R-02-U001",
+ "made": "2026-11-13T12:24:20+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:zensar:ai-assistant",
+   "type": "System",
+   "name": "AI assistant",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:code-review",
+   "type": "Process",
+   "name": "Code review",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-03f15ff1ee",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:pilot-results",
+   "type": "RELATED_TO",
+   "evidence": "title: Pilot results, AI-assisted code review in four delivery teams",
+   "by": "code",
+   "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Title concerns pilot results of AI-assisted code review in delivery teams.",
+    "by": "model",
+    "at": "2026-11-13T12:24:22+00:00"
+   }
+  },
+  {
+   "id": "x-504f4b9834",
+   "source": "concept:ai-assisted-delivery",
+   "target": "concept:responsible-ai-use",
+   "type": "RELATED_TO",
+   "evidence": "how_the_pilot_ran: first_pass: The AI assistant commented on every change before a person read it, approval: A person approved or rejected every change, access: The assistant was used through the approved gateway only, data_rule: No confidential data of a customer was put into a prompt, compared_wit",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Sentence covers AI assistant use with gateway and data rules, tying delivery to responsible use.",
+    "by": "model",
+    "at": "2026-11-13T12:24:22+00:00"
+   }
+  },
+  {
+   "id": "x-674dca21bb",
+   "source": "concept:pilot-results",
+   "target": "concept:responsible-ai-use",
+   "type": "RELATED_TO",
+   "evidence": "how_the_pilot_ran: first_pass: The AI assistant commented on every change before a person read it, approval: A person approved or rejected every change, access: The assistant was used through the approved gateway only, data_rule: No confidential data of a customer was put into a prompt, compared_wit",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "Pilot description includes responsible-use rules, but the link is indirect.",
+    "by": "model",
+    "at": "2026-11-13T12:24:22+00:00"
+   }
+  },
+  {
+   "id": "x-e7e8e12c8c",
+   "source": "entity:zensar:code-review",
+   "target": "entity:zensar:ai-assistant",
+   "type": "USES",
+   "evidence": "Four delivery teams used an AI assistant for the first pass of every code review for 12 weeks.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Teams used an AI assistant for first pass of code review.",
+    "by": "model",
+    "at": "2026-11-13T12:24:22+00:00"
+   }
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "code": "E-04",
+  "title": "Tyre Analysis",
+  "sensitivity": "Restricted",
+  "ceiling": "MD",
+  "never_leave": true,
+  "owner_role": "Node owner",
+  "synthetic": false,
+  "added": {
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:43+00:00"
+  }
+}

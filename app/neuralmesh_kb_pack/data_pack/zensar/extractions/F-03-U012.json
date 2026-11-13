@@ -1,8 +1,51 @@
 {
  "document": "zensar:F-03-U012",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:51+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u012-decision-7ea3be86",
+   "type": "Decision",
+   "name": "Final sections yet",
+   "sentence": "We should make sure the list covers support readiness as well as the technical checks, but I do not think we have agreed the final sections yet.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u012-risk-55a07b95",
+   "type": "Risk",
+   "name": "Assigning unresolved checklist items now could imply commitments that the ...",
+   "sentence": "My concern is assigning unresolved checklist items now could imply commitments that the group has not agreed.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u012-action-7a1643db",
+   "type": "Action",
+   "name": "Add an explicit unresolved section instead of guessing at owners",
+   "sentence": "A practical next step is to add an explicit unresolved section instead of guessing at owners.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u012-action-0840114e",
+   "type": "Action",
+   "name": "Bring the draft and open questions to the planning review ...",
+   "sentence": "The follow-up is to bring the draft and open questions to the planning review at the next planning meeting, with the relevant owners need to confirm which handoff steps apply still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u012-decision-9e9b9702",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u012-risk-5363c995",
+   "type": "Risk",
+   "name": "Relevant owners need to confirm which handoff steps apply",
+   "sentence": "The dependency is the relevant owners need to confirm which handoff steps apply.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-9c552ca3dd",
@@ -12,7 +55,14 @@
    "evidence": "Maya Chen: Maya Chen: Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "Sentence concerns keeping checklist as draft; nothing about labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:23:52+00:00"
+   }
   },
   {
    "id": "x-6db2ccd146",
@@ -22,6 +72,103 @@
    "evidence": "Priya Shah: Priya Shah: Before we call this ready, how are we handling assigning unresolved checklist items now could imply commitments that the group has not agreed, especially while which escalation contacts should be listed for after-hours support?",
    "by": "code",
    "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "'handling' is used in a generic sense; not about materials handling.",
+    "by": "model",
+    "at": "2026-11-13T12:23:52+00:00"
+   }
+  },
+  {
+   "id": "x-5aaa1c1361",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-decision-7ea3be86",
+   "type": "HAS_DECISION",
+   "evidence": "We should make sure the list covers support readiness as well as the technical checks, but I do not think we have agreed the final sections yet.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-258430103c",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-risk-55a07b95",
+   "type": "HAS_RISK",
+   "evidence": "My concern is assigning unresolved checklist items now could imply commitments that the group has not agreed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-b96cc24376",
+   "source": "entity:zensar:f-03-u012-risk-55a07b95",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "My concern is assigning unresolved checklist items now could imply commitments that the group has not agreed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-5a4a81cd5a",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-action-7a1643db",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to add an explicit unresolved section instead of guessing at owners.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-01bf22af51",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-action-0840114e",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to bring the draft and open questions to the planning review at the next planning meeting, with the relevant owners need to confirm which handoff steps apply still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-dfd22b5da0",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-decision-9e9b9702",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-9317d73669",
+   "source": "entity:zensar:f-03-u012-decision-9e9b9702",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-024f3d9d73",
+   "source": "entity:zensar:f-03-u012-decision-9e9b9702",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the checklist as a draft until the next planning review.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-6157339209",
+   "source": "zensar:F-03-U012",
+   "target": "entity:zensar:f-03-u012-risk-5363c995",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the relevant owners need to confirm which handoff steps apply.",
+   "by": "code",
+   "sentences": 1,
    "status": "proposed"
   }
  ]

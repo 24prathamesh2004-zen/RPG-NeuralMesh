@@ -1,7 +1,248 @@
 {
  "document": "zensar:F-03-U010",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
- "links": []
+ "made": "2026-11-13T12:23:39+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:reconciliation-job",
+   "type": "System",
+   "name": "reconciliation job",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:data-contract-review",
+   "type": "Process",
+   "name": "data contract review",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:ledger-team",
+   "type": "Team",
+   "name": "ledger team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:schema-diff",
+   "type": "Form",
+   "name": "schema diff",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:settlement-reference-field",
+   "type": "Form",
+   "name": "settlement-reference field",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-risk-f029eb0e",
+   "type": "Risk",
+   "name": "Reconciliation schema sign-off",
+   "sentence": "We have the staging dashboard shows 96 percent successful retries across the latest test batch, and the signal I am watching is the remaining blocker is the reconciliation schema sign-off.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-risk-bc0ade17",
+   "type": "Risk",
+   "name": "Late schema change could invalidate the migration already prepared",
+   "sentence": "My concern is a late schema change could invalidate the migration already prepared.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-risk-71f224e8",
+   "type": "Risk",
+   "name": "Reconciliation schema sign-off is still the measure that matters",
+   "sentence": "The latest evidence is the staging dashboard shows 96 percent successful retries across the latest test batch; the remaining blocker is the reconciliation schema sign-off is still the measure that matters.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-action-dcc456ea",
+   "type": "Action",
+   "name": "Ship the stable retry path first and feature-flag the compatibility ...",
+   "sentence": "A practical next step is to ship the stable retry path first and feature-flag the compatibility field.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-action-d0c1a25c",
+   "type": "Action",
+   "name": "Publish the schema diff and get a review from the ...",
+   "sentence": "The follow-up is to publish the schema diff and get a review from the ledger team by 3 p.m.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u010-decision-fa4058ac",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the retry change in the current sprint and move optional reconciliation metadata to the next sprint.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-c73febe1da",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-risk-f029eb0e",
+   "type": "HAS_RISK",
+   "evidence": "We have the staging dashboard shows 96 percent successful retries across the latest test batch, and the signal I am watching is the remaining blocker is the reconciliation schema sign-off.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence names schema sign-off as remaining blocker.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-f4c79db336",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-risk-bc0ade17",
+   "type": "HAS_RISK",
+   "evidence": "My concern is a late schema change could invalidate the migration already prepared.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Explicit stated concern about late schema change.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-0894cd8bcf",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-risk-71f224e8",
+   "type": "HAS_RISK",
+   "evidence": "The latest evidence is the staging dashboard shows 96 percent successful retries across the latest test batch; the remaining blocker is the reconciliation schema sign-off is still the measure that matters.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Blocker stated, but target text is garbled phrasing, not a clean risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-ff583cea42",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-action-dcc456ea",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to ship the stable retry path first and feature-flag the compatibility field.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Stated next step action.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-95238f11e7",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-action-d0c1a25c",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to publish the schema diff and get a review from the ledger team by 3 p.m.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Stated follow-up action with deadline.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-08c384c590",
+   "source": "zensar:F-03-U010",
+   "target": "entity:zensar:f-03-u010-decision-fa4058ac",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the retry change in the current sprint and move optional reconciliation metadata to the next sprint.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement captured as decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-e6843e783e",
+   "source": "entity:zensar:f-03-u010-decision-fa4058ac",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the retry change in the current sprint and move optional reconciliation metadata to the next sprint.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence has nothing about labour or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-5fd570adba",
+   "source": "entity:zensar:reconciliation-job",
+   "target": "entity:zensar:data-contract-review",
+   "type": "REQUIRES",
+   "evidence": "Noah Williams: The current picture is the retry change is merged, but the reconciliation job is waiting on a data contract review.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Job is waiting on data contract review.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-eb9c37f26c",
+   "source": "entity:zensar:schema-diff",
+   "target": "entity:zensar:ledger-team",
+   "type": "APPROVED_BY",
+   "evidence": "Noah Williams will publish the schema diff and get a review from the ledger team by 3 p.m. tomorrow; whether the legacy partner feed needs a temporary compatibility field remains unresolved.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Schema diff to be reviewed by ledger team.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  },
+  {
+   "id": "x-b9e555bfe7",
+   "source": "entity:zensar:settlement-reference-field",
+   "target": "entity:zensar:ledger-team",
+   "type": "APPROVED_BY",
+   "evidence": "The dependency is the ledger team must confirm the settlement-reference field.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Ledger team must confirm the field.",
+    "by": "model",
+    "at": "2026-11-13T12:51:50+00:00"
+   }
+  }
+ ]
 }

@@ -1,0 +1,129 @@
+{
+ "document": "zensar:C-05-U001",
+ "made": "2026-11-13T12:20:29+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:zensar:process-owner",
+   "type": "Role",
+   "name": "Process owner",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:sign-off-sheet",
+   "type": "Form",
+   "name": "Sign-off sheet",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:target-process",
+   "type": "Process",
+   "name": "Target process",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-6ce6439e7d",
+   "source": "concept:process-ownership-before-cut-over",
+   "target": "concept:acquisition-integration",
+   "type": "PART_OF",
+   "evidence": "This runbook is the cut-over part of the integration playbook.",
+   "by": "code",
+   "sentences": 5,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Runbook is stated as the cut-over part of the integration playbook; the playbook is plausibly Acquisition integration.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  },
+  {
+   "id": "x-4305e5f03b",
+   "source": "concept:process-ownership-before-cut-over",
+   "target": "concept:integration-checklist",
+   "type": "PART_OF",
+   "evidence": "This runbook is the cut-over part of the integration playbook.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "The sentence names the integration playbook, not an 'Integration checklist'; the match is doubtful.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  },
+  {
+   "id": "x-fa6cf2ac7d",
+   "source": "concept:acquisition-integration",
+   "target": "concept:integration-checklist",
+   "type": "RELATED_TO",
+   "evidence": "This runbook is the cut-over part of the integration playbook.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "The sentence does not relate acquisition integration to a checklist.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  },
+  {
+   "id": "x-eebfc4556f",
+   "source": "entity:zensar:target-process",
+   "target": "entity:zensar:process-owner",
+   "type": "APPROVED_BY",
+   "evidence": "A cut-over starts only after the process owner signs off the target process.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Cut-over starts only after the process owner signs off the target process.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  },
+  {
+   "id": "x-7e84c7bd67",
+   "source": "entity:zensar:sign-off-sheet",
+   "target": "entity:zensar:process-owner",
+   "type": "APPROVED_BY",
+   "evidence": "The integration lead confirms that the process owner has signed the sign-off sheet.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "The process owner signs the sign-off sheet, and the integration lead confirms it.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  },
+  {
+   "id": "x-b8691ff79d",
+   "source": "entity:zensar:target-process",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "REQUIRES",
+   "evidence": "Review local labour, contract and payment terms by day 30, and change the target process where a local rule needs it.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Local terms are reviewed and the target process may be changed; 'requires' is a loose fit.",
+    "by": "model",
+    "at": "2026-11-13T12:50:21+00:00"
+   }
+  }
+ ]
+}

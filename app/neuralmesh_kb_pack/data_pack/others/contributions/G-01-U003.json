@@ -13,28 +13,16 @@
     "version": "2026-11",
     "tags": [
       "knowledge-transfer-and-handover",
-      "employee-onboarding",
-      "client-service-desk",
       "process-ownership-before-system-cut-over"
     ],
     "summary": "Knowledge transfer and handover playbook Used when a delivery team takes over an application from another team, a client or an acquired unit. Weeks 1 and 2: shadowing The incoming team shadows the outgoing team on live tickets. Every runbook, password vault entry and deployment step is listed in one handover register.",
     "body": "Knowledge transfer and handover playbook\n\nUsed when a delivery team takes over an application from another team, a client or an acquired unit.\nWeeks 1 and 2: shadowing\nThe incoming team shadows the outgoing team on live tickets.\nEvery runbook, password vault entry and deployment step is listed in one handover register.\nWeeks 3 and 4: reverse shadowing\nThe incoming team handles tickets and the outgoing team watches.\nOpen questions go to the handover register with an owner and a date.\nWeek 5: sign-off\nThe handover is signed off only when the register has no open item older than 5 working days.\nNew joiners of the incoming team follow the onboarding checklist of the delivery unit before they get production access.\nLessons from 2026 transitions\n| Transition | Weeks planned | Weeks taken | Main lesson |\n|---|---|---|---|\n| Insurance claims portal | 5 | 7 | Start the access requests in week 1 |\n| Retail order platform | 5 | 5 | The handover register kept the scope clear |\n| Acquired unit service desk | 6 | 9 | Agree process ownership before the systems cut-over |\n\nSynthetic sample written for the RPG NeuralMesh demonstration. It is not a record of the RPG Group.",
     "concepts": [
-      "concept:client-service-desk",
-      "concept:employee-onboarding",
-      "concept:integration-checklist",
-      "concept:knowledge-transfer",
-      "concept:overseas-mobilisation-terms",
-      "concept:process-ownership-before-cut-over"
+      "concept:knowledge-transfer"
     ]
   },
   "concept_matches": {
-    "concept:client-service-desk": "phrase",
-    "concept:employee-onboarding": "phrase",
-    "concept:integration-checklist": "phrase",
-    "concept:knowledge-transfer": "phrase",
-    "concept:overseas-mobilisation-terms": "phrase",
-    "concept:process-ownership-before-cut-over": "phrase"
+    "concept:knowledge-transfer": "phrase"
   },
   "kind_detected": {
     "by": "model",
@@ -48,5 +36,47 @@
     "by_role": "Mesh admin",
     "by_company": "zensar",
     "at": "2026-11-12T05:17:42+00:00"
-  }
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:client-service-desk",
+      "verdict": "not_supported",
+      "reason": "'service desk' appears only as an acquired unit in a lessons table; not the topic",
+      "sentence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+      "by": "model",
+      "at": "2026-11-13T12:25:03+00:00"
+    },
+    {
+      "concept": "concept:employee-onboarding",
+      "verdict": "not_supported",
+      "reason": "Onboarding checklist is mentioned in passing; document isn't about employee onboarding",
+      "sentence": "New joiners of the incoming team follow the onboarding checklist of the delivery unit before they get production access.",
+      "by": "model",
+      "at": "2026-11-13T12:25:03+00:00"
+    },
+    {
+      "concept": "concept:integration-checklist",
+      "verdict": "not_supported",
+      "reason": "Title only; no sign it concerns an integration checklist",
+      "sentence": "Knowledge transfer and handover playbook",
+      "by": "model",
+      "at": "2026-11-13T12:25:03+00:00"
+    },
+    {
+      "concept": "concept:overseas-mobilisation-terms",
+      "verdict": "not_supported",
+      "reason": "Sentence is a transitions lessons table, nothing on labour or payment terms",
+      "sentence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+      "by": "model",
+      "at": "2026-11-13T12:25:03+00:00"
+    },
+    {
+      "concept": "concept:process-ownership-before-cut-over",
+      "verdict": "not_supported",
+      "reason": "Table doesn't address process ownership before system cut-over",
+      "sentence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+      "by": "model",
+      "at": "2026-11-13T12:25:03+00:00"
+    }
+  ]
 }

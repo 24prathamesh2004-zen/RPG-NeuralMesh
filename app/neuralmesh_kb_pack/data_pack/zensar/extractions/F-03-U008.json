@@ -1,8 +1,44 @@
 {
  "document": "zensar:F-03-U008",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:26+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u008-risk-5c974b18",
+   "type": "Risk",
+   "name": "Team could close the defect based on a single clean ...",
+   "sentence": "My concern is the team could close the defect based on a single clean run without understanding the trigger.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u008-action-8dba228b",
+   "type": "Action",
+   "name": "Isolate the permission path before changing retry behavior",
+   "sentence": "A practical next step is to isolate the permission path before changing retry behavior.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u008-action-d641eeb0",
+   "type": "Action",
+   "name": "Run the notification scenario ten times and attach logs from ...",
+   "sentence": "The follow-up is to run the notification scenario ten times and attach logs from the affected device by the next QA checkpoint, with the device lab must reserve the older Android handset still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u008-decision-1c621ed5",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: ship the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: ship the offline sync fix independently and hold the notification change behind its existing flag.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u008-risk-9be3982a",
+   "type": "Risk",
+   "name": "Device lab must reserve the older Android handset",
+   "sentence": "The dependency is the device lab must reserve the older Android handset.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-0eac7ab92a",
@@ -12,7 +48,134 @@
    "evidence": "Avery Johnson: Avery Johnson: Before we call this ready, how are we handling the team could close the defect based on a single clean run without understanding the trigger, especially while whether the intermittent behavior is caused by permission timing or background limits?",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "'handling' matched by chance; not about materials handling",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-406376583d",
+   "source": "zensar:F-03-U008",
+   "target": "entity:zensar:f-03-u008-risk-5c974b18",
+   "type": "HAS_RISK",
+   "evidence": "My concern is the team could close the defect based on a single clean run without understanding the trigger.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states this as a concern/risk of the meeting",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-5e928d70c3",
+   "source": "entity:zensar:f-03-u008-risk-5c974b18",
+   "target": "concept:failure-pattern",
+   "type": "ABOUT",
+   "evidence": "My concern is the team could close the defect based on a single clean run without understanding the trigger.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Failure pattern loosely suggested; not stated, generic target",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-e9d34bf606",
+   "source": "zensar:F-03-U008",
+   "target": "entity:zensar:f-03-u008-action-8dba228b",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to isolate the permission path before changing retry behavior.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Next step stated explicitly as an action",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-7854b77efb",
+   "source": "zensar:F-03-U008",
+   "target": "entity:zensar:f-03-u008-action-d641eeb0",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to run the notification scenario ten times and attach logs from the affected device by the next QA checkpoint, with the device lab must reserve the older Android handset still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action with deadline stated",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-001992ee5a",
+   "source": "zensar:F-03-U008",
+   "target": "entity:zensar:f-03-u008-decision-1c621ed5",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: ship the offline sync fix independently and hold the notification change behind its existing flag.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement stated as the decision",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-bbdce44e86",
+   "source": "entity:zensar:f-03-u008-decision-1c621ed5",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: ship the offline sync fix independently and hold the notification change behind its existing flag.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Decision is about shipping and flag, not labour terms",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
+  },
+  {
+   "id": "x-913028808d",
+   "source": "zensar:F-03-U008",
+   "target": "entity:zensar:f-03-u008-risk-9be3982a",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the device lab must reserve the older Android handset.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency on device lab reservation stated as risk",
+    "by": "model",
+    "at": "2026-11-13T12:51:40+00:00"
+   }
   }
  ]
 }

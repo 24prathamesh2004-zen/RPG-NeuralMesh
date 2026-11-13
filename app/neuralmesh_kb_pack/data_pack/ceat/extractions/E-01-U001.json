@@ -1,0 +1,55 @@
+{
+ "document": "ceat:E-01-U001",
+ "made": "2026-11-13T12:18:59+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:ceat:storage-ageing-check",
+   "type": "Test",
+   "name": "storage ageing check",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:mixing",
+   "type": "Process",
+   "name": "mixing",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-3a0b9283e2",
+   "source": "concept:material-ageing",
+   "target": "concept:time-to-use-limit",
+   "type": "RELATED_TO",
+   "evidence": "A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence links ageing of material to the time-to-use limit and the check.",
+    "by": "model",
+    "at": "2026-11-13T12:49:54+00:00"
+   }
+  },
+  {
+   "id": "x-60589b4d05",
+   "source": "entity:ceat:storage-ageing-check",
+   "target": "entity:ceat:mixing",
+   "type": "PRECEDES",
+   "evidence": "A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Lot is issued to mixing only after passing the check, so the check comes first.",
+    "by": "model",
+    "at": "2026-11-13T12:49:54+00:00"
+   }
+  }
+ ]
+}

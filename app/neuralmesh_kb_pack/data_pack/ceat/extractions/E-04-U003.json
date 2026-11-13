@@ -1,0 +1,263 @@
+{
+ "document": "ceat:E-04-U003",
+ "made": "2026-11-13T12:19:38+00:00",
+ "model": "made, 2 of 2 parts read",
+ "entities": [
+  {
+   "id": "entity:ceat:sidewall-ply-separation-bulge",
+   "type": "Defect",
+   "name": "Sidewall Ply Separation / Bulge",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:ceat-qc-ty-02",
+   "type": "Standard",
+   "name": "CEAT-QC-TY-02",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:tread-or-sidewall-penetration-cut",
+   "type": "Defect",
+   "name": "Tread or Sidewall Penetration Cut",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:astm-f538",
+   "type": "Standard",
+   "name": "ASTM F538",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:torn-bead-wire-seating-lip-distortion",
+   "type": "Defect",
+   "name": "Torn Bead Wire / Seating Lip Distortion",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:superficial-penetrating-fungal-mould-colony",
+   "type": "Defect",
+   "name": "Superficial / Penetrating Fungal Mould Colony",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:hml-green-book-rss-clause-2-3",
+   "type": "Standard",
+   "name": "HML-GREEN-BOOK-RSS Clause 2.3",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:ferrou-oxide-red-rust-bleed",
+   "type": "Defect",
+   "name": "Ferrous Oxide Red Rust Bleed",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:kec-patrol-p01-clause-8-4",
+   "type": "Standard",
+   "name": "KEC-PATROL-P01 Clause 8.4",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:structural-angle-leg-permanent-deformation-buckling",
+   "type": "Defect",
+   "name": "Structural Angle Leg Permanent Deformation / Buckling",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:is-802-part-1-sec-2",
+   "type": "Standard",
+   "name": "IS 802 (Part 1/Sec 2)",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:electrical-partial-discharge-dendritic-treeing-path",
+   "type": "Defect",
+   "name": "Electrical Partial Discharge Dendritic Treeing Path",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:iec-60502-4-ieee-404",
+   "type": "Standard",
+   "name": "IEC 60502-4 / IEEE 404",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:asymmetric-heat-recovery-trapped-air-void",
+   "type": "Defect",
+   "name": "Asymmetric Heat Recovery / Trapped Air Voids",
+   "by": "model"
+  },
+  {
+   "id": "entity:ceat:raychem-hv-sop-404-clause-10-3",
+   "type": "Standard",
+   "name": "RAYCHEM-HV-SOP-404 Clause 10.3",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-6561879768",
+   "source": "concept:breakdown-rca",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "condition_id: mould, family: contamination_mould, subsidiary: harrisons, display_name: Superficial / Penetrating Fungal Mould Colony, severity: High, primary_failure_mode: Microbial breakdown of polyisoprene polymer chains, loss of tensile modulus, visual_signature: geometry: Circular or diffuse spo",
+   "by": "code",
+   "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Sentence is a mould condition record; link to generic heading-like document name is vague.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-98add46ade",
+   "source": "concept:failure-pattern",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "condition_id: colour_unevenness, family: colour_appearance, subsidiary: harrisons, display_name: Uneven Smoke Curing / Dark Clouding, severity: Moderate, primary_failure_mode: Inconsistent cure index (tc90) during downstream tyre compounding, visual_signature: geometry: Broad blotches contrasting wi",
+   "by": "code",
+   "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Colour unevenness record has nothing to do with knowledge transfer and handover.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-31cce5acd5",
+   "source": "entity:ceat:sidewall-ply-separation-bulge",
+   "target": "entity:ceat:ceat-qc-ty-02",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: bulge, family: deformation, subsidiary: ceat, display_name: Sidewall Ply Separation / Bulge, severity: Critical, primary_failure_mode: Catastrophic Carcass Blowout under highway loading, visual_signature: geometry: Localized radial protrusion or bubble >15mm diameter, texture: Disconti",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Visible text doesn't show the standard; truncated, governance plausible but unconfirmed.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-1095aea96a",
+   "source": "entity:ceat:tread-or-sidewall-penetration-cut",
+   "target": "entity:ceat:astm-f538",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: cut, family: crack_cut, subsidiary: ceat, display_name: Tread or Sidewall Penetration Cut, severity: High, primary_failure_mode: Breaker belt steel wire rust & structural ply rupture, visual_signature: geometry: Sharp linear fissure penetrating outer rubber gauge, texture: High-contras",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Standard not visible in the shown text; plausible but unconfirmed.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-a30e24e276",
+   "source": "entity:ceat:torn-bead-wire-seating-lip-distortion",
+   "target": "entity:ceat:ceat-qc-ty-02",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: bead_damage, family: wear, subsidiary: ceat, display_name: Torn Bead Wire / Seating Lip Distortion, severity: Critical, primary_failure_mode: Sudden tubeless air loss & rim dislodgement, visual_signature: geometry: Torn rubber exposing bronze-coated steel bead bundles, texture: Rough j",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Standard reference not visible in the truncated sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-ff830f6701",
+   "source": "entity:ceat:superficial-penetrating-fungal-mould-colony",
+   "target": "entity:ceat:hml-green-book-rss-clause-2-3",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: mould, family: contamination_mould, subsidiary: harrisons, display_name: Superficial / Penetrating Fungal Mould Colony, severity: High, primary_failure_mode: Microbial breakdown of polyisoprene polymer chains, loss of tensile modulus, visual_signature: geometry: Circular or diffuse spo",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Harrisons mould condition; clause reference not visible in text shown.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-b3e4771560",
+   "source": "entity:ceat:ferrou-oxide-red-rust-bleed",
+   "target": "entity:ceat:kec-patrol-p01-clause-8-4",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: rust, family: corrosion_coating, subsidiary: kec, display_name: Ferrous Oxide Red Rust Bleed, severity: High, primary_failure_mode: Active steel section loss reducing tower ultimate load capacity, visual_signature: geometry: Flaking or pitted corrosion bleeding from fastener holes or g",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "KEC rust condition; patrol clause not visible in truncated text.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-c3a2b941ea",
+   "source": "entity:ceat:structural-angle-leg-permanent-deformation-buckling",
+   "target": "entity:ceat:is-802-part-1-sec-2",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: bent_member, family: deformation, subsidiary: kec, display_name: Structural Angle Leg Permanent Deformation / Buckling, severity: Critical, primary_failure_mode: Euler buckling of lattice tower leg leading to whole tower collapse, visual_signature: geometry: Deviation from straight cho",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Buckling of tower leg fits IS 802, but not stated in shown text.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-9f0165d0ad",
+   "source": "entity:ceat:electrical-partial-discharge-dendritic-treeing-path",
+   "target": "entity:ceat:iec-60502-4-ieee-404",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: tracking_mark, family: thermal_electrical, subsidiary: raychem, display_name: Electrical Partial Discharge Dendritic Treeing Path, severity: Critical, primary_failure_mode: Progressive dielectric erosion terminating in phase-to-earth flashover, visual_signature: geometry: Branched dend",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Partial discharge treeing fits the standard, but sentence truncated before it.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  },
+  {
+   "id": "x-9cb496c9c8",
+   "source": "entity:ceat:asymmetric-heat-recovery-trapped-air-void",
+   "target": "entity:ceat:raychem-hv-sop-404-clause-10-3",
+   "type": "GOVERNED_BY",
+   "evidence": "condition_id: uneven_shrink, family: deformation, subsidiary: raychem, display_name: Asymmetric Heat Recovery / Trapped Air Voids, severity: High, primary_failure_mode: Air void ionization under high voltage stress triggering internal partial discharge, visual_signature: geometry: Wavy ridge, wrinkl",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": true,
+    "reason": "Raychem condition; SOP clause not visible in the shown text.",
+    "by": "model",
+    "at": "2026-11-13T12:50:05+00:00"
+   }
+  }
+ ]
+}

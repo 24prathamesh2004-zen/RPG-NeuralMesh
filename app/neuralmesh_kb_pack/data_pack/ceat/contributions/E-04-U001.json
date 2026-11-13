@@ -1,0 +1,87 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U001",
+    "datapoint": "ceat:E-04",
+    "title": "README NEURALMESH SPEC",
+    "kind": "standard",
+    "version": "2026-11",
+    "tags": [],
+    "summary": "================================================================================ RPG SNAP & SCORE AI -> NEURALMESH KNOWLEDGE GRAPH SEED DATA SPECIFICATION ================================================================================ Generated: 2026-11-13 Version: 1.0.0 Audience: NeuralMesh Engineering Team (Knowledge Graph & Graph RAG Modelers) OVERVIEW: This archive contains the definitive str…",
+    "body": "================================================================================\nRPG SNAP & SCORE AI -> NEURALMESH KNOWLEDGE GRAPH SEED DATA SPECIFICATION\n================================================================================\nGenerated: 2026-11-13\nVersion: 1.0.0\nAudience: NeuralMesh Engineering Team (Knowledge Graph & Graph RAG Modelers)\n\nOVERVIEW:\nThis archive contains the definitive structural seed datasets exported from the \nRPG Snap & Score AI project. These files define the multi-tier asset hierarchy,\ndefect conditions, quality standard clauses, remaining useful life (RUL) \nprognostic models, and insurance policies across 4 RPG Group subsidiaries:\n  1. CEAT Limited (Tyres & Automotive Rubber)\n  2. Harrisons Malayalam Limited (Natural Rubber & Estate Crops)\n  3. KEC International Limited (Power Transmission & Rail Infrastructure)\n  4. Raychem RPG Limited (HV Cable Accessories & Jointing)\n\nFILES INCLUDED IN THIS EXPORT:\n--------------------------------------------------------------------------------\n1. asset_taxonomy.json\n   - Hierarchical breakdown: Subsidiary -> Asset Family -> Asset -> Inspection Views.\n   - Scan mechanisms (Barcode, QR, Lot Tag, Tower Member ID, Joint ID).\n   - Governing plant grading scales (tyre_plant, tyre_fleet, sheet_visual, qa_basic, patrol_priority).\n\n2. defect_ontology.json\n   - Visual conditions and failure symptoms.\n   - Severity tiers (Critical, High, Moderate, Cosmetic).\n   - Physical failure modes (Carcass blowout, Fungal biodegradation, Tower buckling, Flashover).\n   - Visual cue signatures (geometry, texture, HSV color space boundaries).\n\n3. sop_standards.json\n   - Plant Quality Operating Standards and specific standard clauses.\n   - Governing specifications: ISO 10191, ASTM F538, IRSG Green Book, IS 802, ISO 12944, IEEE 404, IEC 60502.\n   - Exact numerical acceptance thresholds and mandatory quarantine actions.\n   - Direct feed for Snap & Score Level 9 NeuralMesh SOP Terminal.\n\n4. rul_prognostics.json\n   - Physics-grounded Remaining Useful Life (RUL) degradation models.\n   - Baseline design units:\n       * CEAT Tyres: 60,000 km / 48 Months\n       * Harrisons Malayalam: 24.0 Months (Warehouse Storage)\n       * KEC International: 40.0 Years (Atmospheric Service Life)\n       * Raychem RPG: 30.0 Years (Dielectric Insulation Horizon)\n   - Wear index equations and maintenance intervention triggers.\n\n5. insurance_policies.json\n   - Policy reference bindings (POL-RPG-CEAT-09, POL-RPG-HARRISONS-09, etc.).\n   - Underwriting perils covered.\n   - Step-by-step claim settlement workflows for automated dossier dispatch.\n\nGRAPH SCHEMA MAPPING RECOMMENDATION (Neo4j / RDF / TigerGraph):\n--------------------------------------------------------------------------------\nNodes:\n  (:Subsidiary {id, name, sector})\n  (:AssetFamily {id, name})\n  (:Asset {id, name, scan_type, grade_scale, baseline_lifespan})\n  (:View {name})\n  (:Defect {id, family, severity, primary_failure_mode})\n  (:StandardClause {clause_ref, standard_id, acceptance_limit, remedial_action})\n  (:RULModel {baseline_units, unit, lifespan_category, physics})\n  (:Policy {policy_ref, cover_type, underwriter})\n\nRelationships:\n  (:Subsidiary)-[:OPERATES_FAMILY]->(:AssetFamily)\n  (:AssetFamily)-[:CONTAINS_ASSET]->(:Asset)\n  (:Asset)-[:INSPECTED_VIA]->(:View)\n  (:Asset)-[:SUBJECT_TO_DEFECT]->(:Defect)\n  (:Defect)-[:GOVERNED_BY]->(:StandardClause)\n  (:Asset)-[:PROGNOSTIC_CURVE]->(:RULModel)\n  (:Asset)-[:INSURED_UNDER]->(:Policy)\n\nRUNTIME REST ENDPOINTS EXPECTED BY SNAP & SCORE (rest_client.py):\n--------------------------------------------------------------------------------\n1. GET /assets/{asset_id}\n   -> Returns AssetRecord (name, subsidiary, family, scan_type, site, batch)\n2. GET /assets/{asset_id}/inspection_profile\n   -> Returns InspectionProfile (views, conditions, grade_scale, thresholds)\n3. GET /assets/{asset_id}/cover\n   -> Returns CoverInfo (policy_ref, cover_type, insured, claim_steps)\n4. GET /standards/search?asset_id={...}&condition_id={...}\n   -> Returns StandardResult (standard_id, title, acceptance_clause, next_check)\n5. POST /experts/ask\n   -> Body: {question, asset_id, context_image_ref} -> Returns ExpertAnswer\n6. POST /cases/similar\n   -> Body: {asset_id, conditions, limit} -> Returns list of SimilarCase\n7. POST /claims/build\n   -> Body: {asset_id, inspection_id, evidence_refs} -> Returns ClaimPack\n================================================================================"
+  },
+  "concept_matches": {},
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"specification\" in the first lines"
+  },
+  "upload": {
+    "file": "README_NEURALMESH_SPEC.txt",
+    "format": "text",
+    "chars": 4458,
+    "sha256": "073a3ba9dd61faa2cf13eff59cd4db5927c296e54266aedaf5ed213ec1a21e11",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:43+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:data-quality-check",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:19:19+00:00"
+    },
+    {
+      "concept": "concept:lot-acceptance",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:19:19+00:00"
+    },
+    {
+      "concept": "concept:tower-design-standard",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:19:19+00:00"
+    },
+    {
+      "concept": "concept:breakdown-rca",
+      "verdict": "not_supported",
+      "reason": "'breakdown' here means hierarchical decomposition, not equipment breakdown RCA.",
+      "sentence": "asset_taxonomy.json - Hierarchical breakdown: Subsidiary -> Asset Family -> Asset -> Inspection Views.",
+      "by": "model",
+      "at": "2026-11-13T12:19:21+00:00"
+    },
+    {
+      "concept": "concept:failure-pattern",
+      "verdict": "not_supported",
+      "reason": "Sentence lists hierarchy, defects, standards, RUL, insurance; no failure patterns topic.",
+      "sentence": "These files define the multi-tier asset hierarchy, defect conditions, quality standard clauses, remaining useful life (RUL) prognostic models, and insurance policies across 4 RPG Group subsidiaries: 1.",
+      "by": "model",
+      "at": "2026-11-13T12:19:21+00:00"
+    },
+    {
+      "concept": "concept:overseas-mobilisation-terms",
+      "verdict": "not_supported",
+      "reason": "Claim settlement workflows are not labour, contract or payment terms.",
+      "sentence": "- Step-by-step claim settlement workflows for automated dossier dispatch.",
+      "by": "model",
+      "at": "2026-11-13T12:19:21+00:00"
+    },
+    {
+      "concept": "concept:raw-material-storage",
+      "verdict": "not_supported",
+      "reason": "Warehouse storage mentioned only as a design unit in passing; not raw material storage.",
+      "sentence": "- Baseline design units: * CEAT Tyres: 60,000 km / 48 Months * Harrisons Malayalam: 24.0 Months (Warehouse Storage) * KEC International: 40.0 Years (Atmospheric Service Life) * Raychem RPG: 30.0 Years (Dielectric Insulation Horizon) - Wear index equations and maintenance intervention triggers.",
+      "by": "model",
+      "at": "2026-11-13T12:19:21+00:00"
+    }
+  ]
+}

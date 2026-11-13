@@ -1,7 +1,202 @@
 {
  "document": "zensar:F-03-U001",
- "made": "2026-11-12T10:50:16+00:00",
- "model": "made",
- "entities": [],
- "links": []
+ "made": "2026-11-13T12:22:34+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:operation-team",
+   "type": "Team",
+   "name": "operations team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:controlled-load-test",
+   "type": "Test",
+   "name": "controlled load test",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:alert-threshold",
+   "type": "Form",
+   "name": "alert threshold",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:high-volume-import-window",
+   "type": "Process",
+   "name": "high-volume import window",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u001-risk-0f093a78",
+   "type": "Risk",
+   "name": "Same queue pressure could recur during the next scheduled import",
+   "sentence": "My concern is the same queue pressure could recur during the next scheduled import.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u001-action-8bbb6ff9",
+   "type": "Action",
+   "name": "Scale concurrency gradually and watch connection usage at each step",
+   "sentence": "A practical next step is to scale concurrency gradually and watch connection usage at each step.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u001-action-26baf505",
+   "type": "Action",
+   "name": "Add a queue-depth alert and run a controlled load test ...",
+   "sentence": "The follow-up is to add a queue-depth alert and run a controlled load test before the next high-volume import window, with the operations team needs to approve the alert threshold still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u001-decision-d93f43e6",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: treat queue ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: treat queue saturation as the primary contributing factor and track the database limit as a contributing condition.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u001-risk-5289c6cd",
+   "type": "Risk",
+   "name": "Operations team needs to approve the alert threshold",
+   "sentence": "The dependency is the operations team needs to approve the alert threshold.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-de5bc203da",
+   "source": "zensar:F-03-U001",
+   "target": "entity:zensar:f-03-u001-risk-0f093a78",
+   "type": "HAS_RISK",
+   "evidence": "My concern is the same queue pressure could recur during the next scheduled import.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states a recurrence risk for the next import.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-060aa15320",
+   "source": "zensar:F-03-U001",
+   "target": "entity:zensar:f-03-u001-action-8bbb6ff9",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to scale concurrency gradually and watch connection usage at each step.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence names this as a next step.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-24bbcaa4ab",
+   "source": "zensar:F-03-U001",
+   "target": "entity:zensar:f-03-u001-action-26baf505",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to add a queue-depth alert and run a controlled load test before the next high-volume import window, with the operations team needs to approve the alert threshold still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated directly.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-73c576e31f",
+   "source": "zensar:F-03-U001",
+   "target": "entity:zensar:f-03-u001-decision-d93f43e6",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: treat queue saturation as the primary contributing factor and track the database limit as a contributing condition.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement stated as the decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-8fb0de06ea",
+   "source": "entity:zensar:f-03-u001-decision-d93f43e6",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: treat queue saturation as the primary contributing factor and track the database limit as a contributing condition.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Labour/contract terms topic unrelated to queue saturation sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-8a330a8f7a",
+   "source": "zensar:F-03-U001",
+   "target": "entity:zensar:f-03-u001-risk-5289c6cd",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the operations team needs to approve the alert threshold.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency on operations approval stated as a risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-0257f9a528",
+   "source": "entity:zensar:alert-threshold",
+   "target": "entity:zensar:operation-team",
+   "type": "APPROVED_BY",
+   "evidence": "If the operations team needs to approve the alert threshold, what do we tell the people relying on this work?",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Operations team approves the alert threshold.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  },
+  {
+   "id": "x-a0565a34c6",
+   "source": "entity:zensar:controlled-load-test",
+   "target": "entity:zensar:high-volume-import-window",
+   "type": "PRECEDES",
+   "evidence": "Andre Lewis will add a queue-depth alert and run a controlled load test before the next high-volume import window; whether a second worker pool is needed for long-running imports remains unresolved.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Load test is to occur before the import window.",
+    "by": "model",
+    "at": "2026-11-13T12:51:07+00:00"
+   }
+  }
+ ]
 }

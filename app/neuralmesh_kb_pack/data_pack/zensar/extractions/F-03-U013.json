@@ -1,8 +1,56 @@
 {
  "document": "zensar:F-03-U013",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:58+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:reporting-integration",
+   "type": "System",
+   "name": "Reporting integration",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:legacy-account",
+   "type": "Asset",
+   "name": "legacy account",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u013-risk-65443298",
+   "type": "Risk",
+   "name": "Removing an account before confirming its purpose could interrupt a ...",
+   "sentence": "My concern is removing an account before confirming its purpose could interrupt a scheduled integration.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u013-action-15b707ce",
+   "type": "Action",
+   "name": "Time-box a read-only observation period before requesting removal",
+   "sentence": "A practical next step is to time-box a read-only observation period before requesting removal.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u013-action-68798312",
+   "type": "Action",
+   "name": "Contact system owners and attach the access rationale or approved ...",
+   "sentence": "The follow-up is to contact system owners and attach the access rationale or approved removal request before the quarterly control sign-off, with application teams must identify the owners for the remaining service accounts still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u013-decision-2c80f82e",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: keep the ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the evidence review open until the four unowned accounts are resolved.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u013-risk-342bda44",
+   "type": "Risk",
+   "name": "Application teams must identify the owners for the remaining service ...",
+   "sentence": "The dependency is application teams must identify the owners for the remaining service accounts.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-dcb0f94e4b",
@@ -12,7 +60,99 @@
    "evidence": "Keiko Sato: Keiko Sato: Before we call this ready, how are we handling removing an account before confirming its purpose could interrupt a scheduled integration, especially while whether one legacy account is still required by the reporting integration?",
    "by": "code",
    "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "'handling' is used in 'how are we handling'; the sentence has nothing to do with Materials handling.",
+    "by": "model",
+    "at": "2026-11-13T12:24:00+00:00"
+   }
+  },
+  {
+   "id": "x-bf6c59eab3",
+   "source": "zensar:F-03-U013",
+   "target": "entity:zensar:f-03-u013-risk-65443298",
+   "type": "HAS_RISK",
+   "evidence": "My concern is removing an account before confirming its purpose could interrupt a scheduled integration.",
+   "by": "code",
+   "sentences": 1,
    "status": "proposed"
+  },
+  {
+   "id": "x-3af58ae96c",
+   "source": "entity:zensar:f-03-u013-risk-65443298",
+   "target": "concept:acquisition-integration",
+   "type": "ABOUT",
+   "evidence": "My concern is removing an account before confirming its purpose could interrupt a scheduled integration.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-9bb6e307cc",
+   "source": "zensar:F-03-U013",
+   "target": "entity:zensar:f-03-u013-action-15b707ce",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to time-box a read-only observation period before requesting removal.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-34cf87c26e",
+   "source": "zensar:F-03-U013",
+   "target": "entity:zensar:f-03-u013-action-68798312",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to contact system owners and attach the access rationale or approved removal request before the quarterly control sign-off, with application teams must identify the owners for the remaining service accounts still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-760f5265c5",
+   "source": "zensar:F-03-U013",
+   "target": "entity:zensar:f-03-u013-decision-2c80f82e",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the evidence review open until the four unowned accounts are resolved.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-8728eeaf8a",
+   "source": "entity:zensar:f-03-u013-decision-2c80f82e",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: keep the evidence review open until the four unowned accounts are resolved.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-890002cce4",
+   "source": "zensar:F-03-U013",
+   "target": "entity:zensar:f-03-u013-risk-342bda44",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is application teams must identify the owners for the remaining service accounts.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-fef00905ec",
+   "source": "entity:zensar:reporting-integration",
+   "target": "entity:zensar:legacy-account",
+   "type": "REQUIRES",
+   "evidence": "The remaining question is whether one legacy account is still required by the reporting integration.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "reason": "The sentence suggests the reporting integration may require the legacy account, but it is posed as an open question, not",
+    "by": "model",
+    "at": "2026-11-13T12:24:00+00:00"
+   }
   }
  ]
 }

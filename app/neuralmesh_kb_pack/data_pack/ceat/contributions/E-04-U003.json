@@ -1,0 +1,55 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U003",
+    "datapoint": "ceat:E-04",
+    "title": "Defect ontology",
+    "kind": "standard",
+    "version": "2026-11",
+    "tags": [],
+    "summary": "condition_id: bulge, family: deformation, subsidiary: ceat, display_name: Sidewall Ply Separation / Bulge, severity: Critical, primary_failure_mode: Catastrophic Carcass Blowout under highway loading, visual_signature: geometry: Localized radial protrusion or bubble >15mm diameter, texture: Discontinuous sidewall curvature under ArUco normal, hsv_range: Uniform tyre black with distinct shadow grad…",
+    "body": "condition_id: bulge, family: deformation, subsidiary: ceat, display_name: Sidewall Ply Separation / Bulge, severity: Critical, primary_failure_mode: Catastrophic Carcass Blowout under highway loading, visual_signature: geometry: Localized radial protrusion or bubble >15mm diameter, texture: Discontinuous sidewall curvature under ArUco normal, hsv_range: Uniform tyre black with distinct shadow gradient, quarantine_mandated: True, governing_standard: CEAT-QC-TY-02 / ISO 10191\n\ncondition_id: cut, family: crack_cut, subsidiary: ceat, display_name: Tread or Sidewall Penetration Cut, severity: High, primary_failure_mode: Breaker belt steel wire rust & structural ply rupture, visual_signature: geometry: Sharp linear fissure penetrating outer rubber gauge, texture: High-contrast edge discontinuity across tread rib, hsv_range: Dark localized shadow cleft, quarantine_mandated: False, governing_standard: ASTM F538\n\ncondition_id: uneven_wear, family: wear, subsidiary: ceat, display_name: Heel-and-Toe / Shoulder Chamfer Wear, severity: Moderate, primary_failure_mode: Premature tread life loss and asymmetric braking pull, visual_signature: geometry: Differential groove depth between outer and inner ribs, texture: Scalloped or diagonal feathering along block edges, hsv_range: Grayscale depth profile deviation, quarantine_mandated: False, governing_standard: CEAT-FLEET-MAINT-04\n\ncondition_id: bead_damage, family: wear, subsidiary: ceat, display_name: Torn Bead Wire / Seating Lip Distortion, severity: Critical, primary_failure_mode: Sudden tubeless air loss & rim dislodgement, visual_signature: geometry: Torn rubber exposing bronze-coated steel bead bundles, texture: Rough jagged boundary at rim contact interface, hsv_range: Metallic luster embedded in black elastomer matrix, quarantine_mandated: True, governing_standard: CEAT-QC-TY-02\n\ncondition_id: mould, family: contamination_mould, subsidiary: harrisons, display_name: Superficial / Penetrating Fungal Mould Colony, severity: High, primary_failure_mode: Microbial breakdown of polyisoprene polymer chains, loss of tensile modulus, visual_signature: geometry: Circular or diffuse spore patches spreading across ribs, texture: Velvety or granular high-frequency surface scatter, hsv_range: H: 35-85 (Olive green / dull yellow), S: 30-180, V: 40-200, quarantine_mandated: True, governing_standard: HML-GREEN-BOOK-RSS Clause 2.3\n\ncondition_id: colour_unevenness, family: colour_appearance, subsidiary: harrisons, display_name: Uneven Smoke Curing / Dark Clouding, severity: Moderate, primary_failure_mode: Inconsistent cure index (tc90) during downstream tyre compounding, visual_signature: geometry: Broad blotches contrasting with amber baseline, texture: Smooth transition without fungal spore texture, hsv_range: H: 15-30, delta-V > 35 across illuminated inspection tray, quarantine_mandated: False, governing_standard: HML-GREEN-BOOK-RSS Clause 3.2\n\ncondition_id: bubbles, family: colour_appearance, subsidiary: harrisons, display_name: Latex Gas Fermentation Bubbles, severity: Moderate, primary_failure_mode: Internal structural void pockets lowering tear resistance, visual_signature: geometry: Clusters of spherical translucent pinhead inclusions <3mm, texture: Local specular highlights under polarized backlighting, hsv_range: High brightness void rings with darker centers, quarantine_mandated: False, governing_standard: HML-GREEN-BOOK-RSS Clause 4.2\n\ncondition_id: zinc_loss, family: corrosion_coating, subsidiary: kec, display_name: Galvanic Zinc Depletion / White Storage Stain, severity: Moderate, primary_failure_mode: Loss of sacrificial zinc anode layer exposing underlying carbon steel, visual_signature: geometry: Patchy degradation of bright spangle crystallization, texture: Chalky matte film or pitted micro-roughness, hsv_range: Dull neutral gray, low saturation, reflectance loss, quarantine_mandated: False, governing_standard: ISO 12944 / IS 802\n\ncondition_id: rust, family: corrosion_coating, subsidiary: kec, display_name: Ferrous Oxide Red Rust Bleed, severity: High, primary_failure_mode: Active steel section loss reducing tower ultimate load capacity, visual_signature: geometry: Flaking or pitted corrosion bleeding from fastener holes or gussets, texture: High roughness, scaly exfoliating rust flakes, hsv_range: H: 5-25 (Reddish-brown), S: 120-255, V: 50-180, quarantine_mandated: True, governing_standard: KEC-PATROL-P01 Clause 8.4\n\ncondition_id: bent_member, family: deformation, subsidiary: kec, display_name: Structural Angle Leg Permanent Deformation / Buckling, severity: Critical, primary_failure_mode: Euler buckling of lattice tower leg leading to whole tower collapse, visual_signature: geometry: Deviation from straight chord exceeding L/500 tolerance, texture: Kinked flange or distorted gusset bolt holes, hsv_range: Shadow crease along deformed neutral axis, quarantine_mandated: True, governing_standard: IS 802 (Part 1/Sec 2)\n\ncondition_id: burnt, family: thermal_electrical, subsidiary: raychem, display_name: Insulation Thermal Scorching / Flashover Char, severity: Critical, primary_failure_mode: Dielectric breakdown, thermal runaway, and catastrophic cable splice explosion, visual_signature: geometry: Charred crater or blistered polymeric outer sleeve, texture: Carbonized brittle soot crust with molten polyolefin lips, hsv_range: Pure matte black (V < 25) with surrounding iridescent thermal discoloration, quarantine_mandated: True, governing_standard: RAYCHEM-HV-SOP-404 / IEEE 404\n\ncondition_id: tracking_mark, family: thermal_electrical, subsidiary: raychem, display_name: Electrical Partial Discharge Dendritic Treeing Path, severity: Critical, primary_failure_mode: Progressive dielectric erosion terminating in phase-to-earth flashover, visual_signature: geometry: Branched dendritic carbon tracks radiating along creepage path, texture: Fine micro-grooves etched into silicone or mastic substrate, hsv_range: High-contrast dark treeing veins across lighter insulator sheds, quarantine_mandated: True, governing_standard: IEC 60502-4 / IEEE 404\n\ncondition_id: uneven_shrink, family: deformation, subsidiary: raychem, display_name: Asymmetric Heat Recovery / Trapped Air Voids, severity: High, primary_failure_mode: Air void ionization under high voltage stress triggering internal partial discharge, visual_signature: geometry: Wavy ridge, wrinkled transition, or improper step-down taper, texture: Wrinkled skin indicating non-uniform torch heating, hsv_range: Contour shadow folds along sleeve circumference, quarantine_mandated: True, governing_standard: RAYCHEM-HV-SOP-404 Clause 10.3",
+    "concepts": [
+      "concept:failure-pattern"
+    ]
+  },
+  "concept_matches": {
+    "concept:failure-pattern": "phrase"
+  },
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: the words \"standard\" in the first lines"
+  },
+  "upload": {
+    "file": "defect_ontology.json",
+    "format": "json",
+    "chars": 6625,
+    "sha256": "4a58ff0f1ca24b2fbc4c866b1bf21b84073856cc5c5efd3e1e872687411720f3",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:44+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:breakdown-rca",
+      "verdict": "not_supported",
+      "reason": "Describes mould as a material defect, not maintenance or breakdown root cause analysis.",
+      "sentence": "condition_id: mould, family: contamination_mould, subsidiary: harrisons, display_name: Superficial / Penetrating Fungal Mould Colony, severity: High, primary_failure_mode: Microbial breakdown of polyisoprene polymer chains, loss of tensile modulus, visual_signature: geometry: Circular or diffuse spo",
+      "by": "model",
+      "at": "2026-11-13T12:19:45+00:00"
+    },
+    {
+      "concept": "concept:knowledge-transfer",
+      "verdict": "not_supported",
+      "reason": "A colour unevenness defect entry has nothing to do with knowledge transfer or handover.",
+      "sentence": "condition_id: colour_unevenness, family: colour_appearance, subsidiary: harrisons, display_name: Uneven Smoke Curing / Dark Clouding, severity: Moderate, primary_failure_mode: Inconsistent cure index (tc90) during downstream tyre compounding, visual_signature: geometry: Broad blotches contrasting wi",
+      "by": "model",
+      "at": "2026-11-13T12:19:45+00:00"
+    }
+  ]
+}

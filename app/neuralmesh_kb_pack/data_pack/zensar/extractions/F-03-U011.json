@@ -1,8 +1,44 @@
 {
  "document": "zensar:F-03-U011",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:45+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u011-risk-f429c25e",
+   "type": "Risk",
+   "name": "Identity-provider test environment has been unstable",
+   "sentence": "My concern is the identity-provider test environment has been unstable.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u011-action-02818d4b",
+   "type": "Action",
+   "name": "Split the integration story into a testable setup task and ...",
+   "sentence": "A practical next step is to split the integration story into a testable setup task and a later end-to-end task.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u011-action-2160b261",
+   "type": "Action",
+   "name": "Confirm the environment and post a revised estimate for the ...",
+   "sentence": "The follow-up is to confirm the environment and post a revised estimate for the integration story before Wednesday's planning follow-up, with the identity team must provide a stable test tenant still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u011-decision-ccf1ddd8",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: commit to ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u011-risk-94c68ae4",
+   "type": "Risk",
+   "name": "Identity team must provide a stable test tenant",
+   "sentence": "The dependency is the identity team must provide a stable test tenant.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-fa0cca6d1a",
@@ -12,7 +48,14 @@
    "evidence": "Nina Patel: Nina Patel: Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "Sentence concerns scope commitments for authentication refactor; nothing about labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:23:47+00:00"
+   }
   },
   {
    "id": "x-796768888c",
@@ -22,6 +65,103 @@
    "evidence": "Olivia Chen: Olivia Chen: Before we call this ready, how are we handling the identity-provider test environment has been unstable, especially while whether the integration test tenant will be available this week?",
    "by": "code",
    "sentences": 2,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "'handling' is used in a casual sense; the sentence is about test environment, not materials handling.",
+    "by": "model",
+    "at": "2026-11-13T12:23:47+00:00"
+   }
+  },
+  {
+   "id": "x-5f77f58638",
+   "source": "zensar:F-03-U011",
+   "target": "entity:zensar:f-03-u011-risk-f429c25e",
+   "type": "HAS_RISK",
+   "evidence": "My concern is the identity-provider test environment has been unstable.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-7ed40f214f",
+   "source": "zensar:F-03-U011",
+   "target": "entity:zensar:f-03-u011-action-02818d4b",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to split the integration story into a testable setup task and a later end-to-end task.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-eeb61028bd",
+   "source": "entity:zensar:f-03-u011-action-02818d4b",
+   "target": "concept:acquisition-integration",
+   "type": "ABOUT",
+   "evidence": "A practical next step is to split the integration story into a testable setup task and a later end-to-end task.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-6440ee1099",
+   "source": "zensar:F-03-U011",
+   "target": "entity:zensar:f-03-u011-action-2160b261",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to confirm the environment and post a revised estimate for the integration story before Wednesday's planning follow-up, with the identity team must provide a stable test tenant still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-2c802a2739",
+   "source": "entity:zensar:f-03-u011-action-2160b261",
+   "target": "concept:acquisition-integration",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to confirm the environment and post a revised estimate for the integration story before Wednesday's planning follow-up, with the identity team must provide a stable test tenant still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-0f7e2a6b1c",
+   "source": "zensar:F-03-U011",
+   "target": "entity:zensar:f-03-u011-decision-ccf1ddd8",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-4d84b467eb",
+   "source": "entity:zensar:f-03-u011-decision-ccf1ddd8",
+   "target": "concept:acquisition-integration",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-00ed6d8627",
+   "source": "entity:zensar:f-03-u011-decision-ccf1ddd8",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: commit to the authentication refactor and audit-log groundwork, but leave the integration story as stretch scope.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-cfa77959a4",
+   "source": "zensar:F-03-U011",
+   "target": "entity:zensar:f-03-u011-risk-94c68ae4",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the identity team must provide a stable test tenant.",
+   "by": "code",
+   "sentences": 1,
    "status": "proposed"
   }
  ]

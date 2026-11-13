@@ -68,6 +68,20 @@
         "bid_support",
         "learning"
       ]
+    },
+    {
+      "id": "ceat:E-04",
+      "catalogue_id": "E-04",
+      "title": "Tyre Analysis",
+      "sensitivity": "Restricted",
+      "ceiling": "MD",
+      "owner_role": "Node owner",
+      "purposes_allowed": [
+        "problem_solving",
+        "compliance",
+        "bid_support"
+      ],
+      "never_leave": true
     }
   ],
   "documents": [
@@ -345,11 +359,9 @@
       ],
       "summary": "Material specification, natural rubber grades and storage limits Specification of the raw material team of CEAT, revision 4, valid from 1 September 2026. A lot of natural rubber is accepted when all four incoming tests of its grade are inside the limits of the table below. A lot that is past the time-to-use limit of its grade is issued to mixing only after it passes the storage ageing check.",
       "concepts": [
-        "concept:compound-formulation",
         "concept:incoming-quality-control",
         "concept:lot-acceptance",
         "concept:material-ageing",
-        "concept:raw-material-storage",
         "concept:supplier-feedback-loop",
         "concept:time-to-use-limit"
       ],
@@ -395,6 +407,78 @@
         "concept:time-to-use-limit"
       ],
       "body_file": "contributions/E-03-U003.json"
+    },
+    {
+      "id": "ceat:E-04-U001",
+      "datapoint": "ceat:E-04",
+      "title": "README NEURALMESH SPEC",
+      "kind": "standard",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "================================================================================ RPG SNAP & SCORE AI -> NEURALMESH KNOWLEDGE GRAPH SEED DATA SPECIFICATION ================================================================================ Generated: 2026-11-13 Version: 1.0.0 Audience: NeuralMesh Engineering Team (Knowledge Graph & Graph RAG Modelers) OVERVIEW: This archive contains the definitive str…",
+      "body_file": "contributions/E-04-U001.json"
+    },
+    {
+      "id": "ceat:E-04-U002",
+      "datapoint": "ceat:E-04",
+      "title": "Asset taxonomy",
+      "kind": "rca",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "version: 1.0.0 project: RPG Snap & Score AI -> NeuralMesh Knowledge Graph description: Enterprise asset hierarchy, camera viewpoints, scan codes, and grading scales across all 4 RPG subsidiaries.",
+      "body_file": "contributions/E-04-U002.json"
+    },
+    {
+      "id": "ceat:E-04-U003",
+      "datapoint": "ceat:E-04",
+      "title": "Defect ontology",
+      "kind": "standard",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "condition_id: bulge, family: deformation, subsidiary: ceat, display_name: Sidewall Ply Separation / Bulge, severity: Critical, primary_failure_mode: Catastrophic Carcass Blowout under highway loading, visual_signature: geometry: Localized radial protrusion or bubble >15mm diameter, texture: Discontinuous sidewall curvature under ArUco normal, hsv_range: Uniform tyre black with distinct shadow grad…",
+      "concepts": [
+        "concept:failure-pattern"
+      ],
+      "body_file": "contributions/E-04-U003.json"
+    },
+    {
+      "id": "ceat:E-04-U004",
+      "datapoint": "ceat:E-04",
+      "title": "Insurance policies",
+      "kind": "policy",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "subsidiary: ceat, cover_type: stock_policy, policy_ref: POL-RPG-CEAT-09, underwriter: New India Assurance / RPG Group Marine & Property Package, insured: True, covered_perils: Manufacturing Casing Defects, Warehouse Fire & Water Contamination, OEM Transit Road Hazard, claim_workflow_steps: 1. High-resolution sidewall and bead photographic capture, 2.",
+      "concepts": [
+        "concept:project-delay-pattern"
+      ],
+      "body_file": "contributions/E-04-U004.json"
+    },
+    {
+      "id": "ceat:E-04-U005",
+      "datapoint": "ceat:E-04",
+      "title": "Rul prognostics",
+      "kind": "report",
+      "version": "2026-11",
+      "tags": [
+        "raw-material-storage"
+      ],
+      "summary": "subsidiary: ceat, asset_id: ceat.finished_tyre, lifespan_category: Tyre Mileage Lifespan, baseline_design_life: 60000, unit: km, typical_time_horizon: 48 Months, underlying_physics: Archard abrasive tread contact wear + mechanical carcass fatigue under internal pressure cyclic flexing., failure_modes: trigger_condition: bulge, rul_remaining_pct: 0.0, rul_display: 0 km (Scrap Mandated), risk_level:…",
+      "concepts": [
+        "concept:failure-pattern",
+        "concept:raw-material-storage"
+      ],
+      "body_file": "contributions/E-04-U005.json"
+    },
+    {
+      "id": "ceat:E-04-U006",
+      "datapoint": "ceat:E-04",
+      "title": "Sop standards",
+      "kind": "sop",
+      "version": "2026-11",
+      "tags": [],
+      "summary": "standard_id: CEAT-QC-TY-02, subsidiary: ceat, title: CEAT Commercial & Passenger Radial Plant Quality Standard, authority: CEAT Corporate Quality Council & ISO 10191, clauses: clause_ref: Clause 4.1.2 - Carcass Structural Integrity & Bulges, condition_id: bulge, acceptance_limit: Zero Tolerance (0% visible area).",
+      "body_file": "contributions/E-04-U006.json"
     }
   ],
   "relationships": [

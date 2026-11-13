@@ -1,0 +1,62 @@
+{
+ "document": "ceat:E-04-U005",
+ "made": "2026-11-13T12:20:02+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-a6a3ae80dd",
+   "source": "concept:failure-pattern",
+   "target": "concept:raw-material-storage",
+   "type": "RELATED_TO",
+   "evidence": "subsidiary: harrisons, asset_id: harrisons.smoked_sheet, lifespan_category: Storage Shelf-Life (Green Book), baseline_design_life: 24.0, unit: months, typical_time_horizon: Warehouse Storage, underlying_physics: Microbial biodegradation and atmospheric oxidation of cis-1,4-polyisoprene polymer matri",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Smoked sheet storage shelf-life row; the generic 'Failure pattern' source makes the link vague.",
+    "by": "model",
+    "at": "2026-11-13T12:50:15+00:00"
+   }
+  },
+  {
+   "id": "x-cf29bf50d0",
+   "source": "concept:compound-formulation",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "subsidiary: kec, asset_id: kec.tower_member, lifespan_category: Atmospheric Structural RUL, baseline_design_life: 40.0, unit: years, typical_time_horizon: Field In-Service Operation, underlying_physics: ISO 12944 galvanic zinc consumption followed by ferric pitting corrosion section loss., failure_m",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Row is about a tower member's corrosion life; compound formulation is not mentioned.",
+    "by": "model",
+    "at": "2026-11-13T12:50:15+00:00"
+   }
+  },
+  {
+   "id": "x-7a1b59df1f",
+   "source": "concept:breakdown-rca",
+   "target": "concept:failure-pattern",
+   "type": "RELATED_TO",
+   "evidence": "subsidiary: raychem, asset_id: raychem.joint, lifespan_category: Dielectric Insulation Life, baseline_design_life: 30.0, unit: years, typical_time_horizon: Energized Grid Operation, underlying_physics: Arrhenius thermal stress aging and partial discharge electrical treeing across polymeric dielectri",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Row describes joint dielectric life; no maintenance or breakdown RCA is stated.",
+    "by": "model",
+    "at": "2026-11-13T12:50:15+00:00"
+   }
+  }
+ ]
+}

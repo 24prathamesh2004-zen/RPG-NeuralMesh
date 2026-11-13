@@ -1,0 +1,26 @@
+{
+ "document": "others:G-01-U004",
+ "made": "2026-11-13T12:25:05+00:00",
+ "model": "made",
+ "entities": [],
+ "links": [
+  {
+   "id": "x-f3208d4eec",
+   "source": "concept:compound-formulation",
+   "target": "concept:regulatory-change-control",
+   "type": "RELATED_TO",
+   "evidence": "Tread compound formulation change request, restricted",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Sentence only labels a change request as restricted; link to regulatory change control is implied, not stated.",
+    "by": "model",
+    "at": "2026-11-13T12:53:02+00:00"
+   }
+  }
+ ]
+}

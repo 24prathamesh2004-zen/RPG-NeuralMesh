@@ -1,0 +1,222 @@
+{
+ "document": "others:G-01-U003",
+ "made": "2026-11-13T12:24:55+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:others:incoming-team",
+   "type": "Team",
+   "name": "Incoming team",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:onboarding-checklist",
+   "type": "Form",
+   "name": "Onboarding checklist",
+   "by": "model"
+  },
+  {
+   "id": "entity:others:g-01-u003-decision-78bcf312",
+   "type": "Decision",
+   "name": "Only when the register has no open item older than ...",
+   "sentence": "Week 5: sign-off The handover is signed off only when the register has no open item older than 5 working days.",
+   "by": "code"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-94ece48c86",
+   "source": "concept:employee-onboarding",
+   "target": "concept:integration-checklist",
+   "type": "FOLLOWS",
+   "evidence": "New joiners of the incoming team follow the onboarding checklist of the delivery unit before they get production access.",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Sentence mentions onboarding checklist, not 'Integration checklist'; source/target mismatched generic names.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-84325673f7",
+   "source": "concept:integration-checklist",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "Knowledge transfer and handover playbook",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Only a title; checklist link to playbook not stated.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-64bd722c2d",
+   "source": "concept:client-service-desk",
+   "target": "concept:knowledge-transfer",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table of lessons; service desk not tied to handover topic by relation.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-a83f15a066",
+   "source": "concept:client-service-desk",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table row fragment; no link to labour terms.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-d8ffdd812f",
+   "source": "concept:client-service-desk",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table row fragment; no stated relation to process ownership.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-2df63cc23b",
+   "source": "concept:knowledge-transfer",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table lists items side by side; labour terms not mentioned.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-5665c0db3d",
+   "source": "concept:knowledge-transfer",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table fragment; process ownership not stated.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-d03df3b20d",
+   "source": "concept:overseas-mobilisation-terms",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "RELATED_TO",
+   "evidence": "Lessons from 2026 transitions | Transition | Weeks planned | Weeks taken | Main lesson | |---|---|---|---| | Insurance claims portal | 5 | 7 | Start the access requests in week 1 | | Retail order platform | 5 | 5 | The handover register kept the scope clear | | Acquired unit service desk | 6 | 9 | A",
+   "by": "code",
+   "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Table fragment; no relation stated between these topics.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-15299ef3cb",
+   "source": "others:G-01-U003",
+   "target": "entity:others:g-01-u003-decision-78bcf312",
+   "type": "HAS_DECISION",
+   "evidence": "Week 5: sign-off The handover is signed off only when the register has no open item older than 5 working days.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sign-off rule is a decision of the handover playbook.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-c8e25206e3",
+   "source": "entity:others:g-01-u003-decision-78bcf312",
+   "target": "concept:knowledge-transfer",
+   "type": "ABOUT",
+   "evidence": "Week 5: sign-off The handover is signed off only when the register has no open item older than 5 working days.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sign-off condition concerns the handover.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  },
+  {
+   "id": "x-04081415c1",
+   "source": "entity:others:incoming-team",
+   "target": "entity:others:onboarding-checklist",
+   "type": "REQUIRES",
+   "evidence": "New joiners of the incoming team follow the onboarding checklist of the delivery unit before they get production access.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Joiners must follow the onboarding checklist before production access.",
+    "by": "model",
+    "at": "2026-11-13T12:52:58+00:00"
+   }
+  }
+ ]
+}

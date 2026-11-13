@@ -1,8 +1,44 @@
 {
  "document": "zensar:F-03-U005",
- "made": "2026-11-12T10:50:17+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:23:03+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:f-03-u005-risk-a7d1e997",
+   "type": "Risk",
+   "name": "Checklist alone may hide delays caused by approvals outside the ...",
+   "sentence": "My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u005-action-9907ff39",
+   "type": "Action",
+   "name": "Automate only the local tooling checks in the first iteration",
+   "sentence": "A practical next step is to automate only the local tooling checks in the first iteration.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u005-action-3f3e5596",
+   "type": "Action",
+   "name": "Draft the onboarding guide and validate it with the next ...",
+   "sentence": "The follow-up is to draft the onboarding guide and validate it with the next two new starters before the next onboarding date, with IT must confirm the expected turnaround for repository and test-environment access still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u005-decision-8b3c84f5",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: pilot a ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u005-risk-052d2b10",
+   "type": "Risk",
+   "name": "IT must confirm the expected turnaround for repository and test-environment ...",
+   "sentence": "The dependency is IT must confirm the expected turnaround for repository and test-environment access.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-6f0eb343c2",
@@ -12,7 +48,15 @@
    "evidence": "Ella Morgan: Ella Morgan: My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
    "by": "code",
    "sentences": 11,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Concern about checklist hiding delays; both topics discussed together.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-ee9df2bf29",
@@ -22,7 +66,15 @@
    "evidence": "Amara Okafor: Amara Okafor: For the record, pilot a day-one checklist and track access wait time separately from setup time.",
    "by": "code",
    "sentences": 11,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Pilot is proposed, but no results exist yet.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-7961c50894",
@@ -32,7 +84,15 @@
    "evidence": "Amara Okafor: Amara Okafor: Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Nothing about labour, contract or payment terms.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-4f67da78c2",
@@ -42,7 +102,15 @@
    "evidence": "Amara Okafor: Amara Okafor: Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Labour/contract terms topic unrelated to the sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-f59b4637e6",
@@ -52,7 +120,15 @@
    "evidence": "Ella Morgan: Ella Morgan: Before we call this ready, how are we handling a checklist alone may hide delays caused by approvals outside the engineering team, especially while which setup steps can be automated without broadening default permissions?",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "'handling' matched by chance; not materials handling.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-ca415a32d4",
@@ -62,7 +138,15 @@
    "evidence": "Ella Morgan: Ella Morgan: Before we call this ready, how are we handling a checklist alone may hide delays caused by approvals outside the engineering team, especially while which setup steps can be automated without broadening default permissions?",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Materials handling matched on the word 'handling' only.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-eb1c328fb2",
@@ -72,7 +156,15 @@
    "evidence": "We will pilot a day-one checklist and track access wait time separately from setup time, and Theo Bennett will draft the onboarding guide and validate it with the next two new starters before the next onboarding date.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Onboarding pilot of a day-one checklist.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   },
   {
    "id": "x-9874d98332",
@@ -82,7 +174,202 @@
    "evidence": "We will pilot a day-one checklist and track access wait time separately from setup time, and Theo Bennett will draft the onboarding guide and validate it with the next two new starters before the next onboarding date.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Pilot planned, not results; weak topic match.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-73edbb4f5a",
+   "source": "zensar:F-03-U005",
+   "target": "entity:zensar:f-03-u005-risk-a7d1e997",
+   "type": "HAS_RISK",
+   "evidence": "My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Meeting raises this risk explicitly.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-6660658e02",
+   "source": "entity:zensar:f-03-u005-risk-a7d1e997",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Risk concerns the checklist.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-50f5ebc945",
+   "source": "entity:zensar:f-03-u005-risk-a7d1e997",
+   "target": "concept:project-delay-pattern",
+   "type": "ABOUT",
+   "evidence": "My concern is a checklist alone may hide delays caused by approvals outside the engineering team.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Risk concerns delays caused by approvals.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-2f3db0778d",
+   "source": "zensar:F-03-U005",
+   "target": "entity:zensar:f-03-u005-action-9907ff39",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to automate only the local tooling checks in the first iteration.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Action stated as a next step.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-6242c75a74",
+   "source": "zensar:F-03-U005",
+   "target": "entity:zensar:f-03-u005-action-3f3e5596",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to draft the onboarding guide and validate it with the next two new starters before the next onboarding date, with IT must confirm the expected turnaround for repository and test-environment access still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated directly.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-9d8f4077ed",
+   "source": "entity:zensar:f-03-u005-action-3f3e5596",
+   "target": "concept:employee-onboarding",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to draft the onboarding guide and validate it with the next two new starters before the next onboarding date, with IT must confirm the expected turnaround for repository and test-environment access still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Onboarding guide action concerns employee onboarding.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-298737de8e",
+   "source": "zensar:F-03-U005",
+   "target": "entity:zensar:f-03-u005-decision-8b3c84f5",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement captured as a decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-44c2191279",
+   "source": "entity:zensar:f-03-u005-decision-8b3c84f5",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Decision is to pilot the day-one checklist.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-f5e35ee30a",
+   "source": "entity:zensar:f-03-u005-decision-8b3c84f5",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "No labour or contract terms mentioned.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-360f548227",
+   "source": "entity:zensar:f-03-u005-decision-8b3c84f5",
+   "target": "concept:pilot-results",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: pilot a day-one checklist and track access wait time separately from setup time.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Pilot is planned; results topic is a stretch.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
+  },
+  {
+   "id": "x-04dc94301a",
+   "source": "zensar:F-03-U005",
+   "target": "entity:zensar:f-03-u005-risk-052d2b10",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is IT must confirm the expected turnaround for repository and test-environment access.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "IT turnaround dependency is a stated risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:27+00:00"
+   }
   }
  ]
 }

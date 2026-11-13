@@ -1,0 +1,131 @@
+{
+ "document": "kec:L-02-U001",
+ "made": "2026-11-13T12:20:20+00:00",
+ "model": "made",
+ "entities": [
+  {
+   "id": "entity:kec:project-management-office",
+   "type": "Team",
+   "name": "Project management office",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:kec-international",
+   "type": "Organisation",
+   "name": "KEC International",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:process-owner",
+   "type": "Role",
+   "name": "Process owner",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:system-cut-over",
+   "type": "Process",
+   "name": "System cut-over",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:purchase-to-payment",
+   "type": "Process",
+   "name": "Purchase to payment",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:site-payroll",
+   "type": "Process",
+   "name": "Site payroll",
+   "by": "model"
+  },
+  {
+   "id": "entity:kec:subcontractor-billing",
+   "type": "Process",
+   "name": "Subcontractor billing",
+   "by": "model"
+  }
+ ],
+ "links": [
+  {
+   "id": "x-10b6220106",
+   "source": "entity:kec:project-management-office",
+   "target": "entity:kec:kec-international",
+   "type": "PART_OF",
+   "evidence": "Review by the project management office of KEC International, July 2026.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": false,
+    "reason": "Sentence implies PMO belongs to KEC International, but it is a trivial attribution line.",
+    "by": "model",
+    "at": "2026-11-13T12:50:18+00:00"
+   }
+  },
+  {
+   "id": "x-938219e9c1",
+   "source": "entity:kec:system-cut-over",
+   "target": "entity:kec:process-owner",
+   "type": "REQUIRES",
+   "evidence": "Start a system cut-over only after the process owner signs off the target process.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Cut-over requires process owner sign-off of target process first.",
+    "by": "model",
+    "at": "2026-11-13T12:50:18+00:00"
+   }
+  },
+  {
+   "id": "x-dc0624767b",
+   "source": "entity:kec:purchase-to-payment",
+   "target": "entity:kec:process-owner",
+   "type": "OWNED_BY",
+   "evidence": "Process owners were named for purchase to payment, site payroll and subcontractor billing.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Process owners were named for purchase to payment.",
+    "by": "model",
+    "at": "2026-11-13T12:50:18+00:00"
+   }
+  },
+  {
+   "id": "x-194e33452b",
+   "source": "entity:kec:site-payroll",
+   "target": "entity:kec:process-owner",
+   "type": "OWNED_BY",
+   "evidence": "Process owners were named for purchase to payment, site payroll and subcontractor billing.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Process owners were named for site payroll.",
+    "by": "model",
+    "at": "2026-11-13T12:50:18+00:00"
+   }
+  },
+  {
+   "id": "x-51a6b7d97b",
+   "source": "entity:kec:subcontractor-billing",
+   "target": "entity:kec:process-owner",
+   "type": "OWNED_BY",
+   "evidence": "Process owners were named for purchase to payment, site payroll and subcontractor billing.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Process owners were named for subcontractor billing.",
+    "by": "model",
+    "at": "2026-11-13T12:50:18+00:00"
+   }
+  }
+ ]
+}

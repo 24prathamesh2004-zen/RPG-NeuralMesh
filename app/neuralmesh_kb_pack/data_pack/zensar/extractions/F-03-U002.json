@@ -1,8 +1,74 @@
 {
  "document": "zensar:F-03-U002",
- "made": "2026-11-12T10:50:16+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:22:41+00:00",
+ "model": "made, 3 of 3 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:data-governance-team",
+   "type": "Team",
+   "name": "data governance team",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:normalized-address-format",
+   "type": "Form",
+   "name": "normalized address format",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:production-cutover",
+   "type": "Process",
+   "name": "production cutover",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:address-mapping",
+   "type": "Process",
+   "name": "address mapping",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:rollback-rehearsal",
+   "type": "Test",
+   "name": "rollback rehearsal",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:f-03-u002-risk-3a98b7d1",
+   "type": "Risk",
+   "name": "Cutover before reconciliation could create duplicate or incomplete customer profiles",
+   "sentence": "My concern is a cutover before reconciliation could create duplicate or incomplete customer profiles.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u002-action-a62ca08f",
+   "type": "Action",
+   "name": "Preserve the original value in an audit field while mapping ...",
+   "sentence": "A practical next step is to preserve the original value in an audit field while mapping only validated cases.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u002-action-af740ae9",
+   "type": "Action",
+   "name": "Sample the regional exceptions and document a tested rollback sequence ...",
+   "sentence": "The follow-up is to sample the regional exceptions and document a tested rollback sequence before the next cutover review, with the data governance team must approve the normalized address format still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u002-decision-eed3ba03",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: do not ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u002-risk-018fdc6b",
+   "type": "Risk",
+   "name": "Data governance team must approve the normalized address format",
+   "sentence": "The dependency is the data governance team must approve the normalized address format.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-abb4ae3557",
@@ -12,7 +78,15 @@
    "evidence": "Camila Torres: Camila Torres: Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Labour/contract terms topic unrelated to the cutover sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
   },
   {
    "id": "x-5d650acf75",
@@ -22,7 +96,216 @@
    "evidence": "Anika Desai: Anika Desai: Before we call this ready, how are we handling a cutover before reconciliation could create duplicate or incomplete customer profiles, especially while whether blank legacy region codes should remain blank or use a reviewed mapping?",
    "by": "code",
    "sentences": 2,
-   "status": "proposed"
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "'handling' matched by chance; not Materials handling.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-efc07be96c",
+   "source": "zensar:F-03-U002",
+   "target": "entity:zensar:f-03-u002-risk-3a98b7d1",
+   "type": "HAS_RISK",
+   "evidence": "My concern is a cutover before reconciliation could create duplicate or incomplete customer profiles.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Meeting raises this cutover risk explicitly.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-3c19566077",
+   "source": "entity:zensar:f-03-u002-risk-3a98b7d1",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "ABOUT",
+   "evidence": "My concern is a cutover before reconciliation could create duplicate or incomplete customer profiles.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Risk concerns cutover, but the topic link is loose.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-f68207e96e",
+   "source": "zensar:F-03-U002",
+   "target": "entity:zensar:f-03-u002-action-a62ca08f",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to preserve the original value in an audit field while mapping only validated cases.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Sentence states this as a next step action.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-c0388f9ea1",
+   "source": "zensar:F-03-U002",
+   "target": "entity:zensar:f-03-u002-action-af740ae9",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to sample the regional exceptions and document a tested rollback sequence before the next cutover review, with the data governance team must approve the normalized address format still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Follow-up action stated in the sentence.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-f5e179fef4",
+   "source": "entity:zensar:f-03-u002-action-af740ae9",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to sample the regional exceptions and document a tested rollback sequence before the next cutover review, with the data governance team must approve the normalized address format still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Action concerns cutover review; topic name is a loose fit.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-f2385794fb",
+   "source": "zensar:F-03-U002",
+   "target": "entity:zensar:f-03-u002-decision-eed3ba03",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Working agreement is the decision stated.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-44fae18cb2",
+   "source": "entity:zensar:f-03-u002-decision-eed3ba03",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "keep": false,
+    "reason": "Labour terms unrelated to the decision.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-2b0e3b2068",
+   "source": "entity:zensar:f-03-u002-decision-eed3ba03",
+   "target": "concept:process-ownership-before-cut-over",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: do not schedule production cutover until the address mapping and rollback rehearsal pass.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "unsure",
+    "keep": false,
+    "reason": "Decision is about cutover, but topic name is a loose fit.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-e8ef757670",
+   "source": "zensar:F-03-U002",
+   "target": "entity:zensar:f-03-u002-risk-018fdc6b",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is the data governance team must approve the normalized address format.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Dependency on governance approval is stated as the risk.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-127f2e4c93",
+   "source": "entity:zensar:normalized-address-format",
+   "target": "entity:zensar:data-governance-team",
+   "type": "APPROVED_BY",
+   "evidence": "If the data governance team must approve the normalized address format, what do we tell the people relying on this work?",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Governance team must approve the address format.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-613c0c00fa",
+   "source": "entity:zensar:production-cutover",
+   "target": "entity:zensar:address-mapping",
+   "type": "REQUIRES",
+   "evidence": "do not schedule production cutover until the address mapping and rollback rehearsal pass",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Cutover must wait for address mapping to pass.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
+  },
+  {
+   "id": "x-0f35042746",
+   "source": "entity:zensar:production-cutover",
+   "target": "entity:zensar:rollback-rehearsal",
+   "type": "REQUIRES",
+   "evidence": "do not schedule production cutover until the address mapping and rollback rehearsal pass",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "keep": true,
+    "reason": "Cutover must wait for rollback rehearsal to pass.",
+    "by": "model",
+    "at": "2026-11-13T12:51:12+00:00"
+   }
   }
  ]
 }

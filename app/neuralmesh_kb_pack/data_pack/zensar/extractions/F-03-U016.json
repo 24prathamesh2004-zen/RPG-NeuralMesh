@@ -1,8 +1,64 @@
 {
  "document": "zensar:F-03-U016",
- "made": "2026-11-12T10:50:18+00:00",
- "model": "made",
- "entities": [],
+ "made": "2026-11-13T12:24:12+00:00",
+ "model": "made, 2 of 2 parts read",
+ "entities": [
+  {
+   "id": "entity:zensar:rollout-readiness-checklist",
+   "type": "Form",
+   "name": "rollout readiness checklist",
+   "by": "model"
+  },
+  {
+   "id": "entity:zensar:readiness-review",
+   "type": "Process",
+   "name": "readiness review",
+   "by": "model",
+   "existing": true
+  },
+  {
+   "id": "entity:zensar:f-03-u016-decision-dde84da8",
+   "type": "Decision",
+   "name": "Staged rollout, starting with a limited internal cohort",
+   "sentence": "Okay, the decision is a staged rollout, starting with a limited internal cohort.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u016-risk-08bd5f06",
+   "type": "Risk",
+   "name": "Wider launch could begin before the first cohort has enough ...",
+   "sentence": "My concern is the wider launch could begin before the first cohort has enough time to surface issues.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u016-action-fe410931",
+   "type": "Action",
+   "name": "Review after five days only if the agreed quality and ...",
+   "sentence": "A practical next step is to review after five days only if the agreed quality and support signals are stable.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u016-action-b6eafb70",
+   "type": "Action",
+   "name": "Prepare the rollout readiness checklist before the next readiness review, ...",
+   "sentence": "The follow-up is to prepare the rollout readiness checklist before the next readiness review, with support coverage and rollback monitoring must be confirmed still tracked.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u016-decision-3f31c37f",
+   "type": "Decision",
+   "name": "Not a claim that the risk is gone: start with ...",
+   "sentence": "Let's capture that as a working agreement, not a claim that the risk is gone: start with a limited internal cohort and defer approval for a wider launch.",
+   "by": "code"
+  },
+  {
+   "id": "entity:zensar:f-03-u016-risk-b21c0eb4",
+   "type": "Risk",
+   "name": "Support coverage and rollback monitoring must be confirmed",
+   "sentence": "The dependency is support coverage and rollback monitoring must be confirmed.",
+   "by": "code"
+  }
+ ],
  "links": [
   {
    "id": "x-c4c0d50668",
@@ -12,7 +68,109 @@
    "evidence": "Maya Chen: Maya Chen: For the readiness checklist, who can take the first draft and the notes on how we will monitor the pilot?",
    "by": "code",
    "sentences": 1,
+   "full_names": 0,
+   "status": "proposed",
+   "check": {
+    "verdict": "not_supported",
+    "reason": "Sentence concerns a readiness checklist and pilot monitoring notes, not the Integration checklist or pilot results.",
+    "by": "model",
+    "at": "2026-11-13T12:24:14+00:00"
+   }
+  },
+  {
+   "id": "x-2e0e576178",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-decision-dde84da8",
+   "type": "HAS_DECISION",
+   "evidence": "Okay, the decision is a staged rollout, starting with a limited internal cohort.",
+   "by": "code",
+   "sentences": 1,
    "status": "proposed"
+  },
+  {
+   "id": "x-19d5f71515",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-risk-08bd5f06",
+   "type": "HAS_RISK",
+   "evidence": "My concern is the wider launch could begin before the first cohort has enough time to surface issues.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-dc5e5d72df",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-action-fe410931",
+   "type": "HAS_ACTION",
+   "evidence": "A practical next step is to review after five days only if the agreed quality and support signals are stable.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-2e4f4a8108",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-action-b6eafb70",
+   "type": "HAS_ACTION",
+   "evidence": "The follow-up is to prepare the rollout readiness checklist before the next readiness review, with support coverage and rollback monitoring must be confirmed still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-4e46120e8b",
+   "source": "entity:zensar:f-03-u016-action-b6eafb70",
+   "target": "concept:integration-checklist",
+   "type": "ABOUT",
+   "evidence": "The follow-up is to prepare the rollout readiness checklist before the next readiness review, with support coverage and rollback monitoring must be confirmed still tracked.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-61896d7138",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-decision-3f31c37f",
+   "type": "HAS_DECISION",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: start with a limited internal cohort and defer approval for a wider launch.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-b7571d245f",
+   "source": "entity:zensar:f-03-u016-decision-3f31c37f",
+   "target": "concept:overseas-mobilisation-terms",
+   "type": "ABOUT",
+   "evidence": "Let's capture that as a working agreement, not a claim that the risk is gone: start with a limited internal cohort and defer approval for a wider launch.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-ca8959571c",
+   "source": "zensar:F-03-U016",
+   "target": "entity:zensar:f-03-u016-risk-b21c0eb4",
+   "type": "HAS_RISK",
+   "evidence": "The dependency is support coverage and rollback monitoring must be confirmed.",
+   "by": "code",
+   "sentences": 1,
+   "status": "proposed"
+  },
+  {
+   "id": "x-1a38ba8e1a",
+   "source": "entity:zensar:rollout-readiness-checklist",
+   "target": "entity:zensar:readiness-review",
+   "type": "PRECEDES",
+   "evidence": "Jordan Lee will prepare the rollout readiness checklist before the next readiness review.",
+   "by": "model",
+   "status": "proposed",
+   "check": {
+    "verdict": "supported",
+    "reason": "Checklist is to be prepared before the next readiness review, stating the ordering.",
+    "by": "model",
+    "at": "2026-11-13T12:24:14+00:00"
+   }
   }
  ]
 }

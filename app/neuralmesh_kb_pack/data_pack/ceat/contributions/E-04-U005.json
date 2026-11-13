@@ -1,0 +1,73 @@
+{
+  "status": "accepted",
+  "synthetic": false,
+  "context_graph": {
+    "id": "g-3dcdd022",
+    "name": "Tyre Analysis"
+  },
+  "document": {
+    "id": "ceat:E-04-U005",
+    "datapoint": "ceat:E-04",
+    "title": "Rul prognostics",
+    "kind": "report",
+    "version": "2026-11",
+    "tags": [
+      "raw-material-storage"
+    ],
+    "summary": "subsidiary: ceat, asset_id: ceat.finished_tyre, lifespan_category: Tyre Mileage Lifespan, baseline_design_life: 60000, unit: km, typical_time_horizon: 48 Months, underlying_physics: Archard abrasive tread contact wear + mechanical carcass fatigue under internal pressure cyclic flexing., failure_modes: trigger_condition: bulge, rul_remaining_pct: 0.0, rul_display: 0 km (Scrap Mandated), risk_level:…",
+    "body": "subsidiary: ceat, asset_id: ceat.finished_tyre, lifespan_category: Tyre Mileage Lifespan, baseline_design_life: 60000, unit: km, typical_time_horizon: 48 Months, underlying_physics: Archard abrasive tread contact wear + mechanical carcass fatigue under internal pressure cyclic flexing., failure_modes: trigger_condition: bulge, rul_remaining_pct: 0.0, rul_display: 0 km (Scrap Mandated), risk_level: Critical, wear_index: 1.0, maintenance_action: Immediate tyre quarantine & scrap per CEAT QC-TY-02 / ISO 10191. High carcass blowout hazard., projected_end_of_life: Immediate Replacement Required, trigger_condition: bead_damage, rul_remaining_pct: 0.0, rul_display: 0 km (Rim Breach Hazard), risk_level: Critical, wear_index: 1.0, maintenance_action: Quarantine tyre. Discard from service., projected_end_of_life: Immediate Replacement Required, trigger_condition: cut, rul_formula: round(max(0.12, 1.0 - (0.35 + defect_area_ratio * 4.0)) * 100, 1), risk_level: High to Moderate, maintenance_action: Dismount tyre for ultrasonic ply-breaker inspection. Quarantine from steer axles., projected_end_of_life: Prognostic limit dependent on cut depth, trigger_condition: uneven_wear, rul_remaining_pct: 54.0, rul_display: 32,400 km / ~27 Months, risk_level: Moderate, wear_index: 0.46, maintenance_action: Perform chassis wheel alignment and rotate tyre diagonally to equalize treadwear., projected_end_of_life: Estimated service limit at +32,400 km, trigger_condition: nominal_sound, rul_remaining_pct: 92.5, rul_display: 55,500 km / ~46 Months, risk_level: Low, wear_index: 0.075, maintenance_action: Maintain 32-34 PSI cold inflation pressure; rotate at standard 10,000 km maintenance interval., projected_end_of_life: 46 Months remaining (Standard Service)\n\nsubsidiary: harrisons, asset_id: harrisons.smoked_sheet, lifespan_category: Storage Shelf-Life (Green Book), baseline_design_life: 24.0, unit: months, typical_time_horizon: Warehouse Storage, underlying_physics: Microbial biodegradation and atmospheric oxidation of cis-1,4-polyisoprene polymer matrices., failure_modes: trigger_condition: mould, rul_formula: max(0.5, 6.0 - (defect_area_ratio * 50.0)) months, risk_level: Critical (<2 months) or High (<6 months), maintenance_action: Immediate hot-smoke shed re-drying (<60°C) with thymol sanitization. Dispatch within 10 days., projected_end_of_life: Degradation limit within 0.5 to 6 months, trigger_condition: dirt_foreign, rul_remaining_pct: 58.3, rul_display: 14.0 Months (Dry Storage), risk_level: Moderate, wear_index: 0.417, maintenance_action: Store in temperature-controlled low-humidity bay (RH < 65%). Package with moisture-barrier film., projected_end_of_life: 14 Months remaining before tensile loss, trigger_condition: nominal_sound, rul_remaining_pct: 95.0, rul_display: 22.8 Months (Premium Quality), risk_level: Low, wear_index: 0.05, maintenance_action: Standard dry palletized storage; certified for export compounding without restrictions., projected_end_of_life: 22+ Months remaining (Full Grade 1 Life)\n\nsubsidiary: kec, asset_id: kec.tower_member, lifespan_category: Atmospheric Structural RUL, baseline_design_life: 40.0, unit: years, typical_time_horizon: Field In-Service Operation, underlying_physics: ISO 12944 galvanic zinc consumption followed by ferric pitting corrosion section loss., failure_modes: trigger_condition: bent_member, rul_remaining_pct: 0.0, rul_display: 0 Years (Buckling Hazard), risk_level: Critical, wear_index: 1.0, maintenance_action: Immediate emergency strut replacement & tower guy-wire tensioning per KEC Patrol P-01., projected_end_of_life: Critical Structural Failure Threat, trigger_condition: rust, rul_formula: max(2.0, 18.0 - (defect_area_ratio * 80.0)) years, risk_level: High (<6 yrs) or Moderate, maintenance_action: Wire-brush loose iron oxide; apply two-coat zinc-rich cold galvanizing compound (DFT > 80 µm)., projected_end_of_life: Critical steel loss threshold reached within calculated horizon, trigger_condition: nominal_sound, rul_remaining_pct: 90.0, rul_display: 36.0 Years (Sound Galvanization), risk_level: Low, wear_index: 0.1, maintenance_action: Routine 3-year transmission line patrol survey per CEA guidelines., projected_end_of_life: 36 Years remaining (Nominal Exposure)\n\nsubsidiary: raychem, asset_id: raychem.joint, lifespan_category: Dielectric Insulation Life, baseline_design_life: 30.0, unit: years, typical_time_horizon: Energized Grid Operation, underlying_physics: Arrhenius thermal stress aging and partial discharge electrical treeing across polymeric dielectric barrier., failure_modes: trigger_condition: burnt, rul_remaining_pct: 0.0, rul_display: 0 Years (Dielectric Breakdown), risk_level: Critical, wear_index: 1.0, maintenance_action: Immediate de-energization & joint remake. High flashover & thermal runaway hazard., projected_end_of_life: Immediate Breakdown Risk, trigger_condition: tracking_mark, rul_remaining_pct: 26.7, rul_display: 8.0 Years (Thermal Stress), risk_level: High, wear_index: 0.733, maintenance_action: Execute partial discharge (PD) test. Install silicone heat-shrink stress relief boot., projected_end_of_life: 8 Years remaining before insulation puncturing, trigger_condition: nominal_sound, rul_remaining_pct: 93.3, rul_display: 28.0 Years (Hermetic Seal), risk_level: Low, wear_index: 0.067, maintenance_action: Inspect during scheduled substation thermal imaging window (5-year cadence)., projected_end_of_life: 28 Years remaining (Nominal Dielectric)",
+    "concepts": [
+      "concept:failure-pattern",
+      "concept:raw-material-storage"
+    ]
+  },
+  "concept_matches": {
+    "concept:failure-pattern": "phrase",
+    "concept:raw-material-storage": "phrase"
+  },
+  "kind_detected": {
+    "by": "model",
+    "reason": "stand-in: no rule matched, report is the default"
+  },
+  "upload": {
+    "file": "rul_prognostics.json",
+    "format": "json",
+    "chars": 5491,
+    "sha256": "c849fa4e16db1be81a2e3af0f309220998f2d2f9bb7ea4124f80fd4575173e98",
+    "by_role": "Mesh admin",
+    "by_company": "zensar",
+    "at": "2026-11-13T10:10:44+00:00"
+  },
+  "topics_set_aside": [
+    {
+      "concept": "concept:field-service-routine",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:05+00:00"
+    },
+    {
+      "concept": "concept:tower-design-standard",
+      "verdict": "not_supported",
+      "reason": "the name of the topic stands in no sentence",
+      "by": "code",
+      "at": "2026-11-13T12:20:05+00:00"
+    },
+    {
+      "concept": "concept:breakdown-rca",
+      "verdict": "not_supported",
+      "reason": "Sentence gives joint dielectric life data, not maintenance/breakdown RCA.",
+      "sentence": "subsidiary: raychem, asset_id: raychem.joint, lifespan_category: Dielectric Insulation Life, baseline_design_life: 30.0, unit: years, typical_time_horizon: Energized Grid Operation, underlying_physics: Arrhenius thermal stress aging and partial discharge electrical treeing across polymeric dielectri",
+      "by": "model",
+      "at": "2026-11-13T12:20:07+00:00"
+    },
+    {
+      "concept": "concept:compound-formulation",
+      "verdict": "not_supported",
+      "reason": "Tower member corrosion life; nothing about compound formulation.",
+      "sentence": "subsidiary: kec, asset_id: kec.tower_member, lifespan_category: Atmospheric Structural RUL, baseline_design_life: 40.0, unit: years, typical_time_horizon: Field In-Service Operation, underlying_physics: ISO 12944 galvanic zinc consumption followed by ferric pitting corrosion section loss., failure_m",
+      "by": "model",
+      "at": "2026-11-13T12:20:07+00:00"
+    }
+  ]
+}
